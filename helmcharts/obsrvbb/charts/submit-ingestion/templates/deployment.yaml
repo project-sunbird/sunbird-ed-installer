@@ -1,0 +1,62 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: submit-ingestion
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: druid
+          image: "ubuntu:20.04"
+          command:
+            - sh
+            - -c
+            - |
+
+              apt-get update && apt-get install -y curl &&
+              if  [ "{{ .Values.offline_desktop_events.enable }}" = "true" ]; then
+                curl -XPOST -H 'Content-Type: application/json' -d @/etc/configs/raw_offline_desktop.json http://{{ .Values.global.druid.host }}:{{ .Values.global.druid.port }}/{{ .Values.supervisor_path }};
+              fi
+              if  [ "{{ .Values.summary_events.enable }}" = "true" ]; then
+                curl -XPOST -H 'Content-Type: application/json' -d @/etc/configs/raw_summary_events.json http://{{ .Values.global.druid.host }}:{{ .Values.global.druid.port }}/{{ .Values.supervisor_path }};
+              fi
+              if  [ "{{ .Values.telemetry_events_syncts.enable }}" = "true" ]; then
+                curl -XPOST -H 'Content-Type: application/json' -d @/etc/configs/raw_telemetry_events.json http://{{ .Values.global.druid.host }}:{{ .Values.global.druid.port }}/{{ .Values.supervisor_path }};
+              fi
+              if  [ "{{ .Values.telemetry_feedback_events.enable }}" = "true" ]; then
+                curl -XPOST -H 'Content-Type: application/json' -d @/etc/configs/raw_telemetry_feedback_events.json http://{{ .Values.global.druid.host }}:{{ .Values.global.druid.port }}/{{ .Values.supervisor_path }};
+              fi
+              if  [ "{{ .Values.course_completion_events_rollup.enable }}" = "true" ]; then
+                curl -XPOST -H 'Content-Type: application/json' -d @/etc/configs/rollup_course_completion_audit_syncts.json http://{{ .Values.global.druid.host }}:{{ .Values.global.druid.port }}/{{ .Values.supervisor_path }};
+              fi
+              if  [ "{{ .Values.error_hourly_rollup_syncts.enable }}" = "true" ]; then
+                curl -XPOST -H 'Content-Type: application/json' -d @/etc/configs/rollup_error_hourly_syncts.json http://{{ .Values.global.druid.host }}:{{ .Values.global.druid.port }}/{{ .Values.supervisor_path }};
+              fi
+              if  [ "{{ .Values.summary_distinct_counts.enable }}" = "true" ]; then
+                curl -XPOST -H 'Content-Type: application/json' -d @/etc/configs/rollup_summary_distinct_counts.json http://{{ .Values.global.druid.host }}:{{ .Values.global.druid.port }}/{{ .Values.supervisor_path }};
+              fi
+              if  [ "{{ .Values.summary_rollup_syncts.enable }}" = "true" ]; then
+                curl -XPOST -H 'Content-Type: application/json' -d @/etc/configs/rollup_summary_syncts.json http://{{ .Values.global.druid.host }}:{{ .Values.global.druid.port }}/{{ .Values.supervisor_path }};
+              fi
+              if  [ "{{ .Values.audit_rollup_syncts.enable }}" = "true" ]; then
+                curl -XPOST -H 'Content-Type: application/json' -d @/etc/configs/rollup_telemetry_audit_syncts.json http://{{ .Values.global.druid.host }}:{{ .Values.global.druid.port }}/{{ .Values.supervisor_path }};
+              fi
+              if  [ "{{ .Values.telemetry_hourly_rollup_syncts.enable }}" = "true" ]; then
+                curl -XPOST -H 'Content-Type: application/json' -d @/etc/configs/rollup_telemetry_hourly_syncts.json http://{{ .Values.global.druid.host }}:{{ .Values.global.druid.port }}/{{ .Values.supervisor_path }};
+              fi
+              if  [ "{{ .Values.telemetry_rollup_syncts.enable }}" = "true" ]; then
+                curl -XPOST -H 'Content-Type: application/json' -d @/etc/configs/rollup_telemetry_syncts.json http://{{ .Values.global.druid.host }}:{{ .Values.global.druid.port }}/{{ .Values.supervisor_path }};
+              fi
+              if  [ "{{ .Values.tpd_hourly_rollup_syncts.enable }}" = "true" ]; then
+                curl -XPOST -H 'Content-Type: application/json' -d @/etc/configs/rollup_tpd_hourly_syncts.json http://{{ .Values.global.druid.host }}:{{ .Values.global.druid.port }}/{{ .Values.supervisor_path }};
+              fi
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/configs
+      volumes:
+        - name: config-volume
+          configMap:
+            name: ingestion-spec-config
+
+

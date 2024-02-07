@@ -1,0 +1,28 @@
+apiVersion: v2
+appVersion: 1.0.0
+dependencies:
+- name: common
+  repository: https://nimbushubin.github.io/helmcharts
+  version: 0.1.0
+- name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 18.1.1
+  condition: redis.enabled
+- name: kafka
+  repository: https://charts.bitnami.com/bitnami
+  version: 20.0.2
+  condition: kafka.enabled
+- name: cassandra
+  repository: https://charts.bitnami.com/bitnami
+  version: 10.1.0
+  condition: cassandra.enabled
+# - name: postgresql
+#   repository: https://charts.bitnami.com/bitnami
+#   version: 12.2.7
+#   condition: postgresql.enabled
+description: A production-ready Helm chart base template
+maintainers:
+- name: NimbusHub.in
+name: flink
+version: 0.1.0
+

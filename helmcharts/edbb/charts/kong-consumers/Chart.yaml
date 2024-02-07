@@ -1,0 +1,11 @@
+apiVersion: v2
+appVersion: 0.14.1
+dependencies:
+- name: common
+  repository: https://nimbushubin.github.io/helmcharts
+  version: 0.1.0
+description: A production-ready Helm chart base template
+maintainers:
+- name: NimbusHub.in
+name: kong-consumers
+version: 0.1.0

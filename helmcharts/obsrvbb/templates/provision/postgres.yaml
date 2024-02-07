@@ -1,0 +1,117 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-postgres-migration-job
+  labels:
+    app: {{ .Chart.Name }}-postgres-migration
+  annotations:
+    {{.Values.global.postgresql.provisioning.annotations | toYaml }}
+data:
+{{- $currentScope := .}}
+{{- range $path, $_ := .Files.Glob "files/*" }} # Take only root level
+    {{ base $path | nindent 2 }}: |-
+      {{- with $currentScope }}
+      {{- $var := .Files.Get $path }}
+      {{- include "common.tplvalues.render" (dict "value" $var "context" $) | nindent 6 }}
+      {{- end }}
+  {{- end }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Chart.Name }}-postgres-migration-job
+  labels:
+    app: {{ .Chart.Name }}-postgres-migration
+    scope: provisioning
+  annotations:
+    {{.Values.global.postgresql.provisioning.annotations | toYaml }}
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}-postgres-migration
+    spec:
+      restartPolicy: Never
+      volumes:
+      - name: shared-volume
+        emptyDir: {}
+      - name: {{ .Chart.Name }}-postgres-migration-job
+        configMap:
+          name: {{ .Chart.Name }}-postgres-migration-job
+
+      initContainers:
+      - name: wait-for-postgres
+        image: alpine/git
+        imagePullPolicy: IfNotPresent
+        command: ['sh', '-c']
+        args:
+        - |
+          timeout {{ .Values.migration.postgresql.waitTime }} sh -c 'until nc -z {{ .Values.global.postgresql.host }} {{ .Values.global.postgresql.port }}; do echo waiting for postgres; sleep 10; done'
+          # Downloading migration files
+          set -e
+          export devops_branch={{ .Values.devops_release_branch }}
+          cd /opt/shared-volume
+
+          git clone --filter=blob:none --no-checkout https://github.com/project-sunbird/sunbird-devops --branch=$devops_branch --depth 1
+          cd sunbird-devops
+          git sparse-checkout init --cone
+          git sparse-checkout set ansible/roles/postgresql-data-update/templates ansible/roles/postgres-migration/files/sunbird_programs
+          git checkout
+        volumeMounts:
+          - name: shared-volume
+            mountPath: /opt/shared-volume
+      containers:
+      - name: migration
+        image: {{ .Values.postgres_migration_image }}
+        imagePullPolicy: IfNotPresent
+        command: ['bash', '-c']
+        securityContext:
+          runAsUser: 0
+        volumeMounts:
+          - name: shared-volume
+            mountPath: /opt/shared-volume
+          - mountPath: /tmp/postgres.sql
+            name: {{ .Chart.Name }}-postgres-migration-job
+            subPath: postgres.sql
+        args:
+        - |
+          set -e
+          export PGHOST={{.Values.global.postgresql.host}}
+          export PGPORT={{.Values.global.postgresql.port}}
+          export PGUSER={{.Values.global.postgresql.postgresqlUsername}}
+          export PGPASSWORD={{.Values.global.postgresql.postgresqlPassword}}
+          {{- range .Values.global.postgresql.databases }}
+          # Check if the database exists
+          if ! psql -lqt | cut -d \| -f 1 | grep -qw {{.name}}; then
+            # Database doesn't exist, create it
+            echo "SELECT 'CREATE DATABASE \"{{ .name }}\"' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '\"{{ .name }}\"')\gexec" | psql
+          else
+            echo "Database {{.name}} already exists."
+          fi
+          {{- end }}
+
+          cd /opt/shared-volume/sunbird-devops/ansible/roles/postgresql-data-update
+
+          cd templates
+          for sql_file in *.sql; do
+            echo "Applying $sql_file..."
+            psql -f "$sql_file"
+          done
+
+          cd /opt/shared-volume/sunbird-devops/ansible/roles/postgres-migration/files
+
+          if [ -d "sunbird_programs" ]; then
+            cd sunbird_programs
+          else
+            echo "Directory /opt/shared-volume/sunbird-devops/ansible/roles/postgres-migration/files/sunbird_programs not found."
+            exit 1  # Exit the script if the directory is not found
+          fi
+
+          for sql_file in *.sql; do
+            echo "Applying $sql_file..."
+            psql -f "$sql_file"
+          done
+          psql -f /tmp/postgres.sql
+
+          echo "PostgreSQL setup completed."
+  backoffLimit: 30

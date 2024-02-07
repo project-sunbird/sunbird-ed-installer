@@ -1,0 +1,49 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "common.names.fullname" . }}-migrations
+  annotations:
+    {{- .Values.provisioningAnnotations | toYaml | nindent 4 }}
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: wait-for-postgres
+          image: busybox
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/bin/sh", "-c"]
+          args:
+          - "timeout 300 sh -c 'until nc -z {{.Values.global.postgresql.host}} {{.Values.global.postgresql.port}}; do echo waiting for postgres; sleep 10; done'"
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - /bin/bash
+            - -c
+          args:
+            - |
+              echo "Starting migrations..."
+              kong migrations up --v
+          env:
+            - name: KONG_DATABASE
+              value: {{ .Values.kong_database }}
+            - name: KONG_PG_DATABASE
+              value: {{ .Values.kong_pg_database }}
+            - name: KONG_PG_HOST
+              value: {{ .Values.kong_pg_host }}
+            - name: KONG_PG_PASSWORD
+              value: {{ .Values.kong_pg_password }}
+            - name: KONG_PG_USER
+              value: {{ .Values.kong_pg_user }}
+            - name: KONG_PROXY_ACCESS_LOG
+              value: "/dev/stdout"
+            - name: KONG_ADMIN_ACCESS_LOG
+              value: "/dev/stdout"
+            - name: KONG_PROXY_ERROR_LOG
+              value: "/dev/stdout"
+            - name: KONG_ADMIN_ERROR_LOG
+              value: "/dev/stdout"
+      restartPolicy: Never
+  backoffLimit: 30

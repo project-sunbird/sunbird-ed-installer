@@ -1,0 +1,321 @@
+nameOverride: "druid-raw-cluster"
+fullnameOverride: "druid-raw-cluster"
+
+replicaCount:
+  druid_coordinator: 1
+  druid_overlord: 1
+  druid_historical: 1
+  druid_indexer: 1
+  druid_router: 1
+  druid_broker: 1
+
+resources:
+  druid_broker:
+    requests:
+      cpu: 100m
+      memory: 1024Mi
+    limits:
+     cpu: 200m
+     memory: 1500Mi
+  druid_coordinator:
+    requests:
+      cpu: 250m
+      memory: 750Mi
+    limits:
+     cpu: 250m
+     memory: 1024Mi
+  druid_overlord:
+    requests:
+      cpu: 250m
+      memory: 750Mi
+    limits:
+     cpu: 250m
+     memory: 1024Mi
+  druid_historical:
+    requests:
+      cpu: 750m
+      memory: 512Mi
+    limits:
+     cpu: 1
+     memory: 2048Mi
+  druid_indexer:
+    requests:
+      cpu: 200m
+      memory: 10Gi
+    limits:
+     cpu: 200m
+     memory: 11Gi
+  druid_router:
+    requests:
+      cpu: 250m
+      memory: 500Mi
+    limits:
+     cpu: 512m
+     memory: 1024Mi
+
+readinessProbe:
+  httpGet:
+    path: /status/health
+    port: 8088
+    druid_broker_port: 8082
+    druid_coordinator_port: 8081
+    druid_overlord_port: 8090
+    druid_historical_port: 8084
+    druid_indexer_port: 8091
+    druid_router_plaintextPort: 8888
+
+
+securityContext:
+  securityContext_druid:
+      fsGroup: 1000
+      runAsUser: 1000
+      runAsGroup: 1000
+  securityContext_Druid:
+        fsGroup: 0
+        runAsUser: 0
+        runAsGroup: 0
+
+env: "dev"
+druid_cluster_type: "raw"
+druid_image: "apache/druid:25.0.0"
+druid_namespace: ""
+druid_monitoring: True
+mount_path: /druid/data
+storageClass: "managed-premium"
+
+######################### Druid common variables ########################
+druid_directory: "/opt/druid"
+druid_extensions_loadList: '"postgresql-metadata-storage", "druid-kafka-indexing-service", "druid-azure-extensions"'
+
+# Logging
+# Log all runtime properties on startup. Disable to avoid logging properties on startup:
+druid.startup.logging.logProperties: true
+
+# Druid Metadata Store
+druid_metadata_storage_type: "postgresql"
+druid_postgres: "jdbc:postgresql"
+druid_deepstorage_type: "azure"
+druid_storage_directory: "/data"
+druid_postgresql_db: "druid_raw"
+
+
+# Azure Container Details
+azure_storage_account_name: ""
+azure_storage_account_key: ""
+azure_storage_container: "reports"
+
+
+# Indexing service logs
+# For local disk (only viable in a cluster_type if this is a network mount):
+druid_indexer_logs_type: "azure"
+druid_indexer_logs_container: "reports"
+druid_indexer_logs_prefix: "backups/druid/druid-task-logs"
+druid_indexer_logs_directory: "backups/druid/druid-task-logs"
+
+# Service discovery
+druid_selectors_indexing_serviceName: druid/overlord
+druid_selectors_coordinator_serviceName: druid/coordinator
+
+# Monitoring
+druid_monitoring_monitors: '"com.metamx.metrics.JvmMonitor","org.apache.druid.java.util.metrics.JvmMonitor"'
+druid_emitter: composing
+druid_emitter_composing_emitters: '"logging"'
+druid_emitter_logging_logLevel: INFO
+
+
+# Storage type of double columns
+# ommiting this will lead to index double as float at the storage layer
+druid_indexing_doubleStorage: double
+
+#Writing query logs into file
+druid_request_logging_type: composing
+druid_request_logging_dir: "/data/druid/log"
+
+druid_javascript_enabled: true
+druid_sql_enable: true
+
+####################### Druid Broker Variables ##########################
+
+druid_broker_service: druid/broker
+druid_broker_port: 8082
+druid_broker_min_heap_size: 1G
+druid_broker_max_heap_size: 1G
+druid_broker_max_direct_size: 1G
+
+# Processing threads and buffers
+druid_broker_processing_buffer_sizeBytes: 64MiB
+druid_broker_processing_numThreads: 1
+druid_broker_processing_numMergeBuffers: 1
+
+
+# HTTP server threads
+druid_broker_http_numConnections: 5
+#druid_server_http_numThreads: 25
+
+druid_javascript.enabled: true
+#druid_sql_enable: true
+
+# druid_broker_replicas: 1
+
+##################### Druid Coordinator Variables #######################
+
+druid_coordinator_service: druid/coordinator
+druid_coordinator_port: 8081
+
+druid_coordinator_min_heap_size: 750M
+druid_coordinator_max_heap_size: 750M
+
+druid_coordinator_startDelay: PT5M
+druid_coordinator_period: PT5M
+druid_coordinator_balancer_strategy: diskNormalized
+
+# druid_coordinator_replicas: 1
+
+####################### Druid Overlord Variables ########################
+
+druid_overlord_service: druid/overlord
+druid_overlord_port: 8090
+druid_overlord_min_heap_size: 512M
+druid_overlord_max_heap_size: 750M
+
+druid_indexer_queue_startDelay: PT10M
+
+druid_indexer_runner_type: remote
+druid_indexer_storage_type: metadata
+
+# Additional parameters for minor compaction
+druid_indexer_tasklock_forceTimeChunkLock: false
+
+###################### Druid Historical Variables #######################
+
+druid_historical_service: druid/historical
+druid_historical_port: 8084
+druid_historical_min_heap_size: 512M
+druid_historical_max_heap_size: 750M
+druid_historical_max_direct_size: 512M
+
+
+# Processing threads and buffers
+druid_historical_processing_buffer_sizeBytes: 64MiB
+druid_historical_processing_numThreads: 2
+druid_historical_processing_numMergeBuffers: 2
+
+druid_query_ondiskstorage_enabled: True
+druid_query_groupBy_maxMergingDictionarySize: 100000000
+druid_query_groupBy_maxOnDiskStorage: 524288000
+
+# Segmentstorage (default 1 gb storage)
+druid_segmentCache_locations: '{"path": "/druid/data/store", "maxSize": 10737418240}'
+druid_historical_persistent_volume_size: 25Gi
+
+druid_segmentCache_numLoadingThreads: 4
+
+# Caching
+druid_historical_cache_useCache: False
+druid_historical_cache_populateCache: true
+druid_historical_cache_unCacheable: '"select", "scan"'
+druid_cache_type: caffeine
+druid_historical_cache_size: 128MiB
+druid_historical_cache_expiry: 3600000
+
+# druid_historical_replicas: 1
+
+#################### Druid Middlemanager Variables ######################
+
+druid_middlemanager_service: druid/middlemanager
+druid_middlemanager_port: 8091
+druid_middlemanager_heap_size: 750M
+
+druid_middlemanager_persistent_volume_size: 1G
+
+# Number of tasks per middleManager
+druid_worker_capacity: 2
+druid_middlemanager_peon_heap_size: 512M
+
+# Task launch parameters
+druid_indexer_runner_javaOpts: "-server -Xms512m -Xmx512m -XX:+UseG1GC -XX:MaxGCPauseMillis=100"
+#druid_indexer_task_baseTaskDir: "/var/task"
+
+# Peon properties
+#druid_indexer_fork_property_druid_processing_buffer_sizeBytes: 25MiB
+#druid_indexer_fork_property_druid_processing_numThreads: 2
+#druid_indexer_fork_property_druid_server_http_numThreads: 25
+
+#Additional Parameters
+#druid_indexer_task_restoreTasksOnRestart: true
+
+druid_middlemanager_replicas: 1
+
+
+#################### Druid Indexer Variables ######################
+
+druid_indexer_service: druid/indexer
+druid_indexer_port: 8091
+# druid_indexer_min_heap_size: 256M
+# druid_indexer_max_heap_size: 512M
+# druid_indexer_max_direct_size: 256M
+druid_indexer_min_heap_size: 7g
+druid_indexer_max_heap_size: 9g
+druid_indexer_max_direct_size: 2g
+
+# Peon properties
+druid_indexer_fork_property_druid_processing_buffer_sizeBytes: 64M
+druid_indexer_worker_globalIngestionHeapLimitBytes: "8589934592"
+druid_indexer_fork_property_druid_processing_numThreads: 2 # Number of cores - 1 (or 1)
+druid_indexer_fork_property_druid_processing_numMergeBuffers: 1
+druid_indexer_fork_property_druid_server_http_numThreads: 25 # max(10, (Number of cores * 17) / 16 + 2) + 30
+
+druid_indexer_numConcurrentMerges: 1
+
+druid_indexer_persistent_volume_size: 25Gi
+
+indexer_intial_delay: 60
+
+# Number of tasks per indexer
+druid_indexer_worker_capacity: 8 #(Number of available processors - 1)
+
+# Task launch parameters
+# druid_indexer_runner_javaOpts: "-server -Xms512m -Xmx1024m -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:MaxDirectMemorySize=512m"
+druid_indexer_task_baseTaskDir: "/druid/data/task"
+
+
+
+#Additional Parameters
+druid_indexer_task_restoreTasksOnRestart: true
+
+# druid_indexer_replicas: 1
+
+######################## Druid Router Variables #########################
+
+druid_router_service: druid/router
+druid_router_plaintextPort: 8888
+
+druid_router_min_heap_size: 256M
+druid_router_max_heap_size: 512M
+
+
+# HTTP proxy
+druid_router_http_numConnections: 25
+druid_router_http_readTimeout: PT10M
+druid_router_http_numMaxThreads: 25
+druid_server_http_numThreads: 25
+
+# Service discovery
+druid_router_defaultBrokerServiceName: druid/broker
+druid_router_coordinatorServiceName: druid/coordinator
+
+# Management proxy to coordinator / overlord: required for unified web console.
+druid_router_managementProxy_enabled: True
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations:
+    serviceAccountName: ""
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: obsrv-sa
+
+# commonAnnotations:
+#   reloader.stakater.com/auto: "true"

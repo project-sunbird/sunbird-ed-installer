@@ -1,0 +1,82 @@
+{{- $currentScope := .}}
+{{- range $jobName, $jobData := .Values.secor_jobs }}
+{{- if $jobData.enabled }}
+{{- with $currentScope }}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  annotations:
+    configmap.reloader.stakater.com/reload: {{ $jobName }}-config
+  name: {{ $jobName }}
+  labels:
+    app: secor
+spec:
+  serviceName: secor
+  updateStrategy:
+    type: RollingUpdate
+  replicas: {{ $jobData.replicas }}
+  selector:
+    matchLabels:
+      app: secor
+      release: {{ $jobName }}
+  template:
+    metadata:
+      labels:
+        app: secor
+        release: {{ $jobName }}
+    spec:
+      {{- with .Values.image.pullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      initContainers:
+      - name: change-pv-dir-ownership
+        image: alpine:3
+        command: ["/bin/sh", "-c"]
+        args: ["chown -R 9999:9999 /mnt/data"]
+        volumeMounts:
+        - name: data-path
+          mountPath: /mnt/data
+      containers:
+        - name: {{ $jobName }}-secor
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: "CONFIG_FILE"
+              value: "/opt/secor/config/secor.partition.properties"
+            - name: "LOG4J_CONFIGURATION"
+              value: "/opt/secor/config/log4j.docker.properties"
+
+          volumeMounts:
+           - mountPath: /opt/secor/config
+             name: secor-config
+           - name: "data-path"
+             mountPath: /mnt/data
+          resources:
+            requests:
+              cpu: {{ get (get (get $.Values.secor_jobs $jobName) "requests") "cpu" }}
+              memory: {{ get (get (get $.Values.secor_jobs $jobName) "requests") "memory"}}
+          securityContext:
+            runAsUser: 9999
+
+      volumes:
+        - configMap:
+            name: {{ $jobName }}-config
+          name: secor-config
+
+  volumeClaimTemplates:
+    - metadata:
+        name: data-path
+        labels:
+          app: secor
+      spec:
+        storageClassName: "{{ .Values.storageClass }}"
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: {{ $jobData.storage.size }}
+{{- end }}
+{{- end }}
+{{- end }}

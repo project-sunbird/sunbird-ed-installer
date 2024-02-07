@@ -1,0 +1,162 @@
+fullnameOverride: "cert-registry"
+
+replicaCount: 1
+
+image:
+  repository: sunbirded.azurecr.io/cert_registry_service
+  tag: "release-5.0.0_RC1_1"
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # runAsNonRoot: true
+  # runAsUser: 1001
+  # fsGroup: 1001
+
+securityContext: {}
+  # readOnlyRootFilesystem: false
+  # capabilities:
+  #   drop:
+  #   - ALL
+
+service:
+  type: ClusterIP
+  protocol: TCP
+  ports:
+    - name: http
+      port: 9000
+      targetPort: 9000
+
+ingress: {}
+  # enabled: false
+  # annotations: {}
+  # hosts:
+  #   - host: chart-example.local
+  #     paths:
+  #     - /
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 100Mi
+  limits:
+    cpu: 1
+    memory: 1024Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+
+livenessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+  httpGet:
+    path: /health
+    port: 9000
+
+readinessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+  httpGet:
+    path: /health
+    port: 9000
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+configmap:
+  enabled: true
+  mountPath: /home/sunbird/service-1.0-SNAPSHOT/config
+
+commonAnnotations:
+  reloader.stakater.com/auto: "true"
+
+serviceAccount:
+  create: true
+
+serviceMonitor:
+  enabled: true
+  interval: 30s
+  scrapeTimeout: 10s
+  labels:
+    release: monitoring
+  honorLabels: true
+  jobLabel: "app.kubernetes.io/name"
+
+opa_enabled: false
+
+envoy_probes:
+  failureThreshold: 2
+  httpGet:
+    path: /ready
+    port: 10000
+    scheme: HTTP
+  initialDelaySeconds: 5
+  periodSeconds: 15
+  timeoutSeconds: 5
+
+opa_probes:
+  failureThreshold: 3
+  httpGet:
+    path: /health?plugins
+    port: 8282
+    scheme: HTTP
+  initialDelaySeconds: 5
+  periodSeconds: 15
+  timeoutSeconds: 5
+
+envoy_resources:
+  requests:
+    cpu: "100m"
+    memory: "100Mi"
+  limits:
+    cpu: "1"
+    memory: "1024Mi"
+
+opa_resources:
+  requests:
+    cpu: "100m"
+    memory: "100Mi"
+  limits:
+    cpu: "1"
+    memory: "1024Mi"
+
+init_container_resources:
+  requests:
+    cpu: "100m"
+    memory: "100Mi"
+  limits:
+    cpu: "1"
+    memory: "1024Mi"
+
+cert_service_base_url: "http://cert-service:9000"
+registry_credential_service_base_url: "http://registry-service:8081"
+rc_entity: "TrainingCertificate"
+sunbird_cassandra_keyspace: "sunbird"
+sunbird_cassandra_username: ""
+sunbird_cassandra_password: ""
+cassandra_multi_dc_enabled: "false"
+java_options: -Xmx600m

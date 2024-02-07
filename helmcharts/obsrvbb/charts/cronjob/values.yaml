@@ -1,0 +1,4 @@
+date: $(date "+%Y-%m-%d")
+user_id: userid-123  
+populate_anonymous_user: true
+refresh_data: false 

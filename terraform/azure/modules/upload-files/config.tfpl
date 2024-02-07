@@ -1,0 +1,9 @@
+[ownaccount]
+type = azureblob
+account = ${storage_account_name}
+key = ${storage_account_key}
+
+[sunbird]
+type = azureblob
+account = ${sunbird_public_artifacts_account}
+sas_url = ${sunbird_public_artifacts_account_sas_url}

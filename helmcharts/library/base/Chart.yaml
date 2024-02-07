@@ -1,0 +1,11 @@
+apiVersion: v2
+name: base
+description: A production-ready Helm chart base template
+version: 0.1.0
+appVersion: 1.0.0
+dependencies:
+  - name: common
+    repository: https://nimbushubin.github.io/helmcharts
+    version: 0.1.0
+maintainers:
+  - name: NimbusHub.in

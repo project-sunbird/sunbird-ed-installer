@@ -1,0 +1,114 @@
+nameOverride: "neo4j"
+fullnameOverride: "neo4j"
+
+replicaCount: 1
+
+image:
+  repository: sunbirded.azurecr.io/neo4j
+  tag: "3.3.0"
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+podAnnotations: {}
+
+commonAnnotations:
+  reloader.stakater.com/auto: "true"
+
+commonLabels: {}
+
+livenessProbe: {}
+readinessProbe: {}
+
+
+service:
+  type: ClusterIP
+  ports:
+    - name: cypher-port
+      port: 7474
+      targetPort: 7474
+    - name: bolt-port-1
+      port: 7687
+      targetPort: 7687
+    - name: bolt-port-2
+      port: 8687
+      targetPort: 8687
+
+ingress: {}
+
+resources:
+  requests:
+    cpu: "0.5"
+    memory: "25Gi"
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+configmap:
+  enabled: true
+
+serviceAccount:
+  create: true
+  name: ""
+
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  scrapeTimeout: 10s
+  labels: {} # additional labels e.g. release: prometheus
+  honorLabels: true
+  jobLabel: "app.kubernetes.io/name"
+
+neo4j:
+  env:
+   name: NEO4J_dbms_security_auth__enabled
+   value: "false"
+  mountPath:
+    sharedData: /var/lib/neo4j/logs/plugins/txn-handler
+    neo4jData: "/data"
+  pvc:
+    claimName: neo4j-claim
+    accessModes: ReadWriteOnce
+    annotations: "keep"
+    resources:
+      requests:
+        storage: 2Gi
+
+
+logstash:
+  name: logstash
+  image: logstash:6.8.21
+  imagePullPolicy: Always
+  configmap:
+    name: logstash-config
+  mountPath:
+    name: logstash.conf
+    sharedData: /txn-handler
+    config: /usr/share/logstash/pipeline/logstash.conf
+  input:
+    type: "graph_event"
+    file_path: "/txn-handler/learning_graph_event_neo4j.log"
+    sincedb_path: "/usr/share/logstash/.sincedb_learning_graph_event_mw"
+
+learning_graph_events: "{{ .Values.global.env }}.knowlg.learning.graph.events"
+backend_event_topic_id: "{{ .Values.global.env }}.knowlg.telemetry.backend"
+
+

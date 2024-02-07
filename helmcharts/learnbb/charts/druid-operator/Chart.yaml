@@ -1,0 +1,10 @@
+apiVersion: v2
+appVersion: 0.0.7
+description: Druid Kubernetes Operator
+name: druid-operator
+type: application
+version: 0.1.1
+dependencies:
+- name: common
+  repository: https://nimbushubin.github.io/helmcharts
+  version: 0.1.0

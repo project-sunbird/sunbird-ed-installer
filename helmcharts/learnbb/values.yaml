@@ -1,0 +1,179 @@
+devops_release_branch: release-6.0.0
+postgres_migration_image: bitnami/postgresql:11.14.0-debian-10-r49
+cassandra_migration_version: release-5.3.0
+certregistry:
+  opa_enabled: true
+learner:
+  opa_enabled: true
+lms:
+  opa_enabled: true
+notification:
+  opa_enabled: true
+registry:
+  opa_enabled: true
+
+provisioningAnnotations: &provisioningAnnotations
+  "helm.sh/hook-weight": "-4"
+
+postgresql: &postgresql
+  enabled: true
+  fullnameOverride: "postgresql"
+  host: postgresql
+  port: 5432
+  postgresqlUsername: postgres
+  postgresqlPassword: postgres
+  provisioning:
+    annotations: *provisioningAnnotations
+  persistence:
+    size: 25Gi
+  databases:
+  - name: "keycloak"
+  - name: "quartz"
+  - name: "userorg"
+  - name: "enc-keys"
+  - name: "registry"
+
+elasticsearch: &es
+  enabled: true
+  fullnameOverride: "elasticsearch"
+  host: "elasticsearch"
+  port: 9200
+  image:
+    registry: docker.io
+    repository: bitnami/elasticsearch
+    tag: 6.8.23
+  master:
+    masterOnly: false
+    replicaCount: 1
+    resources:
+      requests:
+        cpu: "1"
+        memory: "2Gi"
+      limits:
+        cpu: "2"
+        memory: "4Gi"
+    heapSize: 2G
+    persistence:
+      size: 25Gi
+  data:
+    replicaCount: 0
+  coordinating:
+    replicaCount: 0
+  ingest:
+    enabled: false
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  provisioning:
+    annotations: *provisioningAnnotations
+
+redis: &redis
+  enabled: true
+  fullnameOverride: "redis"
+  auth:
+    enabled: false
+  host: "redis-master"
+  port: 6379
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  replica:
+    replicaCount: 0
+  master:
+    persistence:
+      size: 25Gi
+
+cassandra: &cassandra
+  enabled: true
+  nameOverride: "cassandra"
+  fullnameOverride: "cassandra"
+  host: "cassandra"
+  port: 9042
+  provisioning:
+    annotations: *provisioningAnnotations
+  image:
+    tag: 3.11.13-debian-11-r3
+  extraEnvVars:
+    - name: CASSANDRA_AUTHENTICATOR
+      value: AllowAllAuthenticator
+    - name: CASSANDRA_AUTHORIZER
+      value: AllowAllAuthorizer
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  persistence:
+    size: 25Gi
+
+zookeeper: &zookeeper
+  fullnameOverride: zookeeper
+  nameOverride: zookeeper
+  host: "zookeeper"
+  port: 2181
+  persistence:
+    size: 2Gi
+
+kafka: &kafka
+  zookeeper: *zookeeper
+  enabled: true
+  fullnameOverride: "kafka"
+  clientProtocol: PLAINTEXT
+  host: "kafka"
+  port: 9092
+  image:
+    registry: docker.io
+    repository: bitnami/kafka
+    tag: 3.3.1-debian-11-r25
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  persistence:
+    size: 25Gi
+
+druid: &druid
+  enabled: true
+  fullnameOverride: "druid"
+  host: druid-raw-routers
+  port: 8888
+  coordinatorhost: druid-raw-coordinators
+  coordinatorport: 8081
+  overlordhost:  druid-raw-overlords
+  overlordport: 8090
+  brokerhost: druid-raw-brokers
+  brokerport: 8082
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  persistence:
+    size: 25Gi
+
+neo4j: &neo4j
+  enabled: true
+  host: "neo4j"
+  port: 7687
+  boltPort: 8687
+  shard_id: 1
+  image:
+    repository: sunbirded.azurecr.io/neo4j
+    tag: "3.3.0"
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  provisioning:
+    annotations: *provisioningAnnotations
+
+global:
+  redis: *redis
+  elasticsearch: *es
+  cassandra: *cassandra
+  zookeeper: *zookeeper
+  kafka: *kafka
+  postgresql: *postgresql
+  druid: *druid
+  neo4j: *neo4j
+  provisioningAnnotations: *provisioningAnnotations
+  keycloak_kid_keys_configmap: keycloak-kids-keys
+  keycloak_key_configmap: keycloak-key
+  kong_desktop_device_consumer_names_for_opa: '["portal", "desktop"]'
+
+migration:
+  cassandra:
+    waitTime: 120
+    jarUrl: "https://github.com/user/repo/releases/download/v1.0/migration.jar"
+  elasticsearch:
+    waitTime: 120
+  postgresql:
+    waitTime: 120

@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "common.names.name" . }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "common.names.name" . }}
+      annotations:
+        checksum/config: {{ .Files.Glob "configs/*" | toYaml | sha256sum }}
+    spec:
+      serviceAccountName: {{ include "common.names.fullname" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- with .Values.image.pullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.initContainers }}
+      initContainers:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          {{- end }}
+          ports:
+            {{- range .Values.service.ports }}
+            - name: {{ .name }}
+              containerPort: {{ .targetPort }}
+            {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          env:
+          # - name: REFRESH_TOKEN_PUBLIC_KEYPREFIX
+          #   valueFrom:
+          #     configMapKeyRef:
+          #       name: {{ .Values.global.keycloak_kid_keys_configmap }}
+          #       key: KEYCLOAK_PUBLIC_KEY_KID
+          - name: REFRESH_TOKEN_KID
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.global.keycloak_kid_keys_configmap }}
+                key: KEYCLOAK_PUBLIC_KEY_KID
+          - name: REFRESH_TOKEN_SECRET_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.global.keycloak_kid_keys_configmap }}
+                key: REFRESH_TOKEN_SECRET
+          envFrom:
+          - configMapRef:
+              name: {{ include "common.names.fullname" . }}-env
+          volumeMounts:
+          {{- if .Values.configmap.enabled }}
+          - name: config
+            mountPath: {{ .Values.configmap.mountPath }}
+          {{- end }}
+          - mountPath: /keys/
+            name: keys
+          - name: keycloak-key
+            mountPath: /keycloak-keys/
+        {{- with .Values.sidecars }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      volumes:
+      - name: env
+        configMap:
+          name: {{ include "common.names.fullname" . }}-env
+      {{- if .Values.configmap.enabled }}
+      - name: config
+        configMap:
+          name: {{ include "common.names.fullname" . }}
+      {{- end }}
+      - name: keys
+        projected:
+          sources:
+          - configMap:
+              name: access-private-keys
+          - configMap:
+              name: mobile-devicev2-private-keys
+          - configMap:
+              name: desktop-devicev2-private-keys
+          - configMap:
+              name: portal-anonymous-private-keys
+          - configMap:
+              name: portal-loggedin-private-keys
+      - name: keycloak-key
+        configMap:
+          name: {{ .Values.global.keycloak_kid_keys_configmap }}

@@ -1,0 +1,98 @@
+kind: Job
+apiVersion: batch/v1
+metadata:
+  name: {{ printf "%s-provisioning" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.global.kafka.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: kafka-provisioning
+    scope: provisioning
+  annotations:
+    {{- if .Values.global.kafka.provisioning.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.global.kafka.provisioning.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  template:
+    metadata:
+      labels: 
+        app.kubernetes.io/component: kafka-provisioning
+      {{- if .Values.global.kafka.provisioning.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.global.kafka.provisioning.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- if .Values.global.kafka.provisioning.schedulerName }}
+      schedulerName: {{ .Values.global.kafka.provisioning.schedulerName | quote }}
+      {{- end }}
+      restartPolicy: OnFailure
+      terminationGracePeriodSeconds: 0
+      {{- if .Values.global.kafka.provisioning.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.global.kafka.provisioning.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.global.kafka.provisioning.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.global.kafka.provisioning.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if or .Values.global.kafka.provisioning.initContainers .Values.global.kafka.provisioning.waitForKafka }}
+      initContainers:
+        {{- if .Values.global.kafka.provisioning.waitForKafka }}
+        - name: wait-for-available-kafka
+          image: "{{.Values.global.kafka.image.repository}}:{{.Values.global.kafka.image.tag}}"
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              wait-for-port \
+                --host={{.Values.global.kafka.host}} \
+                --state=inuse \
+                --timeout=120 \
+                {{ .Values.global.kafka.port | int64 }};
+              echo "Kafka is available";
+        {{- end }}
+      {{- end }}
+      containers:
+        - name: kafka-provisioning
+          image: "{{.Values.global.kafka.image.repository}}:{{.Values.global.kafka.image.tag}}"
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              echo "Configuring environment"
+              . /opt/bitnami/scripts/libkafka.sh
+              export CLIENT_CONF="/tmp/client.properties"
+              touch $CLIENT_CONF
+              kafka_common_conf_set "$CLIENT_CONF" security.protocol {{ .Values.global.kafka.clientProtocol | quote }}
+              KAFKA_SERVICE="{{.Values.global.kafka.host}}:{{.Values.global.kafka.port}}"
+              kafka_provisioning_commands=(
+              {{- range $topic := .Values.global.kafka.provisioning.topics }}
+              {{- $topicName := include "common.tplvalues.render" (dict "value" $topic.name "context" $) }}
+                "/opt/bitnami/kafka/bin/kafka-topics.sh \
+                    --create \
+                    --if-not-exists \
+                    --bootstrap-server "$KAFKA_SERVICE" \
+                    --replication-factor {{ $topic.replicationFactor | default $.Values.global.kafka.provisioning.replicationFactor }} \
+                    --partitions {{ $topic.partitions | default $.Values.global.kafka.provisioning.numPartitions }} \
+                    --config retention.ms=172800000 \
+                    {{- range $name, $value := $topic.config }}
+                    --config {{ $name }}={{ $value }} \
+                    {{- end }}
+                    --command-config ${CLIENT_CONF} \
+                    --topic {{ $topicName }}"
+              {{- end }}
+              {{- range $command := .Values.global.kafka.provisioning.extraProvisioningCommands }}
+              {{- $command | quote | nindent 16 }}
+              {{- end }}
+              )
+
+              echo "Starting provisioning"
+              for ((index=0; index < ${#kafka_provisioning_commands[@]}; index+={{ .Values.global.kafka.provisioning.parallel }}))
+              do
+                for j in $(seq ${index} $((${index}+{{ .Values.global.kafka.provisioning.parallel }}-1)))
+                do
+                    ${kafka_provisioning_commands[j]} & # Async command
+                done
+                wait  # Wait the end of the jobs
+              done
+
+              echo "Provisioning succeeded"

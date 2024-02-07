@@ -1,0 +1,73 @@
+kind: Job
+apiVersion: batch/v1
+metadata:
+  name: {{ printf "%s-neo4j-provisioning" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.global.neo4j.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: neo4j-provisioning
+    scope: provisioning
+  annotations:
+    {{- if .Values.global.neo4j.provisioning.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.global.neo4j.provisioning.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  template:
+    metadata:
+      labels: 
+        app.kubernetes.io/component: neo4j-provisioning
+      {{- if .Values.global.neo4j.provisioning.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.global.neo4j.provisioning.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- if .Values.global.neo4j.provisioning.schedulerName }}
+      schedulerName: {{ .Values.global.neo4j.provisioning.schedulerName | quote }}
+      {{- end }}
+      restartPolicy: OnFailure
+      terminationGracePeriodSeconds: 0
+      {{- if .Values.global.neo4j.provisioning.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.global.neo4j.provisioning.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.global.neo4j.provisioning.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.global.neo4j.provisioning.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      initContainers:
+        - name: wait-for-available-neo4j
+          image: busybox
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+          args:
+            - -ec
+            - |
+              PORT={{.Values.global.neo4j.port}}
+              HOST={{.Values.global.neo4j.host}}
+              TIMEOUT=120
+              START_TIME=$(date +%s)
+
+              while ! nc -z $HOST $PORT; do
+                CURRENT_TIME=$(date +%s)
+                ELAPSED_TIME=$(( CURRENT_TIME - START_TIME ))
+
+                if [ $ELAPSED_TIME -ge $TIMEOUT ]; then
+                  echo "Timeout reached. Port $PORT is not available."
+                  exit 1
+                fi
+
+                sleep 1
+              done
+
+              echo "Port Neo4j is now available."
+      containers:
+        - name: neo4j-provisioning
+          image: "{{.Values.global.neo4j.image.repository}}:{{.Values.global.neo4j.image.tag}}"
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              /var/lib/neo4j/bin/cypher-shell -a bolt://{{.Values.global.neo4j.host}}:{{.Values.global.neo4j.port}} <<EOF
+              CREATE CONSTRAINT ON (domain:domain) ASSERT domain.IL_UNIQUE_ID IS UNIQUE;
+              CREATE INDEX ON :domain(IL_FUNC_OBJECT_TYPE);
+              CREATE INDEX ON :domain(IL_SYS_NODE_TYPE);
+              EOF

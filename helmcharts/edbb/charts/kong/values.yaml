@@ -1,0 +1,155 @@
+nameOverride: "kong"
+fullnameOverride: "kong"
+
+replicaCount: 1
+
+image:
+  repository: sunbirded.azurecr.io/kong
+  tag: "0.14.1"
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+  # readOnlyRootFilesystem: false
+  # capabilities:
+  #   drop:
+  #   - ALL
+
+service:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8000
+      targetPort: 8000
+    - name: admin
+      port: 8001
+      targetPort: 8001
+
+ingress:
+  enabled: false
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+      - /
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 100M
+  limits:
+    cpu: 1
+    memory: 1G
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+
+# livenessProbe: {}
+# Example:
+livenessProbe:
+  httpGet:
+    path: "/status"
+    port: 8001
+  initialDelaySeconds: 15
+  periodSeconds: 15
+  failureThreshold: 5
+
+# readinessProbe: {}
+# Example:
+readinessProbe:
+  httpGet:
+    path: "/status"
+    port: 8001
+  initialDelaySeconds: 15
+  periodSeconds: 15
+  failureThreshold: 5
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+configmap:
+  enabled: true
+  mountPath: /config
+
+serviceAccount:
+  create: true
+  name: ""
+
+serviceMonitor:
+  enabled: true
+  interval: 30s
+  scrapeTimeout: 10s
+  labels:
+    release: monitoring
+  honorLabels: true
+  jobLabel: "app.kubernetes.io/name"
+
+# Example values.yaml structure
+initContainers: {}
+  # - name: init-myservice
+  #   image: busybox:1.28
+  #   command: ['sh', '-c', "until nslookup kubernetes.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for myservice; sleep 2; done"]
+
+sidecars: {}
+  # - name: log-reader # Sidecar container
+  #   image: busybox # Use another busybox image
+  #   command: ["/bin/sh"] # Override the default command
+  #   args: ["-c", "tail -f /var/log/app.log"] # Run a shell script that tails the log file
+
+opa:
+  enabled: false
+
+kong_admin_listen: 0.0.0.0:8001
+kong_database: postgres
+kong_log_level: info
+kong_lua_socket_pool_size: "30"
+kong_mem_cache_size: 128m
+kong_nginx_http_log_format: "nginx_public_ingress_log_format '$remote_addr - $remote_user [$time_local] \"$request\" $status $request_length $body_bytes_sent $request_time $upstream_response_time $pipe \"$http_referer\" \"$http_user_agent\" \"$http_x_request_id\" \"$http_x_device_id\" \"$http_x_channel_id\" \"$http_x_app_id\" \"$http_x_app_ver\" \"$http_x_session_id\"'"
+kong_nginx_worker_processes: "4"
+kong_pg_database: kong
+kong_pg_host: postgresql
+kong_pg_password: postgres
+kong_pg_ssl: "True"
+kong_pg_user: postgres
+kong_proxy_access_log: "logs/access.log nginx_public_ingress_log_format"
+kong_ratelimit_cache_size: 12m
+kong_trusted_ips: 0.0.0.0/0,::/0
+kong_upstream_keepalive: "200"
+
+commonAnnotations:
+  reloader.stakater.com/auto: "true"
+
+postgresql: &postgresql
+  enabled: true
+  host: postgresql
+  postgresqlUsername: postgres
+  postgresqlPassword: postgres
+
+global:
+  azure_storage_account_name: ""
+  azure_storage_account_key: ""
+  postgresql: *postgresql
+
+provisioningAnnotations:
+  "helm.sh/hook-weight": "-4"
+  # "helm.sh/hook": post-install,post-upgrade

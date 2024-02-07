@@ -1,0 +1,58 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Chart.Name }}-cassandra-migration-job
+  labels:
+    app: {{ .Chart.Name }}-cassandra-migration
+    scope: provisioning
+  annotations:
+    {{.Values.global.cassandra.provisioning.annotations | toYaml }}
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}-cassandra-migration
+    spec:
+      restartPolicy: Never
+      initContainers:
+      - name: wait-for-cassandra
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        command: ["/bin/sh", "-c"]
+        args:
+        - "timeout {{ .Values.migration.cassandra.waitTime }} sh -c 'until nc -z {{ .Values.global.cassandra.host }} {{ .Values.global.cassandra.port }}; do echo waiting for cassandra; sleep 10; done'"
+      containers:
+      - name: migration
+        image: maven
+        imagePullPolicy: IfNotPresent
+        command: ['bash', '-c']
+        args:
+        - |
+          cd /tmp/
+          export sunbird_cassandra_host={{.Values.global.cassandra.host}}
+          export sunbird_cassandra_port={{.Values.global.cassandra.port}}
+          {{/* export sunbird_cassandra_username=cassandra */}}
+          {{/* export sunbird_cassandra_password=cassandra */}}
+          {{/* export sunbird_cassandra_keyspace=sunbird */}}
+          {{/* export sunbird_cassandra_migration_location="filesystem:cassandra/sunbird" */}}
+          export migration_version={{ .Values.cassandra_migration_version }}
+
+
+          cwd=$PWD
+
+          # Download the migration files
+          git clone --filter=blob:none --no-checkout https://github.com/Sunbird-Lern/sunbird-utils --branch=$migration_version --depth 1
+          cd sunbird-utils
+          git sparse-checkout init --cone
+          git sparse-checkout set sunbird-cassandra-migration/cassandra-migration/src/main/resources/db/migration/cassandra
+          git checkout
+          cd sunbird-cassandra-migration/cassandra-migration/src/main/resources/db/migration/
+          wget https://{{.Values.global.azure_storage_account_name}}.blob.core.windows.net/{{ .Values.global.azure_public_container_name }}/artifacts-{{.Values.global.release_version}}/cassandra-migration-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+          for folder in ./cassandra/*/; do
+            folder_name=$(basename "$folder");
+            echo "$folder_name"
+            export sunbird_cassandra_migration_location="filesystem:cassandra/$folder_name"
+            export sunbird_cassandra_keyspace=$folder_name
+            java -cp "cassandra-migration-0.0.1-SNAPSHOT-jar-with-dependencies.jar" com.contrastsecurity.cassandra.migration.utils.MigrationScriptEntryPoint;
+          done
+  backoffLimit: 30
