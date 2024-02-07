@@ -1,0 +1,6 @@
+apiVersion: v2
+appVersion: 0.0.7
+description: Druid Kubernetes Operator
+name: druid-operator
+type: application
+version: 0.1.1

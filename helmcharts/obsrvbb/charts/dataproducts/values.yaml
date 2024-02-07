@@ -1,0 +1,110 @@
+# cluster-config.json
+model_version: "2.0"
+analytics_core_artifact: "analytics-framework-2.0.jar"
+analytics_core_artifact_ver: "2.0"
+scruid_artifact: "scruid_2.12-2.5.0.jar"
+scruid_artifact_ver: "2.5.0"
+analytics_ed_dataporducts_jar_artifact: "data-products-1.0.jar"
+analytics_ed_dataporducts_artifact_ver: "1.0"
+analytics_batch_module_artifact: "batch-models-2.0.jar"
+spark_cluster:
+  executor_core: 5
+  executor_memory: 19G
+  num_executors: 5
+spark_enable_dynamic_allocation: false
+spark_sql_shuffle_partitions: 200
+spark_cassandra_connection_timeout_millis: 30000
+spark_cassandra_query_timeout_millis: 180000
+spark_cassandra_query_max_rows_fetch_count: 1000
+
+
+#commom.conf
+lp_url: "http://learning:8080/learning-service"
+search:
+    url: http://search-service:9000
+    path: /v3/search
+cassandra_keyspace_prefix: '{{ .Values.global.env }}_'
+cassandra_hierarchy_store_prefix: "{{ .Values.global.env }}_"
+spark:
+  driver_memory: 7g
+  memory_fraction: 0.3
+  storage_fraction: 0.5
+  heap_conf_str: -Xmx5120m
+
+data_exhaust_webhook_url: ""
+data_exhaust_Channel : ""
+data_exhaust_token: ""
+dp_vault_data_exhaust_token: ""
+data_exhaust_name : ""
+media_service_azure_token_client_secret: ""
+media_service_azure_token_client_key: ""
+media_service_azure_resource_group_name: ""
+media_service_azure_account_name : ""
+media_service_azure_tenant: ""
+media_service_azure_subscription_id: ""
+es_search_index: "compositesearch"
+channelSearchServiceEndpoint: "http://learner-service:9000/v1/org/search"
+hierarchySearchServiceUrl: "http://content-service:9000/action/content"
+hierarchySearchServicEndpoint: /v3/hierarchy/
+stream_base_url: ""
+cassandra_hierarchy_store_keyspace: "{{ .Values.global.env }}_hierarchy_store"
+assessment_metric_primary_category: "{{  .Values.exhaust_job_assessment_primary_category }}"
+exhaust_job_assessment_primary_category: "Practice Question Set"
+sunbird_learner_service_url: "http://learner-service:9000"
+location_search_url: "https://lms-service:9000"
+etb_dialcode_list_druid_length: 70
+user_table_keyspace: "sunbird"
+course_keyspace: "sunbird_courses"
+report_user_table_keyspace: "sunbird_courses"
+exhaust_batches_limit_per_channel: 30
+exhaust_file_size_limit_bytes_per_channel: 1073741824
+exhaust_parallel_batch_load_limit: 10
+exhaust_user_parallelism: 200
+data_exhaust_batch_limit_per_request: 20s
+uci_encryption_secret_key: ""
+uci_encryption_key_base64: ""
+
+#exhaust
+analytics:
+   home: /opt/bitnami/spark
+   soft_path: /opt/bitnami/spark
+analytics_home: /data/analytics
+model_version: "2.0"
+spark_cluster_name: "{{ .Values.global.env }}-spark-cluster"
+admin_name: "{{ .Values.spark_cluster_user_name }}"
+admin_password: "{{ .Values.spark_cluster_user_password }}"
+spark_cluster_user_password: ""
+spark_cluster_user_name: ""
+
+#model-config.sh
+analytics_job_queue_topic: "sunbirddev.analytics.job_queue"
+topic: "sunbirddev.telemetry.derived"
+analytics_metrics_topic: "sunbirddev.analytics_metrics"
+sink_topic: "sunbirddev.telemetry.sink"
+metrics_topic: "sunbirddev.telemetry.metrics"
+assessTopic: "sunbirddev.telemetry.assess"
+job_manager_tmp_dir: "transient-data"
+analytics_jobs_count: 3
+producer_env: "dev.sunbird"
+spark_output_temp_dir: /data/analytics/tmp/
+
+#modelconfig.josn
+reports_container: "reports"
+
+#start-jobmanager
+analytics_job_list: ["wfs", "content-rating-updater", "monitor-job-summ"]
+analytics_cluster:
+  home: "/tmp"
+
+jobmanager_logs_directory: "/data/analytics/logs/services"
+run_logs_directory: "/data/analytics/logs/data-products"
+
+reports_container: "reports"
+blob_container_name: "telemetry-data-store"
+cloud_storage_type: "azure"
+dp_raw_telemetry_backup_location: "unique/raw/"
+cloud_storage_endpoint: https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net
+
+
+
+

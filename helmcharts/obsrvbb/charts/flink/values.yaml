@@ -1,0 +1,948 @@
+nameOverride: ""
+fullnameOverride: ""
+
+replicaCount: 1
+
+# repository: sunbirded.azurecr.io/data-pipeline
+#   tag: "release-5.2.0_RC1_2c615f8_12"
+# docker pull sunbirded.azurecr.io/sunbird-datapipeline:release-4.9.0_RC4_1
+image:
+  repository: aimansharief/obsrv-jobs
+  tag: "R5.2.0"
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+podAnnotations: {}
+
+podSecurityContext:
+  # runAsNonRoot: true
+  runAsUser: 0
+  fsGroup: 0
+
+securityContext: {}
+  # readOnlyRootFilesystem: false
+  # capabilities:
+  #   drop:
+  #   - ALL
+
+service:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8081
+
+ingress:
+  enabled: false
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+      - /
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 100Mi
+  limits:
+    cpu: 1
+    memory: 1024Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+configmap:
+  enabled: false
+  mountPath: /config
+
+serviceAccount:
+  create: true
+  name: ""
+
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  scrapeTimeout: 10s
+  labels: {} # additional labels e.g. release: prometheus
+  honorLabels: true
+  jobLabel: "app.kubernetes.io/name"
+
+# Example values.yaml structure
+initContainers: {}
+  # - name: init-myservice
+  #   image: busybox:1.28
+  #   command: ['sh', '-c', "until nslookup kubernetes.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for myservice; sleep 2; done"]
+
+sidecars: {}
+  # - name: log-reader # Sidecar container
+  #   image: busybox # Use another busybox image
+  #   command: ["/bin/sh"] # Override the default command
+  #   args: ["-c", "tail -f /var/log/app.log"] # Run a shell script that tails the log file
+
+opa:
+  enabled: false
+
+
+jobmanager:
+  rpc_port: 6123
+  blob_port: 6124
+  query_port: 6125
+  ui_port: 8081
+  prom_port: 9250
+  heap_memory: 1024
+
+rest_port: 80
+resttcp_port: 8081
+
+taskmanager:
+  prom_port: 9251
+  rpc_port: 6122
+  heap_memory: 1024
+  replicas: 1
+  cpu_requests: 0.3
+
+
+# AWS S3 Details
+s3_access_key: ""
+s3_secret_key: ""
+s3_endpoint: ""
+s3_path_style_access: ""
+
+# Azure Container Details
+azure_account: "azure-test"
+azure_secret: "azure-secret"
+
+# Azure Container Details
+checkpoint_store_type: "azure"
+cloud_storage_flink_bucketname: flink-state-backend
+cloud_storage_content_bucketname: sunbird-content-dev
+cert_container_name: dev-e-credentials
+cloud_storage_endpoint: https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net
+
+flink_dp_storage_container: ""
+checkpoint_interval: 60000
+checkpoint_pause_between_seconds: 5000
+checkpoint_compression_enabled: true
+restart_attempts: 3
+restart_delay: 30000 # in milli-seconds
+producer_max_request_size: 1572864
+producer_batch_size: 98304
+producer_linger_ms: 10
+producer_compression: snappy
+extractor_event_max_size: 1048576 # Max is only 1MB
+extractor_max_request_size: 5242880
+extractor_consumer_parallelism: 1
+extractor_operators_parallelism: 1
+telemetry_extractor_key_expiry_seconds: 3600
+ingest_router_consumer_parallelism: 1
+ingest_router_operators_parallelism: 1
+raw_router_consumer_parallelism: 1
+raw_router_downstream_parallelism: 1
+
+content_port: 6379
+device_port: 6380
+user_port: 6381
+dialcode_port: 6382
+
+pipeline_preprocessor_consumer_parallelism: 1
+pipeline_preprocessor_operators_parallelism: 1
+portal_id: ".sunbird.portal"
+desktop_id: ".sunbird.desktop"
+pipeline_preprocessor_key_expiry_seconds: 3600
+
+denorm_secondary_window_count: 30
+denorm_secondary_window_shards: 1400
+denorm_primary_window_count: 30
+denorm_primary_window_shards: 1400
+
+denorm_summary_window_count: 5
+denorm_summary_window_shards: 1400
+
+denorm_secondary_consumer_parallelism: 1
+telemetry_denorm_secondary_operators_parallelism: 1
+denorm_primary_consumer_parallelism: 1
+telemetry_denorm_primary_operators_parallelism: 1
+
+### summary-denormalization related vars
+summary_denorm_consumer_parallelism: 1
+summary_denorm_operators_parallelism: 1
+summary_denorm_duplication_key_expiry_seconds: 3600
+summary_denorm_key_expiry_seconds: 3600
+
+### De-normalization related vars
+denorm_consumer_parallelism: 1
+telemetry_denorm_operators_parallelism: 1
+de_normalization_duplicationstore_key_expiry_seconds: 3600
+de_normalization_key_expiry_seconds: 3600
+denorm_window_count: 30
+denorm_window_shards: 1400
+
+### Druid-validator related vars
+druid_validator_consumer_parallelism: 1
+druid_validator_operators_parallelism: 1
+druid_validator_key_expiry_seconds: 3600
+druid_validation_enabled: true
+druid_deduplication_enabled: true
+
+### error-denormalization related vars
+error_denorm_consumer_parallelism: 1
+error_denorm_operators_parallelism: 1
+
+### Device-profile-updater related vars
+deviceprofile_parallelism: 1
+device_profile_updater_key_expiry_seconds: 3600
+device_profile_table: "_device_profile"
+
+### content-cache-updater
+# dialcode_api_url: {{ .Values.global.proto }}://{{ .Values.global.domain_name }}/{{ .Values.dialcode_endpoint }}
+dialcode_api_auth_key: ""
+
+#(user read api details)
+user_read_api_endpoint: "/private/user/v1/read/"
+user_read_api_url: "learner-service:9000"
+
+### User-cache-updater related vars
+usercache_updater_parallelism: 1
+user_cache_updater_key_expiry_seconds: 3600
+middleware_cassandra_keyspace: sunbird
+middleware_cassandra_user_table: user
+middleware_cassandra_location_table: location
+
+postgres:
+  max_connections: 2
+  sslmode: false
+  db_name: analytics
+  db_port: 5432
+
+
+
+
+log4j_console_properties: |
+  # This affects logging for both user code and Flink
+  rootLogger.level = INFO
+  rootLogger.appenderRef.console.ref = ConsoleAppender
+
+  # Uncomment this if you want to _only_ change Flink's logging
+  #logger.flink.name = org.apache.flink
+  #logger.flink.level = INFO
+
+  # The following lines keep the log level of common libraries/connectors on
+  # log level INFO. The root logger does not override this. You have to manually
+  # change the log levels here.
+  logger.akka.name = akka
+  logger.akka.level = ERROR
+  logger.kafka.name= org.apache.kafka
+  logger.kafka.level = ERROR
+  logger.hadoop.name = org.apache.hadoop
+  logger.hadoop.level = ERROR
+  logger.zookeeper.name = org.apache.zookeeper
+  logger.zookeeper.level = ERROR
+
+  # Log all infos to the console
+  appender.console.name = ConsoleAppender
+  appender.console.type = CONSOLE
+  appender.console.layout.type = PatternLayout
+  appender.console.layout.pattern = %d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %-60c %x - %m%n
+
+  # Suppress the irrelevant (wrong) warnings from the Netty channel handler
+  logger.netty.name = org.apache.flink.shaded.akka.org.jboss.netty.channel.DefaultChannelPipeline
+  logger.netty.level = OFF
+
+base_config: |
+    kafka {
+        broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
+        producer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
+        consumer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
+        zookeeper = "{{ .Values.global.zookeeper.host }}:{{ .Values.global.zookeeper.port }}"
+        producer {
+          max-request-size = 1572864
+          batch.size = 98304
+          linger.ms = 10
+        }
+      }
+      job {
+        env = "dev"
+        enable.distributed.checkpointing = false
+        statebackend {
+          blob {
+            storage {
+              account = "{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net"
+              container = "{{ .Values.container }}"
+              checkpointing.dir = "checkpoint"
+            }
+          }
+          base.url = "wasbs://"${job.statebackend.blob.storage.container}"@"${job.statebackend.blob.storage.account}"/"${job.statebackend.blob.storage.checkpointing.dir}
+        }
+      }
+      task {
+        parallelism = 1
+        consumer.parallelism = 1
+        checkpointing.compressed = true
+        checkpointing.interval = 60000
+        checkpointing.pause.between.seconds = 5000
+        restart-strategy.attempts = 3
+        restart-strategy.delay = 30000 # in milli-seconds
+      }
+      redisdb.connection.timeout = 30000
+      redis {
+        host = "{{ .Values.global.redis.host }}"
+        port = {{ .Values.global.redis.port }}
+      }
+      redis-meta {
+        host = "{{ .Values.metadata2_redis_host | default .Values.global.redis.host }}"
+        port = 6379
+      }
+      postgres {
+        host = "{{ .Values.global.postgresql.host }}"
+        port = "{{ .Values.global.postgresql.port }}"
+        maxConnections = "{{ .Values.postgres.max_connections }}"
+        sslMode = "{{ .Values.postgres.sslmode }}"
+        user = "{{ .Values.global.postgresql.postgresqlUsername }}"
+        password = "{{ .Values.global.postgresql.postgresqlPassword }}"
+      }
+      lms-cassandra {
+        host = "{{ .Values.global.cassandra.host }}"
+        port = "{{ .Values.global.cassandra.port }}"
+      }
+      schema {
+        basePath = "https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net/contents/schemas/local"
+        supportedVersion = {
+          itemset = "2.0"
+        }
+      }
+
+flink_jobs:
+  ingest-router:
+    enabled: true
+    config: |+
+      include file("/data/flink/conf/base-config.conf")
+      kafka {
+        producer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
+        consumer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
+        ingest {
+          input.topic = {{ .Values.global.env }}.telemetry.ingestion
+          output.success.topic = {{ .Values.global.env }}.telemetry.ingest
+        }
+        raw {
+          input.topic = "{{ .Values.global.env }}.telemetry.raw"
+          output.success.topic = "{{ .Values.global.env }}.telemetry.raw"
+        }
+        groupId = {{ .Values.global.env }}-ingest-router-group
+        producer {
+          max-request-size = {{ .Values.extractor_max_request_size }}
+        }
+      }
+      task {
+        consumer.parallelism = {{ .Values.ingest_router_consumer_parallelism }}
+        downstream.operators.parallelism = {{ .Values.ingest_router_operators_parallelism }}
+        raw {
+        consumer.parallelism = {{ .Values.raw_router_consumer_parallelism }}
+        downstream.operators.parallelism = {{ .Values.raw_router_downstream_parallelism }}
+        }
+      }
+    flink-conf: |+
+      jobmanager.memory.flink.size: 1024m
+      taskmanager.memory.flink.size: 1024m
+      taskmanager.numberOfTaskSlots: 1
+      parallelism.default: 1
+      jobmanager.execution.failover-strategy: region
+      taskmanager.memory.network.fraction: 0.1
+      scheduler-mode: reactive
+      heartbeat.timeout: 8000
+      heartbeat.interval: 5000
+      taskmanager.memory.process.size: 1700m
+      jobmanager.memory.process.size: 1600m
+    job_classname: org.sunbird.dp.ingestrouter.task.IngestRouterStreamTask
+
+  telemetry-extractor:
+    enabled: true
+    config: |+
+      include file("/data/flink/conf/base-config.conf")
+      kafka {
+        input.topic = {{ .Values.global.env }}.telemetry.ingest
+        output.success.topic = {{ .Values.global.env }}.telemetry.raw
+        output.log.route.topic = {{ .Values.global.env }}.druid.events.log
+        output.duplicate.topic = {{ .Values.global.env }}.telemetry.extractor.duplicate
+        output.failed.topic = {{ .Values.global.env }}.telemetry.failed
+        output.batch.failed.topic = {{ .Values.global.env }}.telemetry.extractor.failed
+        output.assess.raw.topic = {{ .Values.global.env }}.telemetry.assess.raw
+        event.max.size = "{{ .Values.extractor_event_max_size }}" # Max is only 1MB
+        groupId = {{ .Values.global.env }}-telemetry-extractor-group
+        producer {
+          max-request-size = {{ .Values.extractor_max_request_size }}
+        }
+      }
+      task {
+        consumer.parallelism = {{ .Values.extractor_consumer_parallelism }}
+        downstream.operators.parallelism = {{ .Values.extractor_operators_parallelism }}
+      }
+      redis {
+        database {
+          duplicationstore.id = 1
+          key.expiry.seconds = {{ .Values.telemetry_extractor_key_expiry_seconds }}
+          contentstore.id = 5
+        }
+      }
+      redis-meta {
+          database {
+            contentstore.id = 5
+          }
+          host = {{ .Values.metadata2_redis_host | default .Values.global.redis.host }}
+          port = {{ .Values.metadata2_redis_port | default .Values.global.redis.port }}
+        }
+      redact.events.list = ["ASSESS","RESPONSE"]
+    flink-conf: |+
+      jobmanager.memory.flink.size: 1024m
+      taskmanager.memory.flink.size: 1024m
+      taskmanager.numberOfTaskSlots: 1
+      parallelism.default: 1
+      jobmanager.execution.failover-strategy: region
+      taskmanager.memory.network.fraction: 0.1
+      scheduler-mode: reactive
+      heartbeat.timeout: 8000
+      heartbeat.interval: 5000
+      taskmanager.memory.process.size: 1700m
+      jobmanager.memory.process.size: 1600m
+    job_classname: org.sunbird.dp.extractor.task.TelemetryExtractorStreamTask
+
+  pipeline-preprocessor:
+    enabled: true
+    config: |+
+      include file("/data/flink/conf/base-config.conf")
+      kafka {
+        input.topic = {{ .Values.global.env }}.telemetry.raw
+        output.failed.topic = {{ .Values.global.env }}.telemetry.failed
+        output.primary.route.topic = {{ .Values.global.env }}.telemetry.unique
+        output.log.route.topic = {{ .Values.global.env }}.druid.events.log
+        output.error.route.topic = {{ .Values.global.env }}.telemetry.error
+        output.audit.route.topic = {{ .Values.global.env }}.telemetry.audit
+        output.duplicate.topic = {{ .Values.global.env }}.telemetry.duplicate
+        output.denorm.secondary.route.topic = {{ .Values.global.env }}.telemetry.unique.secondary
+        output.denorm.primary.route.topic = {{ .Values.global.env }}.telemetry.unique.primary
+        groupId = {{ .Values.global.env }}-pipeline-preprocessor-group
+      }
+      task {
+        consumer.parallelism = {{ .Values.pipeline_preprocessor_consumer_parallelism }}
+        downstream.operators.parallelism = {{ .Values.pipeline_preprocessor_operators_parallelism }}
+      }
+      telemetry.schema.path="schemas/telemetry/3.0"
+      default.channel="b00bc992ef25f1a9a8d63291e20efc8d"
+      dedup.producer.included.ids = ["{{ .Values.global.env }}{{ .Values.portal_id }}", "{{ .Values.global.env }}{{ .Values.desktop_id }}"]
+      secondary.events = ["INTERACT", "IMPRESSION", "SHARE_ITEM"]
+      redis {
+        database {
+          duplicationstore.id = 7
+          key.expiry.seconds = {{ .Values.pipeline_preprocessor_key_expiry_seconds }}
+        }
+      }
+    flink-conf: |+
+      jobmanager.memory.flink.size: 1024m
+      taskmanager.memory.flink.size: 1024m
+      taskmanager.numberOfTaskSlots: 1
+      parallelism.default: 1
+      jobmanager.execution.failover-strategy: region
+      taskmanager.memory.network.fraction: 0.1
+      scheduler-mode: reactive
+      heartbeat.timeout: 8000
+      heartbeat.interval: 5000
+      taskmanager.memory.process.size: 1700m
+      jobmanager.memory.process.size: 1600m
+    job_classname: org.sunbird.dp.preprocessor.task.PipelinePreprocessorStreamTask
+
+  de-normalization-secondary:
+    enabled: true
+    config: |+
+      include file("/data/flink/conf/base-config.conf")
+      kafka {
+        input.telemetry.topic = {{ .Values.global.env }}.telemetry.unique.secondary
+        input.summary.topic = {{ .Values.global.env }}.telemetry.derived
+        telemetry.denorm.output.topic = {{ .Values.global.env }}.telemetry.denorm
+        summary.denorm.output.topic = {{ .Values.global.env }}.druid.events.summary
+        summary.unique.events.topic = {{ .Values.global.env }}.telemetry.derived.unique
+        output.failed.topic = {{ .Values.global.env }}.telemetry.failed
+        output.duplicate.topic = {{ .Values.global.env }}.telemetry.duplicate
+        groupId = {{ .Values.global.env }}-telemetry-denorm-secondary-group
+      }
+      skip.events = ["INTERRUPT"]
+      permit.eid=["AUDIT"]
+      task {
+        window.count = {{ .Values.denorm_secondary_window_count }}
+        window.shards = {{ .Values.denorm_secondary_window_shards }}
+        consumer.parallelism = {{ .Values.denorm_secondary_consumer_parallelism }}
+        telemetry.downstream.operators.parallelism = {{ .Values.telemetry_denorm_secondary_operators_parallelism }}
+        summary.downstream.operators.parallelism = {{ .Values.summary_denorm_operators_parallelism  }}
+      }
+      redis {
+        database {
+          duplicationstore.id = 9
+          key.expiry.seconds = {{ .Values.de_normalization_duplicationstore_key_expiry_seconds }}
+        }
+      }
+      # redis-metadata
+      redis-meta {
+        database {
+          devicestore.id = 2
+          userstore.id = 12
+          contentstore.id = 5
+          dialcodestore.id = 6
+          key.expiry.seconds = {{ .Values.de_normalization_key_expiry_seconds }}
+        }
+        content.host = {{ .Values.metadata2_redis_host | default .Values.global.redis.host }}
+        device.host = {{ .Values.metadata2_redis_host | default .Values.global.redis.host }}
+        user.host = {{ .Values.metadata2_redis_host | default .Values.global.redis.host }}
+        dialcode.host = {{ .Values.metadata2_redis_host | default .Values.global.redis.host }}
+        content.port = {{ .Values.metadata2_redis_port | default .Values.global.redis.port }}
+        device.port = {{ .Values.metadata2_redis_port | default .Values.global.redis.port }}
+        user.port = {{ .Values.metadata2_redis_port | default .Values.global.redis.port }}
+        dialcode.port = {{ .Values.metadata2_redis_port | default .Values.global.redis.port }}
+      }
+      # config version
+      user_denorm_version = v2
+    flink-conf: |+
+      jobmanager.memory.flink.size: 1024m
+      taskmanager.memory.flink.size: 1024m
+      taskmanager.numberOfTaskSlots: 1
+      parallelism.default: 1
+      jobmanager.execution.failover-strategy: region
+      taskmanager.memory.network.fraction: 0.1
+      scheduler-mode: reactive
+      heartbeat.timeout: 8000
+      heartbeat.interval: 5000
+      taskmanager.memory.process.size: 1700m
+      jobmanager.memory.process.size: 1600m
+    job_classname: org.sunbird.dp.denorm.task.DenormalizationStreamTask
+
+  de-normalization-primary:
+    enabled: true
+    config: |+
+      include file("/data/flink/conf/base-config.conf")
+      kafka {
+        input.telemetry.topic = {{ .Values.global.env }}.telemetry.unique.primary
+        input.summary.topic = {{ .Values.global.env }}.telemetry.derived
+        telemetry.denorm.output.topic = {{ .Values.global.env }}.telemetry.denorm
+        summary.denorm.output.topic = {{ .Values.global.env }}.druid.events.summary
+        summary.unique.events.topic = {{ .Values.global.env }}.telemetry.derived.unique
+        output.failed.topic = {{ .Values.global.env }}.telemetry.failed
+        output.duplicate.topic = {{ .Values.global.env }}.telemetry.duplicate
+        groupId = {{ .Values.global.env }}-telemetry-denorm-primary-group
+      }
+      skip.events = ["INTERRUPT"]
+      permit.eid=["AUDIT"]
+      task {
+        window.count = {{ .Values.denorm_primary_window_count }}
+        window.shards = {{ .Values.denorm_primary_window_shards }}
+        consumer.parallelism = {{ .Values.denorm_primary_consumer_parallelism }}
+        telemetry.downstream.operators.parallelism = {{ .Values.telemetry_denorm_primary_operators_parallelism }}
+        summary.downstream.operators.parallelism = {{ .Values.summary_denorm_operators_parallelism  }}
+      }
+      redis {
+        database {
+          duplicationstore.id = 9
+          key.expiry.seconds = {{ .Values.de_normalization_duplicationstore_key_expiry_seconds }}
+        }
+      }
+      # redis-metadata
+      redis-meta {
+        database {
+          devicestore.id = 2
+          userstore.id = 12
+          contentstore.id = 5
+          dialcodestore.id = 6
+          key.expiry.seconds = {{ .Values.de_normalization_key_expiry_seconds }}
+        }
+        content.host = {{ .Values.metadata2_redis_host | default .Values.global.redis.host }}
+        device.host = {{ .Values.metadata2_redis_host | default .Values.global.redis.host }}
+        user.host = {{ .Values.metadata2_redis_host | default .Values.global.redis.host }}
+        dialcode.host = {{ .Values.metadata2_redis_host | default .Values.global.redis.host }}
+        content.port = {{ .Values.metadata2_redis_port | default .Values.global.redis.port }}
+        device.port = {{ .Values.metadata2_redis_port | default .Values.global.redis.port }}
+        user.port = {{ .Values.metadata2_redis_port | default .Values.global.redis.port }}
+        dialcode.port = {{ .Values.metadata2_redis_port | default .Values.global.redis.port }}
+      }
+      # config version
+      user_denorm_version = v2
+    flink-conf: |+
+      jobmanager.memory.flink.size: 1024m
+      taskmanager.memory.flink.size: 1024m
+      taskmanager.numberOfTaskSlots: 1
+      parallelism.default: 1
+      jobmanager.execution.failover-strategy: region
+      taskmanager.memory.network.fraction: 0.1
+      scheduler-mode: reactive
+      heartbeat.timeout: 8000
+      heartbeat.interval: 5000
+      taskmanager.memory.process.size: 1700m
+      jobmanager.memory.process.size: 1600m
+    job_classname: org.sunbird.dp.denorm.task.DenormalizationStreamTask
+
+  summary-denormalization:
+    enabled: true
+    config: |+
+      include file("/data/flink/conf/base-config.conf")
+      kafka {
+        input.telemetry.topic = {{ .Values.global.env }}.telemetry.unique
+        input.summary.topic = {{ .Values.global.env }}.telemetry.derived
+        telemetry.denorm.output.topic = {{ .Values.global.env }}.telemetry.denorm
+        summary.denorm.output.topic = {{ .Values.global.env }}.druid.events.summary
+        summary.unique.events.topic = {{ .Values.global.env }}.telemetry.derived.unique
+        output.failed.topic = {{ .Values.global.env }}.telemetry.failed
+        output.duplicate.topic = {{ .Values.global.env }}.telemetry.duplicate
+        groupId = {{ .Values.global.env }}-summmary-denorm-group
+      }
+      skip.events = ["INTERRUPT"]
+      permit.eid=["AUDIT"]
+      task {
+        window.count = {{ .Values.denorm_summary_window_count }}
+        window.shards = {{ .Values.denorm_summary_window_shards }}
+        consumer.parallelism = {{ .Values.summary_denorm_consumer_parallelism }}
+        telemetry.downstream.operators.parallelism = {{ .Values.telemetry_denorm_operators_parallelism }}
+        summary.downstream.operators.parallelism = {{ .Values.summary_denorm_operators_parallelism  }}
+      }
+      redis {
+        database {
+          duplicationstore.id = 9
+          key.expiry.seconds = {{ .Values.summary_denorm_duplication_key_expiry_seconds }}
+        }
+      }
+      # redis-metadata
+      redis-meta {
+        database {
+          devicestore.id = 2
+          userstore.id = 12
+          contentstore.id = 5
+          dialcodestore.id = 6
+          key.expiry.seconds = {{ .Values.summary_denorm_key_expiry_seconds }}
+        }
+        content.host = {{ .Values.metadata2_redis_host | default .Values.global.redis.host }}
+        device.host = {{ .Values.metadata2_redis_host | default .Values.global.redis.host }}
+        user.host = {{ .Values.metadata2_redis_host | default .Values.global.redis.host }}
+        dialcode.host = {{ .Values.metadata2_redis_host | default .Values.global.redis.host }}
+        content.port = {{ .Values.metadata2_redis_port | default .Values.global.redis.port }}
+        device.port = {{ .Values.metadata2_redis_port | default .Values.global.redis.port }}
+        user.port = {{ .Values.metadata2_redis_port | default .Values.global.redis.port }}
+        dialcode.port = {{ .Values.metadata2_redis_port | default .Values.global.redis.port }}
+      }
+      # config version
+      user_denorm_version = v2
+    flink-conf: |+
+      jobmanager.memory.flink.size: 1024m
+      taskmanager.memory.flink.size: 1024m
+      taskmanager.numberOfTaskSlots: 1
+      parallelism.default: 1
+      jobmanager.execution.failover-strategy: region
+      taskmanager.memory.network.fraction: 0.1
+      scheduler-mode: reactive
+      heartbeat.timeout: 8000
+      heartbeat.interval: 5000
+      taskmanager.memory.process.size: 1700m
+      jobmanager.memory.process.size: 1600m
+    job_classname: org.sunbird.dp.denorm.task.SummaryDenormalizationStreamTask
+
+  druid-validator:
+    enabled: true
+    config: |+
+      include file("/data/flink/conf/base-config.conf")
+      kafka {
+        input.topic = {{ .Values.global.env }}.telemetry.denorm
+        output.telemetry.route.topic = {{ .Values.global.env }}.druid.events.telemetry
+        output.summary.route.topic = {{ .Values.global.env }}.druid.events.summary
+        output.failed.topic = {{ .Values.global.env }}.telemetry.failed
+        output.duplicate.topic = {{ .Values.global.env }}.telemetry.duplicate
+        groupId = {{ .Values.global.env }}-druid-validator-group
+      }
+      task {
+        consumer.parallelism = {{ .Values.druid_validator_consumer_parallelism }}
+        downstream.operators.parallelism = {{ .Values.druid_validator_operators_parallelism }}
+        druid.validation.enabled = {{ .Values.druid_validation_enabled }}
+        druid.deduplication.enabled = {{ .Values.druid_deduplication_enabled }}
+      }
+      schema {
+        path {
+          telemetry = "schemas/telemetry"
+          summary = "schemas/summary"
+        }
+        file {
+          default = envelope.json
+          summary = me_workflow_summary.json
+          search = search.json
+        }
+      }
+      redis {
+        database {
+          duplicationstore.id = 8
+          key.expiry.seconds = {{ .Values.druid_validator_key_expiry_seconds }}
+        }
+      }
+    flink-conf: |+
+      jobmanager.memory.flink.size: 1024m
+      taskmanager.memory.flink.size: 1024m
+      taskmanager.numberOfTaskSlots: 1
+      parallelism.default: 1
+      jobmanager.execution.failover-strategy: region
+      taskmanager.memory.network.fraction: 0.1
+      scheduler-mode: reactive
+      heartbeat.timeout: 8000
+      heartbeat.interval: 5000
+      taskmanager.memory.process.size: 1700m
+      jobmanager.memory.process.size: 1600m
+    job_classname: org.sunbird.dp.validator.task.DruidValidatorStreamTask
+
+  device-profile-updater:
+    enabled: true
+    config: |+
+      include file("/data/flink/conf/base-config.conf")
+      kafka {
+        producer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
+        consumer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
+        zookeeper = "{{ .Values.global.zookeeper.host }}:{{ .Values.global.zookeeper.port }}"
+        input.topic = {{ .Values.global.env }}.events.deviceprofile
+        groupId = {{ .Values.global.env }}-device-profile-updater-group
+      }
+      task {
+        deviceprofile {
+          parallelism = {{ .Values.deviceprofile_parallelism }}
+        }
+      }
+      # redis-metadata
+      redis-meta {
+        database {
+          devicestore.id = 2
+        }
+        host = {{ .Values.metadata_redis_host | default .Values.global.redis.host }}
+        port = {{ .Values.metadata_redis_port | default .Values.global.redis.port }}
+      }
+      postgres {
+        database = "{{ .Values.postgres.db_name }}",
+        table = "{{ .Values.global.env }}{{ .Values.device_profile_table }}"
+      }
+    flink-conf: |+
+      jobmanager.memory.flink.size: 1024m
+      taskmanager.memory.flink.size: 1024m
+      taskmanager.numberOfTaskSlots: 1
+      parallelism.default: 1
+      jobmanager.execution.failover-strategy: region
+      taskmanager.memory.network.fraction: 0.1
+    job_classname: org.sunbird.dp.deviceprofile.task.DeviceProfileUpdaterStreamTask
+
+  content-cache-updater:
+    enabled: true
+    config: |+
+      include file("/data/flink/conf/base-config.conf")
+      kafka {
+        producer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
+        consumer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
+        zookeeper = "{{ .Values.global.zookeeper.host }}:{{ .Values.global.zookeeper.port }}"
+        input.topic = {{ .Values.global.env }}.learning.graph.events
+        groupId = {{ .Values.global.env }}-content-cache-updater-group
+      }
+      # redis-metadata
+      redis-meta {
+        database {
+          contentstore.id = 5
+          dialcodestore.id = 6
+        }
+        content.host = {{ .Values.metadata_redis_host | default .Values.global.redis.host }}
+        dialcode.host = {{ .Values.metadata_redis_host | default .Values.global.redis.host }}
+        content.port = {{ .Values.metadata_redis_port | default .Values.global.redis.port }}
+        dialcode.port = {{ .Values.metadata_redis_port | default .Values.global.redis.port }}
+      }
+      dialcode {
+        api {
+          url = "{{ .Values.global.proto }}://{{ .Values.global.domain }}/{{ .Values.dialcode_endpoint }}"
+          token = "{{ .Values.global.sunbird_admin_api_token }} "
+        }
+      }
+    flink-conf: |+
+      jobmanager.memory.flink.size: 1024m
+      taskmanager.memory.flink.size: 1024m
+      taskmanager.numberOfTaskSlots: 1
+      parallelism.default: 1
+      jobmanager.execution.failover-strategy: region
+      taskmanager.memory.network.fraction: 0.1
+    job_classname: org.sunbird.dp.contentupdater.task.ContentCacheUpdaterStreamTask
+
+  user-cache-updater-v2:
+    enabled: true
+    config: |+
+      include file("/data/flink/conf/base-config.conf")
+      kafka {
+        input.topic = {{ .Values.global.env }}.telemetry.audit
+        groupId = {{ .Values.global.env }}-user-cache-updater-consumer-group
+      }
+      task {
+        usercache.updater.parallelism = {{ .Values.usercache_updater_parallelism }}
+      }
+      # redis-metadata
+      redis-meta {
+        database {
+          userstore.id = 12
+        }
+        host = {{ .Values.metadata_redis_host | default .Values.global.redis.host }}
+        port = {{ .Values.metadata_redis_port | default .Values.global.redis.port }}
+      }
+      user-read {
+        api {
+          url = "http://{{ .Values.user_read_api_url }}/{{ .Values.user_read_api_endpoint }}"
+        }
+      }
+      regd.user.producer.pid = "learner-service"
+      user.self.signin.types = ["google","self"]
+      user.validated.types = ["sso"]
+      user.self.signin.key = "Self-Signed-In"
+      user.valid.key = "Validated"
+      user.read.url.fields = "locations,organisations"
+      user.read.api.error = ["CLIENT_ERROR"]
+    flink-conf: |+
+      jobmanager.memory.flink.size: 1024m
+      taskmanager.memory.flink.size: 1024m
+      taskmanager.numberOfTaskSlots: 1
+      parallelism.default: 1
+      jobmanager.execution.failover-strategy: region
+      taskmanager.memory.network.fraction: 0.1
+    job_classname: org.sunbird.dp.usercache.task.UserCacheUpdaterStreamTaskV2
+
+  # assessment-aggregator:
+  #   enabled: true
+  #   config: |+
+  #     include "base-config.conf"
+  #     kafka {
+  #       producer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
+  #       consumer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
+  #       zookeeper = "{{ .Values.global.zookeeper.host }}:{{ .Values.global.zookeeper.port }}"
+  #       input.topic = "{{ .Values.global.env }}.telemetry.assess"
+  #       failed.topic= "{{ .Values.global.env }}.telemetry.assess.failed"
+  #       groupId = "{{ .Values.global.env }}-assessment-aggregator-group"
+  #       output.certissue.topic =  "{{ .Values.global.env }}.issue.certificate.request"
+  #     }
+
+  #     task {
+  #       consumer.parallelism = 1
+  #       downstream.parallelism = 1
+  #       assessaggregator {
+  #         parallelism = 1
+  #       }
+  #       scoreaggregator {
+  #         parallelism = 1
+  #       }
+  #     }
+
+  #     lms-cassandra {
+  #       keyspace = "sunbird_courses"
+  #       table = "assessment_aggregator"
+  #       questionudttype= "question"
+  #       enrolmentstable = "user_enrolments"
+  #       activitytable = "user_activity_agg"
+  #     }
+  #     redis {
+  #       database {
+  #         relationCache.id = 10
+  #         contentCache.id = 5
+  #       }
+  #     }
+  #     assessment.skip.missingRecords = false
+  #     content.read.api = "http://dev.sunbirded.org/api/content/v1/read/"
+  #     user.activity.agg.type="attempt_metrics"
+  #   flink-conf: |+
+  #     jobmanager.memory.flink.size: 1024m
+  #     taskmanager.memory.flink.size: 1024m
+  #     taskmanager.numberOfTaskSlots: 1
+  #     parallelism.default: 1
+  #     jobmanager.execution.failover-strategy: region
+  #     taskmanager.memory.network.fraction: 0.1
+  #   job_classname: org.sunbird.dp.assessment.task.AssessmentAggregatorStreamTask
+
+  error-denormalization:
+    enabled: true
+    config: |+
+      include file("/data/flink/conf/base-config.conf")
+      kafka {
+        input.telemetry.topic = {{ .Values.global.env }}.telemetry.error
+        input.summary.topic = {{ .Values.global.env }}.telemetry.derived
+        telemetry.denorm.output.topic = {{ .Values.global.env }}.druid.events.error
+        summary.denorm.output.topic = {{ .Values.global.env }}.druid.events.summary
+        summary.unique.events.topic = {{ .Values.global.env }}.telemetry.derived.unique
+        output.failed.topic = {{ .Values.global.env }}.telemetry.failed
+        output.duplicate.topic = {{ .Values.global.env }}.telemetry.duplicate
+        groupId = {{ .Values.global.env }}-error-denorm-group
+      }
+      skip.events = ["INTERRUPT"]
+      permit.eid=["AUDIT"]
+      task {
+        window.count = {{ .Values.denorm_primary_window_count }}
+        window.shards = {{ .Values.denorm_primary_window_shards }}
+        consumer.parallelism = {{ .Values.error_denorm_consumer_parallelism }}
+        telemetry.downstream.operators.parallelism = {{ .Values.error_denorm_operators_parallelism }}
+        summary.downstream.operators.parallelism = {{ .Values.summary_denorm_operators_parallelism  }}
+      }
+      redis {
+        database {
+          duplicationstore.id = 9
+          key.expiry.seconds = {{ .Values.de_normalization_duplicationstore_key_expiry_seconds }}
+        }
+      }
+      # redis-metadata
+      redis-meta {
+        database {
+          devicestore.id = 2
+          userstore.id = 12
+          contentstore.id = 5
+          dialcodestore.id = 6
+          key.expiry.seconds = {{ .Values.de_normalization_key_expiry_seconds }}
+        }
+        content.host = {{ .Values.metadata2_redis_port | default .Values.global.redis.host }}
+        device.host = {{ .Values.metadata2_redis_port | default .Values.global.redis.host }}
+        user.host = {{ .Values.metadata2_redis_port | default .Values.global.redis.host }}
+        dialcode.host = {{ .Values.metadata2_redis_port | default .Values.global.redis.host }}
+        content.port = {{ .Values.metadata2_redis_port | default .Values.global.redis.port }}
+        device.port = {{ .Values.metadata2_redis_port | default .Values.global.redis.port }}
+        user.port = {{ .Values.metadata2_redis_port | default .Values.global.redis.port }}
+        dialcode.port = {{ .Values.metadata2_redis_host | default .Values.global.redis.port }}
+      }
+      # config version
+      user_denorm_version = v2
+    flink-conf: |+
+      jobmanager.memory.flink.size: 1024m
+      taskmanager.memory.flink.size: 1024m
+      taskmanager.numberOfTaskSlots: 1
+      parallelism.default: 1
+      jobmanager.execution.failover-strategy: region
+      taskmanager.memory.network.fraction: 0.1
+    job_classname: org.sunbird.dp.denorm.task.DenormalizationStreamTask
+
+
+ingest_router_job_classname: org.sunbird.dp.ingestrouter.task.IngestRouterStreamTask
+telemetry_extractor_job_classname: org.sunbird.dp.extractor.task.TelemetryExtractorStreamTask
+pipeline_preprocessor_job_classname: org.sunbird.dp.preprocessor.task.PipelinePreprocessorStreamTask
+de_normalization_secondary_job_classname: org.sunbird.dp.denorm.task.DenormalizationStreamTask
+de_normalization_primary_job_classname: org.sunbird.dp.denorm.task.DenormalizationStreamTask
+summary_denormalization_job_classname: org.sunbird.dp.denorm.task.SummaryDenormalizationStreamTask
+druid_validator_job_classname: org.sunbird.dp.validator.task.DruidValidatorStreamTask
+device_profile_updater_job_classname: org.sunbird.dp.deviceprofile.task.DeviceProfileUpdaterStreamTask
+content_cache_updater_job_classname: org.sunbird.dp.contentupdater.task.ContentCacheUpdaterStreamTask
+user_cache_updater_v2_job_classname: org.sunbird.dp.usercache.task.UserCacheUpdaterStreamTaskV2
+error_denormalization_job_classname: org.sunbird.dp.denorm.task.DenormalizationStreamTask
+assessment_aggregator_job_classname: org.sunbird.dp.assessment.task.AssessmentAggregatorStreamTask
+
+commonAnnotations:
+  reloader.stakater.com/auto: "true"
+

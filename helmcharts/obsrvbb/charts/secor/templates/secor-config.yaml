@@ -1,0 +1,28 @@
+{{- $currentScope := .}}
+{{- range $jobName, $jobData := .Values.secor_jobs }}
+{{- if $jobData.enabled }}
+{{- with $currentScope }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-config" $jobName }}
+  labels:
+{{ include "common.labels.standard" (dict "customLabels" .Values.commonLabels "context" $) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations:
+{{ include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- end }}
+data:
+{{- range $path, $_ := .Files.Glob "config/*" }} # Take only root level files (configs/*) for configmaps
+    {{ base $path | nindent 2 }}: |-
+      {{- with $currentScope }}
+      {{- $var := .Files.Get $path }}
+      {{- $localRender := include "common.tplvalues.render" (dict "value" $var "context" $ "scope" $jobData) }}
+      {{- tpl $localRender $ | nindent 4}}
+      {{/* {{- include "common.tplvalues.render" (dict "value" $localRender "context" $ ) | nindent 4}} */}}
+      {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

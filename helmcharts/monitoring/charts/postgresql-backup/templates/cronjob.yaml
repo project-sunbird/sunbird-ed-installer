@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "postgresql-backup.fullname" . }}
+  labels:
+    {{- include "postgresql-backup.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+spec:
+  schedule: {{ .Values.CRON_SCHEDULE }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          {{- with .Values.podAnnotations }}
+          annotations:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+          labels:
+            {{- include "postgresql-backup.selectorLabels" . | nindent 12 }}
+        spec:
+          serviceAccountName: {{ include "postgresql-backup.serviceAccountName" . }}
+          restartPolicy: {{ .Values.restartPolicy }}
+{{- if .Values.image.imagePullSecrets }}
+          imagePullSecrets:
+            - name: {{ .Values.image.imagePullSecrets }}
+{{- end }}
+          containers:
+            - name: {{ .Chart.Name }}
+              args:
+                - {{ .Values.global.postgresql.host }}
+                - {{ .Values.global.postgresql.postgresqlUsername }}
+                - {{ .Values.global.postgresql.postgresqlPassword }}
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              env:
+                - name: CLOUD_SERVICE
+                  value: {{ .Values.CLOUD_SERVICE }}
+                - name: AZURE_CONTAINER
+                  value: {{ .Values.azure_backups_container_name }}
+                - name: AZURE_STORAGE_ACCOUNT
+                  value: {{ .Values.global.azure_storage_account_name }}
+                - name: AZURE_KEY
+                  value: {{ .Values.global.azure_storage_account_key }}

@@ -1,0 +1,39 @@
+# Default values for postgresql-backup.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+image:
+  repository: "docker.io/postgres"
+  pullPolicy: IfNotPresent
+  imagePullSecrets: ""
+  tag: "11.22-bullseye"
+
+nameOverride: "geo-location-db-setup"
+fullnameOverride: "geo-location-db-setup"
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+restartPolicy: "OnFailure"
+
+configmap:
+  enabled: true
+  mountPath: /config
+
+geo_location_db: analytics
+maxmind_custom_data_mapping_url: "https://sunbirddevtelemetry.blob.core.windows.net/public/maxmind_custom_data_mapping.csv"
+maxmind_db_zip_filename: "GeoLite2-City-CSV_20240105.zip"
+maxmind_db_dir_name: "GeoLite2-City-CSV_20240105"
+maxmind_geoip2_csv_converter_url: "https://github.com/maxmind/geoip2-csv-converter/releases/download/v1.0.0/geoip2-csv-converter-v1.0.0-linux-amd64.tar.gz"
+maxmind_db_converter_archive_filename: "geoip2-csv-converter-v1.0.0-linux-amd64.tar.gz"
+maxmind_db_geo_city_blocks_filename: "GeoLite2-City-Blocks-IPv4.csv"
+maxmind_db_geo_city_ip_range_filename: "GeoLite2-City-Range-IPv4.csv"
+maxmind_db_geo_city_locations_filename: "GeoLite2-City-Locations-en.csv"
+

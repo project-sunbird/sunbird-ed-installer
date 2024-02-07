@@ -1,0 +1,10 @@
+cassandra:
+  enabled: false
+elasticsearch:
+  enabled: false
+kafka:
+  enabled: false
+redis:
+  enabled: false
+neo4j:
+  enabled: false

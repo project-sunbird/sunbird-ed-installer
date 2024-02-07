@@ -1,0 +1,43 @@
+*************************************************************************************************
+*** PLEASE BE PATIENT: Kubernetes Dashboard may need a few minutes to get up and become ready ***
+*************************************************************************************************
+
+Congratulations! You have just installed Kubernetes Dashboard in your cluster.
+{{ if and (has "localhost" .Values.app.ingress.hosts) (eq .Values.app.ingress.ingressClassName "internal-nginx") (.Values.nginx.enabled) }}
+To access Dashboard run:
+  kubectl -n kubernetes-dashboard port-forward svc/kubernetes-dashboard-nginx-controller 8443:443
+
+NOTE: In case port-forward command does not work, make sure that nginx service name is correct.
+      Check the services in Kubernetes Dashboard namespace using:
+        kubectl -n {{ .Release.Namespace }} get svc
+
+Dashboard will be available at:
+  https://localhost:8443
+{{- end }}
+
+{{- if and (has "localhost" .Values.app.ingress.hosts) (eq .Values.app.ingress.ingressClassName "internal-nginx") (not .Values.nginx.enabled) }}
+It looks like you already have nginx installed in your cluster. First find the namespace where it is installed and then find its main service name. By default, it should be located in namespace called nginx or nginx-ingress and service name should be nginx-controller.
+
+To access Dashboard run (replace placeholders with actual names):
+  kubectl -n <nginx-namespace> port-forward svc/<nginx-service> 8443:443
+
+Dashboard will be available at:
+  https://localhost:8443
+{{- end }}
+
+{{- if or (not (has "localhost" .Values.app.ingress.hosts)) (gt (len .Values.app.ingress.hosts) 1) }}
+
+Looks like you are deploying Kubernetes Dashboard on a custom domain(s).
+Please make sure that the ingress configuration is valid.
+Dashboard should be accessible on your configured domain(s) soon:
+{{- range .Values.app.ingress.hosts }}
+{{- if not (eq . "localhost") }}
+  - https://{{ . }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+NOTE: It may take a few minutes for the Ingress IP/Domain to be available.
+      It does not apply to local dev Kubernetes installations such as kind, etc.
+      You can watch the status using:
+        kubectl -n {{ .Release.Namespace }} get ing {{ template "kubernetes-dashboard.fullname" . }} -w

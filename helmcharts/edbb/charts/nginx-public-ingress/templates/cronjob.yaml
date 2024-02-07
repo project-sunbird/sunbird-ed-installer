@@ -1,0 +1,133 @@
+{{- if .Values.lets_encrypt_ssl }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: certbot
+  labels:
+    app: certbot
+spec:
+  schedule: "0 18 */85 * *" # Every 85th day at 6:00 PM UTC -> Translates to 12.30 AM IST
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: certbot
+        spec:
+          serviceAccountName: certbot
+          containers:
+          - name: certbot
+            image: sunbird/certbot-autoupdater:v0.0.1
+            resources:
+              limits:
+                cpu: 100m
+                memory: 200Mi
+            ports:
+            - containerPort: 80
+            env:
+            - name: EMAIL
+              value: admin@{{ .Values.domain }}
+            - name: DOMAIN
+              value: {{ .Values.domain }}
+            command:
+              - /bin/sh
+            args:
+              - /opt/renew.sh
+            volumeMounts:
+            - name: renewscript
+              mountPath: /opt/renew.sh
+              subPath: renew.sh
+          volumes:
+          - name: renewscript
+            configMap:
+              name: certbot
+          restartPolicy: Never
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: certbot
+data:
+  renew.sh: |-
+    kubectl patch svc nginx-public-ingress --type='json' -p='[{"op": "replace", "path": "/spec/selector", "value": {"app.kubernetes.io/name": "certbot"}}]'
+    certbot certonly --non-interactive --agree-tos -m $EMAIL -d $DOMAIN --standalone
+    privkey=$(cat /etc/letsencrypt/live/${DOMAIN}/privkey.pem | base64 -w0)
+    #fullchain=$(cat /etc/letsencrypt/live/${DOMAIN}/fullchain.pem | base64 -w0)
+    # The below step is required to trim Letsencrypt Root Certificate since we are using many outdated package versions which don't recognize the new Root CA certificate
+    fullchain=$(awk '$0=="-----BEGIN CERTIFICATE-----"{c++} c==1' /etc/letsencrypt/live/${DOMAIN}/fullchain.pem && awk '$0=="-----BEGIN CERTIFICATE-----"{c++} c==2' /etc/letsencrypt/live/${DOMAIN}/fullchain.pem)
+    fullchain=$(echo "$fullchain" | base64 -w0)
+    kubectl patch configmap nginx-public-ingress --type='json' -p='[{"op": "replace", "path": "/data/tls.key", "value": "'"$privkey"'"}]'
+    kubectl patch configmap nginx-public-ingress --type='json' -p='[{"op": "replace", "path": "/data/tls.crt", "value": "'"$fullchain"'"}]'
+    kubectl patch svc nginx-public-ingress --type='json' -p='[{"op": "replace", "path": "/spec/selector", "value": {"app.kubernetes.io/name": "nginx-public-ingress"}}]'
+    kubectl rollout restart deployment nginx-public-ingress
+    kubectl rollout status deployment nginx-public-ingress
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: certbot
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: certbot
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: certbot
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: certbot
+rules:
+- apiGroups:
+  - apps
+  resourceNames:
+  - nginx-public-ingress
+  resources:
+  - deployment
+  verbs:
+  - get
+  - list
+  - watch
+  - patch
+- apiGroups:
+  - ""
+  resourceNames:
+  - nginx-public-ingress
+  resources:
+  - configmaps
+  verbs:
+  - get
+  - list
+  - watch
+  - patch
+- apiGroups:
+  - ""
+  resourceNames:
+  - nginx-public-ingress
+  resources:
+  - services
+  verbs:
+  - get
+  - list
+  - watch
+  - patch
+
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: certbot
+subjects:
+- kind: ServiceAccount
+  name: certbot
+roleRef:
+  kind: Role
+  name: certbot
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}

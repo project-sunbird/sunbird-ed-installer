@@ -1,0 +1,51 @@
+nameOverride: ""
+fullnameOverride: ""
+replicaCount: 1
+
+env:
+  DENY_LIST: "default,kube-system"
+  RECONCILE_WAIT: "10s"
+  WATCH_NAMESPACE: ""
+
+image:
+  repository: druidio/druid-operator
+  pullPolicy: IfNotPresent
+  tag: ""
+imagePullSecrets: []
+
+rbac:
+  create: true
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+podAnnotations: {}
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1001
+  fsGroup: 1001
+
+
+securityContext:
+  readOnlyRootFilesystem: false
+  capabilities:
+    drop:
+    - ALL
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 100Mi
+  limits:
+    cpu: 1
+    memory: 1024Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+commonAnnotations:
+  reloader.stakater.com/auto: "true"

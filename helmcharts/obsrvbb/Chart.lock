@@ -1,0 +1,24 @@
+dependencies:
+- name: common
+  repository: https://nimbushubin.github.io/helmcharts
+  version: 0.1.0
+- name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 18.1.1
+- name: kafka
+  repository: https://charts.bitnami.com/bitnami
+  version: 20.0.2
+- name: cassandra
+  repository: https://charts.bitnami.com/bitnami
+  version: 10.1.0
+- name: elasticsearch
+  repository: https://charts.bitnami.com/bitnami
+  version: 19.5.4
+- name: spark
+  repository: https://charts.bitnami.com/bitnami
+  version: 6.3.2
+- name: postgresql
+  repository: ""
+  version: 10.16.3
+digest: sha256:8eeae33e01d8067560405e135f54562f7da2070854af1a6a6e18fea88d833ffe
+generated: "2024-01-17T18:16:46.818548+05:30"

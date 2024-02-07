@@ -1,0 +1,171 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "common.names.name" . }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "common.names.name" . }}
+      annotations:
+        checksum/config: {{ .Files.Glob "files/*" | toYaml | sha256sum }}
+    spec:
+      serviceAccountName: {{ include "common.names.fullname" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- with .Values.image.pullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.initContainers }}
+      initContainers:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          envFrom:
+          - configMapRef:
+              name: {{ include "common.names.fullname" . }}-env
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          - name: sunbird_sso_publickey
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.global.keycloak_kid_keys_configmap }}
+                key: KEYCLOAK_PUBLIC_KEY
+          {{- if .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          {{- end }}
+          ports:
+            {{- range .Values.service.ports }}
+            - name: {{ .name }}
+              containerPort: {{ .targetPort }}
+            {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          volumeMounts:
+          {{- if .Values.configmap.enabled }}
+          - name: config
+            mountPath: {{ .Values.configmap.mountPath }}
+          {{- end }}
+          - name: keys
+            mountPath: /home/sunbird/mw/content/keys/
+{{- if .Values.opa_enabled }}
+        - args:
+          - envoy
+          - --config-path
+          - /config/config.yaml
+          env:
+          - name: ENVOY_UID
+            value: "1111"
+          image: envoyproxy/envoy:v1.20.0
+          imagePullPolicy: IfNotPresent
+          name: envoy
+          livenessProbe:
+            {{ toYaml .Values.envoy_probes | nindent 12 }}
+          readinessProbe:
+            {{ toYaml .Values.envoy_probes | nindent 12 }}
+          resources:
+            {{ toYaml .Values.envoy_resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /config
+              name: envoy-config
+              readOnly: true
+        - command: ["/bin/sh", "-c"]
+          args:
+          - |
+            KID=$(cat /keys/KEYCLOAK_PUBLIC_KEY_KID) && PUBLIC_KEY=$(cat /keys/KEYCLOAK_PUBLIC_KEY) && \
+            PUBLIC_KEY_PEM=$(echo "$PUBLIC_KEY" | sed -e 's/.\{64\}/&\\\\n/g' -e '1s/^/-----BEGIN PUBLIC KEY-----\\\\n/' -e '$s/$/\\\\n-----END PUBLIC KEY-----/') && \
+            mkdir /policies && cp -Lr /opa-policies/*.rego /policies && \
+            sed -i "s|KEYCLOAK_KID|$KID|g" /policies/common.rego && \
+            sed -i "s|KEYCLOAK_PUBLIC_KEY|$PUBLIC_KEY_PEM|g" /policies/common.rego && \
+            /app/opa run --server /policies \
+              --addr=localhost:8181 \
+              --diagnostic-addr=0.0.0.0:8282 \
+              --set=plugins.envoy_ext_authz_grpc.addr=:9191 \
+              --set=plugins.envoy_ext_authz_grpc.path=main/allow \
+              --set=decision_logs.plugin=print_decision_logs_on_failure \
+              --set=plugins.print_decision_logs_on_failure.stdout=true \
+              --log-level=error \
+              --ignore=.*
+          image: keshavprasad/opa:0.34.2-envoy
+          imagePullPolicy: IfNotPresent
+          name: opa
+          livenessProbe:
+            {{- toYaml .Values.opa_probes | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.opa_probes | nindent 12 }}
+          resources:
+            {{- toYaml .Values.opa_resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /opa-policies
+              name: opa-policy
+              readOnly: true
+            - name: keycloak-key
+              mountPath: /keys/
+      initContainers:
+        - args:
+          - -p
+          - "9999"
+          - -u
+          - "1111"
+          - -w
+          - "8282,10000"
+          image: openpolicyagent/proxy_init:v5
+          imagePullPolicy: IfNotPresent
+          name: proxy-init
+          resources:
+            {{ toYaml .Values.init_container_resources | nindent 12 }}
+          securityContext:
+            capabilities:
+              add:
+              - NET_ADMIN
+            runAsNonRoot: false
+            runAsUser: 0
+{{- end }}
+        {{- with .Values.sidecars }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      volumes:
+      - name: env
+        configMap:
+          name: {{ include "common.names.fullname" . }}-env
+      {{- if .Values.configmap.enabled }}
+      - name: config
+        configMap:
+          name: {{ include "common.names.fullname" . }}
+      {{- end }}
+{{- if .Values.opa_enabled }}
+      - name: envoy-config
+        configMap:
+          name: {{ include "common.names.fullname" . }}-envoy
+      - name: opa-policy
+        configMap:
+          name: {{ include "common.names.fullname" . }}-opa
+      - name: keycloak-key
+        configMap:
+          name: {{ .Values.global.keycloak_kid_keys_configmap }}
+{{- end }}
+      - name: keys
+        projected:
+          sources:
+          - configMap:
+              name: {{ include "common.names.fullname" . }}-access-keys
+          - configMap:
+              name: {{ .Values.global.keycloak_key_configmap }}

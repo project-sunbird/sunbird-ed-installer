@@ -1,0 +1,141 @@
+nameOverride: "dial"
+fullnameOverride: "dial"
+replicaCount: 1
+
+image:
+  repository: sunbirded.azurecr.io/sunbird-dial-service
+  tag: "release-5.4.0_RC1_32fe6e8_4"
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # runAsNonRoot: true
+  # runAsUser: 1001
+  # fsGroup: 1001
+
+securityContext: {}
+  # readOnlyRootFilesystem: false
+  # capabilities:
+  #   drop:
+  #   - ALL
+
+service:
+  type: ClusterIP
+  protocol: TCP
+  ports:
+    - name: http-dial
+      port: 9000
+      targetPort: 9000
+
+livenessProbe: &livenessProbe
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+  httpGet:
+    path: /health
+    port: 9000
+readinessProbe: &readinessProbe
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+  httpGet:
+    path: /health
+    port: 9000
+
+ingress: {}
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 100Mi
+  limits:
+    cpu: 1
+    memory: 1024Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+configmap:
+  enabled: true
+  mountPath: /home/sunbird/sunbird-dial-service-1.0-SNAPSHOT/config
+
+serviceAccount:
+  create: true
+
+commonAnnotations:
+  reloader.stakater.com/auto: "true"
+
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  scrapeTimeout: 10s
+  labels: {} # additional labels e.g. release: prometheus
+  honorLabels: true
+  jobLabel: "app.kubernetes.io/name"
+
+javaenv:
+  javaoptions: -Xms500m -Xmx500m
+  _javaoptions: -Dlog4j2.formatMsgNoLookups=true
+
+dialcode:
+  keyspace_name: "{{ .Values.global.env }}_dialcode_store"
+  keyspace_table: dial_code
+  object_type: DialCode
+  max_count: 100
+  index: true
+  graph_event: "{{ .Values.global.env }}.knowlg.learning.graph.events"
+  systemconfig:
+    keyspace_table: system_config
+  publisher:
+    keyspace_table: publisher
+  telemetry_env: dev
+  telemetry_search_topn: 5
+  qrcodes_keyspace_name: dialcodes
+  qrcodes_keyspace_table: dialcode_batch
+  cloudstorage:
+    metadata_replace_absolute_path: "true"
+    relative_path_prefix: "DIAL_STORAGE_BASE_PATH"
+    read_base_path: "https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net"
+dial_storage_container: "dial"
+
+search:
+  fields_query: '["name^100","title^100","lemma^100","code^100","tags^100","question^100","domain","subject","description^10","keywords^25","ageGroup^10","filter^10","theme^10","genre^10","objects^25","contentType^100","language^200","teachingMode^25","skills^10","learningObjective^10","curriculum^100","gradeLevel^100","developer^100","attributions^10","owner^50","text","words","releaseNotes","body"]'
+  fields_date: '["lastUpdatedOn","createdOn","versionDate","lastSubmittedOn","lastPublishedOn"]'
+  batch_size: 500
+  connection_timeout: 30
+
+jsonld:
+  basePath: "https://sunbirdstagingpublic.blob.core.windows.net/sunbird-dial-staging/jsonld-schema/local"
+  type: "sbed"
+  localPath: "/tmp"
+  ttl: 43200
+  sb_schema: '["http://store.knowlg.sunbird.org/dial/specs/sbed/schema.jsonld"]'
+
+
+initContainers: {}
+  # - name: init-myservice
+  #   image: busybox:1.28
+  #   command: ['sh', '-c', "until nslookup kubernetes.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for myservice; sleep 2; done"]
+
+sidecars: {}
+  # - name: log-reader # Sidecar container
+  #   image: busybox # Use another busybox image
+  #   command: ["/bin/sh"] # Override the default command
+  #   args: ["-c", "tail -f /var/log/app.log"] # Run a shell script that tails the log file
+
+opa:
+  enabled: false

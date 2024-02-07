@@ -1,0 +1,940 @@
+nameOverride: ""
+fullnameOverride: ""
+
+replicaCount: 1
+
+image:
+  repository: sunbirded.azurecr.io/knowledge-platform-jobs
+  tag: "release-5.5.0_RC2_037e2e9_54"
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+podAnnotations: {}
+
+podSecurityContext:
+  runAsUser: 0
+  fsGroup: 0
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8081
+
+ingress: {}
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 100Mi
+  limits:
+    cpu: 1
+    memory: 1024Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+configmap:
+  enabled: false
+  mountPath: /config
+
+serviceAccount:
+  create: true
+
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  scrapeTimeout: 10s
+  labels: {} # additional labels e.g. release: prometheus
+  honorLabels: true
+  jobLabel: "app.kubernetes.io/name"
+
+# Example values.yaml structure
+initContainers: {}
+  # - name: init-myservice
+  #   image: busybox:1.28
+  #   command: ['sh', '-c', "until nslookup kubernetes.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for myservice; sleep 2; done"]
+
+sidecars: {}
+  # - name: log-reader # Sidecar container
+  #   image: busybox # Use another busybox image
+  #   command: ["/bin/sh"] # Override the default command
+  #   args: ["-c", "tail -f /var/log/app.log"] # Run a shell script that tails the log file
+
+opa:
+  enabled: false
+
+jobmanager:
+  rpc_port: 6123
+  blob_port: 6124
+  query_port: 6125
+  ui_port: 8081
+  prom_port: 9250
+  heap_memory: 1024
+
+rest_port: 80
+resttcp_port: 8081
+
+taskmanager:
+  prom_port: 9251
+  rpc_port: 6122
+  heap_memory: 1024
+  replicas: 1
+  cpu_requests: 0.3
+
+
+# S3 Details
+s3_access_key: ""
+s3_secret_key: ""
+s3_endpoint: ""
+s3_path_style_access: ""
+
+cloud_storage:
+  type: "azure"
+cloudstorage_metadatalist: '["appIcon","posterImage","artifactUrl","downloadUrl","variants","previewUrl","pdfUrl", "streamingUrl", "toc_url"]'
+cloudstorage_write_base_path: '["https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net"]'
+cloudstorage_read_base_path: "https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net"
+cloudstorage_relative_path_prefix: "CONTENT_STORAGE_BASE_PATH"
+
+log4j_console_properties: |
+  # This affects logging for both user code and Flink
+  rootLogger.level = INFO
+  rootLogger.appenderRef.console.ref = ConsoleAppender
+
+  # Uncomment this if you want to _only_ change Flink's logging
+  #logger.flink.name = org.apache.flink
+  #logger.flink.level = INFO
+
+  # The following lines keep the log level of common libraries/connectors on
+  # log level INFO. The root logger does not override this. You have to manually
+  # change the log levels here.
+  logger.akka.name = akka
+  logger.akka.level = ERROR
+  logger.kafka.name= org.apache.kafka
+  logger.kafka.level = ERROR
+  logger.hadoop.name = org.apache.hadoop
+  logger.hadoop.level = ERROR
+  logger.zookeeper.name = org.apache.zookeeper
+  logger.zookeeper.level = ERROR
+
+  # Log all infos to the console
+  appender.console.name = ConsoleAppender
+  appender.console.type = CONSOLE
+  appender.console.layout.type = PatternLayout
+  appender.console.layout.pattern = %d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %-60c %x - %m%n
+
+  # Suppress the irrelevant (wrong) warnings from the Netty channel handler
+  logger.netty.name = org.apache.flink.shaded.akka.org.jboss.netty.channel.DefaultChannelPipeline
+  logger.netty.level = OFF
+
+base_config: |
+  kafka {
+    broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
+    producer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
+    consumer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
+    zookeeper = "{{ .Values.global.zookeeper.host }}:{{ .Values.global.zookeeper.port }}"
+    producer {
+      max-request-size = 1572864
+      batch.size = 98304
+      linger.ms = 10
+      compression = "snappy"
+    }
+    output.system.event.topic = "{{ .Values.global.env }}.knowlg.system.events"
+  }
+  job {
+    env = "{{ .Values.global.env }}"
+    enable.distributed.checkpointing = false
+    statebackend {
+      blob {
+        storage {
+          account = "{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net"
+          container = "flink-check-points-store"
+          checkpointing.dir = "checkpoint"
+        }
+      }
+      base.url = "wasbs://"${job.statebackend.blob.storage.container}"@"${job.statebackend.blob.storage.account}"/"${job.statebackend.blob.storage.checkpointing.dir}
+    }
+  }
+  task {
+    parallelism = 1
+    consumer.parallelism = 1
+    checkpointing.compressed = true
+    checkpointing.interval = 60000
+    checkpointing.pause.between.seconds = 3000
+    restart-strategy.attempts = 3
+    restart-strategy.delay = 30000 # in milli-seconds
+  }
+  redis {
+  host = "{{ .Values.global.redis.host }}"
+  port = "{{ .Values.global.redis.port }}"
+  connection {
+    max = 2
+    idle.min = 1
+    idle.max = 2
+    minEvictableIdleTimeSeconds = 120
+    timeBetweenEvictionRunsSeconds = 300
+      }
+  }
+  lms-cassandra {
+  host = "{{ .Values.global.cassandra.host }}"
+  port = "{{ .Values.global.cassandra.port }}"
+  }
+
+  neo4j {
+  routePath = "bolt://{{ .Values.global.neo4j.host }}:{{ .Values.global.neo4j.port }}"
+  graph = "domain"
+  }
+
+  es {
+  basePath = "{{ .Values.global.elasticsearch.host }}:{{ .Values.global.elasticsearch.port }}"
+  }
+
+flink_jobs:
+  search-indexer:
+    enabled: true
+    config: |+
+      include file("/data/flink/conf/base-config.conf")
+      job {
+        env = "{{ .Values.global.env }}"
+      }
+      kafka {
+        event.max.size = "1048576" # Max is only 1MB
+        input.topic = "{{ .Values.global.env }}.knowlg.learning.graph.events"
+        error.topic = "{{ .Values.global.env }}.knowlg.learning.events.failed"
+        groupId = "{{ .Values.global.env }}-search-indexer-group"
+        producer {
+          max-request-size = 5242880
+        }
+      }
+      task {
+        consumer.parallelism = 1
+        router.parallelism = 1
+        compositeSearch.parallelism = 1
+        dialcodeIndexer.parallelism = 1
+        dialcodemetricsIndexer.parallelism = 1
+      }
+      compositesearch.index.name = "compositesearch"
+      nested.fields = ["badgeAssertions", "targets", "badgeAssociations", "plugins", "me_totalTimeSpent", "me_totalPlaySessionCount", "me_totalTimeSpentInSec", "batches", "trackable", "credentials", "discussionForum", "provider", "osMetadata", "actions"]
+      schema.definition_cache.expiry = 14400
+      restrict {
+        metadata.objectTypes = []
+        objectTypes = ["EventSet", "Questionnaire", "Misconception", "FrameworkType", "EventSet", "Event"]
+      }
+      cloudstorage.metadata.replace_absolute_path=true
+      cloudstorage.relative_path_prefix= "CONTENT_STORAGE_BASE_PATH"
+      cloudstorage.read_base_path="{{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_read_base_path "context" $) }}"
+      cloudstorage.write_base_path=["https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net"] 
+      cloudstorage.mecloudstorage.metadata.list={{ .Values.cloudstorage_metadatalist }}
+      cloud_storage_container="{{ .Values.global.azure_public_container_name }}"
+
+    flink-conf: |+
+      jobmanager.memory.flink.size: 1024m
+      taskmanager.memory.flink.size: 1024m
+      taskmanager.numberOfTaskSlots: 1
+      jobManager.numberOfTaskSlots: 1
+      parallelism.default: 1
+      jobmanager.execution.failover-strategy: region
+      taskmanager.memory.network.fraction: 0.1
+      scheduler-mode: reactive
+      heartbeat.timeout: 8000
+      heartbeat.interval: 5000
+      taskmanager.memory.process.size: 1700m
+      jobmanager.memory.process.size: 1600m
+      # classloader.resolve-order: "parent-first"
+      # state.savepoints.dir: file:///tmp
+
+    job_classname: org.sunbird.job.searchindexer.task.SearchIndexerStreamTask
+
+  audit-event-generator:
+    enabled: true
+    config: |+
+      include file("/data/flink/conf/base-config.conf")
+      job {
+        env = "{{ .Values.global.env }}"
+      }
+
+      kafka {
+        input.topic = "{{ .Values.global.env }}.knowlg.learning.graph.events"
+        output.topic = "{{ .Values.global.env }}.knowlg.telemetry.raw"
+        groupId = "{{ .Values.global.env }}-audit-event-generator-group"
+      }
+
+      task {
+      consumer.parallelism = 1
+      parallelism = 1
+      producer.parallelism = 1
+      window.time = 60
+      }
+
+      schema {
+        basePath = "{{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_read_base_path "context" $) }}/{{ .Values.global.azure_public_container_name }}/schemas/local/content/"
+      }
+
+      channel.default = "org.sunbird"
+
+    flink-conf: |+
+      jobmanager.memory.flink.size: 1024m
+      taskmanager.memory.flink.size: 1024m
+      taskmanager.numberOfTaskSlots: 1
+      jobManager.numberOfTaskSlots: 1
+      parallelism.default: 1
+      jobmanager.execution.failover-strategy: region
+      taskmanager.memory.network.fraction: 0.1
+      scheduler-mode: reactive
+      heartbeat.timeout: 8000
+      heartbeat.interval: 5000
+      taskmanager.memory.process.size: 1700m
+      jobmanager.memory.process.size: 1600m
+      # classloader.resolve-order: "parent-first"
+      # state.savepoints.dir: file:///tmp
+
+    job_classname: org.sunbird.job.auditevent.task.AuditEventGeneratorStreamTask
+
+  asset-enrichment:
+    enabled: true
+    config: |+
+      include file("/data/flink/conf/base-config.conf")
+      job {
+        env = "{{ .Values.global.env }}"
+      }
+
+      kafka {
+        input.topic = "{{ .Values.global.env }}.knowlg.learning.job.request"
+        groupId = "{{ .Values.global.env }}-asset-enrichment-group"
+        video_stream.topic = "{{ .Values.global.env }}.knowlg.content.postpublish.request"
+      }
+
+      task {
+        consumer.parallelism = 1
+        router.parallelism = 1
+        videoEnrichment.parallelism = 1
+        imageEnrichment.parallelism = 1
+      }
+
+      content {
+        stream {
+          enabled = false
+          mimeType = ["video/mp4", "video/webm"]
+        }
+        youtube {
+          applicationName = "fetch-youtube-license"
+          regexPattern = ["\\?vi?=([^&]*)", "watch\\?.*v=([^&]*)", "(?:embed|vi?)/([^/?]*)", "^([A-Za-z0-9\\-\\_]*)"]
+        }
+        upload.context.driven = true
+        max.iteration.count = 2
+      }
+
+      thumbnail.max {
+        sample = 5
+        size.pixel = 150
+      }
+
+      cloudstorage.metadata.replace_absolute_path=true
+      cloudstorage.relative_path_prefix= "CONTENT_STORAGE_BASE_PATH"
+      cloudstorage.read_base_path="{{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_read_base_path "context" $) }}"
+      cloudstorage.write_base_path={{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_write_base_path "context" $) }}
+      cloudstorage.metadata.list={{ .Values.cloudstorage_metadatalist }}
+
+      cloud_storage_type="{{ .Values.cloud_storage.type }}"
+      cloud_storage_key="{{ .Values.global.azure_storage_account_name }}"
+      cloud_storage_secret="{{ .Values.global.azure_storage_account_key }}"
+      cloud_storage_container="{{ .Values.global.azure_public_container_name }}"
+      cloud_storage_endpoint=""
+
+
+    flink-conf: |+
+      jobmanager.memory.flink.size: 1024m
+      taskmanager.memory.flink.size: 1024m
+      taskmanager.numberOfTaskSlots: 1
+      jobManager.numberOfTaskSlots: 1
+      parallelism.default: 1
+      jobmanager.execution.failover-strategy: region
+      taskmanager.memory.network.fraction: 0.1
+      scheduler-mode: reactive
+      heartbeat.timeout: 8000
+      heartbeat.interval: 5000
+      taskmanager.memory.process.size: 1700m
+      jobmanager.memory.process.size: 1600m
+      # classloader.resolve-order: "parent-first"
+      # state.savepoints.dir: file:///tmp
+
+    job_classname: org.sunbird.job.assetenricment.task.AssetEnrichmentStreamTask
+
+  post-publish-processor:
+    enabled: true
+    config: |+
+      include file("/data/flink/conf/base-config.conf")
+      job {
+        env = "{{ .Values.global.env }}"
+      }
+
+      kafka {
+        input.topic = "{{ .Values.global.env }}.knowlg.content.postpublish.request"
+        groupId = "{{ .Values.global.env }}-post-publish-processor-group"
+        publish.topic = "{{ .Values.global.env }}.learning.job.request"
+        qrimage.topic = "{{ .Values.global.env }}.qrimage.request"
+        dialcode.context.topic = "{{ .Values.global.env }}.knowlg.dialcode.context.job.request"
+      }
+
+      task {
+        consumer.parallelism = 1
+        router.parallelism = 1
+        shallow_copy.parallelism = 1
+        link_dialcode.parallelism = 1
+        batch_create.parallelism = 1
+        dialcode_context_updater.parallelism = 1
+      }
+
+      lms-cassandra {
+        keyspace = "sunbird_courses"
+        batchTable = "course_batch"
+      }
+
+      dialcode-cassandra {
+        keyspace = "dialcodes"
+        imageTable = "dialcode_images"
+      }
+
+      service {
+        search.basePath = "http://search-service:9000"
+        lms.basePath = "http://lms-service:9000"
+        learning_service.basePath = "http://learning:8080/learning-service"
+        dial.basePath = "https://dial-service:9000"
+      }
+
+      dialcode {
+        linkable.primaryCategory = ["Course"]
+      }
+
+      cloudstorage.metadata.replace_absolute_path=true
+      cloudstorage.relative_path_prefix= "CONTENT_STORAGE_BASE_PATH"
+      cloudstorage.read_base_path="{{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_read_base_path "context" $) }}"
+      cloudstorage.write_base_path={{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_write_base_path "context" $) }}
+      cloudstorage.metadata.list={{ .Values.cloudstorage_metadatalist }}
+
+      cloud_storage_type="{{ .Values.cloud_storage.type }}"
+      cloud_storage_key="{{ .Values.global.azure_storage_account_name }}"
+      cloud_storage_secret="{{ .Values.global.azure_storage_account_key }}"
+      cloud_storage_container="{{ .Values.global.azure_public_container_name }}"
+      cloud_storage_endpoint=""
+
+
+    flink-conf: |+
+      jobmanager.memory.flink.size: 1024m
+      taskmanager.memory.flink.size: 1024m
+      taskmanager.numberOfTaskSlots: 1
+      jobManager.numberOfTaskSlots: 1
+      parallelism.default: 1
+      jobmanager.execution.failover-strategy: region
+      taskmanager.memory.network.fraction: 0.1
+      scheduler-mode: reactive
+      heartbeat.timeout: 8000
+      heartbeat.interval: 5000
+      taskmanager.memory.process.size: 1700m
+      jobmanager.memory.process.size: 1600m
+      # classloader.resolve-order: "parent-first"
+      # state.savepoints.dir: file:///tmp
+
+    job_classname: org.sunbird.job.postpublish.task.PostPublishProcessorStreamTask
+
+  dialcode-context-updater:
+    enabled: true
+    config: |+
+      include file("/data/flink/conf/base-config.conf")
+      job {
+        env = "{{ .Values.global.env }}"
+      }
+
+      kafka {
+        input.topic = "{{ .Values.global.env }}.knowlg.dialcode.context.job.request"
+        failed.topic = "{{ .Values.global.env }}.knowlg.dialcode.context.job.request.failed"
+        groupId = "{{ .Values.global.env }}-dialcode-group"
+      }
+
+      task {
+        consumer.parallelism = 1
+        parallelism = 1
+        dialcode-context-updater.parallelism = 1
+      }
+
+      dialcode_context_updater {
+          actions="dialcode-context-update"
+          search_mode="Collection"
+          context_map_path = "https://raw.githubusercontent.com/project-sunbird/knowledge-platform-jobs/release-5.0.0/dialcode-context-updater/src/main/resources/contextMapping.json"
+          identifier_search_fields = ["identifier", "primaryCategory", "channel"]
+          dial_code_context_read_api_path = "/dialcode/v4/read/"
+          dial_code_context_update_api_path = "/dialcode/v4/update/"
+      }
+
+      service {
+        search.basePath = "http://search-service:9000"
+        dial_service.basePath = "http://dial-service:9000"
+      }
+
+      es_sync_wait_time = 5000
+
+
+    flink-conf: |+
+      jobmanager.memory.flink.size: 1024m
+      taskmanager.memory.flink.size: 1024m
+      taskmanager.numberOfTaskSlots: 1
+      jobManager.numberOfTaskSlots: 1
+      parallelism.default: 1
+      jobmanager.execution.failover-strategy: region
+      taskmanager.memory.network.fraction: 0.1
+      scheduler-mode: reactive
+      heartbeat.timeout: 8000
+      heartbeat.interval: 5000
+      taskmanager.memory.process.size: 1700m
+      jobmanager.memory.process.size: 1600m
+      # classloader.resolve-order: "parent-first"
+      # state.savepoints.dir: file:///tmp
+
+    job_classname: org.sunbird.job.dialcodecontextupdater.task.DialcodeContextUpdaterStreamTask
+
+
+  qrcode-image-generator:
+    enabled: true
+    config: |+
+      include file("/data/flink/conf/base-config.conf")
+      job {
+        env = "{{ .Values.global.env }}"
+      }
+
+      kafka {
+        input.topic = "{{ .Values.global.env }}.knowlg.qrimage.request"
+        groupId = "{{ .Values.global.env }}-qrcode-image-generator-group"
+      }
+
+      task {
+        consumer.parallelism = 1
+        parallelism = 1
+        window.time = 60
+      }
+
+      lp.tmp.file.location="/tmp"
+
+      qr.image {
+          imageFormat="png"
+          bottomMargin=0
+          margin=1
+      }
+
+      lms-cassandra {
+        keyspace = "dialcodes"
+        table {
+          image = "dialcode_images"
+          batch = "dialcode_batch"
+        }
+      }
+
+      # Default value is 120
+      max_allowed_character_for_file_name = 120
+
+      cloudstorage.metadata.replace_absolute_path=true
+      cloudstorage.relative_path_prefix="DIAL_STORAGE_BASE_PATH"
+      cloudstorage.read_base_path="{{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_read_base_path "context" $) }}"
+      cloudstorage.write_base_path=["{{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_read_base_path "context" $) }}"]
+      cloudstorage.metadata.list={{ .Values.cloudstorage_metadatalist }}
+
+      cloud_storage_type="{{ .Values.cloud_storage.type }}"
+      cloud_storage_key="{{ .Values.global.azure_storage_account_name }}"
+      cloud_storage_secret="{{ .Values.global.azure_storage_account_key }}"
+      cloud_storage_container="{{ .Values.global.azure_public_container_name }}"
+      cloud_storage_endpoint=""
+
+
+    flink-conf: |+
+      jobmanager.memory.flink.size: 1024m
+      taskmanager.memory.flink.size: 1024m
+      taskmanager.numberOfTaskSlots: 1
+      jobManager.numberOfTaskSlots: 1
+      parallelism.default: 1
+      jobmanager.execution.failover-strategy: region
+      taskmanager.memory.network.fraction: 0.1
+      scheduler-mode: reactive
+      heartbeat.timeout: 8000
+      heartbeat.interval: 5000
+      taskmanager.memory.process.size: 1700m
+      jobmanager.memory.process.size: 1600m
+      # classloader.resolve-order: "parent-first"
+      # state.savepoints.dir: file:///tmp
+
+    job_classname: org.sunbird.job.qrimagegenerator.task.QRCodeImageGeneratorTask
+
+  video-stream-generator:
+    enabled: true
+    config: |+
+      include file("/data/flink/conf/base-config.conf")
+      job {
+        env = "{{ .Values.global.env }}"
+      }
+
+      kafka {
+        input.topic = "{{ .Values.global.env }}.knowlg.content.postpublish.request"
+        groupId = "{{ .Values.global.env }}-video-stream-generator-group"
+      }
+
+      task {
+        consumer.parallelism = 1
+        parallelism = 1
+        timer.duration = 60
+        max.retries = 10
+      }
+
+      lms-cassandra {
+        keyspace = "{{ .Values.global.env }}_platform_db"
+        table = "job_request"
+      }
+
+      service {
+        content {
+          basePath = "https://content:9000"
+        }
+      }
+
+      # Azure Media Service Config
+      azure {
+        location = "centralindia"
+        tenant = "tenant"
+        subscription_id = "subscription id "
+
+        login {
+          endpoint="https://login.microsoftonline.com"
+        }
+
+        api {
+          endpoint="https://management.azure.com"
+          version = "2018-07-01"
+        }
+
+        account_name = "account name"
+        resource_group_name = "group name"
+
+        transform {
+          default = "media_transform_default"
+          hls = "media_transform_hls"
+        }
+
+        stream {
+          base_url = "https://sunbirdspikemedia-inct.streaming.media.azure.net"
+          endpoint_name = "default"
+          protocol = "Hls"
+          policy_name = "Predefined_ClearStreamingOnly"
+        }
+
+        token {
+          client_key = "client key"
+          client_secret = "client secret"
+        }
+      }
+
+      azure_tenant="tenant"
+      azure_subscription_id="subscription id"
+      azure_account_name="{{ .Values.global.azure_storage_account_name }}"
+      azure_resource_group_name="group name"
+      azure_token_client_key="client key"
+      azure_token_client_secret="client secret"
+
+      # CSP Name. e.g: aws or azure
+      media_service_type="aws"
+
+      #AWS Elemental Media Convert Config
+      aws {
+        region="ap-south-1"
+        content_bucket_name="awsmedia-spike"
+        token {
+          access_key="access key"
+          access_secret="access secret"
+        }
+        api {
+          endpoint="API Endpoint for media convert"
+          version="2017-08-29"
+        }
+        service {
+          name="mediaconvert"
+          queue="Media Convert Queue Id"
+          role="Media Convert Role Name"
+        }
+        stream {
+          protocol="Hls"
+        }
+      }
+
+      media_service_job_success_status=["FINISHED", "COMPLETE"]
+
+    flink-conf: |+
+      jobmanager.memory.flink.size: 1024m
+      taskmanager.memory.flink.size: 1024m
+      taskmanager.numberOfTaskSlots: 1
+      jobManager.numberOfTaskSlots: 1
+      parallelism.default: 1
+      jobmanager.execution.failover-strategy: region
+      taskmanager.memory.network.fraction: 0.1
+      scheduler-mode: reactive
+      heartbeat.timeout: 8000
+      heartbeat.interval: 5000
+      taskmanager.memory.process.size: 1700m
+      jobmanager.memory.process.size: 1600m
+      # classloader.resolve-order: "parent-first"
+      # state.savepoints.dir: file:///tmp
+
+    job_classname: org.sunbird.job.videostream.task.VideoStreamGeneratorStreamTask
+
+  audit-history-indexer:
+    enabled: true
+    config: |+
+      include file("/data/flink/conf/base-config.conf")
+      job {
+        env = "{{ .Values.global.env }}"
+      }
+
+      kafka {
+        input.topic = "{{ .Values.global.env }}.knowlg.learning.graph.events"
+        groupId = "{{ .Values.global.env }}-audit-history-indexer-group"
+      }
+
+      task {
+        consumer.parallelism = 1
+        parallelism = 1
+        window.time = 60
+      }
+
+      timezone = "IST"
+
+    flink-conf: |+
+      jobmanager.memory.flink.size: 1024m
+      taskmanager.memory.flink.size: 1024m
+      taskmanager.numberOfTaskSlots: 1
+      jobManager.numberOfTaskSlots: 1
+      parallelism.default: 1
+      jobmanager.execution.failover-strategy: region
+      taskmanager.memory.network.fraction: 0.1
+      scheduler-mode: reactive
+      heartbeat.timeout: 8000
+      heartbeat.interval: 5000
+      taskmanager.memory.process.size: 1700m
+      jobmanager.memory.process.size: 1600m
+      # classloader.resolve-order: "parent-first"
+      # state.savepoints.dir: file:///tmp
+
+    job_classname: org.sunbird.job.audithistory.task.AuditHistoryIndexerStreamTask
+
+  content-publish:
+    enabled: true
+    config: |+
+      include file("/data/flink/conf/base-config.conf")
+
+      job {
+        env = "{{ .Values.global.env }}"
+      }
+
+      kafka {
+        input.topic = "{{ .Values.global.env }}.knowlg.publish.job.request"
+        post_publish.topic = "{{ .Values.global.env }}.knowlg.content.postpublish.request"
+        mvc.topic = "{{ .Values.global.env }}.knowlg.mvc.processor.job.request"
+        error.topic = "{{ .Values.global.env }}.knowlg.learning.events.failed"
+        groupId = "{{ .Values.global.env }}-content-publish-group"
+      }
+
+      task {
+        consumer.parallelism = 1
+        parallelism = 1
+        router.parallelism = 1
+      }
+
+      redis {
+        database {
+          contentCache.id = 0
+        }
+      }
+
+      content {
+        bundleLocation = "/tmp/contentBundle"
+        isECARExtractionEnabled = true
+        retry_asset_download_count = 1
+        keyspace = "dev_content_store"
+        table = "content_data"
+        tmp_file_location = "/tmp"
+        objectType = ["Content", "ContentImage","Collection","CollectionImage"]
+        mimeType = ["application/pdf",
+                                    "application/vnd.ekstep.ecml-archive",
+                                    "application/vnd.ekstep.html-archive",
+                                    "application/vnd.android.package-archive",
+                                    "application/vnd.ekstep.content-archive",
+                                    "application/epub",
+                                    "application/msword",
+                                    "application/vnd.ekstep.h5p-archive",
+                                    "video/webm",
+                                    "video/mp4",
+                                    "application/vnd.ekstep.content-collection",
+                                    "video/quicktime",
+                                    "application/octet-stream",
+                                    "application/json",
+                                    "application/javascript",
+                                    "application/xml",
+                                    "text/plain",
+                                    "text/html",
+                                    "text/javascript",
+                                    "text/xml",
+                                    "text/css",
+                                    "image/jpeg",
+                                    "image/jpg",
+                                    "image/png",
+                                    "image/tiff",
+                                    "image/bmp",
+                                    "image/gif",
+                                    "image/svg+xml",
+                                    "image/x-quicktime",
+                                    "video/avi",
+                                    "video/mpeg",
+                                    "video/quicktime",
+                                    "video/3gpp",
+                                    "video/mp4",
+                                    "video/ogg",
+                                    "video/webm",
+                                    "video/msvideo",
+                                    "video/x-msvideo",
+                                    "video/x-qtc",
+                                    "video/x-mpeg",
+                                    "audio/mp3",
+                                    "audio/mp4",
+                                    "audio/mpeg",
+                                    "audio/ogg",
+                                    "audio/webm",
+                                    "audio/x-wav",
+                                    "audio/wav",
+                                    "audio/mpeg3",
+                                    "audio/x-mpeg-3",
+                                    "audio/vorbis",
+                                    "application/x-font-ttf",
+                                    "application/vnd.ekstep.plugin-archive",
+                                    "video/x-youtube",
+                                    "video/youtube",
+                                    "text/x-url"]
+        asset_download_duration = "60 seconds"
+
+        stream {
+          enabled = false
+          mimeType = ["video/mp4", "video/webm"]
+        }
+        artifact.size.for_online=209715200
+
+        downloadFiles {
+          spine = ["appIcon"]
+          full = ["appIcon", "grayScaleAppIcon", "artifactUrl", "itemSetPreviewUrl", "media"]
+        }
+
+        nested.fields=["badgeAssertions", "targets", "badgeAssociations", "plugins", "me_totalTimeSpent", "me_totalPlaySessionCount", "me_totalTimeSpentInSec", "batches", "trackable", "credentials", "discussionForum", "provider", "osMetadata", "actions"]
+
+      }
+
+      hierarchy {
+        keyspace = "{{ .Values.global.env }}_hierarchy_store"
+        table = "content_hierarchy"
+      }
+
+      cloud_storage {
+          folder {
+              content = "content"
+              artifact = "artifact"
+          }
+      }
+
+      service {
+        print.basePath = "http://print:5000"
+      }
+
+      contentTypeToPrimaryCategory {
+        ClassroomTeachingVideo: "Explanation Content"
+        ConceptMap: "Learning Resource"
+        Course: "Course"
+        CuriosityQuestionSet: "Practice Question Set"
+        eTextBook: "eTextbook"
+        Event: "Event"
+        EventSet: "Event Set"
+        ExperientialResource: "Learning Resource"
+        ExplanationResource: "Explanation Content"
+        ExplanationVideo: "Explanation Content"
+        FocusSpot: "Teacher Resource"
+        LearningOutcomeDefinition: "Teacher Resource"
+        MarkingSchemeRubric: "Teacher Resource"
+        PedagogyFlow: "Teacher Resource"
+        PracticeQuestionSet: "Practice Question Set"
+        PracticeResource: "Practice Question Set"
+        SelfAssess: "Course Assessment"
+        TeachingMethod: "Teacher Resource"
+        TextBook: "Digital Textbook"
+        Collection: "Content Playlist"
+        ExplanationReadingMaterial: "Learning Resource"
+        LearningActivity: "Learning Resource"
+        LessonPlan: "Content Playlist"
+        LessonPlanResource: "Teacher Resource"
+        PreviousBoardExamPapers: "Learning Resource"
+        TVLesson: "Explanation Content"
+        OnboardingResource: "Learning Resource"
+        ReadingMaterial: "Learning Resource"
+        Template: "Template"
+        Asset: "Asset"
+        Plugin: "Plugin"
+        LessonPlanUnit: "Lesson Plan Unit"
+        CourseUnit: "Course Unit"
+        TextBookUnit: "Textbook Unit"
+        Asset: "Certificate Template"
+      }
+
+      max_allowed_content_name = 120
+      enableDIALContextUpdate = "Yes"
+
+      cloudstorage.metadata.replace_absolute_path=true
+      cloudstorage.relative_path_prefix="{{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_relative_path_prefix "context" $) }}"
+      cloudstorage.read_base_path="{{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_read_base_path "context" $) }}"
+      cloudstorage.write_base_path={{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_write_base_path "context" $) }}
+      cloudstorage.metadata.list={{ .Values.cloudstorage_metadatalist }}
+
+      cloud_storage_type="{{ .Values.cloud_storage.type }}"
+      cloud_storage_key="{{ .Values.global.azure_storage_account_name }}"
+      cloud_storage_secret="{{ .Values.global.azure_storage_account_key }}"
+      cloud_storage_container="{{ .Values.global.azure_public_container_name }}"
+      cloud_storage_endpoint=""
+    flink-conf: |+
+      jobmanager.memory.flink.size: 1024m
+      taskmanager.memory.flink.size: 1024m
+      taskmanager.numberOfTaskSlots: 1
+      jobManager.numberOfTaskSlots: 1
+      parallelism.default: 1
+      jobmanager.execution.failover-strategy: region
+      taskmanager.memory.network.fraction: 0.1
+      scheduler-mode: reactive
+      heartbeat.timeout: 8000
+      heartbeat.interval: 5000
+      taskmanager.memory.process.size: 1700m
+      jobmanager.memory.process.size: 1600m
+      # classloader.resolve-order: "parent-first"
+      # state.savepoints.dir: file:///tmp
+    job_classname: org.sunbird.job.content.task.ContentPublishStreamTask
+
+commonAnnotations:
+  reloader.stakater.com/auto: "true"

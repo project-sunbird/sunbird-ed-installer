@@ -1,0 +1,158 @@
+fullnameOverride: "adminutil"
+
+replicaCount: 1
+
+image:
+  repository: sunbirded.azurecr.io/adminutil
+  tag: "release-4.5.0_RC3_68b1eaa_61"
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+podAnnotations: {}
+
+commonAnnotations:
+  reloader.stakater.com/auto: "true"
+
+podSecurityContext: {}
+  # runAsNonRoot: true
+  # runAsUser: 1001
+  # fsGroup: 1001
+
+securityContext: {}
+  # readOnlyRootFilesystem: false
+  # capabilities:
+  #   drop:
+  #   - ALL
+
+service:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 4000
+      targetPort: 4000
+
+ingress: {}
+  # enabled: false
+  # annotations: {}
+  # hosts:
+  #   - host: chart-example.local
+  #     paths:
+  #     - /
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 100M
+  limits:
+    cpu: 1
+    memory: 1G
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+
+# livenessProbe: {}
+# Example:
+livenessProbe:
+  httpGet:
+    path: "/health"
+    port: 4000
+  initialDelaySeconds: 15
+  periodSeconds: 15
+  failureThreshold: 5
+
+# readinessProbe: {}
+# Example:
+readinessProbe:
+  httpGet:
+    path: "/health"
+    port: 4000
+  initialDelaySeconds: 15
+  periodSeconds: 15
+  failureThreshold: 5
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+configmap:
+  enabled: true
+  mountPath: /config
+
+serviceAccount:
+  create: true
+  name: ""
+
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  scrapeTimeout: 10s
+  labels: {} # additional labels e.g. release: prometheus
+  honorLabels: true
+  jobLabel: "app.kubernetes.io/name"
+
+# Example values.yaml structure
+initContainers: {}
+  # - name: init-myservice
+  #   image: busybox:1.28
+  #   command: ['sh', '-c', "until nslookup kubernetes.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for myservice; sleep 2; done"]
+
+sidecars: {}
+  # - name: log-reader # Sidecar container
+  #   image: busybox # Use another busybox image
+  #   command: ["/bin/sh"] # Override the default command
+  #   args: ["-c", "tail -f /var/log/app.log"] # Run a shell script that tails the log file
+
+ACCESS_TOKEN_VALIDITY: 86400
+AM_ADMIN_API_ACCESS_BASEPATH: /keys/
+AM_ADMIN_API_ACCESS_KEYCOUNT: 2
+AM_ADMIN_API_ACCESS_KEYPREFIX: access_v1_key
+AM_ADMIN_API_ACCESS_KEYSTART: 1
+AM_ADMIN_API_DESKTOP_DEVICE_BASEPATH: /keys/
+AM_ADMIN_API_DESKTOP_DEVICE_KEYCOUNT: 2
+AM_ADMIN_API_DESKTOP_DEVICE_KEYPREFIX: desktop_devicev2_key
+AM_ADMIN_API_DESKTOP_DEVICE_KEYSTART: 1
+AM_ADMIN_API_ENDPOINT: http://kong:8001
+AM_ADMIN_API_KEYS: "mobile_device,desktop_device,portal_anonymous,portal_loggedin,access"
+AM_ADMIN_API_MOBILE_DEVICE_BASEPATH: /keys/
+AM_ADMIN_API_MOBILE_DEVICE_KEYCOUNT: 2
+AM_ADMIN_API_MOBILE_DEVICE_KEYPREFIX: mobile_devicev2_key
+AM_ADMIN_API_MOBILE_DEVICE_KEYSTART: 1
+AM_ADMIN_API_PORTAL_ANONYMOUS_BASEPATH: /keys/
+AM_ADMIN_API_PORTAL_ANONYMOUS_KEYCOUNT: 2
+AM_ADMIN_API_PORTAL_ANONYMOUS_KEYPREFIX: portal_anonymous_key
+AM_ADMIN_API_PORTAL_ANONYMOUS_KEYSTART: 1
+AM_ADMIN_API_PORTAL_LOGGEDIN_BASEPATH: /keys/
+AM_ADMIN_API_PORTAL_LOGGEDIN_KEYCOUNT: 2
+AM_ADMIN_API_PORTAL_LOGGEDIN_KEYPREFIX: portal_loggedin_key
+AM_ADMIN_API_PORTAL_LOGGEDIN_KEYSTART: 1
+DEFAULT_CONSUMER_GROUP: contentUser
+EMBED_ROLE: true
+ENDPOINTS_HEALTH_ID: apihealth
+ENDPOINTS_HEALTH_SENSITIVE: false
+ENDPOINTS_METRICS_ID: metrics
+ENDPOINTS_METRICS_SENSITIVE: false
+JAVA_OPTS: -Xms256m -Xmx256m
+LEARNER_API_AUTH_KEY:
+LEARNER_BASE_API_URL: http://kong:8000
+REFRESH_TOKEN_LOG_OLDER_THAN: 30
+REFRESH_TOKEN_OFFLINE_VALIDITY: 15552000
+REFRESH_TOKEN_PRELOAD: true
+REFRESH_TOKEN_PUBLIC_BASEPATH: /keycloak-keys/
+REFRESH_TOKEN_PUBLIC_KEYPREFIX: KEYCLOAK_PUBLIC_KEY
+SERVER_PORT: 4000
+SPRING_PROFILES_ACTIVE: production

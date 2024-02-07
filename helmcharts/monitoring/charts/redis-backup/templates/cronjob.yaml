@@ -1,0 +1,46 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "redis-backup.fullname" . }}
+  labels:
+    {{- include "redis-backup.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+spec:
+  schedule: {{ .Values.CRON_SCHEDULE }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          {{- with .Values.podAnnotations }}
+          annotations:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+          labels:
+            {{- include "redis-backup.selectorLabels" . | nindent 12 }}
+        spec:
+          serviceAccountName: {{ include "redis-backup.serviceAccountName" . }}
+          restartPolicy: {{ .Values.restartPolicy }}
+{{- if .Values.image.imagePullSecrets }}
+          imagePullSecrets:
+            - name: {{ .Values.image.imagePullSecrets }}
+{{- end }}
+          containers:
+            - name: {{ .Chart.Name }}
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  backup_date=$(date +%d-%b-%Y-%s)
+                  kubectl exec -it redis-master-0 -- redis-cli save
+                  kubectl cp redis-master-0:/data/dump.rdb dump.rdb
+                  bzip2 dump.rdb
+                  mv dump.rdb.bz2 dump-$backup_date.rdb.bz2
+                  az storage blob upload --account-name {{ .Values.global.azure_storage_account_name }} \
+                                          --account-key {{ .Values.global.azure_storage_account_key }} \
+                                          --container-name {{ .Values.azure_backups_container_name }} \
+                                          --name dump-$backup_date.rdb.bz2 \
+                                          --type block \
+                                          --file "dump-$backup_date.rdb.bz2"
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}

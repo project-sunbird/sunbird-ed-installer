@@ -1,0 +1,32 @@
+# Default values for postgresql-backup.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+image:
+  repository: "keshavprasad/redis-backup"
+  pullPolicy: IfNotPresent
+  imagePullSecrets: ""
+  tag: "0.0.1"
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+restartPolicy: "OnFailure"
+
+CRON_SCHEDULE: '"00 00 * * *"'
+REDIS_MASTER_POD: "redis-master-0"
+azure_backups_container_name: "backups"
+
+global:
+  azure_storage_account_name: your_storage_account_name
+  azure_storage_account_key: your_storage_account_key

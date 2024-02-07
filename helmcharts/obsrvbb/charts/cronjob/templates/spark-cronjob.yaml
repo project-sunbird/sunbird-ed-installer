@@ -1,0 +1,363 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: spark-script-cronjob-user-cache
+spec:
+  schedule: "0 */12 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: spark-cron
+            image: bitnami/kubectl:1.28.4
+            command:
+            - /bin/sh
+            - -c
+            - |
+              SPARK_POD=spark-master-0
+              kubectl exec -it $SPARK_POD -- bash -- /data/analytics/content-snapshot/scripts/run-script.sh USER_CACHE_INDEXER {{ .Values.user_id }} {{ .Values.date }} {{ .Values.populate_anonymous_user }} {{ .Values.refresh_data }}
+          restartPolicy: OnFailure
+          serviceAccountName: spark-cronjob-sa
+
+---
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: spark-script-cronjob-druid-content
+spec:
+  schedule: "0 */12 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: spark-cron
+            image: bitnami/kubectl:1.28.4
+            command:
+            - /bin/sh
+            - -c
+            - |
+              SPARK_POD=spark-master-0
+              kubectl exec -it $SPARK_POD -- bash -- /data/analytics/content-snapshot/scripts/run-script.sh DRUID_CONTENT_INDEXER {{ .Values.user_id }} {{ .Values.date }} {{ .Values.populate_anonymous_user }} {{ .Values.refresh_data }}
+          restartPolicy: OnFailure
+          serviceAccountName: spark-cronjob-sa
+
+---
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: spark-script-cronjob-content-cache
+spec:
+  schedule: "0 */12 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: spark-cron
+            image: bitnami/kubectl:1.28.4
+            command:
+            - /bin/sh
+            - -c
+            - |
+              SPARK_POD=spark-master-0
+              kubectl exec -it $SPARK_POD -- bash -- /data/analytics/content-snapshot/scripts/run-script.sh CONTENT_CACHE_INDEXER {{ .Values.user_id }} {{ .Values.date }} {{ .Values.populate_anonymous_user }} {{ .Values.refresh_data }}
+          restartPolicy: OnFailure
+          serviceAccountName: spark-cronjob-sa
+
+---
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: spark-script-cronjob-dialcode-cache
+spec:
+  schedule: "0 */12 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: spark-cron
+            image: bitnami/kubectl:1.28.4
+            command:
+            - /bin/sh
+            - -c
+            - |
+              SPARK_POD=spark-master-0
+              kubectl exec -it $SPARK_POD -- bash -- /data/analytics/content-snapshot/scripts/run-script.sh DIALCODE_CACHE_INDEXER {{ .Values.user_id }} {{ .Values.date }} {{ .Values.populate_anonymous_user }} {{ .Values.refresh_data }}
+          restartPolicy: OnFailure
+          serviceAccountName: spark-cronjob-sa
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: run-wfs-job
+spec:
+  schedule: "30 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: daily-cron-jobs-for-wfs
+            image: bitnami/kubectl:1.28.4
+            command:
+            - /bin/sh
+            - -c
+            - |
+              SPARK_POD=spark-master-0
+              kubectl exec -it $SPARK_POD -- bash -c "bash -x /data/analytics/scripts/run-job.sh wfs"
+          restartPolicy: OnFailure
+          serviceAccountName: spark-cronjob-sa
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: run-monitor-job
+spec:
+  schedule: "0 3 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: daily-cron-jobs-for-monitor-job
+            image: bitnami/kubectl:1.28.4
+            command:
+            - /bin/sh
+            - -c
+            - |
+              SPARK_POD=spark-master-0
+              kubectl exec -it $SPARK_POD -- bash -c "bash -x /data/analytics/scripts/run-job.sh monitor-job-summ"
+          restartPolicy: OnFailure
+          serviceAccountName: spark-cronjob-sa
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: submit-jobs
+spec:
+  schedule: "35 2 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: daily-cron-jobs-using-submit-all-jobs
+            image: bitnami/kubectl:1.28.4
+            command:
+            - /bin/sh
+            - -c
+            - |
+              SPARK_POD=spark-master-0
+              kubectl exec -it $SPARK_POD -- bash -c "export PATH="/usr/local/rvm/bin:$PATH" && export GEM_HOME=/.gem/ruby/2.6.0 && ruby /data/analytics/scripts/submit-all-jobs.rb"
+          restartPolicy: OnFailure
+          serviceAccountName: spark-cronjob-sa
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: start-jobmanager
+spec:
+  schedule: "30 2 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: start-jobmanager-cron-jobs
+            image: bitnami/kubectl:1.28.4
+            command:
+            - /bin/sh
+            - -c
+            - |
+              SPARK_POD=spark-master-0
+              kubectl exec -it $SPARK_POD -- bash -c "bash -x /data/analytics/scripts/start-jobmanager.sh"
+          restartPolicy: OnFailure
+          serviceAccountName: spark-cronjob-sa
+
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: course-batch-status-updater
+spec:
+  schedule: "0 */12 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: course-batch-status-updater-cron-job
+            image: bitnami/kubectl:1.28.4
+            command:
+            - /bin/sh
+            - -c
+            - |
+              SPARK_POD=spark-master-0
+              kubectl exec -it $SPARK_POD -- bash -c "bash -x /data/analytics/scripts/run-job.sh course-batch-status-updater"
+          restartPolicy: OnFailure
+          serviceAccountName: spark-cronjob-sa
+
+
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: run-admin-user-reports-job
+spec:
+  schedule: "30 3,14 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: admin-user-reports-cron-job
+            image: bitnami/kubectl:1.28.4
+            command:
+            - /bin/sh
+            - -c
+            - |
+              SPARK_POD=spark-master-0
+              kubectl exec -it $SPARK_POD -- bash -c "bash -x /data/analytics/scripts/run-job.sh admin-user-reports"
+          restartPolicy: OnFailure
+          serviceAccountName: spark-cronjob-sa
+
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: run-admin-geo-report-job
+spec:
+  schedule: "0 4 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: admin-geo-reports-cron-job
+            image: bitnami/kubectl:1.28.4
+            command:
+            - /bin/sh
+            - -c
+            - |
+              SPARK_POD=spark-master-0
+              kubectl exec -it $SPARK_POD -- bash -c "bash -x /data/analytics/scripts/run-job.sh admin-geo-reports"
+          restartPolicy: OnFailure
+          serviceAccountName: spark-cronjob-sa
+
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: run-progress-exhaust
+spec:
+  schedule: "0 8 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: progress-exhaust-cron-job
+            image: bitnami/kubectl:1.28.4
+            command:
+            - /bin/sh
+            - -c
+            - |
+              SPARK_POD=spark-master-0
+              kubectl exec -it $SPARK_POD -- bash -c "bash -x /data/analytics/scripts/run-job.sh progress-exhaust"
+          restartPolicy: OnFailure
+          serviceAccountName: spark-cronjob-sa
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: run-response-exhaust
+spec:
+  schedule: "0 9 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: response-exhaust-cron-job
+            image: bitnami/kubectl:1.28.4
+            command:
+            - /bin/sh
+            - -c
+            - |
+              SPARK_POD=spark-master-0
+              kubectl exec -it $SPARK_POD -- bash -c "bash -x /data/analytics/scripts/run-job.sh response-exhaust"
+          restartPolicy: OnFailure
+          serviceAccountName: spark-cronjob-sa
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: run-cassandra-migration
+spec:
+  schedule: "15 19 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: cassandra-migration-cron-job
+            image: bitnami/kubectl:1.28.4
+            command:
+            - /bin/sh
+            - -c
+            - |
+              SPARK_POD=spark-master-0
+              kubectl exec -it $SPARK_POD -- bash -c "bash -x /data/analytics/scripts/run-job.sh cassandra-migration"
+          restartPolicy: OnFailure
+          serviceAccountName: spark-cronjob-sa
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: run-userinfo-exhaust
+spec:
+  schedule: "0 10 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: userinfo-exhaust-cron-job
+            image: bitnami/kubectl:1.28.4
+            command:
+            - /bin/sh
+            - -c
+            - |
+              SPARK_POD=spark-master-0
+              kubectl exec -it $SPARK_POD -- bash -c "bash -x /data/analytics/scripts/run-job.sh userinfo-exhaust"
+          restartPolicy: OnFailure
+          serviceAccountName: spark-cronjob-sa
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: run-collection-summary
+spec:
+  schedule: "30 9 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: collection-summary-cron-job
+            image: bitnami/kubectl:1.28.4
+            command:
+            - /bin/sh
+            - -c
+            - |
+              SPARK_POD=spark-master-0
+              kubectl exec -it $SPARK_POD -- bash -c "bash -x /data/analytics/scripts/run-job.sh collection-summary-report-v2"
+          restartPolicy: OnFailure
+          serviceAccountName: spark-cronjob-sa
+

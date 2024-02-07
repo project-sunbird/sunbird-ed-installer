@@ -1,0 +1,10 @@
+global:
+  env: ${env}
+  environment: ${environment}
+  building_block: ${building_block}
+  azure_storage_account_name: ${azure_storage_account_name}
+  azure_storage_account_key: ${azure_storage_account_key}
+  azure_public_container_name: ${azure_public_container_name}
+  azure_private_container_name: ${azure_private_container_name}
+  private_ingressgateway_ip: ${private_ingressgateway_ip}
+  random_string: ${random_string}

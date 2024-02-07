@@ -1,0 +1,48 @@
+### Default variable file for learning-service ###
+
+replicaCount: 1
+repository: shouryasolanki/learning-service
+image_tag: latest
+resources:
+  requests:
+    cpu: 100m
+    memory: 1024Mi
+  limits:
+    cpu: 1
+    memory: 4096Mi
+network:
+  port: 8080
+  targetport: 8080
+strategy:
+  type: RollingUpdate
+  maxsurge: 25%
+  maxunavailable: 25%
+serviceType: ClusterIP
+
+cloud_storage:
+  type: "azure"
+cloudstorage_relative_path_prefix_content: contents
+cloudstorage_metadata_list: '["appIcon", "artifactUrl", "posterImage", "previewUrl", "thumbnail", "assetsMap", "certTemplate", "itemSetPreviewUrl", "grayScaleAppIcon", "sourceURL", "variants", "downloadUrl", "streamingUrl", "toc_url", "data", "question", "solutions", "editorState", "media", "pdfUrl", "transcripts"]'
+cloudstorage_read_base_path: ""
+cloudstorage_write_base_path: ""
+
+cloud_storage_content_folder: "content"
+cloud_storage_asset_folder: "assets"
+cloud_storage_artefact_folder: "artifact"
+cloud_storage_bundle_folder: "bundle"
+cloud_storage_media_folder: "media"
+cloud_storage_ecar_folder: "ecar_files"
+cloud_storage_itemset_folder: "itemset"
+content_keyspace_name: "{{ .Values.global.env }}_content_store"
+hierarchy_keyspace_name: "{{ .Values.global.env }}_hierarchy_store"
+content_hierarchy_table: content_hierarchy
+framework_hierarchy_table: framework_hierarchy
+dialcode_keyspace_name: dialcode_store
+dialcode_keyspace_table: dial_code
+system_config_table: system_config
+publisher_keyspace_table: publisher
+assessment_keyspace_name: "{{ .Values.global.env }}_content_store"
+assessment_keyspace_table: question_data
+
+dial_service_search_url: http://dial-service:9000/dialcode/v3/search
+dial_service_generate_url: http://dial-service:9000/dialcode/v3/generate

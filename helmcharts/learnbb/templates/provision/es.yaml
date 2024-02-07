@@ -1,0 +1,93 @@
+# Remove composte index from here.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Chart.Name }}-elasticsearch-migration-job
+  labels:
+    app: {{ .Chart.Name }}-elasticsearch-migration
+    scope: provisioning
+  annotations:
+    {{.Values.global.elasticsearch.provisioning.annotations | toYaml }}
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}-elasticsearch-migration
+    spec:
+      restartPolicy: Never
+      initContainers:
+      - name: wait-for-elasticsearch
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        command: ["/bin/sh", "-c"]
+        args:
+        - "timeout {{ .Values.migration.elasticsearch.waitTime }} sh -c 'until nc -z {{ .Values.global.elasticsearch.host }} {{ .Values.global.elasticsearch.port }}; do echo waiting for elasticsearch; sleep 10; done'"
+      containers:
+      - name: migration
+        image: maven # or any other image that has curl and java
+        imagePullPolicy: IfNotPresent
+        command: ['bash', '-c']
+        args:
+        - |
+          set -x
+          cd /tmp/
+          devops_branch={{ .Values.devops_release_branch }}
+
+          # Downloding the indexes
+          cwd=$PWD
+          rm -rf /tmp/sunbird-devops/ || true
+
+          # Download the migration files
+          git clone --filter=blob:none --no-checkout https://github.com/project-sunbird/sunbird-devops --branch=$devops_branch --depth 1
+          cd sunbird-devops
+          git sparse-checkout init --cone
+          git sparse-checkout set ansible/roles/es-mapping/files
+          git checkout
+          cd ansible/roles/es-mapping/
+
+
+          #### Creating the new indices:
+          cd files/indices
+          indices_files=$(ls -l | awk 'NR>1{print $9}' | awk -F"." '{print $1}' | tr "\n" " ")
+          for file in ${indices_files[@]}
+          do
+                  echo "Applying ${file}.json"
+                  curl  -X PUT http://{{.Values.global.elasticsearch.host}}:{{.Values.global.elasticsearch.port}}/${file} -H 'Content-Type: application/json' -d @${file}.json
+          done
+
+          #### Updating the mapping for newly created indices:
+
+          echo "#################################################"
+
+          cd ../mappings
+
+          # Remove autocreated indexes.
+          # automatically gets created by search-indexer
+          # /cs mapping has conflict with _doc map created below
+
+          echo "Applying compositesearch-mapping.json"
+          curl  -X PUT http://{{.Values.global.elasticsearch.host}}:{{.Values.global.elasticsearch.port}}/compositesearch/_mapping/cs -H 'Content-Type: application/json' -d @compositesearch-mapping.json
+          rm -rf compositesearch-mapping.json
+
+          #mapping_files=$(ls -l | awk 'NR>1{print $9}' | awk -F"-" '{print $1}' | tr "\n" " ")
+          mapping_files=$(ls -l | awk 'NR>1{print $9}' | awk -F"." '{print $1}' | tr "\n" " " | sed 's/-mapping//g')
+
+          for file in ${mapping_files[@]}
+          do
+                  echo "Applying ${file}-mapping.json"
+                  curl  -X PUT http://{{.Values.global.elasticsearch.host}}:{{.Values.global.elasticsearch.port}}/${file}/_mapping/_doc -H 'Content-Type: application/json' -d @${file}-mapping.json
+          done
+
+          #### Adding ingest pipeline for newly created indices:
+
+          echo "#################################################"
+
+          cd ../pipelines
+          #mapping_files=$(ls -l | awk 'NR>1{print $9}' | awk -F"-" '{print $1}' | tr "\n" " ")
+          pipeline_files=$(ls -l | awk 'NR>1{print $9}' | awk -F"." '{print $1}' | tr "\n" " " | sed 's/-ingest-pipeline//g')
+
+          for file in ${pipeline_files[@]}
+          do
+                  curl  -X PUT http://{{.Values.global.elasticsearch.host}}:{{.Values.global.elasticsearch.port}}/_ingest/pipeline/${file}-ingest-pipeline -H 'Content-Type: application/json' -d @${file}-ingest-pipeline.json
+          done
+  backoffLimit: 4

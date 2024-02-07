@@ -1,0 +1,30 @@
+{{- $currentScope := .}}
+{{- range $jobName, $jobData := .Values.flink_jobs }}
+{{- if $jobData.enabled }}
+{{- with $currentScope }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-config" $jobName }}
+  labels:
+{{ include "common.labels.standard" (dict "customLabels" .Values.commonLabels "context" $) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations:
+{{ include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- end }}
+data:
+  {{- range $configKey, $configValue := $jobData -}}
+  {{/* We don't have to create key value pair configmaps as files  */}}
+  {{- if contains "\n" (toString $configValue) -}}
+  {{- $configKey | nindent 2 -}}: |-
+    {{- include "common.tplvalues.render" (dict "value" $configValue "context" $) | nindent 4 }}
+  {{- end -}}
+  {{- end -}}
+  {{- "base-config" | nindent 2 -}}: |-
+    {{- include "common.tplvalues.render" (dict "value" .Values.base_config "context" $) | nindent 4 }}
+  {{- "log4j_console_properties" |nindent 2 -}}: |-
+    {{- include "common.tplvalues.render" (dict "value" .Values.log4j_console_properties "context" $) | nindent 4 }}
+  {{- end -}}
+  {{- end -}}
+  {{- end -}}

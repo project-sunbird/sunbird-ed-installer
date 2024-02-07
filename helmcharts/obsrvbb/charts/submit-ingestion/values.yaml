@@ -1,0 +1,71 @@
+druid: &druid
+  host: "druid-raw-routers"
+  port: 8888
+supervisor_path: "druid/indexer/v1/supervisor"
+kafka: &kafka
+  host: "kafka"
+  port: 9092
+raw_offline_desktop_taskcount: 1
+raw_summary_events_taskcount: 1
+raw_telemetry_events_taskcount: 1
+raw_telemetry_feedback_events_taskcount: 1
+rollup_error_hourly_syncts_taskcount: 1
+rollup_summary_distinct_counts_taskcount: 1
+rollup_summary_syncts_taskcount: 1
+rollup_telemetry_audit_syncts_taskcount: 1
+rollup_telemetry_hourly_syncts_taskcount: 1
+rollup_telemetry_syncts_taskcount: 1
+rollup_tpd_hourly_taskcount: 1
+rollup_course_completion_audit_syncts_taskcount: 1
+desktop_pdata_id: "dev.sunbird.desktop"
+resources:
+  requests:
+    cpu: 100m
+    memory: 100Mi
+  limits:
+    cpu: 1
+    memory: 1024Mi
+container_name: "telemetry-data-store"
+ingestion_spec:
+  druid_events_summary:
+    topic: druid.events.summary
+    name: "druid_events_summary"
+  druid_events_telemetry:
+    topic: druid.events.telemetry
+    name: "druid_events_summary"
+  druid_events_error:
+    topic: druid.events.error
+    name: druid_events_error
+
+global:
+  kafka: *kafka
+  druid: *druid
+
+offline_desktop_events:
+  enable: true
+summary_events:
+  enable: true
+telemetry_events_syncts:
+  enable: true
+telemetry_feedback_events:
+  enbale: true  
+course_completion_events_rollup:
+  enable: true
+error_hourly_rollup_syncts:
+  enable: true
+summary_distinct_counts:
+  enable: true
+summary_rollup_syncts:
+  enable: true  
+audit_rollup_syncts:
+  enable: true  
+telemetry_hourly_rollup_syncts:
+  enable: true  
+telemetry_rollup_syncts:
+  enable: true
+tpd_hourly_rollup_syncts:
+  enable: true   
+
+
+
+
