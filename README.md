@@ -27,7 +27,7 @@ We will copy your existing files in the below location with a `.bak` extension a
 
 - In the below instructions `demo` is the environement name. You can change it as per your need. For example - `dev`, `stage` etc.
 - Clone the repo
-`git cline git@github.com:nimbushubin/sunbird.git`
+`git clone git@github.com:nimbushubin/sunbird.git`
 - Copy the template directory `cd terraform/azure && cp -r template demo`
 - Fill the variables in `demo/env.hcl`
 - Fill the variables in `demo/global-values.yaml`
