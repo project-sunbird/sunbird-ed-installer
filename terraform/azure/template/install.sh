@@ -146,7 +146,7 @@ function run_post_install() {
         sleep 10
     done
     echo "All pods are running successfully."
-    echo "Starting onboard apis..."
+    echo "Starting post install..."
     cp ../../../postman-collection/collection${RELEASE}.json .
     postman collection run collection${RELEASE}.json --environment env.json --delay-request 500 --bail --insecure
 }
