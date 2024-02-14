@@ -146,9 +146,9 @@ function run_post_install() {
         sleep 10
     done
     echo "All pods are running successfully."
-    echo "Downloading postman collection of release $RELEASE from $POSTMAN_COLLECTION_LINK"
-    wget --no-verbose -O collection_${RELEASE}.json $POSTMAN_COLLECTION_LINK
-    postman collection run collection_${RELEASE}.json --environment env.json --delay-request 500 --bail --insecure
+    echo "Starting post install..."
+    cp ../../../postman-collection/collection${RELEASE}.json .
+    postman collection run collection${RELEASE}.json --environment env.json --delay-request 500 --bail --insecure
 }
 
 function destroy_tf_resources() {

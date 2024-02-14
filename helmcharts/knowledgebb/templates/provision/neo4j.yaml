@@ -66,8 +66,8 @@ spec:
           args:
             - -ec
             - |
-              /var/lib/neo4j/bin/cypher-shell -a bolt://{{.Values.global.neo4j.host}}:{{.Values.global.neo4j.port}} <<EOF
-              CREATE CONSTRAINT ON (domain:domain) ASSERT domain.IL_UNIQUE_ID IS UNIQUE;
-              CREATE INDEX ON :domain(IL_FUNC_OBJECT_TYPE);
-              CREATE INDEX ON :domain(IL_SYS_NODE_TYPE);
-              EOF
+              /var/lib/neo4j/bin/cypher-shell -a bolt://{{.Values.global.neo4j.host}}:{{.Values.global.neo4j.port}} 'CREATE CONSTRAINT ON (domain:domain) ASSERT domain.IL_UNIQUE_ID IS UNIQUE;'
+              sleep 3
+              /var/lib/neo4j/bin/cypher-shell -a bolt://{{.Values.global.neo4j.host}}:{{.Values.global.neo4j.port}} 'CREATE INDEX ON :domain(IL_FUNC_OBJECT_TYPE);'
+              sleep 3
+              /var/lib/neo4j/bin/cypher-shell -a bolt://{{.Values.global.neo4j.host}}:{{.Values.global.neo4j.port}} 'CREATE INDEX ON :domain(IL_SYS_NODE_TYPE);'

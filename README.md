@@ -27,14 +27,14 @@ We will copy your existing files in the below location with a `.bak` extension a
 
 - In the below instructions `demo` is the environement name. You can change it as per your need. For example - `dev`, `stage` etc.
 - Clone the repo
-`git cline git@github.com:nimbushubin/sunbird.git`
+`git clone https://github.com/project-sunbird/sunbird-ed-installer.git`
 - Copy the template directory `cd terraform/azure && cp -r template demo`
-- Fill the variables in `demo/env.hcl`
+- Fill the variables in `demo/environment.hcl`
 - Fill the variables in `demo/global-values.yaml`
 - Run `az login --tenant AZURE_TENANT_ID`
 - Run `time ./install.sh`
 
-#### Mandatory variables in `env.hcl`
+#### Mandatory variables in `environment.hcl`
 |      Name      |   Description    |
 |----------------|------------------|
 |`environment`   | Environment name (between 1 - 9 charcaters). Example: *dev*, *stage* |

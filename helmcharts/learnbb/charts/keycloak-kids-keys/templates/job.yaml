@@ -11,6 +11,13 @@ spec:
       serviceAccountName: {{ include "common.names.fullname" . }}
       containers:
         - name: {{ .Chart.Name }}
+          command:
+          - /bin/bash
+          - -c
+          args:
+          - |
+            sleep 30
+            /usr/local/bin/execute_query.sh
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           envFrom:
