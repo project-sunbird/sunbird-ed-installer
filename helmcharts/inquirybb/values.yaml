@@ -73,6 +73,10 @@ elasticsearch: &es
     annotations: *provisioningAnnotations
   persistence:
     size: 25Gi
+  sysctlImage:
+    registry: docker.io
+    repository: bitnami/bitnami-shell-archived
+    tag: 11-debian-11-r54
 
 cassandra: &cassandra
   enabled: true

@@ -50,6 +50,10 @@ elasticsearch: &es
     "helm.sh/hook-weight": "-5"
   provisioning:
     annotations: *provisioningAnnotations
+  sysctlImage:
+    registry: docker.io
+    repository: bitnami/bitnami-shell-archived
+    tag: 11-debian-11-r54
 
 redis: &redis
   enabled: true
