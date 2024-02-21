@@ -219,7 +219,7 @@ dialcode_api_auth_key: ""
 
 #(user read api details)
 user_read_api_endpoint: "/private/user/v1/read/"
-user_read_api_url: "learner-service:9000"
+user_read_api_url: "userorg-service:9000"
 
 ### User-cache-updater related vars
 usercache_updater_parallelism: 1
@@ -805,7 +805,7 @@ flink_jobs:
           url = "http://{{ .Values.user_read_api_url }}/{{ .Values.user_read_api_endpoint }}"
         }
       }
-      regd.user.producer.pid = "learner-service"
+      regd.user.producer.pid = "userorg-service"
       user.self.signin.types = ["google","self"]
       user.validated.types = ["sso"]
       user.self.signin.key = "Self-Signed-In"

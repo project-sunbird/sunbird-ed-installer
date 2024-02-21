@@ -1,9 +1,9 @@
-devops_release_branch: release-6.0.0
+devops_release_branch: release-7.0.0
 postgres_migration_image: bitnami/postgresql:11.14.0-debian-10-r49
 cassandra_migration_version: release-5.3.0
 certregistry:
   opa_enabled: true
-learner:
+userorg:
   opa_enabled: true
 lms:
   opa_enabled: true

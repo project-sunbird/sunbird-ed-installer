@@ -7,5 +7,5 @@ dependencies:
 description: A production-ready Helm chart for lms
 maintainers:
 - name: NimbusHub.in
-name: learner
+name: userorg
 version: 0.1.0

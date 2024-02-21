@@ -1,9 +1,9 @@
-fullnameOverride: "learner"
+fullnameOverride: "userorg"
 
 replicaCount: 1
 
 image:
-  repository: sunbirded.azurecr.io/learner_service
+  repository: sunbirded.azurecr.io/userorg-service
   tag: "release-5.3.1_RC1_c4b5066_31"
   pullPolicy: IfNotPresent
   pullSecrets: []
@@ -89,7 +89,7 @@ affinity: {}
 
 configmap:
   enabled: true
-  mountPath: /home/sunbird/learner/learning-service-1.0-SNAPSHOT/config
+  mountPath: /home/sunbird/userorg-service-1.0-SNAPSHOT/config
 
 commonAnnotations:
   reloader.stakater.com/auto: "true"
@@ -136,11 +136,11 @@ sunbird_cert_service_base_url:  "http://cert-service:9000"
 sunbird_otp_allowed_attempt: "5"
 feed_limit: "30"
 form_api_endpoint: "/plugin/v1/form/read"
-learner_in_memory_cache_ttl: "600"
+userorg_in_memory_cache_ttl: "600"
 user_index_alias: "user_alias"
 org_index_alias: "org_alias"
 sunbird_reset_pass_msg: "You have requested to reset password. Click on the link to set a password:"
-sunbird_mw_system_host: "learner-service"
+sunbird_mw_system_host: "userorg-service"
 sunbird_telemetry_base_url: "http://telemetry-service:9001"
 telemetry_queue_threshold_value: "100"
 sunbird_cs_search_path: "/v1/content/search"
@@ -154,7 +154,7 @@ sunbird_keycloak_required_action_link_expiration_seconds: 2592000
 sunbird_user_profile_field_default_visibility: private
 sunbird_email_max_recipients_limit: 100
 sunbird_url_shortner_enable: false
-telemetry_pdata_pid: learner-service
+telemetry_pdata_pid: userorg-service
 api_actor_provider: local
 background_actor_provider: local
 sunbird_mw_system_port: 8088

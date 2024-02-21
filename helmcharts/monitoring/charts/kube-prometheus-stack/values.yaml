@@ -4226,8 +4226,8 @@ prometheus-blackbox-exporter:
       - name: knowledgemw
         url: "http://knowledge-mw-service:5000/service/health"
         module: http_2xx
-      - name: learner
-        url: "http://learner-service:9000/service/health"
+      - name: userorg
+        url: "http://userorg-service:9000/service/health"
         module: http_2xx
       - name: dial
         url: "http://dial-service:9000/health"

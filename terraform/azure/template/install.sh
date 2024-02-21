@@ -93,8 +93,8 @@ function generate_postman_env() {
     domain_name=$(kubectl get cm -n sunbird report-env -ojsonpath='{.data.SUNBIRD_ENV}')
     api_key=$(kubectl get cm -n sunbird player-env -ojsonpath='{.data.sunbird_api_auth_token}')
     keycloak_secret=$(kubectl get cm -n sunbird player-env -ojsonpath='{.data.sunbird_portal_session_secret}')
-    keycloak_admin=$(kubectl get cm -n sunbird learner-env -ojsonpath='{.data.sunbird_sso_username}')
-    keycloak_password=$(kubectl get cm -n sunbird learner-env -ojsonpath='{.data.sunbird_sso_password}')
+    keycloak_admin=$(kubectl get cm -n sunbird userorg-env -ojsonpath='{.data.sunbird_sso_username}')
+    keycloak_password=$(kubectl get cm -n sunbird userorg-env -ojsonpath='{.data.sunbird_sso_password}')
     generated_uuid=$(uuidgen)
     temp_file=$(mktemp)
     cp postman.env.json "${temp_file}"
@@ -112,8 +112,8 @@ function generate_postman_env() {
 
 function restart_workloads_using_keys() {
     echo -e "\nRestart workloads using keycloak keys and wait for them to start..."
-    kubectl rollout restart deployment -n sunbird neo4j knowledge-mw player report content adminutil cert-registry groups learner lms notification registry analytics
-    kubectl rollout status deployment -n sunbird neo4j knowledge-mw player report content adminutil cert-registry groups learner lms notification registry analytics
+    kubectl rollout restart deployment -n sunbird neo4j knowledge-mw player report content adminutil cert-registry groups userorg lms notification registry analytics
+    kubectl rollout status deployment -n sunbird neo4j knowledge-mw player report content adminutil cert-registry groups userorg lms notification registry analytics
     echo -e "\nWaiting for all pods to start"
 
 }
