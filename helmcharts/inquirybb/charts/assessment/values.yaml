@@ -5,7 +5,7 @@ replicaCount: 1
 
 image:
   repository: sunbirded.azurecr.io/assessment-service
-  tag: release-5.4.0_RC1_7889b07_4
+  tag: release-7.0.0_RC2_aeccd6e_16
   pullPolicy: IfNotPresent
   pullSecrets: []
 

@@ -4,7 +4,7 @@ replicaCount: 1
 image:
   registry: sunbirded.azurecr.io
   repository: sunbird-analytics-service
-  tag: release-5.1.0_RC2_a7544a4_12
+  tag: release-5.1.3_RC1_fc5578f_16
 imagePullSecrets: ""
 
 podAnnotations: {}

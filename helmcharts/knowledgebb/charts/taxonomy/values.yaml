@@ -4,7 +4,7 @@ replicaCount: 1
 
 image:
   repository: sunbirded.azurecr.io/taxonomy-service
-  tag: "release-5.5.0_RC1_551878a_124"
+  tag: "release-5.7.0_RC7_a9fa6d9_13"
   pullPolicy: IfNotPresent
   pullSecrets: []
 

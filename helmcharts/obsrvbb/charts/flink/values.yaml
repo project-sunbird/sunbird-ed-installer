@@ -7,8 +7,8 @@ replicaCount: 1
 #   tag: "release-5.2.0_RC1_2c615f8_12"
 # docker pull sunbirded.azurecr.io/sunbird-datapipeline:release-4.9.0_RC4_1
 image:
-  repository: aimansharief/obsrv-jobs
-  tag: "R5.2.0"
+  repository: sunbirded.azurecr.io/data-pipeline
+  tag: "release-5.2.0_RC3_49d7f23_10"
   pullPolicy: IfNotPresent
   pullSecrets: []
 

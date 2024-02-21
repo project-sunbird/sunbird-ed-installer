@@ -5,7 +5,7 @@ replicaCount: 1
 
 image:
   repository: sunbirded.azurecr.io/knowledge-platform-jobs
-  tag: "release-5.5.0_RC2_037e2e9_54"
+  tag: "release-5.5.0_RC2_037e2e9_84"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
