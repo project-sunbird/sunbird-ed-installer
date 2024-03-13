@@ -888,25 +888,6 @@ flink_jobs:
       parallelism.default: 1
       jobmanager.execution.failover-strategy: region
       taskmanager.memory.network.fraction: 0.1
-  
-  ml-user-delete:
-    enabled: true
-    config: |+
-      include file("/data/flink/conf/base-config.conf")
-      kafka {
-        input.topic = ${job.env}".delete.user"
-        groupId = ${job.env}"-ml-user-delete-group"
-      }
-      task {
-        ml.user.delete.parallelism = {{ ml_user_delete_job_parallelism }}
-      }
-  
-    flink-conf: |+
-      jobmanager.memory.flink.size: {{ flink_job_names['ml-user-delete'].jobmanager_memory }}
-      taskmanager.memory.flink.size: {{ flink_job_names['ml-user-delete'].taskmanager_memory }}
-      taskmanager.numberOfTaskSlots: {{ flink_job_names['ml-user-delete'].taskslots }}
-      parallelism.default: 1
-      jobmanager.execution.failover-strategy: region
-      taskmanager.memory.network.fraction: 0.1
+    job-classname: org.sunbird.job.deletioncleanup.task.UserDeletionCleanupStreamTask
 commonAnnotations:
   reloader.stakater.com/auto: "true"
