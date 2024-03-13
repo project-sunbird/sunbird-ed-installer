@@ -848,6 +848,46 @@ flink_jobs:
       jobmanager.execution.failover-strategy: region
       taskmanager.memory.network.fraction: 0.1
     job_classname: org.sunbird.dp.userinfo.task.ProgramUserInfoStreamTask
-
+  
+  user-deletion-cleanup:
+    enabled: true
+    config: |+
+      include file("/data/flink/conf/base-config.conf")
+      kafka {
+        input.topic = ${job.env}".delete.user"
+        groupId = ${job.env}"-delete-user-group"
+      }
+      task {
+        user.deletion.cleanup.parallelism = {{ user_deletion_cleanup_job_parallelism }}
+      }
+  
+      service {
+          lms {
+              basePath = "{{ lms_service_base_url }}"
+          }
+          userorg {
+              basePath = "{{ userorg_service_base_url }}"
+          }
+      }
+  
+      sunbird_keycloak_user_federation_provider_id={{core_vault_sunbird_keycloak_user_federation_provider_id}}
+      user_read_api = "/user/v5/read/"
+      batch_search_api = "/course/v1/batch/list"
+  
+      user {
+          keyspace = "sunbird"
+          lookup.table = "user_lookup"
+          table = "user"
+          externalIdentity.table = "usr_external_identity"
+          org.table = "user_organisation"
+      }
+    flink-conf: |+
+      jobmanager.memory.flink.size: {{ flink_job_names['user-deletion-cleanup'].jobmanager_memory }}
+      taskmanager.memory.flink.size: {{ flink_job_names['user-deletion-cleanup'].taskmanager_memory }}
+      taskmanager.numberOfTaskSlots: {{ flink_job_names['user-deletion-cleanup'].taskslots }}
+      parallelism.default: 1
+      jobmanager.execution.failover-strategy: region
+      taskmanager.memory.network.fraction: 0.1
+    job-classname: org.sunbird.job.deletioncleanup.task.UserDeletionCleanupStreamTask
 commonAnnotations:
   reloader.stakater.com/auto: "true"

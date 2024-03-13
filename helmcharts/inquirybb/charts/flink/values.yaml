@@ -328,4 +328,68 @@ flink_jobs:
       jobmanager.execution.failover-strategy: region
       taskmanager.memory.network.fraction: 0.1
     job_classname: org.sunbird.job.questionset.republish.task.QuestionSetRePublishStreamTask  
- 
+
+quml-migrator:
+  enabled: false
+  config: |+
+    include file("/data/flink/conf/base-config.conf")
+    kafka {
+      input.topic = "{{ inquiry_quml_migrator_kafka_topic_name }}"
+      republish.topic = "{{ inquiry_assessment_republish_kafka_topic_name }}"
+      groupId = "{{ inquiry_quml_migrator_group }}"
+    }
+    task {
+      consumer.parallelism = {{ quml_migrator_consumer_parallelism }}
+      parallelism = {{ quml_migrator_task_parallelism }}
+      router.parallelism = {{ quml_migrator_router_parallelism }}
+      question_migration.parallelism = {{ question_migration_parallelism }},
+      questionset_migration.parallelism = {{ questionset_migration_parallelism }}
+    }
+    question {
+      keyspace = "{{ question_keyspace_name }}"
+      table = "question_data"
+    }
+    questionset {
+      keyspace = "{{ hierarchy_keyspace_name }}"
+      table = "questionset_hierarchy"
+    }
+
+  flink-conf: |+
+    jobmanager.memory.flink.size: {{ flink_job_names['quml-migrator'].jobmanager_memory }}
+    taskmanager.memory.flink.size: {{ flink_job_names['quml-migrator'].taskmanager_memory }}
+    taskmanager.numberOfTaskSlots: {{ flink_job_names['quml-migrator'].taskslots }}
+    parallelism.default: 1
+    jobmanager.execution.failover-strategy: region
+    taskmanager.memory.network.fraction: 0.1
+  
+user-pii-data-updater:
+  enabled: true
+  config: |+
+    include file("/data/flink/conf/base-config.conf")
+    kafka {
+      input.topic = "{{ user_pii_updater_kafka_topic_name }}"
+      groupId = "{{ user_pii_updater_group }}"
+    }
+    task {
+      consumer.parallelism = 1
+      parallelism = 1
+      router.parallelism = 1
+    }
+    target_object_types={{ user_pii_target_object_types }}
+    user_pii_replacement_value="{{ user_pii_replacement_value }}"
+    admin_email_notification_enable={{ enable_admin_email_notification | default('true') }}
+    userorg_service_base_url="{{ user_org_service_base_url }}"
+    notification {
+      email {
+        subject: "{{ email_notification_subject }}",
+        regards: "{{ email_notification_regards }}"
+      }
+    }
+  flink-conf: |+
+    jobmanager.memory.flink.size: {{ flink_job_names['user-pii-data-updater'].jobmanager_memory }}
+    taskmanager.memory.flink.size: {{ flink_job_names['user-pii-data-updater'].taskmanager_memory }}
+    taskmanager.numberOfTaskSlots: {{ flink_job_names['user-pii-data-updater'].taskslots }}
+    parallelism.default: 1
+    jobmanager.execution.failover-strategy: region
+    taskmanager.memory.network.fraction: 0.1
+  job_classname: org.sunbird.job.user.pii.updater.task.UserPiiUpdaterStreamTask
