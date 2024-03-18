@@ -132,6 +132,17 @@ cloudstorage_replace_absolute_path: false
 ### QuestionSet RePublish Job Config
 inquiry_assessment_republish_kafka_topic_name: "{{ .Values.global.env }}.assessment.republish.request"
 inquiry_assessment_republish_group: "{{ .Values.global.env }}-questionset-republish-group"
+### user_pii Job Config
+user_pii_updater_kafka_topic_name: "{{ .Values.global.env }}.delete.user"
+user_pii_updater_group: "{{ .Values.global.env }}-user-pii-updater-group"
+user_pii_target_object_types: '{
+  "Question": ["1.0", "1.1"],
+  "QuestionSet": ["1.0", "1.1"]
+}'
+user_pii_replacement_value: "Deleted User"
+user_org_service_base_url: "http://{{ .Values.global.private_ingressgateway_ip }}/userorg"
+email_notification_subject: "User Account Deletion Notification"
+email_notification_regards: "Team"
 
 cloud_storage: 
   type: "azure"
@@ -328,67 +339,34 @@ flink_jobs:
       jobmanager.execution.failover-strategy: region
       taskmanager.memory.network.fraction: 0.1
     job_classname: org.sunbird.job.questionset.republish.task.QuestionSetRePublishStreamTask  
-
-quml-migrator:
-  enabled: false
-  config: |+
-    include file("/data/flink/conf/base-config.conf")
-    kafka {
-      input.topic = "{{ inquiry_quml_migrator_kafka_topic_name }}"
-      republish.topic = "{{ inquiry_assessment_republish_kafka_topic_name }}"
-      groupId = "{{ inquiry_quml_migrator_group }}"
-    }
-    task {
-      consumer.parallelism = {{ quml_migrator_consumer_parallelism }}
-      parallelism = {{ quml_migrator_task_parallelism }}
-      router.parallelism = {{ quml_migrator_router_parallelism }}
-      question_migration.parallelism = {{ question_migration_parallelism }},
-      questionset_migration.parallelism = {{ questionset_migration_parallelism }}
-    }
-    question {
-      keyspace = "{{ question_keyspace_name }}"
-      table = "question_data"
-    }
-    questionset {
-      keyspace = "{{ hierarchy_keyspace_name }}"
-      table = "questionset_hierarchy"
-    }
-
-  flink-conf: |+
-    jobmanager.memory.flink.size: {{ flink_job_names['quml-migrator'].jobmanager_memory }}
-    taskmanager.memory.flink.size: {{ flink_job_names['quml-migrator'].taskmanager_memory }}
-    taskmanager.numberOfTaskSlots: {{ flink_job_names['quml-migrator'].taskslots }}
-    parallelism.default: 1
-    jobmanager.execution.failover-strategy: region
-    taskmanager.memory.network.fraction: 0.1
   
 user-pii-data-updater:
   enabled: true
   config: |+
     include file("/data/flink/conf/base-config.conf")
     kafka {
-      input.topic = "{{ user_pii_updater_kafka_topic_name }}"
-      groupId = "{{ user_pii_updater_group }}"
+      input.topic = "{{ .Values.user_pii_updater_kafka_topic_name }}"
+      groupId = "{{ .Values.user_pii_updater_group }}"
     }
     task {
       consumer.parallelism = 1
       parallelism = 1
       router.parallelism = 1
     }
-    target_object_types={{ user_pii_target_object_types }}
-    user_pii_replacement_value="{{ user_pii_replacement_value }}"
-    admin_email_notification_enable={{ enable_admin_email_notification | default('true') }}
-    userorg_service_base_url="{{ user_org_service_base_url }}"
+    target_object_types={{ .Values.user_pii_target_object_typess }}
+    user_pii_replacement_value="{{ .Values.user_pii_replacement_value }}"
+    admin_email_notification_enable=True
+    userorg_service_base_url="{{ .Values.user_org_service_base_url }}"
     notification {
       email {
-        subject: "{{ email_notification_subject }}",
-        regards: "{{ email_notification_regards }}"
+        subject: "{{ .Values.email_notification_subject }}",
+        regards: "{{ .Values.email_notification_regards }}"
       }
     }
   flink-conf: |+
-    jobmanager.memory.flink.size: {{ flink_job_names['user-pii-data-updater'].jobmanager_memory }}
-    taskmanager.memory.flink.size: {{ flink_job_names['user-pii-data-updater'].taskmanager_memory }}
-    taskmanager.numberOfTaskSlots: {{ flink_job_names['user-pii-data-updater'].taskslots }}
+    jobmanager.memory.flink.size: 1024m
+    taskmanager.memory.flink.size: 1024m
+    taskmanager.numberOfTaskSlots: 1
     parallelism.default: 1
     jobmanager.execution.failover-strategy: region
     taskmanager.memory.network.fraction: 0.1
