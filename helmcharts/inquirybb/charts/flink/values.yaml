@@ -137,7 +137,10 @@ user_pii_updater_kafka_topic_name: "{{ .Values.global.env }}.delete.user"
 user_pii_updater_group: "{{ .Values.global.env }}-user-pii-updater-group"
 user_pii_target_object_types: '{
   "Question": ["1.0", "1.1"],
-  "QuestionSet": ["1.0", "1.1"]
+  "QuestionSet": ["1.0", "1.1"],
+  "Asset": ["1.0"],
+  "Content": ["1.0"],
+  "Collection": ["1.0"]
 }'
 user_pii_replacement_value: "Deleted User"
 user_org_service_base_url: "http://{{ .Values.global.private_ingressgateway_ip }}/userorg"

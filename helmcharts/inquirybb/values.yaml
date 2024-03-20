@@ -120,6 +120,9 @@ kafka: &kafka
     - name: "{{ .Values.global.env }}.assessment.publish.request"
       partitions: 1
       replicationFactor: 1
+    - name: "{{ .Values.global.env }}.delete.user"
+      partitions: 1
+      replicationFactor: 1
     parallel: 1
   persistence:
     size: 25Gi
