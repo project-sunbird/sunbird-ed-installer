@@ -118,6 +118,12 @@ inquiry:
   cloudstorage_base_path: "https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net"
   valid_cloudstorage_base_urls: '["https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net","https://obj.dev.sunbird.org"]'
   search_service_base_url: http://search-service:9000/v3/search
+  question_list_limit: 20
+  # V5 API Configurations
+  v5_supported_qumlVersions: '[1.1]'
+  v5_default_qumlVersion: 1.1
+
+
 
 commonAnnotations:
   reloader.stakater.com/auto: "true"
