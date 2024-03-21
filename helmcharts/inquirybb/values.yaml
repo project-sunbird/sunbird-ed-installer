@@ -1,5 +1,5 @@
 fullname: inquirybb
-
+inquiry_automation_version: 7.0.0
 provisioningAnnotations: &provisioningAnnotations
   "helm.sh/hook-weight": "-4"
 
