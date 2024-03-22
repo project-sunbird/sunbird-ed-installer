@@ -210,6 +210,8 @@ collection_summary_agg_cache_ttl: "21600"
 enrollment_list_size: "1000"
 sunbird_cloud_service_provider: "azure"
 isMultiDCEnabled: "false"
+sunbird_dial_service_base_url: "http://dial-service:9000"
+sunbird_dial_service_search_url: "/dialcode/v3/search"
 
 opa_enabled: false
 
