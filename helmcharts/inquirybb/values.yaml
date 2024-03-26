@@ -1,5 +1,5 @@
 fullname: inquirybb
-inquiry_automation_version: 7.0.0
+inquiry_automation_repo_branch: release-7.0.0
 provisioningAnnotations: &provisioningAnnotations
   "helm.sh/hook-weight": "-4"
 
@@ -83,6 +83,7 @@ cassandra: &cassandra
   provisioning:
     annotations: *provisioningAnnotations
   image:
+    repository: bitnami/cassandra
     tag: 3.11.13-debian-11-r3
   extraEnvVars:
     - name: CASSANDRA_AUTHENTICATOR
@@ -150,3 +151,7 @@ global:
   installation: *installation
   elasticsearch: *es
   provisioningAnnotations: *provisioningAnnotations
+
+migration:
+ cassandra:
+   waitTime: 120
