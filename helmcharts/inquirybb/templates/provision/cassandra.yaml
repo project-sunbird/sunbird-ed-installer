@@ -31,9 +31,9 @@ spec:
 
             # Download the migration files
             git clone --filter=blob:none --no-checkout https://github.com/Sunbird-inQuiry/inquiry-api-service --branch=$inquiry_automation_version --depth 1
-            cd scripts/
+            cd inquiry-api-service
             git sparse-checkout init --cone
-            git sparse-checkout set cassandra-db
+            git sparse-checkout set scripts/cassandra-db
             git checkout
         volumeMounts:
           - name: shared-volume
@@ -45,7 +45,7 @@ spec:
         command: ['bash', '-c']
         args:
         - |
-          cd /opt/shared-volume/scripts/cassandra-db
+          cd /opt/shared-volume/inquiry-api-service/scripts/cassandra-db
           for file in *.cql; do echo cqlsh {{.Values.global.cassandra.host}} -f "$file"; cqlsh {{.Values.global.cassandra.host}} -f "$file"; done
         volumeMounts:
           - name: shared-volume
