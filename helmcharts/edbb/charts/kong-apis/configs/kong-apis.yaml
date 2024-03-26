@@ -9036,69 +9036,57 @@ kong_apis:
     config.limit_by: credential
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: false
-    config.enabled: false
 
 - name: questionSetUpdateCommentV2
   uris: "{{ .Values.questionset_prefix }}/v2/comment/update"
   upstream_url: "{{ .Values.assessment_service_url }}/questionset/v5/comment/update"
   strip_uri: true
   plugins:
-    - name: jwt
-    - name: cors
-    - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
-    - name: acl
-      config.whitelist:
-        - contentAdmin
-    - name: rate-limiting
-      config.policy: local
-      config.hour: "{{ .Values.medium_rate_limit_per_hour }}"
-      config.limit_by: credential
-    - name: request-size-limiting
-      config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-    - name: opa-checks
-      config.required: false
-      config.enabled: false
+  - name: jwt
+  - name: cors
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
+  - name: acl
+    config.whitelist:
+    - contentAdmin
+  - name: rate-limiting
+    config.policy: local
+    config.hour: "{{ .Values.medium_rate_limit_per_hour }}"
+    config.limit_by: credential
+  - name: request-size-limiting
+    config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
 
 - name: questionSetReadComment
   uris: "{{ .Values.questionset_prefix }}/v1/comment/read"
   upstream_url: "{{ .Values.assessment_service_url }}/questionset/v4/comment/read"
   strip_uri: true
   plugins:
-    - name: jwt
-    - name: cors
-    - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
-    - name: acl
-      config.whitelist:
-        - contentAccess
-    - name: rate-limiting
-      config.policy: local
-      config.hour: "{{ .Values.medium_rate_limit_per_hour }}"
-      config.limit_by: credential
-    - name: request-size-limiting
-      config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-    - name: opa-checks
-      config.required: false
-      config.enabled: false
+  - name: jwt
+  - name: cors
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
+  - name: acl
+    config.whitelist:
+    - contentAccess
+  - name: rate-limiting
+    config.policy: local
+    config.hour: "{{ .Values.medium_rate_limit_per_hour }}"
+    config.limit_by: credential
+  - name: request-size-limiting
+    config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
 
 - name: questionSetReadCommentV2
   uris: "{{ .Values.questionset_prefix }}/v2/comment/read"
   upstream_url: "{{ .Values.assessment_service_url }}/questionset/v5/comment/read"
   strip_uri: true
   plugins:
-    - name: jwt
-    - name: cors
-    - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
-    - name: acl
-      config.whitelist:
-        - contentAccess
-    - name: rate-limiting
-      config.policy: local
-      config.hour: "{{ .Values.medium_rate_limit_per_hour }}"
-      config.limit_by: credential
-    - name: request-size-limiting
-      config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-    - name: opa-checks
-      config.required: false
-      config.enabled: false
+  - name: jwt
+  - name: cors
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
+  - name: acl
+    config.whitelist:
+    - contentAccess
+  - name: rate-limiting
+    config.policy: local
+    config.hour: "{{ .Values.medium_rate_limit_per_hour }}"
+    config.limit_by: credential
+  - name: request-size-limiting
+    config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
