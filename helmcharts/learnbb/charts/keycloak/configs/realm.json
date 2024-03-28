@@ -3399,14 +3399,14 @@
       "strictTransportSecurity": "max-age=31536000; includeSubDomains"
     },
     "smtpServer": {
-      "password": "{{ .Values.mail_server_password }}",
+      "password": "{{ .Values.global.mail_server_password }}",
       "starttls": "",
       "auth": "true",
       "port": "587",
-      "host": "{{ .Values.mail_server_host }}",
+      "host": "{{ .Values.global.mail_server_host }}",
       "from": "{{ .Values.mail_server_from_email }}",
       "ssl": "",
-      "user": "{{ .Values.mail_server_username }}"
+      "user": "{{ .Values.global.mail_server_username }}"
     },
     "loginTheme": "{{ .Values.tenant_name }}",
     "accountTheme": "keycloak",

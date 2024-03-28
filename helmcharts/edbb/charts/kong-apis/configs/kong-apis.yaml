@@ -8582,9 +8582,6 @@ kong_apis:
     config.limit_by: credential
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: true
-    config.enabled: true
 
 - name: questionCreateV2
   uris: "{{ .Values.question_prefix }}/v2/create"
@@ -8593,7 +8590,7 @@ kong_apis:
   plugins:
   - name: jwt
   - name: cors
-  - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
   - name: acl
     config.whitelist:
     - contentCreate
@@ -8603,9 +8600,6 @@ kong_apis:
     config.limit_by: credential
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: false
-    config.enabled: false
 
 - name: questionReadV2
   uris: "{{ .Values.question_prefix }}/v2/read"
@@ -8613,16 +8607,13 @@ kong_apis:
   strip_uri: true
   plugins:
   - name: cors
-  - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
   - name: rate-limiting
     config.policy: local
     config.hour: "{{ .Values.medium_rate_limit_per_hour }}"
     config.limit_by: ip
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: false
-    config.enabled: false
 
 - name: questionPrivateReadV2
   uris: "{{ .Values.question_prefix }}/v2/private/read"
@@ -8631,7 +8622,7 @@ kong_apis:
   plugins:
   - name: jwt
   - name: cors
-  - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
   - name: acl
     config.whitelist:
     - contentAccess
@@ -8641,9 +8632,6 @@ kong_apis:
     config.limit_by: credential
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: false
-    config.enabled: false
 
 - name: questionUpdateV2
   uris: "{{ .Values.question_prefix }}/v2/update"
@@ -8652,7 +8640,7 @@ kong_apis:
   plugins:
   - name: jwt
   - name: cors
-  - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
   - name: acl
     config.whitelist:
     - contentUpdate
@@ -8662,9 +8650,6 @@ kong_apis:
     config.limit_by: credential
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: false
-    config.enabled: false
 
 - name: questionRetireV2
   uris: "{{ .Values.question_prefix }}/v2/retire"
@@ -8673,7 +8658,7 @@ kong_apis:
   plugins:
   - name: jwt
   - name: cors
-  - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
   - name: acl
     config.whitelist:
     - contentAdmin
@@ -8683,9 +8668,6 @@ kong_apis:
     config.limit_by: credential
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: false
-    config.enabled: false
 
 - name: questionReviewV2
   uris: "{{ .Values.question_prefix }}/v2/review"
@@ -8694,7 +8676,7 @@ kong_apis:
   plugins:
   - name: jwt
   - name: cors
-  - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
   - name: acl
     config.whitelist:
     - contentAdmin
@@ -8704,9 +8686,6 @@ kong_apis:
     config.limit_by: credential
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: false
-    config.enabled: false
 
 - name: questionPublishV2
   uris: "{{ .Values.question_prefix }}/v2/publish"
@@ -8715,7 +8694,7 @@ kong_apis:
   plugins:
   - name: jwt
   - name: cors
-  - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
   - name: acl
     config.whitelist:
     - contentCreate
@@ -8725,9 +8704,6 @@ kong_apis:
     config.limit_by: credential
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: false
-    config.enabled: false
 
 - name: questionListV2
   uris: "{{ .Values.question_prefix }}/v2/list"
@@ -8740,9 +8716,6 @@ kong_apis:
     config.limit_by: ip
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: false
-    config.enabled: false
 
 - name: questionRejectV2
   uris: "{{ .Values.question_prefix }}/v2/reject"
@@ -8751,7 +8724,7 @@ kong_apis:
   plugins:
   - name: jwt
   - name: cors
-  - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
   - name: acl
     config.whitelist:
     - contentAdmin
@@ -8761,9 +8734,6 @@ kong_apis:
     config.limit_by: credential
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: false
-    config.enabled: false
 
 - name: copyQuestionV2
   uris: "{{ .Values.question_prefix }}/v2/copy"
@@ -8772,7 +8742,7 @@ kong_apis:
   plugins:
   - name: jwt
   - name: cors
-  - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
   - name: acl
     config.whitelist:
     - contentCreate
@@ -8782,9 +8752,6 @@ kong_apis:
     config.limit_by: credential
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: false
-    config.enabled: false
 
 - name: questionSetCreateV2
   uris: "{{ .Values.questionset_prefix }}/v2/create"
@@ -8793,7 +8760,7 @@ kong_apis:
   plugins:
   - name: jwt
   - name: cors
-  - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
   - name: acl
     config.whitelist:
     - contentCreate
@@ -8803,9 +8770,6 @@ kong_apis:
     config.limit_by: credential
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: false
-    config.enabled: false
 
 - name: questionSetReadV2
   uris: "{{ .Values.questionset_prefix }}/v2/read"
@@ -8813,16 +8777,13 @@ kong_apis:
   strip_uri: true
   plugins:
   - name: cors
-  - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
   - name: rate-limiting
     config.policy: local
     config.hour: "{{ .Values.medium_rate_limit_per_hour }}"
     config.limit_by: ip
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: false
-    config.enabled: false
 
 - name: questionSetPrivateReadV2
   uris: "{{ .Values.questionset_prefix }}/v2/private/read"
@@ -8831,7 +8792,7 @@ kong_apis:
   plugins:
   - name: jwt
   - name: cors
-  - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
   - name: acl
     config.whitelist:
     - contentAccess
@@ -8841,9 +8802,6 @@ kong_apis:
     config.limit_by: credential
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: false
-    config.enabled: false
 
 - name: questionSetUpdateV2
   uris: "{{ .Values.questionset_prefix }}/v2/update"
@@ -8852,7 +8810,7 @@ kong_apis:
   plugins:
   - name: jwt
   - name: cors
-  - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
   - name: acl
     config.whitelist:
     - contentUpdate
@@ -8862,9 +8820,6 @@ kong_apis:
     config.limit_by: credential
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: false
-    config.enabled: false
 
 - name: questionSetAddQuestionV2
   uris: "{{ .Values.questionset_prefix }}/v2/add"
@@ -8873,7 +8828,7 @@ kong_apis:
   plugins:
   - name: jwt
   - name: cors
-  - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
   - name: acl
     config.whitelist:
     - 'contentUpdate'
@@ -8883,9 +8838,6 @@ kong_apis:
     config.limit_by: credential
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: false
-    config.enabled: false
 
 - name: questionSetRemoveQuestionV2
   uris: "{{ .Values.questionset_prefix }}/v2/remove"
@@ -8894,7 +8846,7 @@ kong_apis:
   plugins:
   - name: jwt
   - name: cors
-  - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
   - name: acl
     config.whitelist:
     - 'contentUpdate'
@@ -8904,9 +8856,6 @@ kong_apis:
     config.limit_by: credential
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: false
-    config.enabled: false
 
 - name: questionSetRetireV2
   uris: "{{ .Values.questionset_prefix }}/v2/retire"
@@ -8915,7 +8864,7 @@ kong_apis:
   plugins:
   - name: jwt
   - name: cors
-  - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
   - name: acl
     config.whitelist:
     - contentAdmin
@@ -8925,9 +8874,6 @@ kong_apis:
     config.limit_by: credential
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: false
-    config.enabled: false
 
 - name: questionSetReviewV2
   uris: "{{ .Values.questionset_prefix }}/v2/review"
@@ -8936,7 +8882,7 @@ kong_apis:
   plugins:
   - name: jwt
   - name: cors
-  - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
   - name: acl
     config.whitelist:
     - contentAdmin
@@ -8946,9 +8892,6 @@ kong_apis:
     config.limit_by: credential
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: false
-    config.enabled: false
 
 - name: questionSetPublishV2
   uris: "{{ .Values.questionset_prefix }}/v2/publish"
@@ -8957,7 +8900,7 @@ kong_apis:
   plugins:
   - name: jwt
   - name: cors
-  - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
   - name: acl
     config.whitelist:
     - contentAdmin
@@ -8967,9 +8910,6 @@ kong_apis:
     config.limit_by: credential
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: false
-    config.enabled: false
 
 - name: questionSetUpdateHierarchyV2
   uris: "{{ .Values.questionset_prefix }}/v2/hierarchy/update"
@@ -8978,7 +8918,7 @@ kong_apis:
   plugins:
   - name: jwt
   - name: cors
-  - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
   - name: acl
     config.whitelist:
     - contentUpdate
@@ -8988,9 +8928,6 @@ kong_apis:
     config.limit_by: credential
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: false
-    config.enabled: false
 
 - name: questionSetReadHierarchyV2
   uris: "{{ .Values.questionset_prefix }}/v2/hierarchy"
@@ -8999,7 +8936,7 @@ kong_apis:
   plugins:
   - name: jwt
   - name: cors
-  - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
   - name: acl
     config.whitelist:
     - anonymousContentAccess
@@ -9009,9 +8946,6 @@ kong_apis:
     config.limit_by: credential
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: false
-    config.enabled: false
 
 - name: questionSetRejectV2
   uris: "{{ .Values.questionset_prefix }}/v2/reject"
@@ -9020,7 +8954,7 @@ kong_apis:
   plugins:
   - name: jwt
   - name: cors
-  - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
   - name: acl
     config.whitelist:
     - contentAdmin
@@ -9030,9 +8964,6 @@ kong_apis:
     config.limit_by: credential
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: false
-    config.enabled: false
 
 - name: questionImportAPIV2
   uris: "{{ .Values.question_prefix }}/v2/import"
@@ -9041,7 +8972,7 @@ kong_apis:
   plugins:
   - name: jwt
   - name: cors
-  - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
   - name: acl
     config.whitelist:
     - contentCreate
@@ -9051,9 +8982,6 @@ kong_apis:
     config.limit_by: credential
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: false
-    config.enabled: false
 
 - name: questionsetImportAPIV2
   uris: "{{ .Values.questionset_prefix }}/v2/import"
@@ -9062,7 +8990,7 @@ kong_apis:
   plugins:
   - name: jwt
   - name: cors
-  - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
   - name: acl
     config.whitelist:
     - contentCreate
@@ -9072,9 +9000,6 @@ kong_apis:
     config.limit_by: credential
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: false
-    config.enabled: false
 
 - name: copyQuestionSetV2
   uris: "{{ .Values.questionset_prefix }}/v2/copy"
@@ -9083,7 +9008,7 @@ kong_apis:
   plugins:
   - name: jwt
   - name: cors
-  - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
   - name: acl
     config.whitelist:
     - contentCreate
@@ -9093,9 +9018,6 @@ kong_apis:
     config.limit_by: credential
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: false
-    config.enabled: false
 
 - name: questionSetUpdateComment
   uris: "{{ .Values.questionset_prefix }}/v1/comment/update"
@@ -9104,7 +9026,7 @@ kong_apis:
   plugins:
   - name: jwt
   - name: cors
-  - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
   - name: acl
     config.whitelist:
     - contentAdmin
@@ -9114,69 +9036,57 @@ kong_apis:
     config.limit_by: credential
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-  - name: opa-checks
-    config.required: false
-    config.enabled: false
 
 - name: questionSetUpdateCommentV2
   uris: "{{ .Values.questionset_prefix }}/v2/comment/update"
   upstream_url: "{{ .Values.assessment_service_url }}/questionset/v5/comment/update"
   strip_uri: true
   plugins:
-    - name: jwt
-    - name: cors
-    - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
-    - name: acl
-      config.whitelist:
-        - contentAdmin
-    - name: rate-limiting
-      config.policy: local
-      config.hour: "{{ .Values.medium_rate_limit_per_hour }}"
-      config.limit_by: credential
-    - name: request-size-limiting
-      config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-    - name: opa-checks
-      config.required: false
-      config.enabled: false
+  - name: jwt
+  - name: cors
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
+  - name: acl
+    config.whitelist:
+    - contentAdmin
+  - name: rate-limiting
+    config.policy: local
+    config.hour: "{{ .Values.medium_rate_limit_per_hour }}"
+    config.limit_by: credential
+  - name: request-size-limiting
+    config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
 
 - name: questionSetReadComment
   uris: "{{ .Values.questionset_prefix }}/v1/comment/read"
   upstream_url: "{{ .Values.assessment_service_url }}/questionset/v4/comment/read"
   strip_uri: true
   plugins:
-    - name: jwt
-    - name: cors
-    - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
-    - name: acl
-      config.whitelist:
-        - contentAccess
-    - name: rate-limiting
-      config.policy: local
-      config.hour: "{{ .Values.medium_rate_limit_per_hour }}"
-      config.limit_by: credential
-    - name: request-size-limiting
-      config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-    - name: opa-checks
-      config.required: false
-      config.enabled: false
+  - name: jwt
+  - name: cors
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
+  - name: acl
+    config.whitelist:
+    - contentAccess
+  - name: rate-limiting
+    config.policy: local
+    config.hour: "{{ .Values.medium_rate_limit_per_hour }}"
+    config.limit_by: credential
+  - name: request-size-limiting
+    config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
 
 - name: questionSetReadCommentV2
   uris: "{{ .Values.questionset_prefix }}/v2/comment/read"
   upstream_url: "{{ .Values.assessment_service_url }}/questionset/v5/comment/read"
   strip_uri: true
   plugins:
-    - name: jwt
-    - name: cors
-    - "{{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}"
-    - name: acl
-      config.whitelist:
-        - contentAccess
-    - name: rate-limiting
-      config.policy: local
-      config.hour: "{{ .Values.medium_rate_limit_per_hour }}"
-      config.limit_by: credential
-    - name: request-size-limiting
-      config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
-    - name: opa-checks
-      config.required: false
-      config.enabled: false
+  - name: jwt
+  - name: cors
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
+  - name: acl
+    config.whitelist:
+    - contentAccess
+  - name: rate-limiting
+    config.policy: local
+    config.hour: "{{ .Values.medium_rate_limit_per_hour }}"
+    config.limit_by: credential
+  - name: request-size-limiting
+    config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
