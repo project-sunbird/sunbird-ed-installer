@@ -163,7 +163,7 @@ function invoke_functions() {
     done
 }
 
-RELEASE="release600"
+RELEASE="release700"
 POSTMAN_COLLECTION_LINK="https://api.postman.com/collections/5338608-e28d5510-20d5-466e-a9ad-3fcf59ea9f96?access_key=PMAT-01HMV5SB2ZPXCGNKD74J7ARKRQ"
 
 if [ $# -eq 0 ]; then
