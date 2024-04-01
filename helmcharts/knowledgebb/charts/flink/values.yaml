@@ -524,7 +524,7 @@ flink_jobs:
       }
 
       kafka {
-        input.topic = "{{ .Values.global.env }}.knowlg.qrimage.request"
+        input.topic = "{{ .Values.global.env }}.qrimage.request"
         groupId = "{{ .Values.global.env }}-qrcode-image-generator-group"
       }
 
