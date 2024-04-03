@@ -28,5 +28,5 @@ variable "sunbird_public_artifacts_account_sas_url" {
 variable "sunbird_public_artifacts_container" {
     type        = string
     description = "The container name dedicated for this release which holds the storage artifatcs."
-    default     = "release600"
+    default     = "release700"
 }
