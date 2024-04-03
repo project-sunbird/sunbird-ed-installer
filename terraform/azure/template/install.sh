@@ -51,7 +51,17 @@ function install_component() {
         -f "../terraform/azure/$environment/global-values-rsa-keys.yaml" \
         -f "../terraform/azure/$environment/global-cloud-values.yaml" --timeout 30m --debug
 }
-
+function certificate_keys() {
+    # Generate private and public keys using openssl
+    openssl genrsa -out certkey.pem;
+    openssl rsa -in key.pem -pubout -out certpubkey.pem;
+    CERTPRIVATEKEY=`sed 's/KEY-----/KEY-----\\n/g' certkey.pem | sed 's/-----END/\\n-----END/g' | awk '{printf("%s",$0)}' `
+    CERTPUBLICKEY=`awk '{sub(/\r/, ""); printf "%s\\n",$0;}' certpubkey.pem`
+    echo "CERTIFICATE_PRIVATE_KEY: \""$CERTPRIVATEKEY"\"" >> global-values.yaml
+    echo "CERTIFICATE_PUBLIC_KEY: \""$CERTPUBLICKEY"\"" >> global-values.yaml
+    echo "CERTIFICATESIGN_PRIVATE_KEY: \""$CERTPRIVATEKEY"\"" >> global-values.yaml
+    echo "CERTIFICATESIGN_PUBLIC_KEY: \""$CERTPUBLICKEY"\"" >> global-values.yaml
+}
 function install_helm_components() {
     components=("monitoring" "edbb" "learnbb" "knowledgebb" "obsrvbb" "inquirybb")
     for component in "${components[@]}"; do
