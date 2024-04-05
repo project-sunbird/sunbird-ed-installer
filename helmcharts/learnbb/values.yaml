@@ -10,7 +10,7 @@ lms:
 notification:
   opa_enabled: true
 registry:
-  opa_enabled: true
+  opa_enabled: false
 
 provisioningAnnotations: &provisioningAnnotations
   "helm.sh/hook-weight": "-4"
