@@ -145,7 +145,7 @@ cassandra_isMultiDCEnabled: false
 kp_schema_base_path: "https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net/{{ .Values.global.azure_public_container_name }}/schemas/local"
 kp_search_service_base_url: "http://search-service:9000"
 content_read_api_host: "http://content-service:9000"
-content_read_api_endpoint: "/content/v3/read"
+content_read_api_endpoint: "content/v3/read/"
 content_service_base_url: "http://content-service:9000"
 learner_service_base_url: "http://learner-service:9000"
 cert_reg_service_base_url: "http://certreg:9000/certreg"
