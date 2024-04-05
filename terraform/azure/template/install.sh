@@ -62,6 +62,9 @@ function certificate_keys() {
     echo "CERTIFICATESIGN_PRIVATE_KEY: \""$CERTPRIVATEKEY"\"" >> global-values.yaml
     echo "CERTIFICATESIGN_PUBLIC_KEY: \""$CERTPUBLICKEY"\"" >> global-values.yaml
 }
+function certificate_config() {
+# Inject cert keys to the service
+}
 function install_helm_components() {
     components=("monitoring" "edbb" "learnbb" "knowledgebb" "obsrvbb" "inquirybb")
     for component in "${components[@]}"; do
