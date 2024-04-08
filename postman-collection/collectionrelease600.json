@@ -5010,7 +5010,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "0139952564315586560"
+										"value": "{{channel_id}}"
 									},
 									{
 										"key": "Authorization",
@@ -5059,7 +5059,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "0139952564315586560",
+										"value": "{{channel_id}}",
 										"type": "text"
 									}
 								],
@@ -5073,7 +5073,7 @@
 											"disabled": true
 										},
 										{
-											"key": "file_url",
+											"key": "fileUrl",
 											"value": "https://downloadableartifacts.blob.core.windows.net/release600/certificate_template.svg",
 											"type": "text"
 										}
