@@ -351,7 +351,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"request\" :\n\t\t{\n\t\t\t \"id\": \"custodianOrgId\",\n             \"field\": \"custodianOrgId\",\n             \"value\": \"{{custodian_channel_id}}\"\n\t}\n}",
+							"raw": "{\n\t\"request\" :\n\t\t{\n\t\t\t \"id\": \"custodianOrgId\",\n             \"field\": \"custodianOrgId\",\n             \"value\": \"{{channel_custodian_id}}\"\n\t}\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -393,7 +393,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\n\t\"request\" :\n\t\t{\n\t\t\t \"id\": \"custodianRootOrgId\",\n             \"field\": \"custodianRootOrgId\",\n             \"value\": \"{{custodian_channel_id}}\"\n\t}\n}",
+							"raw": "{\n\t\n\t\"request\" :\n\t\t{\n\t\t\t \"id\": \"custodianRootOrgId\",\n             \"field\": \"custodianRootOrgId\",\n             \"value\": \"{{channel_custodian_id}}\"\n\t}\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -4982,6 +4982,25 @@
 						},
 						{
 							"name": "Create certificate template",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Your do id\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    var cert_content_id = jsonData.result.identifier;",
+											"    console.log(jsonData);",
+											"    if(cert_content_id) {",
+											"        pm.environment.set(\"cert_content_id\", cert_content_id);",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
 							"request": {
 								"method": "POST",
 								"header": [
@@ -4991,7 +5010,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "{{channel_id}}"
+										"value": "0139952564315586560"
 									},
 									{
 										"key": "Authorization",
@@ -5004,7 +5023,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"request\": {\n        \"asset\": {\n            \"certType\": \"cert template layout\",\n            \"code\": \"1 logo 1 signature\",\n            \"data\": {\n                \"title\": \"1 logo 1 signature\"\n            },\n            \"channel\": \"0139952564315586560\",\n            \"mimeType\": \"image/svg+xml\",\n            \"issuer\": {\n                \"name\": \"cbse\",\n                \"url\": \"https://diksha.gov.in/cbse/\"\n            },\n            \"primaryCategory\": \"Certificate Template\",\n            \"mediaType\": \"image\",\n            \"signatoryList\": [\n                {\n                    \"image\": \"https://diksha.gov.in/cbse/cbse-logo.png\",\n                    \"name\": \"CBSE\",\n                    \"id\": \"cbse\",\n                    \"designation\": \"XBSE\"\n                }\n            ],\n            \"license\": \"CC BY 4.0\",\n            \"name\": \"1 logo 1 signature\"\n        }\n    }\n}"
+									"raw": "{\n    \"request\": {\n        \"asset\": {\n            \"certType\": \"cert template layout\",\n            \"code\": \"1 logo 1 signature\",\n            \"data\": {\n                \"title\": \"1 logo 1 signature\"\n            },\n            \"channel\": \"{{channel_id}}\",\n            \"mimeType\": \"image/svg+xml\",\n            \"issuer\": {\n                \"name\": \"cbse\",\n                \"url\": \"https://diksha.gov.in/cbse/\"\n            },\n            \"primaryCategory\": \"Certificate Template\",\n            \"mediaType\": \"image\",\n            \"signatoryList\": [\n                {\n                    \"image\": \"https://diksha.gov.in/cbse/cbse-logo.png\",\n                    \"name\": \"CBSE\",\n                    \"id\": \"cbse\",\n                    \"designation\": \"XBSE\"\n                }\n            ],\n            \"license\": \"CC BY 4.0\",\n            \"name\": \"1 logo 1 signature\"\n        }\n    }\n}"
 								},
 								"url": {
 									"raw": "{{host}}/api/asset/v1/create",
@@ -5027,8 +5046,8 @@
 								"method": "POST",
 								"header": [
 									{
-										"key": "X-Channel-Id",
-										"value": "0139952564315586560"
+										"key": "Accept",
+										"value": "application/json"
 									},
 									{
 										"key": "Authorization",
@@ -5036,11 +5055,12 @@
 									},
 									{
 										"key": "x-authenticated-user-token",
-										"value": "{{access_token}}"
+										"value": "{{creator_access_token}}"
 									},
 									{
-										"key": "Accept",
-										"value": "application/json"
+										"key": "X-Channel-Id",
+										"value": "0139952564315586560",
+										"type": "text"
 									}
 								],
 								"body": {
@@ -5049,26 +5069,27 @@
 										{
 											"key": "file",
 											"type": "file",
-											"src": "/home/sanket.r@optit.india/Downloads/do_213356869095890944194_1630477222707_template-2.svg"
+											"src": "/home/sanket.r@optit.india/Downloads/do_213356869095890944194_1630477222707_template-2.svg",
+											"disabled": true
 										},
 										{
-											"key": "fileurl",
-											"value": "",
-											"type": "text",
-											"disabled": true
+											"key": "file_url",
+											"value": "https://downloadableartifacts.blob.core.windows.net/release600/certificate_template.svg",
+											"type": "text"
 										}
 									]
 								},
 								"url": {
-									"raw": "{{host}}/content/asset/v1/create",
+									"raw": "{{host}}/api/asset/v1/upload/{{cert_content_id}}",
 									"host": [
 										"{{host}}"
 									],
 									"path": [
-										"content",
+										"api",
 										"asset",
 										"v1",
-										"create"
+										"upload",
+										"{{cert_content_id}}"
 									]
 								}
 							},
@@ -5101,7 +5122,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"request\": {\r\n        \"action\": \"save\",\r\n        \"subType\": \"resource\",\r\n        \"framework\": \"*\",\r\n        \"rootOrgId\": \"*\",\r\n        \"type\": \"content\",\r\n        \"popup\": true,\r\n        \"editMode\": true,\r\n        \"data\": {\r\n            \"templateName\": \"defaultTemplate\",\r\n            \"action\": \"review\",\r\n            \"fields\": [\r\n                {\r\n                    \"code\": \"appicon\",\r\n                    \"visible\": true,\r\n                    \"editable\": true,\r\n                    \"dataType\": \"url\",\r\n                    \"renderingHints\": {},\r\n                    \"name\": \"App Icon\",\r\n                    \"description\": \"App Icon\",\r\n                    \"index\": 1,\r\n                    \"inputType\": \"file\",\r\n                    \"label\": \"Icon\",\r\n                    \"placeholder\": \"App Icon\",\r\n                    \"required\": false\r\n                },\r\n                {\r\n                    \"code\": \"name\",\r\n                    \"visible\": true,\r\n                    \"editable\": true,\r\n                    \"dataType\": \"text\",\r\n                    \"renderingHints\": {},\r\n                    \"name\": \"Title\",\r\n                    \"description\": \"Title of the content\",\r\n                    \"index\": 2,\r\n                    \"inputType\": \"text\",\r\n                    \"label\": \"Title\",\r\n                    \"placeholder\": \"Enter Title For Book\",\r\n                    \"required\": true\r\n                },\r\n                {\r\n                    \"code\": \"description\",\r\n                    \"visible\": true,\r\n                    \"editable\": true,\r\n                    \"dataType\": \"text\",\r\n                    \"renderingHints\": {},\r\n                    \"name\": \"Description\",\r\n                    \"description\": \"Brief description\",\r\n                    \"index\": 3,\r\n                    \"inputType\": \"textarea\",\r\n                    \"label\": \"Description\",\r\n                    \"placeholder\": \"Brief description about the Book\",\r\n                    \"required\": false\r\n                },\r\n                {\r\n                    \"code\": \"board\",\r\n                    \"visible\": true,\r\n                    \"depends\": [\r\n                        \"medium\",\r\n                        \"gradeLevel\",\r\n                        \"subject\",\r\n                        \"topic\"\r\n                    ],\r\n                    \"editable\": true,\r\n                    \"dataType\": \"text\",\r\n                    \"renderingHints\": {},\r\n                    \"description\": \"Board\",\r\n                    \"index\": 5,\r\n                    \"label\": \"Board/Syllabus\",\r\n                    \"required\": false,\r\n                    \"name\": \"Board/Syllabus\",\r\n                    \"inputType\": \"select\",\r\n                    \"placeholder\": \"Select Board/Syllabus\"\r\n                },\r\n                {\r\n                    \"code\": \"medium\",\r\n                    \"visible\": true,\r\n                    \"depends\": [\r\n                        \"gradeLevel\",\r\n                        \"subject\",\r\n                        \"topic\"\r\n                    ],\r\n                    \"editable\": true,\r\n                    \"dataType\": \"list\",\r\n                    \"renderingHints\": {},\r\n                    \"description\": \"\",\r\n                    \"index\": 6,\r\n                    \"label\": \"Medium\",\r\n                    \"required\": false,\r\n                    \"name\": \"medium\",\r\n                    \"inputType\": \"multiselect\",\r\n                    \"placeholder\": \"Select Medium\"\r\n                },\r\n                {\r\n                    \"code\": \"gradeLevel\",\r\n                    \"visible\": true,\r\n                    \"depends\": [\r\n                        \"subject\",\r\n                        \"topic\"\r\n                    ],\r\n                    \"editable\": true,\r\n                    \"dataType\": \"list\",\r\n                    \"renderingHints\": {},\r\n                    \"description\": \"Class\",\r\n                    \"index\": 7,\r\n                    \"label\": \"Class\",\r\n                    \"required\": false,\r\n                    \"name\": \"Class\",\r\n                    \"inputType\": \"multiselect\",\r\n                    \"placeholder\": \"Select Class\"\r\n                },\r\n                {\r\n                    \"code\": \"subject\",\r\n                    \"visible\": true,\r\n                    \"depends\": [\r\n                        \"topic\"\r\n                    ],\r\n                    \"editable\": true,\r\n                    \"dataType\": \"list\",\r\n                    \"renderingHints\": {},\r\n                    \"description\": \"\",\r\n                    \"index\": 8,\r\n                    \"label\": \"Subject\",\r\n                    \"required\": false,\r\n                    \"name\": \"Subject\",\r\n                    \"inputType\": \"multiselect\",\r\n                    \"placeholder\": \"Select Subject\"\r\n                }\r\n            ]\r\n        }\r\n    }\r\n}"
+									"raw": "{\r\n    \"request\": {\r\n        \"action\": \"save\",\r\n        \"subType\": \"resource\",\r\n        \"framework\": \"*\",\r\n        \"rootOrgId\": \"*\",\r\n        \"type\": \"content\",\r\n        \"popup\": true,\r\n        \"editMode\": true,\r\n        \"data\": {\r\n            \"templateName\": \"defaultTemplate\",\r\n            \"action\": \"save\",\r\n            \"fields\": [\r\n                {\r\n                    \"code\": \"appicon\",\r\n                    \"visible\": true,\r\n                    \"editable\": true,\r\n                    \"dataType\": \"url\",\r\n                    \"renderingHints\": {},\r\n                    \"name\": \"App Icon\",\r\n                    \"description\": \"App Icon\",\r\n                    \"index\": 1,\r\n                    \"inputType\": \"file\",\r\n                    \"label\": \"Icon\",\r\n                    \"placeholder\": \"App Icon\",\r\n                    \"required\": false\r\n                },\r\n                {\r\n                    \"code\": \"name\",\r\n                    \"visible\": true,\r\n                    \"editable\": true,\r\n                    \"dataType\": \"text\",\r\n                    \"renderingHints\": {},\r\n                    \"name\": \"Title\",\r\n                    \"description\": \"Title of the content\",\r\n                    \"index\": 2,\r\n                    \"inputType\": \"text\",\r\n                    \"label\": \"Title\",\r\n                    \"placeholder\": \"Enter Title For Book\",\r\n                    \"required\": true\r\n                },\r\n                {\r\n                    \"code\": \"description\",\r\n                    \"visible\": true,\r\n                    \"editable\": true,\r\n                    \"dataType\": \"text\",\r\n                    \"renderingHints\": {},\r\n                    \"name\": \"Description\",\r\n                    \"description\": \"Brief description\",\r\n                    \"index\": 3,\r\n                    \"inputType\": \"textarea\",\r\n                    \"label\": \"Description\",\r\n                    \"placeholder\": \"Brief description about the Book\",\r\n                    \"required\": false\r\n                },\r\n                {\r\n                    \"code\": \"board\",\r\n                    \"visible\": true,\r\n                    \"depends\": [\r\n                        \"medium\",\r\n                        \"gradeLevel\",\r\n                        \"subject\",\r\n                        \"topic\"\r\n                    ],\r\n                    \"editable\": true,\r\n                    \"dataType\": \"text\",\r\n                    \"renderingHints\": {},\r\n                    \"description\": \"Board\",\r\n                    \"index\": 5,\r\n                    \"label\": \"Board/Syllabus\",\r\n                    \"required\": false,\r\n                    \"name\": \"Board/Syllabus\",\r\n                    \"inputType\": \"select\",\r\n                    \"placeholder\": \"Select Board/Syllabus\"\r\n                },\r\n                {\r\n                    \"code\": \"medium\",\r\n                    \"visible\": true,\r\n                    \"depends\": [\r\n                        \"gradeLevel\",\r\n                        \"subject\",\r\n                        \"topic\"\r\n                    ],\r\n                    \"editable\": true,\r\n                    \"dataType\": \"list\",\r\n                    \"renderingHints\": {},\r\n                    \"description\": \"\",\r\n                    \"index\": 6,\r\n                    \"label\": \"Medium\",\r\n                    \"required\": false,\r\n                    \"name\": \"medium\",\r\n                    \"inputType\": \"multiselect\",\r\n                    \"placeholder\": \"Select Medium\"\r\n                },\r\n                {\r\n                    \"code\": \"gradeLevel\",\r\n                    \"visible\": true,\r\n                    \"depends\": [\r\n                        \"subject\",\r\n                        \"topic\"\r\n                    ],\r\n                    \"editable\": true,\r\n                    \"dataType\": \"list\",\r\n                    \"renderingHints\": {},\r\n                    \"description\": \"Class\",\r\n                    \"index\": 7,\r\n                    \"label\": \"Class\",\r\n                    \"required\": false,\r\n                    \"name\": \"Class\",\r\n                    \"inputType\": \"multiselect\",\r\n                    \"placeholder\": \"Select Class\"\r\n                },\r\n                {\r\n                    \"code\": \"subject\",\r\n                    \"visible\": true,\r\n                    \"depends\": [\r\n                        \"topic\"\r\n                    ],\r\n                    \"editable\": true,\r\n                    \"dataType\": \"list\",\r\n                    \"renderingHints\": {},\r\n                    \"description\": \"\",\r\n                    \"index\": 8,\r\n                    \"label\": \"Subject\",\r\n                    \"required\": false,\r\n                    \"name\": \"Subject\",\r\n                    \"inputType\": \"multiselect\",\r\n                    \"placeholder\": \"Select Subject\"\r\n                }\r\n            ]\r\n        }\r\n    }\r\n}"
 								},
 								"url": {
 									"raw": "{{host}}/api/data/v1/form/create",
