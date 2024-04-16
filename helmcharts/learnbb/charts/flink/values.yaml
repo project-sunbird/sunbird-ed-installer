@@ -146,12 +146,12 @@ kp_schema_base_path: "https://{{ .Values.global.azure_storage_account_name }}.bl
 lms_service_base_url: "http://lms-service:9000"
 kp_search_service_base_url: "http://search-service:9000"
 content_read_api_host: "http://content-service:9000"
-content_read_api_endpoint: "/content/v3/read"
+content_read_api_endpoint: "content/v3/read/"
 content_service_base_url: "http://content-service:9000"
 userorg_service_base_url: "http://userorg-service:9000"
 cert_reg_service_base_url: "http://certreg:9000/certreg"
 enc_service_base_url: "http://enc:9000/enc"
-cert_rc_base_url: "http://registry-service:8081/registry-service/api/v1"
+cert_rc_base_url: "http://registry-service:8081/api/v1"
 cert_rc_entity: "TrainingCertificate"
 certificate_migrator_enable_suppress_exception: false
 sunbird_api_auth_token: "token"
@@ -174,7 +174,7 @@ kafka_topic_certificate_request: "{{ .Values.global.env }}.issue.certificate.req
 kafka_group_activity_agg: "{{ .Values.global.env }}-activity-aggregate-group"
 kafka_group_relation_cache_updater: "{{ .Values.global.env }}-relation-cache-updater-group"
 
-kafka_topic_content_publish_request: "{{ .Values.global.env }}.content.postpublish.request"
+kafka_topic_content_publish_request: "{{ .Values.global.env }}.knowlg.content.postpublish.request"
 kafka_topic_generate_certificate_request: "{{ .Values.global.env }}.generate.certificate.request"
 kafka_topic_certificate_failed: "{{ .Values.global.env }}.issue.certificate.failed"
 kafka_topic_lms_user_account: "{{ .Values.global.env }}.lms.user.account.merge"
@@ -594,7 +594,7 @@ flink_jobs:
             collectionCache.id = 0
           }
       }
-      cert_domain_url = "{{ .Values.global.domain }}"
+      cert_domain_url = "https://{{ .Values.global.domain }}"
       user_read_api = "/private/user/v1/read"
       content_read_api = "/content/v3/read"
       service {
@@ -645,7 +645,7 @@ flink_jobs:
         sbkeyspace = "{{ .Values.registry_sunbird_keyspace }}"
         certreg.table ="{{ .Values.cert_registry_table }}"
       }
-      cert_domain_url = "{{ .Values.global.domain }}"
+      cert_domain_url = "https://{{ .Values.global.domain }}"
       cert_container_name = "{{ .Values.global.azure_public_container_name }}"
       cert_cloud_storage_type = "{{ include "common.tplvalues.render" (dict "value" .Values.cert_cloud_storage_type "context" $) }}"
       cert_cloud_storage_secret = "{{ include "common.tplvalues.render" (dict "value" .Values.cert_cloud_storage_secret "context" $) }}"

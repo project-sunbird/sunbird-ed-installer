@@ -29,7 +29,26 @@ function create_tf_resources() {
     terragrunt run-all apply --terragrunt-non-interactive
     chmod 600 ~/.kube/config
 }
+function certificate_keys() {
+    # Generate private and public keys using openssl
+    openssl genrsa -out certkey.pem;
+    openssl rsa -in certkey.pem -pubout -out certpubkey.pem;
+    CERTPRIVATEKEY=`sed 's/KEY-----/KEY-----\\n/g' certkey.pem | sed 's/-----END/\\n-----END/g' | awk '{printf("%s",$0)}' `
+    CERTPUBLICKEY=`awk '{sub(/\r/, ""); printf "%s\\n",$0;}' certpubkey.pem`
+    echo "CERTIFICATE_PRIVATE_KEY: \""$CERTPRIVATEKEY"\"" >> global-values.yaml
+    echo "CERTIFICATE_PUBLIC_KEY: \""$CERTPUBLICKEY"\"" >> global-values.yaml
+    echo "CERTIFICATESIGN_PRIVATE_KEY: \""$CERTPRIVATEKEY"\"" >> global-values.yaml
+    echo "CERTIFICATESIGN_PUBLIC_KEY: \""$CERTPUBLICKEY"\"" >> global-values.yaml
+}
+function certificate_config() {
+    # Check if the key is already present in RC 
+    CERTKEY=`kubectl -n sunbird exec deploy/assessment -- curl --location --request POST 'http://registry-service:8081/api/v1/PublicKey/search' --header 'Content-Type: application/json' --data-raw '{ "filters": {}}' | jq '.[] | .value'`
 
+    # Inject cert keys to the service if its not available 
+    if [ $CERTKEY = "" ]; then
+        kubectl -n sunbird exec deploy/nginx-public-ingress -- curl --location --request POST 'http://registry-service:8081/api/v1/PublicKey' --header 'Content-Type: application/json' --data-raw '{"value":"$CERTIFICATE_PUBLIC_KEY"}'
+    fi 
+}
 function install_component() {
     # We need a dummy cm for configmap to start. Later Lernbb will create real one
     kubectl create confifmap keycloak-key -n sunbird 2>/dev/null || true
@@ -44,12 +63,22 @@ function install_component() {
     if [ -f "$component/ed-values.yaml" ]; then
         ed_values_flag="-f $component/ed-values.yaml --wait --wait-for-jobs"
     fi
+    ### Generate the key pair required for certificate template
+    if [ $component = "learnbb" ]; then
+        if [ -f "certkey.pem" ] && [ -f "certpubkey.pem" ]; then
+          certificate_keys
+        fi
+    fi
     helm upgrade --install "$component" "$component" --namespace sunbird -f "$component/values.yaml" \
         $ed_values_flag \
         -f "../terraform/azure/$environment/global-values.yaml" \
         -f "../terraform/azure/$environment/global-values-jwt-tokens.yaml" \
         -f "../terraform/azure/$environment/global-values-rsa-keys.yaml" \
         -f "../terraform/azure/$environment/global-cloud-values.yaml" --timeout 30m --debug
+    ### Inject the certificate keys to RC services
+    if [ $component = "learnbb" ]; then
+          certificate_config
+    fi
 }
 
 function install_helm_components() {
@@ -165,6 +194,9 @@ function invoke_functions() {
 
 RELEASE="release700"
 POSTMAN_COLLECTION_LINK="https://api.postman.com/collections/5338608-e28d5510-20d5-466e-a9ad-3fcf59ea9f96?access_key=PMAT-01HMV5SB2ZPXCGNKD74J7ARKRQ"
+CERTPUBLICKEY=""
+CERTPRIVATEKEY=""
+
 
 if [ $# -eq 0 ]; then
     create_tf_backend

@@ -88,7 +88,7 @@ affinity: {}
 
 configmap:
   enabled: true
-  mountPath: /home/sunbird/userorg-service-1.0-SNAPSHOT/config/
+  mountPath: /etc/signer
 commonAnnotations:
   reloader.stakater.com/auto: "true"
 
