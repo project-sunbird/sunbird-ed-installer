@@ -31,23 +31,30 @@ function create_tf_resources() {
 }
 function certificate_keys() {
     # Generate private and public keys using openssl
-    openssl genrsa -out certkey.pem;
-    openssl rsa -in certkey.pem -pubout -out certpubkey.pem;
-    CERTPRIVATEKEY=`sed 's/KEY-----/KEY-----\\n/g' certkey.pem | sed 's/-----END/\\n-----END/g' | awk '{printf("%s",$0)}' `
-    CERTPUBLICKEY=`awk '{sub(/\r/, ""); printf "%s\\n",$0;}' certpubkey.pem`
-    echo "CERTIFICATE_PRIVATE_KEY: \""$CERTPRIVATEKEY"\"" >> global-values.yaml
-    echo "CERTIFICATE_PUBLIC_KEY: \""$CERTPUBLICKEY"\"" >> global-values.yaml
-    echo "CERTIFICATESIGN_PRIVATE_KEY: \""$CERTPRIVATEKEY"\"" >> global-values.yaml
-    echo "CERTIFICATESIGN_PUBLIC_KEY: \""$CERTPUBLICKEY"\"" >> global-values.yaml
+    echo "Creation of RSA keys for certificate signing"
+    openssl genrsa -out ../terraform/azure/$environment/certkey.pem;
+    openssl rsa -in ../terraform/azure/$environment/certkey.pem -pubout -out ../terraform/azure/$environment/certpubkey.pem;
+    CERTPRIVATEKEY=`sed 's/KEY-----/KEY-----\\n/g' ../terraform/azure/$environment/certkey.pem | sed 's/-----END/\\n-----END/g' | awk '{printf("%s",$0)}' `
+    echo "CERTIFICATE_PRIVATE_KEY: \""$CERTPRIVATEKEY"\"" >> ../terraform/azure/$environment/global-values.yaml
+    awk '{if($0 !~ /END/)  printf "%s\\r\\n",$0;} END{printf "-----END PUBLIC KEY-----"}' ../terraform/azure/$environment/certpubkey.pem |awk '{print "CERTIFICATE_PUBLIC_KEY: \""$0"\""}' >> ../terraform/azure/$environment/global-values.yaml
+    echo "CERTIFICATESIGN_PRIVATE_KEY: \""$CERTPRIVATEKEY"\"" >> ../terraform/azure/$environment/global-values.yaml
+    awk '{if($0 !~ /END/)  printf "%s\\r\\n",$0;} END{printf "-----END PUBLIC KEY-----"}' ../terraform/azure/$environment/certpubkey.pem |awk '{print "CERTIFICATESIGN_PUBLIC_KEY: \""$0"\""}' >> ../terraform/azure/$environment/global-values.yaml
 }
+
 function certificate_config() {
     # Check if the key is already present in RC 
-    CERTKEY=`kubectl -n sunbird exec deploy/assessment -- curl --location --request POST 'http://registry-service:8081/api/v1/PublicKey/search' --header 'Content-Type: application/json' --data-raw '{ "filters": {}}' | jq '.[] | .value'`
-
+    echo "Configuring Certificatekeys"
+    kubectl -n sunbird exec deploy/nodebb -- apt update -y
+    kubectl -n sunbird exec deploy/nodebb -- apt install jq -y
+    CERTKEY=`kubectl -n sunbird exec deploy/nodebb -- curl --location --request POST 'http://registry-service:8081/api/v1/PublicKey/search' --header 'Content-Type: application/json' --data-raw '{ "filters": {}}' | jq '.[] | .value'`
     # Inject cert keys to the service if its not available 
-    if [ $CERTKEY = "" ]; then
-        kubectl -n sunbird exec deploy/nginx-public-ingress -- curl --location --request POST 'http://registry-service:8081/api/v1/PublicKey' --header 'Content-Type: application/json' --data-raw '{"value":"$CERTIFICATE_PUBLIC_KEY"}'
-    fi 
+    if [ "$CERTKEY" = "" ]; then
+            echo "Certificate RSA public key not available"
+            CERTPUBKEY=`awk -F'"' '/CERTIFICATE_PUBLIC_KEY/{print $2}' global-values.yaml`
+            curl_data="curl --location --request POST 'http://registry-service:8081/api/v1/PublicKey' --header 'Content-Type: application/json' --data-raw '{\"value\":\"$CERTPUBKEY\"}'"
+            echo "kubectl -n sunbird exec deploy/nodebb -- $curl_data" | sh -
+    fi
+
 }
 function install_component() {
     # We need a dummy cm for configmap to start. Later Lernbb will create real one
@@ -144,7 +151,7 @@ function restart_workloads_using_keys() {
     kubectl rollout restart deployment -n sunbird neo4j knowledge-mw player report content adminutil cert-registry groups learner lms notification registry analytics
     kubectl rollout status deployment -n sunbird neo4j knowledge-mw player report content adminutil cert-registry groups learner lms notification registry analytics
     echo -e "\nWaiting for all pods to start"
-
+    certificate_config
 }
 
 function run_post_install() {
@@ -179,9 +186,17 @@ function run_post_install() {
     cp ../../../postman-collection/collection${RELEASE}.json .
     postman collection run collection${RELEASE}.json --environment env.json --delay-request 500 --bail --insecure
 }
-
+function cleanworkspace() {
+        #rm  certkey.pem certpubkey.pem
+        sed -i '/CERTIFICATE_PRIVATE_KEY:/d' global-values.yaml
+        sed -i '/CERTIFICATE_PUBLIC_KEY:/d' global-values.yaml
+        sed -i '/CERTIFICATESIGN_PRIVATE_KEY:/d' global-values.yaml
+        sed -i '/CERTIFICATESIGN_PUBLIC_KEY:/d' global-values.yaml
+        echo "cleanup completed"
+}
 function destroy_tf_resources() {
     source tf.sh
+    cleanworkspace
     echo -e "Destroying resources on azure cloud"
     terragrunt run-all destroy
 }
@@ -235,6 +250,9 @@ else
         ;;
     "destroy_tf_resources")
         destroy_tf_resources
+        ;;
+    "certificate_config")
+        certificate_config
         ;;
     *)
         invoke_functions "$@"
