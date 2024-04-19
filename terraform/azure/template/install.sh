@@ -82,10 +82,6 @@ function install_component() {
         -f "../terraform/azure/$environment/global-values-jwt-tokens.yaml" \
         -f "../terraform/azure/$environment/global-values-rsa-keys.yaml" \
         -f "../terraform/azure/$environment/global-cloud-values.yaml" --timeout 30m --debug
-    ### Inject the certificate keys to RC services
-    if [ $component = "learnbb" ]; then
-          certificate_config
-    fi
 }
 
 function install_helm_components() {
@@ -187,7 +183,7 @@ function run_post_install() {
     postman collection run collection${RELEASE}.json --environment env.json --delay-request 500 --bail --insecure
 }
 function cleanworkspace() {
-        #rm  certkey.pem certpubkey.pem
+        rm  certkey.pem certpubkey.pem
         sed -i '/CERTIFICATE_PRIVATE_KEY:/d' global-values.yaml
         sed -i '/CERTIFICATE_PUBLIC_KEY:/d' global-values.yaml
         sed -i '/CERTIFICATESIGN_PRIVATE_KEY:/d' global-values.yaml
