@@ -56,7 +56,6 @@ function certificate_config() {
     fi
 
 }
-
 function install_component() {
     # We need a dummy cm for configmap to start. Later Lernbb will create real one
     kubectl create confifmap keycloak-key -n sunbird 2>/dev/null || true
@@ -82,11 +81,7 @@ function install_component() {
         -f "../terraform/azure/$environment/global-values.yaml" \
         -f "../terraform/azure/$environment/global-values-jwt-tokens.yaml" \
         -f "../terraform/azure/$environment/global-values-rsa-keys.yaml" \
-        -f "../terraform/azure/$environment/global-cloud-values.yaml" --timeout 30m
-    ### Inject the certificate keys to RC services
-    if [ $component = "learnbb" ]; then
-          certificate_config
-    fi
+        -f "../terraform/azure/$environment/global-cloud-values.yaml" --timeout 30m --debug
 }
 
 function install_helm_components() {
@@ -187,16 +182,14 @@ function run_post_install() {
     cp ../../../postman-collection/collection${RELEASE}.json .
     postman collection run collection${RELEASE}.json --environment env.json --delay-request 500 --bail --insecure
 }
-
 function cleanworkspace() {
-        #rm  certkey.pem certpubkey.pem
+        rm  certkey.pem certpubkey.pem
         sed -i '/CERTIFICATE_PRIVATE_KEY:/d' global-values.yaml
         sed -i '/CERTIFICATE_PUBLIC_KEY:/d' global-values.yaml
         sed -i '/CERTIFICATESIGN_PRIVATE_KEY:/d' global-values.yaml
         sed -i '/CERTIFICATESIGN_PUBLIC_KEY:/d' global-values.yaml
         echo "cleanup completed"
 }
-
 function destroy_tf_resources() {
     source tf.sh
     cleanworkspace
