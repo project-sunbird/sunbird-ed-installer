@@ -4901,12 +4901,10 @@
 									]
 								},
 								"url": {
-									"raw": "https://easyinstalltest.sunbirded.org/auth/realms/sunbird/protocol/openid-connect/token",
+									"raw": "{{host}}/auth/realms/sunbird/protocol/openid-connect/token",
 									"protocol": "https",
 									"host": [
-										"easyinstalltest",
-										"sunbirded",
-										"org"
+										"{{host}}"
 									],
 									"path": [
 										"auth",
@@ -6222,12 +6220,10 @@
 									"raw": "{\n    \"request\": {\n        \"type\": \"content\",\n        \"subType\": \"assessment\",\n        \"action\": \"create\",\n        \"component\": \"*\",\n        \"framework\": \"*\",\n        \"data\": {\n            \"templateName\": \"defaultTemplate\",\n            \"action\": \"create\",\n            \"fields\": [\n                {\n                    \"code\": \"name\",\n                    \"visible\": true,\n                    \"editable\": true,\n                    \"displayProperty\": \"Editable\",\n                    \"dataType\": \"text\",\n                    \"renderingHints\": {\n                        \"semanticColumnWidth\": \"twelve\"\n                    },\n                    \"description\": \"Name\",\n                    \"index\": 1,\n                    \"label\": \"Name\",\n                    \"required\": false,\n                    \"name\": \"Name\",\n                    \"inputType\": \"text\",\n                    \"placeholder\": \"Name\"\n                },\n                {\n                    \"code\": \"maxAttempts\",\n                    \"dataType\": \"text\",\n                    \"name\": \"Max no of attempts\",\n                    \"label\": \"Max no of attempts\",\n                    \"description\": \"Max no of attempts\",\n                    \"editable\": true,\n                    \"placeholder\": \"Max no of attempts\",\n                    \"inputType\": \"number\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"visible\": true,\n                    \"renderingHints\": {\n                        \"semanticColumnWidth\": \"six\"\n                    },\n                    \"index\": 6\n                }\n            ]\n        },\n        \"rootOrgId\": \"*\"\n    }\n}"
 								},
 								"url": {
-									"raw": "https://easyinstalltest.sunbirded.org/api/data/v1/form/create",
+									"raw": "{{host}}/api/data/v1/form/create",
 									"protocol": "https",
 									"host": [
-										"easyinstalltest",
-										"sunbirded",
-										"org"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -6406,12 +6402,10 @@
 									"raw": "{\n    \"request\":{\n        \"type\": \"content\",\n        \"action\": \"create\",\n        \"subType\": \"assessment\",\n        \"rootOrgId\": \"*\",\n        \"component\": \"portal\",\n        \"data\": {\n                \"templateName\": \"defaultTemplate\",\n                \"action\": \"create\",\n                \"fields\": [\n                    {\n                        \"code\": \"name\",\n                        \"visible\": true,\n                        \"editable\": true,\n                        \"displayProperty\": \"Editable\",\n                        \"dataType\": \"text\",\n                        \"renderingHints\": {\n                            \"semanticColumnWidth\": \"twelve\"\n                        },\n                        \"description\": \"Name\",\n                        \"index\": 1,\n                        \"label\": \"Name\",\n                        \"required\": false,\n                        \"name\": \"Name\",\n                        \"inputType\": \"text\",\n                        \"placeholder\": \"Name\"\n                    },\n                    {\n                        \"code\": \"maxAttempts\",\n                        \"dataType\": \"text\",\n                        \"name\": \"Max no of attempts\",\n                        \"label\": \"Max no of attempts\",\n                        \"description\": \"Max no of attempts\",\n                        \"editable\": true,\n                        \"placeholder\": \"Max no of attempts\",\n                        \"inputType\": \"number\",\n                        \"required\": false,\n                        \"displayProperty\": \"Editable\",\n                        \"visible\": true,\n                        \"renderingHints\": {\n                            \"semanticColumnWidth\": \"six\"\n                        },\n                        \"index\": 6\n                    }\n                ]\n            }\n    }\n}"
 								},
 								"url": {
-									"raw": "https://easyinstalltest.sunbirded.org/api/data/v1/form/create",
+									"raw": "{{host}}/api/data/v1/form/create",
 									"protocol": "https",
 									"host": [
-										"easyinstalltest",
-										"sunbirded",
-										"org"
+										"{{host}}"
 									],
 									"path": [
 										"api",
