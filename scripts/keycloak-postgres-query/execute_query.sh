@@ -96,9 +96,9 @@ kubectl create configmap keycloak-kids-keys -n $NAMESPACE \
   --from-literal=REFRESH_TOKEN_SECRET="$REFRESH_TOKEN_SECRET" \
   --from-literal=KEYCLOAK_PUBLIC_KEY="$KEYCLOAK_PUBLIC_KEY" \
   --from-literal=KEYCLOAK_PUBLIC_KEY_PEM="$KEYCLOAK_PUBLIC_KEY_PEM" \
-  --from-literal=KEYCLOAK_PUBLIC_KEY_KID="$KEYCLOAK_PUBLIC_KEY_KID" -o yaml --dry-run=client | kubectl apply -f -
+  --from-literal=KEYCLOAK_PUBLIC_KEY_KID="$KEYCLOAK_PUBLIC_KEY_KID" -o yaml --dry-run=client | kubectl apply -f --server-side -
 kubectl create configmap keycloak-key -n $NAMESPACE \
-  --from-literal=$KEYCLOAK_PUBLIC_KEY_KID="$KEYCLOAK_PUBLIC_KEY" -o yaml --dry-run=client | kubectl apply -f -
+  --from-literal=$KEYCLOAK_PUBLIC_KEY_KID="$KEYCLOAK_PUBLIC_KEY" -o yaml --dry-run=client | kubectl apply -f --server-side -
 
 # Assign service account role to lms client
 echo "Generate access token"
