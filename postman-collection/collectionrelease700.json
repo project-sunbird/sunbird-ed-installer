@@ -6880,6 +6880,26 @@
 					"item": [
 						{
 							"name": "Auth Token- content creator",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Your test name\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.globals.set(\"creator_refresh_token\", jsonData.refresh_token);",
+											"    // pm.expect(jsonData.value).to.eql(100);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
 							"request": {
 								"method": "POST",
 								"header": [
@@ -6889,7 +6909,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhcGlfYWRtaW4ifQ.R0dE7mmX95ohjboVTdmqMJUKn9haHF7GKoDGtzK8bMI"
+										"value": "Bearer {{apikey}}"
 									}
 								],
 								"body": {
@@ -6897,12 +6917,12 @@
 									"urlencoded": [
 										{
 											"key": "client_id",
-											"value": "direct-grant",
+											"value": "{{admin_client_id}}",
 											"type": "text"
 										},
 										{
 											"key": "client_secret",
-											"value": "direct-grantU2PNfwcz6rb9756ZwAwZ",
+											"value": "{{admin_client_secret}}",
 											"type": "text"
 										},
 										{
@@ -6924,7 +6944,6 @@
 								},
 								"url": {
 									"raw": "{{host}}/auth/realms/sunbird/protocol/openid-connect/token",
-									"protocol": "https",
 									"host": [
 										"{{host}}"
 									],
@@ -8166,7 +8185,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "{{kong_api_key}}"
+										"value": "Bearer {{apikey}}"
 									}
 								],
 								"body": {
@@ -8234,7 +8253,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhcGlfYWRtaW4ifQ.R0dE7mmX95ohjboVTdmqMJUKn9haHF7GKoDGtzK8bMI"
+										"value": "Bearer {{apikey}}"
 									}
 								],
 								"body": {
@@ -8243,7 +8262,6 @@
 								},
 								"url": {
 									"raw": "{{host}}/api/data/v1/form/create",
-									"protocol": "https",
 									"host": [
 										"{{host}}"
 									],
@@ -8416,7 +8434,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhcGlfYWRtaW4ifQ.R0dE7mmX95ohjboVTdmqMJUKn9haHF7GKoDGtzK8bMI"
+										"value": "Bearer {{apikey}}"
 									}
 								],
 								"body": {
@@ -8425,7 +8443,6 @@
 								},
 								"url": {
 									"raw": "{{host}}/api/data/v1/form/create",
-									"protocol": "https",
 									"host": [
 										"{{host}}"
 									],
