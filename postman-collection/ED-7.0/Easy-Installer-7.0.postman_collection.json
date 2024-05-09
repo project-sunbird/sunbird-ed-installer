@@ -1,0 +1,49 @@
+{
+	"info": {
+		"_postman_id": "6bcfc6f6-cc1c-4ea2-b072-13da772e0d97",
+		"name": "Easy-Installer-7.0",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4214340",
+		"_collection_link": "https://knowlg-sunbird.postman.co/workspace/Sunbrid-ED~33366c22-8008-4247-9728-2b2df868bfef/collection/4214340-6bcfc6f6-cc1c-4ea2-b072-13da772e0d97?action=share&source=collection_link&creator=4214340"
+	},
+	"item": [
+		{
+			"name": "Consumption",
+			"item": [
+				{
+					"name": "Portal",
+					"item": []
+				},
+				{
+					"name": "App",
+					"item": []
+				}
+			]
+		},
+		{
+			"name": "Editors",
+			"item": [
+				{
+					"name": "Question-Set-Editor",
+					"item": []
+				},
+				{
+					"name": "Interactive-Editor",
+					"item": []
+				},
+				{
+					"name": "File-Upload-Editor",
+					"item": []
+				},
+				{
+					"name": "Collection-Editor",
+					"item": []
+				},
+				{
+					"name": "Workspace",
+					"item": []
+				}
+			]
+		}
+	]
+}

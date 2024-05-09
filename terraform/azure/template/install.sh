@@ -29,10 +29,36 @@ function create_tf_resources() {
     terragrunt run-all apply --terragrunt-non-interactive
     chmod 600 ~/.kube/config
 }
+function certificate_keys() {
+    # Generate private and public keys using openssl
+    echo "Creation of RSA keys for certificate signing"
+    openssl genrsa -out ../terraform/azure/$environment/certkey.pem;
+    openssl rsa -in ../terraform/azure/$environment/certkey.pem -pubout -out ../terraform/azure/$environment/certpubkey.pem;
+    CERTPRIVATEKEY=`sed 's/KEY-----/KEY-----\\n/g' ../terraform/azure/$environment/certkey.pem | sed 's/-----END/\\n-----END/g' | awk '{printf("%s",$0)}' `
+    echo "CERTIFICATE_PRIVATE_KEY: \""$CERTPRIVATEKEY"\"" >> ../terraform/azure/$environment/global-values.yaml
+    awk '{if($0 !~ /END/)  printf "%s\\r\\n",$0;} END{printf "-----END PUBLIC KEY-----"}' ../terraform/azure/$environment/certpubkey.pem |awk '{print "CERTIFICATE_PUBLIC_KEY: \""$0"\""}' >> ../terraform/azure/$environment/global-values.yaml
+    echo "CERTIFICATESIGN_PRIVATE_KEY: \""$CERTPRIVATEKEY"\"" >> ../terraform/azure/$environment/global-values.yaml
+    awk '{if($0 !~ /END/)  printf "%s\\r\\n",$0;} END{printf "-----END PUBLIC KEY-----"}' ../terraform/azure/$environment/certpubkey.pem |awk '{print "CERTIFICATESIGN_PUBLIC_KEY: \""$0"\""}' >> ../terraform/azure/$environment/global-values.yaml
+}
 
+function certificate_config() {
+    # Check if the key is already present in RC 
+    echo "Configuring Certificatekeys"
+    kubectl -n sunbird exec deploy/nodebb -- apt update -y
+    kubectl -n sunbird exec deploy/nodebb -- apt install jq -y
+    CERTKEY=`kubectl -n sunbird exec deploy/nodebb -- curl --location --request POST 'http://registry-service:8081/api/v1/PublicKey/search' --header 'Content-Type: application/json' --data-raw '{ "filters": {}}' | jq '.[] | .value'`
+    # Inject cert keys to the service if its not available 
+    if [ "$CERTKEY" = "" ]; then
+            echo "Certificate RSA public key not available"
+            CERTPUBKEY=`awk -F'"' '/CERTIFICATE_PUBLIC_KEY/{print $2}' global-values.yaml`
+            curl_data="curl --location --request POST 'http://registry-service:8081/api/v1/PublicKey' --header 'Content-Type: application/json' --data-raw '{\"value\":\"$CERTPUBKEY\"}'"
+            echo "kubectl -n sunbird exec deploy/nodebb -- $curl_data" | sh -
+    fi
+
+}
 function install_component() {
     # We need a dummy cm for configmap to start. Later Lernbb will create real one
-    kubectl create confifmap keycloak-key -n sunbird 2>/dev/null || true
+    kubectl create configmap keycloak-key -n sunbird 2>/dev/null || true
     local current_directory="$(pwd)"
     if [ "$(basename $current_directory)" != "helmcharts" ]; then
         cd ../../../helmcharts 2>/dev/null || true
@@ -43,6 +69,12 @@ function install_component() {
     local ed_values_flag=""
     if [ -f "$component/ed-values.yaml" ]; then
         ed_values_flag="-f $component/ed-values.yaml --wait --wait-for-jobs"
+    fi
+    ### Generate the key pair required for certificate template
+    if [ $component = "learnbb" ]; then
+        if [ -f "certkey.pem" ] && [ -f "certpubkey.pem" ]; then
+          certificate_keys
+        fi
     fi
     helm upgrade --install "$component" "$component" --namespace sunbird -f "$component/values.yaml" \
         $ed_values_flag \
@@ -115,7 +147,6 @@ function restart_workloads_using_keys() {
     kubectl rollout restart deployment -n sunbird neo4j knowledge-mw player report content adminutil cert-registry groups userorg lms notification registry analytics
     kubectl rollout status deployment -n sunbird neo4j knowledge-mw player report content adminutil cert-registry groups userorg lms notification registry analytics
     echo -e "\nWaiting for all pods to start"
-
 }
 
 function run_post_install() {
@@ -150,9 +181,17 @@ function run_post_install() {
     cp ../../../postman-collection/collection${RELEASE}.json .
     postman collection run collection${RELEASE}.json --environment env.json --delay-request 500 --bail --insecure
 }
-
+function cleanworkspace() {
+        rm  certkey.pem certpubkey.pem
+        sed -i '/CERTIFICATE_PRIVATE_KEY:/d' global-values.yaml
+        sed -i '/CERTIFICATE_PUBLIC_KEY:/d' global-values.yaml
+        sed -i '/CERTIFICATESIGN_PRIVATE_KEY:/d' global-values.yaml
+        sed -i '/CERTIFICATESIGN_PUBLIC_KEY:/d' global-values.yaml
+        echo "cleanup completed"
+}
 function destroy_tf_resources() {
     source tf.sh
+    cleanworkspace
     echo -e "Destroying resources on azure cloud"
     terragrunt run-all destroy
 }
@@ -165,6 +204,9 @@ function invoke_functions() {
 
 RELEASE="release700"
 POSTMAN_COLLECTION_LINK="https://api.postman.com/collections/5338608-e28d5510-20d5-466e-a9ad-3fcf59ea9f96?access_key=PMAT-01HMV5SB2ZPXCGNKD74J7ARKRQ"
+CERTPUBLICKEY=""
+CERTPRIVATEKEY=""
+
 
 if [ $# -eq 0 ]; then
     create_tf_backend
@@ -174,6 +216,7 @@ if [ $# -eq 0 ]; then
     install_helm_components
     cd ../terraform/azure/$environment
     restart_workloads_using_keys
+    certificate_config
     dns_mapping
     generate_postman_env
     run_post_install
@@ -203,6 +246,9 @@ else
         ;;
     "destroy_tf_resources")
         destroy_tf_resources
+        ;;
+    "certificate_config")
+        certificate_config
         ;;
     *)
         invoke_functions "$@"
