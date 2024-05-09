@@ -36,7 +36,7 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"value": "Bearer {{api_key}}"
+												"value": "Bearer {{apikey}}"
 											},
 											{
 												"key": "Content-Type",
@@ -71,7 +71,7 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"value": "Bearer {{api_key}}"
+												"value": "Bearer {{apikey}}"
 											},
 											{
 												"key": "Content-Type",
@@ -111,7 +111,7 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"value": "Bearer {{api_key}}"
+												"value": "Bearer {{apikey}}"
 											},
 											{
 												"key": "Content-Type",
@@ -151,7 +151,7 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"value": "Bearer {{api_key}}"
+												"value": "Bearer {{apikey}}"
 											},
 											{
 												"key": "Content-Type",
