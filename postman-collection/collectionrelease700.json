@@ -7486,7 +7486,7 @@
 							"response": []
 						},
 						{
-							"name": "10 - Workspace UI create",
+							"name": "10 - Workspace options",
 							"request": {
 								"method": "POST",
 								"url": "{{host}}/api/data/v1/form/create",
