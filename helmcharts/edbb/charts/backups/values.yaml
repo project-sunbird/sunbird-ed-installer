@@ -1,0 +1,46 @@
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Automatically mount a ServiceAccount's API credentials?
+  automount: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: "backup"
+
+kubectlExecArgs:
+  - "exec"
+  - "cassandra-0 -n sunbird"
+  - "--"
+  - "python3 /bitnami/cassandra/cassandra_backup.sh -t /bitnami/cassandra --connectionstring"    
+podAnnotations: {}
+podLabels: {}
+connectionstring: "Pleaseinputconnectioncstring"
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+
+resources: {}
+# Additional volumes on the output Deployment definition.
+volumes: []
+# Additional volumeMounts on the output Deployment definition.
+volumeMounts: []
+# - name: foo
+#   mountPath: "/etc/foo"
+#   readOnly: true
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
