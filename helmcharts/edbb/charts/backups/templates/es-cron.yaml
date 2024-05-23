@@ -30,9 +30,6 @@ spec:
               command:
                 - /bin/sh
                 - -c
-                - |
-                  backup_date=$(date +%d-%b-%Y-%s)
-                  curl -XPUT 'http://localhost:9200/_snapshot/azurebackup' -H 'Content-Type: application/json' -d '{ "type": "azure", "settings": { "container": "elasticsearch-snapshots", "base_path": "elasticsearch" }'
-                  curl -XPUT 'http://localhost:9200/_snapshot/azurebackup/snapshot_1' -H 'Content-Type: application/json' -d '{ "indices":"*","include_global_state":false }'
+                - /tmp/esbackup.sh
               image: "{{ .Values.elasticsearchbackupimage.repository }}:{{ .Values.elasticsearchbackupimage.tag | default .Chart.AppVersion }}"
               imagePullPolicy: {{ .Values.elasticsearchbackupimage.pullPolicy }}
