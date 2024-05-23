@@ -1,4 +1,4 @@
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: cassandra-cronjob
@@ -16,6 +16,6 @@ spec:
             #args: ["exec", "cassandra-0", "-n sunbird"  , "--", "python3 /bitnami/cassandra/cassandra.py -t /bitnami/cassandra"]
             args: 
             {{- toYaml .Values.kubectlExecArgs | nindent 12 }}
-            - {{ .Values.connectionstring }}
+            - {{ .Values.connectionstring | quote }}
           restartPolicy: OnFailure
 

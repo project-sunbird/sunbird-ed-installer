@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: elasticsearch-backup-cronjob
+  labels:
+    {{- include "backups.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+spec:
+  schedule: {{ .Values.CRON_SCHEDULE }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          {{- with .Values.podAnnotations }}
+          annotations:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+          labels:
+            {{- include "backups.selectorLabels" . | nindent 12 }}
+        spec:
+          serviceAccountName: {{ include "backups.serviceAccountName" . }}
+          restartPolicy: {{ .Values.restartPolicy }}
+{{- if .Values.elasticsearchbackupimage.imagePullSecrets }}
+          imagePullSecrets:
+            - name: {{ .Values.elasticsearchbackupimage.imagePullSecrets }}
+{{- end }}
+          containers:
+            - name: {{ .Chart.Name }}
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  backup_date=$(date +%d-%b-%Y-%s)
+                  curl -XPUT 'http://localhost:9200/_snapshot/azurebackup' -H 'Content-Type: application/json' -d '{ "type": "azure", "settings": { "container": "elasticsearch-snapshots", "base_path": "elasticsearch" }'
+                  curl -XPUT 'http://localhost:9200/_snapshot/azurebackup/snapshot_1' -H 'Content-Type: application/json' -d '{ "indices":"*","include_global_state":false }'
+              image: "{{ .Values.elasticsearchbackupimage.repository }}:{{ .Values.elasticsearchbackupimage.tag | default .Chart.AppVersion }}"
+              imagePullPolicy: {{ .Values.elasticsearchbackupimage.pullPolicy }}

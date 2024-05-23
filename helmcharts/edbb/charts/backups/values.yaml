@@ -12,12 +12,18 @@ serviceAccount:
 
 kubectlExecArgs:
   - "exec"
-  - "cassandra-0 -n sunbird"
+  - "cassandra-0"
+  - "-n" 
+  - "sunbird"
   - "--"
-  - "python3 /bitnami/cassandra/cassandra_backup.sh -t /bitnami/cassandra --connectionstring"    
+  - "python3" 
+  - "/bitnami/cassandra/cassandra_backup.py" 
+  - "-t"
+  - "/tmp"
+  - "--connectionstring"    
 podAnnotations: {}
 podLabels: {}
-connectionstring: "Pleaseinputconnectioncstring"
+connectionstring: ""
 podSecurityContext: {}
   # fsGroup: 2000
 
@@ -44,3 +50,71 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+#redis
+redisimage:
+  repository: "sunbirded.azurecr.io/redisbackup"
+  pullPolicy: IfNotPresent
+  imagePullSecrets: ""
+  tag: "1.0.0"
+
+#neo4j
+neo4jimage:
+  repository: "sunbirded.azurecr.io/redisbackup"
+  pullPolicy: IfNotPresent
+  imagePullSecrets: ""
+  tag: "1.0.0"
+
+elasticsearchbackupimage:
+  repository: "sunbirded.azurecr.io/elasticsearchbackupimage"
+  pullPolicy: IfNotPresent
+  imagePullSecrets: ""
+  tag: "1.0.1"
+
+    
+nameOverride: ""
+fullnameOverride: ""
+
+  #serviceAccount:
+  # Specifies whether a service account should be created
+  # create: true
+  # Annotations to add to the service account
+  #annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  #name: ""
+
+podAnnotations: {}
+
+restartPolicy: "OnFailure"
+
+CRON_SCHEDULE: '"00 00 * * 1-5"'
+REDIS_MASTER_POD: "redis-master-0"
+azure_backups_container_name: "backups"
+
+
+#postgres
+#CRON_SCHEDULE: '"00 00 * * *"'
+PG_USER: "postgres"
+PG_HOST: "postgresql"
+PGPASSWORD: "postgres"
+AZURE_STORAGE_ACCOUNT: ""
+AZURE_KEY: ""
+CLOUD_SERVICE: "azure"
+
+postgresql: &postgresql
+  enabled: true
+  host: postgresql
+  postgresqlUsername: postgres
+  postgresqlPassword: postgres
+
+postgresimage:
+  repository: "sunbirded.azurecr.io/postgresbackup"
+  pullPolicy: IfNotPresent
+  imagePullSecrets: ""
+  tag: "1.0.0"
+
+global:
+  azure_storage_account_name: your_storage_account_name
+  azure_storage_account_key: your_storage_account_key
+  postgresql: *postgresql

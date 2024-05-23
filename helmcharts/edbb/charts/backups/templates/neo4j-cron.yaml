@@ -1,0 +1,54 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: neo4j-backup-cronjob
+  labels:
+    {{- include "backups.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+spec:
+  schedule: {{ .Values.CRON_SCHEDULE }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          {{- with .Values.podAnnotations }}
+          annotations:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+          labels:
+            {{- include "backups.selectorLabels" . | nindent 12 }}
+        spec:
+          serviceAccountName: {{ include "backups.serviceAccountName" . }}
+          restartPolicy: {{ .Values.restartPolicy }}
+{{- if .Values.neo4jimage.imagePullSecrets }}
+          imagePullSecrets:
+            - name: {{ .Values.neo4jimage.imagePullSecrets }}
+{{- end }}
+          containers:
+            - name: {{ .Chart.Name }}
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  backup_date=$(date +%d-%b-%Y-%s)
+                  kubectl scale deploy neo4j -n sunbird --replicas=0
+                  mv graph.db graph.db.backup
+                  tar czf graph.db.tar.gz graph.db.backup
+                  az storage blob upload --account-name your_storage_account_name \
+                                          --account-key your_storage_account_key \
+                                          --container-name neo4j-backup \
+                                          --name copy-$backup_date.tar.gz \
+                                          --type block \
+                                          --file "graph.db.tar.gz"
+                  kubectl scale deploy neo4j -n sunbird --replicas=1
+              image: "{{ .Values.neo4jimage.repository }}:{{ .Values.neo4jimage.tag | default .Chart.AppVersion }}"
+              imagePullPolicy: {{ .Values.neo4jimage.pullPolicy }}
+              volumeMounts:
+              - name: neo4j-data
+                mountPath: /data
+          volumes:
+          - name: neo4j-data 
+            persistentVolumeClaim:
+              claimName: neo4j-claim
+
