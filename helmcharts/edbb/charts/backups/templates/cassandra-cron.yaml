@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: cassandra-cronjob
 spec:
-  schedule: "*/5 * * * *"
+  schedule: {{ .Values.cassandradb_cron_schedule | default "0 0 * * 1-5"}}
   jobTemplate:
     spec:
       template:
@@ -15,7 +15,16 @@ spec:
             command: ["kubectl"]
             #args: ["exec", "cassandra-0", "-n sunbird"  , "--", "python3 /bitnami/cassandra/cassandra.py -t /bitnami/cassandra"]
             args: 
-            {{- toYaml .Values.kubectlExecArgs | nindent 12 }}
+            - "exec"
+            - "cassandra-0"
+            - "-n" 
+            - "sunbird"
+            - "--"
+            - "python3" 
+            - "/bitnami/cassandra/cassandra_backup.py" 
+            - "-t"
+            - "/tmp"
+            - "--connectionstring"
             - {{ .Values.connectionstring | quote }}
           restartPolicy: OnFailure
 

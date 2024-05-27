@@ -7,7 +7,7 @@ metadata:
   annotations:
     "helm.sh/hook": post-install,post-upgrade
 spec:
-  schedule: {{ .Values.CRON_SCHEDULE }}
+  schedule: {{ .Values.neo4jdb_cron_schedule | default "0 0 * * 1-5"}}
   jobTemplate:
     spec:
       template:
@@ -35,8 +35,8 @@ spec:
                   kubectl scale deploy neo4j -n sunbird --replicas=0
                   mv graph.db graph.db.backup
                   tar czf graph.db.tar.gz graph.db.backup
-                  az storage blob upload --account-name your_storage_account_name \
-                                          --account-key your_storage_account_key \
+                  az storage blob upload --account-name {{ .Values.global.azure_storage_account_name }} \
+                                          --account-key {{ .Values.global.azure_storage_account_key }} \
                                           --container-name neo4j-backup \
                                           --name copy-$backup_date.tar.gz \
                                           --type block \

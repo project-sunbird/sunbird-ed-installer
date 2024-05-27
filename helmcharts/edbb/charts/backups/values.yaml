@@ -34,8 +34,6 @@ securityContext: {}
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
   # runAsUser: 1000
-
-
 resources: {}
 # Additional volumes on the output Deployment definition.
 volumes: []
@@ -44,12 +42,12 @@ volumeMounts: []
 # - name: foo
 #   mountPath: "/etc/foo"
 #   readOnly: true
-
 nodeSelector: {}
-
 tolerations: []
-
 affinity: {}
+nameOverride: ""
+fullnameOverride: ""
+podAnnotations: {}
 
 #redis
 redisimage:
@@ -65,30 +63,15 @@ neo4jimage:
   imagePullSecrets: ""
   tag: "1.0.0"
 
+#elasricsearch
 elasticsearchbackupimage:
   repository: "sunbirded.azurecr.io/elasticsearchbackupimage"
   pullPolicy: IfNotPresent
   imagePullSecrets: ""
   tag: "1.0.1"
 
-    
-nameOverride: ""
-fullnameOverride: ""
-
-  #serviceAccount:
-  # Specifies whether a service account should be created
-  # create: true
-  # Annotations to add to the service account
-  #annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  #name: ""
-
-podAnnotations: {}
 
 restartPolicy: "OnFailure"
-
-CRON_SCHEDULE: '"00 00 * * 1-5"'
 REDIS_MASTER_POD: "redis-master-0"
 azure_backups_container_name: "backups"
 
@@ -118,3 +101,11 @@ global:
   azure_storage_account_name: your_storage_account_name
   azure_storage_account_key: your_storage_account_key
   postgresql: *postgresql
+
+#Update this variables if you want to set cron schedules accordingly
+
+#cassandradb_cron_schedule: ""
+#postgresdb_cron_schedule: ""
+#redisdb_cron_schedule: ""
+#cassandradb_cron_schedule: ""
+#neo4jdb_cron_schedule: ""

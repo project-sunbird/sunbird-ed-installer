@@ -7,7 +7,7 @@ metadata:
   annotations:
     "helm.sh/hook": post-install,post-upgrade
 spec:
-  schedule: {{ .Values.CRON_SCHEDULE }}
+  schedule: {{ .Values.redisdb_cron_schedule | default "0 0 * * 1-5"}}
   jobTemplate:
     spec:
       template:
@@ -34,13 +34,13 @@ spec:
                   backup_date=$(date +%d-%b-%Y-%s)
                   kubectl exec -it redis-master-0 -- redis-cli save
                   kubectl cp redis-master-0:/data/dump.rdb dump.rdb
-                  bzip2 dump.rdb
-                  mv dump.rdb.bz2 dump-$backup_date.rdb.bz2
+                  tar cvf dump.rdb.tag.gz dump.rdb
+                  mv dump.rdb.tag.gz dump-$backup_date.rdb.tag.gz
                   az storage blob upload --account-name {{ .Values.global.azure_storage_account_name }} \
                                           --account-key {{ .Values.global.azure_storage_account_key }} \
                                           --container-name {{ .Values.azure_backups_container_name }} \
-                                          --name dump-$backup_date.rdb.bz2 \
+                                          --name dump-$backup_date.rdb.tar.gz \
                                           --type block \
-                                          --file "dump-$backup_date.rdb.bz2"
+                                          --file "dump-$backup_date.rdb.tar.gz"
               image: "{{ .Values.redisimage.repository }}:{{ .Values.redisimage.tag | default .Chart.AppVersion }}"
               imagePullPolicy: {{ .Values.redisimage.pullPolicy }}
