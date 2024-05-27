@@ -4,7 +4,7 @@ replicaCount: 1
 
 image:
   repository: sunbirded.azurecr.io/lms_service
-  tag: "release-5.3.2_RC1_927e04e_30"
+  tag: "release-5.3.2_RC1_927e04e_676"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
