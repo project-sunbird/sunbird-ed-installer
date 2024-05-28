@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cassandra-cronjob
+spec:
+  schedule: {{ .Values.cassandradb_cron_schedule | default "0 0 * * 1-5"}}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: {{ .Values.serviceAccount.name }}
+          containers:
+          - name: kubectl-exec
+            image: bitnami/kubectl:1.29
+            command: ["kubectl"]
+            #args: ["exec", "cassandra-0", "-n sunbird"  , "--", "python3 /bitnami/cassandra/cassandra.py -t /bitnami/cassandra"]
+            args: 
+            - "exec"
+            - "cassandra-0"
+            - "-n" 
+            - "sunbird"
+            - "--"
+            - "python3" 
+            - "/bitnami/cassandra/cassandra_backup.py" 
+            - "-t"
+            - "/tmp"
+            - "--connectionstring"
+            - {{ .Values.connectionstring | quote }}
+          restartPolicy: OnFailure
+
