@@ -1,0 +1,119 @@
+nameOverride: "telemetry"
+fullnameOverride: "telemetry"
+
+replicaCount: 1
+image:
+  repository: sunbird/telemetry-service
+  pullPolicy: Always
+  tag: "release-3.3.0_RC1"
+  pullSecrets: []
+podAnnotations: {}
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1001
+  fsGroup: 1001
+
+securityContext:
+  readOnlyRootFilesystem: false
+  capabilities:
+    drop:
+    - ALL
+
+service:
+  type: ClusterIP
+  protocol: TCP
+  ports:
+    - name: http-telemetry
+      port: 9001
+      targetPort: 9001
+
+ingress:
+  enabled: false
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+      - /
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 100Mi
+  limits:
+    cpu: 1
+    memory: 1024Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+
+livenessProbe:
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+  httpGet:
+    path: /health
+    port: 9001
+readinessProbe:
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+  httpGet:
+    path: /health
+    port: 9001
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+configmap:
+  enabled: true
+  mountPath: /home/sunbird/telemetry-service-1.0-SNAPSHOT/config/
+
+commonAnnotations:
+  reloader.stakater.com/auto: "true"
+
+strategy:
+  type: RollingUpdate
+  maxsurge: 25%
+  maxunavailable: 25%
+
+serviceAccount:
+  create: true
+  name: ""
+
+kafka: &kafka
+  host: "kafka"
+  port: 9092
+
+sunbird_telemetry_service:
+  telemetry_service_threads: 2
+  telemetry_local_storage_enabled: "true"
+  telemetry_local_storage_type: kafka
+  telemetry_kafka_topic: sunbird.telemetry.ingest
+  telemetry_kafka_compression: snappy
+  telemetry_proxy_enabled: "false"
+  # telemetry_proxy_url: {{telemetry_proxy_url}}
+  # telemetry_proxy_auth_key: {{sunbird_ekstep_api_key}}
+
+global:
+  kafka: *kafka

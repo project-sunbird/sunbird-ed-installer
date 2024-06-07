@@ -1,0 +1,263 @@
+fullnameOverride: "lms"
+
+replicaCount: 1
+
+image:
+  repository: sunbirded.azurecr.io/lms_service
+  tag: "release-5.3.2_RC1_927e04e_30"
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # runAsNonRoot: true
+  # runAsUser: 1001
+  # fsGroup: 1001
+
+securityContext: {}
+  # readOnlyRootFilesystem: false
+  # capabilities:
+  #   drop:
+  #   - ALL
+
+service:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 9000
+      targetPort: 9000
+
+ingress: {}
+  # enabled: false
+  # annotations: {}
+  # hosts:
+  #   - host: chart-example.local
+  #     paths:
+  #     - /
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 100Mi
+  limits:
+    cpu: 1
+    memory: 1024Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+
+livenessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+  httpGet:
+    path: /health
+    port: 9000
+
+readinessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+  httpGet:
+    path: /health
+    port: 9000
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+configmap:
+  enabled: true
+  mountPath: /home/sunbird/lms/lms-service-1.0-SNAPSHOT/config
+
+serviceAccount:
+  create: true
+
+serviceMonitor:
+  enabled: true
+  interval: 30s
+  scrapeTimeout: 10s
+  labels:
+    release: monitoring
+  honorLabels: true
+  jobLabel: "app.kubernetes.io/name"
+
+# Example values.yaml structure
+initContainers: {}
+  # - name: init-myservice
+  #   image: busybox:1.28
+  #   command: ['sh', '-c', "until nslookup kubernetes.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for myservice; sleep 2; done"]
+
+sidecars: {}
+  # - name: log-reader # Sidecar container
+  #   image: busybox # Use another busybox image
+  #   command: ["/bin/sh"] # Override the default command
+  #   args: ["-c", "tail -f /var/log/app.log"] # Run a shell script that tails the log file
+
+cloud_store_base_path_placeholder: ""
+cloud_storage_path_prefix_dial: "dial"
+sunbird_group_service_api_base_url: "http://groups-service:9000"
+sunbird_mw_system_host: lms-service
+sunbird_mw_system_port: 8088
+sunbird_app_name: "sunbird"
+core_vault_sunbird_sso_publickey: ""
+keycloak_realm: sunbird
+core_vault_sunbird_sso_username: admin
+core_vault_sunbird_sso_password: admin
+sunbird_sso_client_id: lms
+sunbird_sso_client_secret: "lms_client_secret"
+sunbird_cassandra_username: ""
+sunbird_cassandra_password: ""
+actor_hostname: actor-service
+bind_hostname: "0.0.0.0"
+sunbird_pg_db: quartz
+sunbird_quartz_mode: cluster
+sunbird_encryption_mode: local
+sunbird_remote_req_router_path: akka.tcp://SunbirdMWSystem@actor-service:8088/user/RequestRouter
+sunbird_remote_bg_req_router_path: kka.tcp://SunbirdMWSystem@actor-service:8088/user/BackgroundRequestRouter
+sunbird_default_channel: "sunbird"
+sunbird_user_bulk_upload_size: 1001
+sunbird_user_profile_field_default_visibility: private
+java_options: -Xmx600m
+log4j_java_options: "-Dlog4j2.formatMsgNoLookups=true"
+sunbird_sso_realm: sunbird
+sunbird_sso_username: admin
+sunbird_sso_password: admin
+sunbird_analytics_api_base_url: "http://analytics-service:9000"
+sunbird_search_service_api_base_url: "http://search-service:9000"
+learning_service_url: "http://learning:8080/learning-service"
+content_service_url: "http://content-service:9000"
+content_read_url: "/content/v3/read/"
+mail_server_username: ""
+mail_server_password: ""
+mail_server_host: ""
+mail_server_port: ""
+mail_server_from_email: ""
+sunbird_msg_sender: ""
+sunbird_msg_91_auth: ""
+sunbird_installation_email: ""
+background_actor_provider: local
+api_actor_provider: local
+sunbird_badger_baseurl: http://badger:8004
+telemetry_pdata_pid: "lms-service"
+sunbird_telemetry_base_url: "http://telemetry-service:9001"
+telemetry_queue_threshold_value: "100"
+sunbird_api_mgr_base_url: http://knowledge-mw-service:5000
+sunbird_api_base_url: http://knowledge-mw-service:5000
+sunbird_cs_search_path: "/v1/content/search"
+sunbird_env_logo_url: ""
+sunbird_registry_service_baseurl: "http://registry-service:8081"
+sunbird_open_saber_bridge_enable: "false"
+sunbird_email_max_recipients_limit: 100
+sunbird_url_shortner_access_token: ""
+sunbird_url_shortner_enable: false
+sunbird_keycloak_required_action_link_expiration_seconds: 2592000
+sunbird_course_batch_notification_enabled: true
+sunbird_course_batch_notification_signature: sunbird
+sunbird_otp_expiration: 1800
+sunbird_otp_length: 6
+sunbird_time_zone: "Asia/Kolkata"
+sunbird_health_check_enable: "true"
+sunbird_keycloak_user_federation_provider_id: "cassandrafederationid"
+sunbird_gzip_enable: "true"
+sunbird_gzip_size_threshold: "262144"
+sunbird_cache_enable: "false"
+sunbird_user_org_api_base_url: "http://learner-service:9000"
+sunbird_cert_service_base_url: http://cert-service:9000
+learning_service_base_url: "http://learning:8080/learning-service"
+sunbird_user_search_cretordetails_fields: "id,firstName,lastName"
+sunbird_user_service_api_base_url: "http://userorg:9000"
+limit_managed_user_creation: "true"
+managed_user_limit: "30"
+sunbird_user_qrcode_courses_limit: "5000"
+keys_basepath: "/keys/"
+learning_content_props_to_add: "mimeType,contentType,name,code,description,keywords,framework,copyright,topic"
+group_activity_agg_cache_ttl: "3600"
+group_activity_agg_cache_enable: "false"
+redis_connection_max: "64"
+redis_connection_idle_max: "32"
+redis_connection_idle_min: "1"
+redis_connection_minEvictableIdleTimeSeconds: "120"
+redis_connection_timeBetweenEvictionRunsSeconds: "300"
+redis_experimentIndex: "10"
+redis_dbIndex: "2"
+user_enrolments_response_cache_enable: "true"
+user_enrolments_response_cache_ttl: "300"
+druid_proxy_api_port: "8082"
+druid_proxy_api_endpoint: /druid/v2/
+collection_summary_agg_data_source: 'audit-rollup-syncts'
+collection_summary_agg_cache_ttl: "21600"
+enrollment_list_size: "1000"
+sunbird_cloud_service_provider: "azure"
+isMultiDCEnabled: "false"
+sunbird_dial_service_base_url: "http://dial-service:9000"
+sunbird_dial_service_search_url: "/dialcode/v3/search"
+
+opa_enabled: false
+
+envoy_probes:
+  failureThreshold: 2
+  httpGet:
+    path: /ready
+    port: 10000
+    scheme: HTTP
+  initialDelaySeconds: 5
+  periodSeconds: 15
+  timeoutSeconds: 5
+
+opa_probes:
+  failureThreshold: 3
+  httpGet:
+    path: /health?plugins
+    port: 8282
+    scheme: HTTP
+  initialDelaySeconds: 5
+  periodSeconds: 15
+  timeoutSeconds: 5
+
+envoy_resources:
+  requests:
+    cpu: "100m"
+    memory: "100Mi"
+  limits:
+    cpu: "1"
+    memory: "1024Mi"
+
+opa_resources:
+  requests:
+    cpu: "100m"
+    memory: "100Mi"
+  limits:
+    cpu: "1"
+    memory: "1024Mi"
+
+init_container_resources:
+  requests:
+    cpu: "100m"
+    memory: "100Mi"
+  limits:
+    cpu: "1"
+    memory: "1024Mi"
+
+commonAnnotations:
+  reloader.stakater.com/auto: "true"

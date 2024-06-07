@@ -1,0 +1,9 @@
+dependencies:
+- name: common
+  repository: https://nimbushubin.github.io/helmcharts
+  version: 0.1.0
+- name: grafana
+  repository: https://grafana.github.io/helm-charts
+  version: 6.60.6
+digest: sha256:6ea24a0f4fbb7fac28ae0845d426b0dab6884a16eb2a33d989d690540ae0ad90
+generated: "2024-01-12T11:40:34.947044517+01:00"

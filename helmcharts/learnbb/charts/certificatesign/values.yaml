@@ -1,0 +1,118 @@
+fullnameOverride: "certificatesign"
+
+replicaCount: 1
+
+image:
+  repository: sunbirded.azurecr.io/sunbird-rc-certificate-signer
+  tag: "release-5.1.0_2bc7760_9"
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+podAnnotations: {}
+
+podSecurityContext: {}
+  # runAsNonRoot: false
+  # runAsUser: 0
+  # fsGroup: 0
+
+securityContext: {}
+  # readOnlyRootFilesystem: false
+  # capabilities:
+  #   drop:
+  #   - ALL
+
+service:
+  type: ClusterIP
+  protocol: TCP
+  ports:
+    - name: http
+      port: 8079
+      targetPort: 8079
+
+ingress: {}
+  # enabled: false
+  # annotations: {}
+  # hosts:
+  #   - host: chart-example.local
+  #     paths:
+  #     - /
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 100Mi
+  limits:
+    cpu: 1
+    memory: 1024Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+
+livenessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+  httpGet:
+    path: /health
+    port: 8079
+
+readinessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+  httpGet:
+    path: /health
+    port: 8079
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+configmap:
+  enabled: true
+  mountPath: /etc/signer
+commonAnnotations:
+  reloader.stakater.com/auto: "true"
+
+strategy:
+  type: RollingUpdate
+  maxsurge: 25%
+  maxunavailable: 25%
+
+serviceAccount:
+  create: true
+  name: ""
+
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  scrapeTimeout: 10s
+  labels: {} # additional labels e.g. release: prometheus
+  honorLabels: true
+  jobLabel: "app.kubernetes.io/name"
+
+PORT: 8079
+QR_TYPE: "URL"
+CERTIFICATESIGN_PRIVATE_KEY: ""
+CERTIFICATESIGN_PUBLIC_KEY: ""
+SIGNING_KEY_TYPE: "RSA"
+CACHE_CONTEXT_URLS: ""
+java_options: -Xmx600m

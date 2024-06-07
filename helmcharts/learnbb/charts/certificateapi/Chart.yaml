@@ -1,0 +1,11 @@
+apiVersion: v2
+appVersion: 1.0.0
+dependencies:
+- name: common
+  repository: https://nimbushubin.github.io/helmcharts
+  version: 0.1.0
+description: A production-ready Helm chart for lms
+maintainers:
+- name: NimbusHub.in
+name: certificateapi
+version: 0.1.0

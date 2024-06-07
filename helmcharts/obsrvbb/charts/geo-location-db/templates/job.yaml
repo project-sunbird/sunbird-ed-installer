@@ -1,0 +1,36 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+spec:
+  template:
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+          - /bin/bash
+          - -c
+          args:
+            - /config/provision.sh
+          env:
+            - name: PGPASSWORD
+              value: {{ .Values.global.postgresql.postgresqlPassword }}
+          volumeMounts:
+          {{- if .Values.configmap.enabled }}
+          - name: config
+            mountPath: {{ .Values.configmap.mountPath }}
+          {{- end }}
+      volumes:
+      {{- if .Values.configmap.enabled }}
+      - name: config
+        configMap:
+          name: {{ include "common.names.fullname" . }}
+          defaultMode: 0755
+      {{- end }}
+      restartPolicy: Never
+  backoffLimit: 30

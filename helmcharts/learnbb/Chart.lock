@@ -1,0 +1,24 @@
+dependencies:
+- name: common
+  repository: https://nimbushubin.github.io/helmcharts
+  version: 0.1.0
+- name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 18.1.1
+- name: kafka
+  repository: https://charts.bitnami.com/bitnami
+  version: 20.0.2
+- name: cassandra
+  repository: https://charts.bitnami.com/bitnami
+  version: 10.1.0
+- name: elasticsearch
+  repository: https://charts.bitnami.com/bitnami
+  version: 19.5.4
+- name: druid-raw-cluster
+  repository: ""
+  version: 0.1.1
+- name: druid-operator
+  repository: ""
+  version: 0.1.1
+digest: sha256:7482f8b9b83a81ac821c878713a95bcd05a42f92401787b27af45f3b203138c7
+generated: "2024-01-12T11:40:04.779084178+01:00"

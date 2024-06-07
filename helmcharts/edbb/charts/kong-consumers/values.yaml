@@ -1,0 +1,355 @@
+nameOverride: ""
+fullnameOverride: ""
+
+image:
+  repository: keshavprasad/kong-scripts
+  tag: "0.1.8"
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+kong_admin_url: kong
+kong_admin_port: 8001
+
+mobile_admin_groups: &mobile_admin_groups
+  - mobileSuperAdmin
+
+mobile_app_groups: &mobile_app_groups
+  - mobileAdmin
+
+portal_anonymous_register: &portal_anonymous_register
+  - portalAnonymous
+
+portal_loggedin_register: &portal_loggedin_register
+  - portalLoggedin
+
+mobile_device_groups: &mobile_device_groups
+  - appAccess
+  - certificateAccess
+  - contentAccess
+  - courseAccess
+  - deviceCreate
+  - dialcodeAccess
+  - locationAccess
+  - orgAccess
+  - ssoCreate
+  - telemetryCreate
+  - userAccess
+  - userUpdate
+  - contentTempAccess
+  - groupCreate
+  - groupUpdate
+  - groupAccess
+  - groupAdmin
+  - refreshTokenCreate
+  - discussionAccess
+  - anonymousCertificateAccess
+  - anonymousContentAccess
+  - anonymousCourseAccess
+  - anonymousOrgAccess
+  - anonymousUserAccess
+  - anonymousAppAccess
+  - anonymousUserCreate
+  - readNotificationFeed
+  - updateNotificationFeed
+  - deleteNotificationFeed
+  - cloudUrlsCreate
+  - observationAccess
+  - observationCreate
+  - observationUpdate
+  - programAccess
+  - projectAccess
+  - projectCreate
+  - projectUpdate
+  - registryAccess
+  - solutionAccess
+  - surveyAccess
+  - surveyUpdate
+
+desktop_device_groups: &desktop_devicev_groups
+  - appAccess
+  - channelAccess
+  - certificateAccess
+  - courseAccess
+  - contentAccess
+  - pageAccess
+  - dialcodeAccess
+  - frameworkAccess
+  - orgAccess
+  - deviceCreate
+  - groupCreate
+  - groupAccess
+  - groupUpdate
+  - groupAdmin
+  - locationAccess
+  - userCreate
+  - userUpdate
+  - userAccess
+  - refreshTokenCreate
+  - ssoCreate
+  - preferenceAccess
+  - programAccess
+  - telemetryCreate
+  - anonymousCertificateAccess
+  - anonymousContentAccess
+  - anonymousCourseAccess
+  - anonymousOrgAccess
+  - anonymousUserAccess
+  - anonymousAppAccess
+  - anonymousUserCreate
+  - readNotificationFeed
+  - updateNotificationFeed
+  - deleteNotificationFeed
+
+anonymous_user_groups: &anonymous_user_groups
+  - deviceCreate
+  - locationAccess
+  - telemetryCreate
+  - anonymousCertificateAccess
+  - anonymousContentAccess
+  - anonymousCourseAccess
+  - anonymousOrgAccess
+  - anonymousUserAccess
+  - anonymousAppAccess
+  - anonymousUserCreate
+
+userAccess: &userAccess
+  - userAccess
+
+kong_all_consumer_groups: &kong_all_consumer_groups
+  - announcementAccess
+  - appAccess
+  - appAdmin
+  - appUpdate
+  - badgeAccess
+  - badgeAdmin
+  - badgeCreate
+  - badgeUpdate
+  - certificateAccess
+  - certificateAdmin
+  - certificateCreate
+  - certificateUpdate
+  - channelAccess
+  - channelCreate
+  - channelUpdate
+  - contentAccess
+  - contentAdmin
+  - contentCreate
+  - contentUpdate
+  - courseAccess
+  - courseAdmin
+  - courseCreate
+  - courseUpdate
+  - deviceCreate
+  - dialcodeAccess
+  - dialcodeAdmin
+  - dialcodeCreate
+  - dialcodeUpdate
+  - locationAccess
+  - noteAccess
+  - noteAdmin
+  - noteCreate
+  - noteUpdate
+  - objectAccess
+  - orgAccess
+  - orgCreate
+  - pageAccess
+  - pluginAccess
+  - reportsAccess
+  - reportsAdmin
+  - reportsCreate
+  - reportsUpdate
+  - ssoCreate
+  - userAccess
+  - userAdmin
+  - userCreate
+  - userTempAdmin
+  - userUpdate
+  - groupCreate
+  - groupUpdate
+  - groupAccess
+  - groupAdmin
+  - dataAccess
+  - druidReportCreate
+  - druidReportAdmin
+  - dataCreate
+  - frameworkAccess
+  - programAccess
+  - solutionAccess
+  - registryAccess
+  - projectAccess
+  - projectUpdate
+  - projectCreate
+  - observationAccess
+  - observationUpdate
+  - observationCreate
+  - surveyAccess
+  - cloudUrlsCreate
+  - surveyUpdate
+  - refreshTokenCreate
+  - telemetryCreate
+  - anonymousCertificateAccess
+  - anonymousContentAccess
+  - anonymousCourseAccess
+  - anonymousOrgAccess
+  - anonymousUserAccess
+  - anonymousAppAccess
+  - anonymousUserCreate
+  - readNotificationFeed
+  - updateNotificationFeed
+  - deleteNotificationFeed
+
+kong_admin_groups:
+  - anonymousAppAccess
+  - anonymousCertificateAccess
+  - anonymousContentAccess
+  - anonymousCourseAccess
+  - anonymousOrgAccess
+  - anonymousUserAccess
+  - anonymousUserCreate
+  - appAccess
+  - appAdmin
+  - appCreate
+  - appUpdate
+  - assessmentAccess
+  - badgeAccess
+  - badgeAdmin
+  - badgeCreate
+  - badgeUpdate
+  - certificateAccess
+  - certificateCreate
+  - certificateUpdate
+  - channelAccess
+  - channelAdmin
+  - channelCreate
+  - channelUpdate
+  - cloudUrlsCreate
+  - contentAccess
+  - contentAdmin
+  - contentCreate
+  - contentSuperAdmin
+  - contentUpdate
+  - courseAccess
+  - courseAdmin
+  - courseCreate
+  - courseSuperAdmin
+  - courseUpdate
+  - createNotificationTemplate
+  - dataAccess
+  - dataCreate
+  - definitionsAdmin
+  - deleteNotificationFeed
+  - deleteNotificationTemplate
+  - desktopAdmin
+  - desktopSuperAdmin
+  - deviceCreate
+  - dialcodeAccess
+  - dialcodeAdmin
+  - dialcodeCreate
+  - dialcodeUpdate
+  - discussionAccess
+  - discussionCreate
+  - druidReportAdmin
+  - druidReportCreate
+  - experimentCreate
+  - expirementAccess
+  - externalmessagingAccess
+  - formCreate
+  - formUpdate
+  - frameworkAccess
+  - frameworkAdmin
+  - frameworkCreate
+  - frameworkUpdate
+  - getNotificationTemplate
+  - groupAccess
+  - groupAdmin
+  - groupCreate
+  - groupUpdate
+  - igotAdmin
+  - igotApp
+  - itemSetAdmin
+  - kongConsumerAdmin
+  - locationAccess
+  - locationAdmin
+  - locationCreate
+  - locationSuperAdmin
+  - locationUpdate
+  - masterCategoriesAdmin
+  - mobileAdmin
+  - mobileOpenRAPAdmin
+  - mobileOpenRAPSuperAdmin
+  - mobileSuperAdmin
+  - mobileTeacherAidAdmin
+  - mobileTeacherAidSuperAdmin
+  - noteAccess
+  - noteAdmin
+  - noteCreate
+  - noteUpdate
+  - observationAccess
+  - observationCreate
+  - observationUpdate
+  - orgAccess
+  - orgAdmin
+  - orgCreate
+  - orgSuperAdmin
+  - orgUpdate
+  - pageAccess
+  - pageCreate
+  - pageUpdate
+  - pluginAccess
+  - portalAnonymous
+  - portalLoggedin
+  - privateCourseAccess
+  - programAccess
+  - projectAccess
+  - projectCreate
+  - projectUpdate
+  - readNotificationFeed
+  - refreshTokenCreate
+  - registryAccess
+  - reportsAccess
+  - reportsAdmin
+  - reportsCreate
+  - reportsUpdate
+  - sendNotification
+  - solutionAccess
+  - ssoAdmin
+  - ssoCreate
+  - surveyAccess
+  - surveyUpdate
+  - telemetryCreate
+  - updateNotificationFeed
+  - updateNotificationTemplate
+  - userAccess
+  - userAdmin
+  - userCreate
+  - userSuperAccess
+  - userSuperAdmin
+  - userTempAdmin
+  - userUpdate
+
+configmap:
+  enabled: true
+  mountPath: /config
+
+global:
+  random_string: randomstring123
+
+# You can add new consumers using this block
+# additional_consumers:
+#   - username: additional_sample_consumer_hs256
+#     groups: *anonymous_user_groups
+#     state: present
+#     key: additional_sample_consumer_hs256_key
+#     secret: additional_sample_consumer__hs256_secret
+#     algorithm: HS256
+#     print_credentials: true
+#   - username: additional_sample_consumer_rs256
+#     groups: *anonymous_user_groups
+#     state: present
+#     credential_iss: additional_sample_consumer_rs256_key
+#     credential_rsa_public_key: -----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtsYTZf6LONHPQnwpUzyY\nnB5sF5zIYJJ2eSvaCl6ByPNqsrKm/EIkpg3en1+LerB1EgRytofiVwqWJmG5aUqI\nAZ3CCiIaYG5LeJx/RNIJCmiFyC/tO9IRbTCCPfWvNOqtBixVUrq7jGi4FXNSbARN\ngx90ClggYeKiH6pdQmjuSUeJfFrswojk1+KPQBz2txcf5v0xuaJ9hT1a9hcCYzyf\n7APrASg+F6qq7WrHfzW9jCCACwE7NDBKyiwmSjkTSXddaQnGKncy7YpjwsYmK3lj\nbqzWephiXoMQpmONb3xST+OuoyO80hzeZeZHHRloB7R0e4vF/CfuSsV0VsgUKmJI\nOwIDAQAB\n-----END PUBLIC KEY-----
+#     credential_algorithm: RS256
+#     print_credentials: true
+
+provisioningAnnotations:
+  "helm.sh/hook": post-install,post-upgrade

@@ -1,0 +1,20 @@
+{{- if .Values.rbac.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+{{- if .Values.env.WATCH_NAMESPACE }}
+kind: RoleBinding
+{{- else }}
+kind: ClusterRoleBinding
+{{- end }}
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  labels:
+    {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: {{ if .Values.env.WATCH_NAMESPACE }} Role {{ else }} ClusterRole {{ end }}
+  name: {{ include "common.names.fullname" . }}
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}

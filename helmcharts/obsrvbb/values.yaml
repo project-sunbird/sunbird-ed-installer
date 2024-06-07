@@ -1,0 +1,388 @@
+replicaCount: 1
+fullname: obsrvbb
+devops_release_branch: release-6.0.0
+postgres_migration_image: bitnami/postgresql:11.14.0-debian-10-r49
+cassandra_migration_version: release-5.3.0
+
+provisioningAnnotations: &provisioningAnnotations
+  "helm.sh/hook-weight": "-4"
+
+redis: &redis
+  enabled: true
+  nameOverride: "redis"
+  fullnameOverride: "redis"
+  auth:
+    enabled: false
+  host: "redis-master"
+  port: 6379
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  replica:
+    replicaCount: 0
+  master:
+    persistence:
+      size: 25Gi
+
+elasticsearch: &es
+  enabled: true
+  nameOverride: "elasticsearch"
+  fullnameOverride: "elasticsearch"
+  host: "elasticsearch"
+  port: 9200
+  image:
+    registry: docker.io
+    repository: bitnami/elasticsearch
+    tag: 6.8.23
+    digest: ""
+  master:
+    masterOnly: false
+    replicaCount: 1
+    resources:
+      requests:
+        cpu: "1"
+        memory: "2Gi"
+      limits:
+        cpu: "2"
+        memory: "4Gi"
+    heapSize: 2G
+    persistence:
+      size: 25Gi
+  data:
+    replicaCount: 0
+  coordinating:
+    replicaCount: 0
+  ingest:
+    enabled: false
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  provisioning:
+    annotations: *provisioningAnnotations
+  sysctlImage:
+    registry: docker.io
+    repository: bitnami/bitnami-shell-archived
+    tag: 11-debian-11-r54
+
+
+postgresql: &postgresql
+  enabled: true
+  image:
+    repository: bitnami/postgresql
+    tag: 11.14.0-debian-10-r49
+  postgresqlUsername: postgres
+  postgresqlPassword: postgres
+  host: postgresql
+  port: 5432
+  provisioning:
+    annotations: *provisioningAnnotations
+  persistence:
+    size: 25Gi
+  databases:
+  - name: "analytics"
+  - name: "druid_raw"
+  - name: "druid"
+
+cassandra: &cassandra
+  enabled: true
+  nameOverride: "cassandra"
+  fullnameOverride: "cassandra"
+  host: "cassandra"
+  port: 9042
+  provisioning:
+    annotations: *provisioningAnnotations
+  image:
+    tag: 3.11.13-debian-11-r3
+  extraEnvVars:
+    - name: CASSANDRA_AUTHENTICATOR
+      value: AllowAllAuthenticator
+    - name: CASSANDRA_AUTHORIZER
+      value: AllowAllAuthorizer
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  persistence:
+    size: 25Gi
+
+zookeeper: &zookeeper
+  fullnameOverride: zookeeper
+  nameOverride: zookeeper
+  host: "zookeeper"
+  port: 2181
+  persistence:
+    size: 25Gi
+
+kafka: &kafka
+  zookeeper: *zookeeper
+  enabled: true
+  nameOverride: "kafka"
+  fullnameOverride: "kafka"
+  clientProtocol: PLAINTEXT
+  host: "kafka"
+  port: 9092
+  image:
+    registry: docker.io
+    repository: bitnami/kafka
+    tag: 3.3.1-debian-11-r25
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  persistence:
+    size: 25Gi
+  provisioning:
+    nameOverride: "provisioning"
+    fullnameOverride: "provisioning"
+    annotations:
+      "helm.sh/hook-weight": "-4"
+    replicationFactor: 1
+    numPartitions: 1
+    topics:
+    - name: sunbird.telemetry.ingest
+    - name: "{{ .Values.global.env }}.druid.events.summary"
+    - name: "{{ .Values.global.env }}.druid.events.telemetry"
+    - name: "{{ .Values.global.env }}.druid.events.error"
+    - name: telemetry.raw
+    - name: sunbirddev.telemetry.derived
+    - name: sunbirddev.analytics_metrics
+    - name: sunbirddev.analytics.job_queue
+    - name: sunbirddev.telemetry.sink
+    - name: sunbirddev.telemetry.metrics
+    - name: sunbirddev.telemetry.assess
+    - name: "{{ .Values.global.env }}.telemetry.ingest"
+    - name: "{{ .Values.global.env }}.telemetry.raw"
+    - name: "{{ .Values.global.env }}.druid.events.log"
+    - name: "{{ .Values.global.env }}.telemetry.extractor.duplicate"
+    - name: "{{ .Values.global.env }}.telemetry.failed"
+    - name: "{{ .Values.global.env }}.telemetry.assess.raw"
+    - name: "{{ .Values.global.env }}.telemetry.audit"
+    - name: "{{ .Values.global.env }}.telemetry.error"
+    - name: "{{ .Values.global.env }}.telemetry.unique"
+    - name: "{{ .Values.global.env }}.telemetry.duplicate"
+    - name: "{{ .Values.global.env }}.telemetry.unique.secondary"
+    - name: "{{ .Values.global.env }}.telemetry.unique.primary"
+    - name: "{{ .Values.global.env }}.telemetry.derived"
+    - name: "{{ .Values.global.env }}.telemetry.denorm"
+    - name: "{{ .Values.global.env }}.telemetry.derived.unique"
+    - name: "{{ .Values.global.env }}.druid.events.summary"
+    - name: "{{ .Values.global.env }}.druid.events.telemetry"
+    - name: "{{ .Values.global.env }}.events.deviceprofile"
+    - name: "{{ .Values.global.env }}.learning.graph.events"
+    - name: "{{ .Values.global.env }}.telemetry.assess"
+    - name: "{{ .Values.global.env }}.telemetry.assess.failed"
+    - name: "{{ .Values.global.env }}.issue.certificate.request"
+    parallel: 1
+
+druid: &druid
+  enabled: true
+  host: druid-raw-routers
+  port: 8888
+  coordinatorhost: druid-raw-coordinators
+  coordinatorport: 8081
+  overlordhost: druid-raw-overlords
+  overlordport: 8090
+  brokerhost: druid-raw-brokers
+  brokerport: 8082
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  persistence:
+    size: 25Gi
+
+installation: &installation
+  id: ekstep
+channel: &channel "in.ekstep"
+env: &env
+default: "dev"
+confVolume: &confVolume
+      extraVolumes:
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: spark-data-pvc
+        - name: log-directory
+          persistentVolumeClaim:
+            claimName: log-data-pvc
+        - name: obsrvbb-dataproducts
+          configMap:
+            name: obsrvbb-dataproducts
+            items:
+              - key: submit-all-jobs.rb
+                path: submit-all-jobs.rb
+              - key: log4j2.xml
+                path: log4j2.xml
+              - key: run-job.sh
+                path: run-job.sh
+              - key: submit-job.sh
+                path: submit-job.sh
+              - key: model-config.sh
+                path: model-config.sh
+              - key: replay-updater.sh
+                path: replay-updater.sh
+              - key: sourcing-ingestion-spec.json
+                path: sourcing-ingestion-spec.json
+              - key: submit-script.sh
+                path: submit-script.sh
+              - key: model-config.json
+                path: model-config.json
+              - key: start-jobmanager.sh
+                path: start-jobmanager.sh
+              - key: common.conf
+                path: common.conf
+              - key: collection-summary-ingestion-spec.json
+                path: collection-summary-ingestion-spec.json
+        - name: obsrvbb-user-cache-indexer-conf
+          configMap:
+            name: obsrvbb-etl-jobs
+            items:
+              - key: DialcodeRedisIndexer.conf
+                path: DialcodeRedisIndexer.conf
+              - key: DeviceProfile.conf
+                path: DeviceProfile.conf
+              - key: ESCloudUploader.conf
+                path: ESCloudUploader.conf
+              - key: ESContentIndexer.conf
+                path: ESContentIndexer.conf
+              - key: ESDialcodeIndexer.conf
+                path: ESDialcodeIndexer.conf
+              - key: application.conf
+                path: application.conf
+              - key: cassandraRedis.conf
+                path: cassandraRedis.conf
+        - name: obsrvbb-user-cache-indexer-scripts
+          configMap:
+            name: obsrvbb-etl-jobs
+            items:
+              - key: DruidContentIndexer.sh
+                path: DruidContentIndexer.sh
+              - key: RedisContentIndexer.sh
+                path: RedisContentIndexer.sh
+              - key: RedisDialcodeIndexer.sh
+                path: RedisDialcodeIndexer.sh
+              - key: RedisUserDataIndexer.sh
+                path: RedisUserDataIndexer.sh
+              - key: DeviceProfileScripts.sh
+                path: DeviceProfileScripts.sh
+              - key: run-script.sh
+                path: run-script.sh
+
+        - name: spark-conf
+          configMap:
+            name: spark-conf
+            items:
+              - key: spark-defaults.conf
+                path: spark-defaults.conf
+              - key: spark-env.sh
+                path: spark-env.sh
+
+      extraVolumeMounts:
+        - name: obsrvbb-dataproducts
+          mountPath: /data/analytics/scripts
+        - name: data-volume
+          mountPath: /data
+        - name: spark-conf
+          mountPath: /data/analytics/spark-conf
+        - name: log-directory
+          mountPath: /data/analytics/scripts/logs
+        - name: obsrvbb-user-cache-indexer-scripts
+          mountPath: /data/analytics/content-snapshot/scripts
+        - name: obsrvbb-user-cache-indexer-conf
+          mountPath: /data/analytics/content-snapshot/conf
+
+      command:
+          - "/bin/sh"
+          - "-c"
+          - |
+            data_path="/
+            data/analytics" # persistent path
+            python -m venv /data/analytics/venv  # run dataproducts.tar.gz
+            . /data/analytics/venv/bin/activate && pip install /data/analytics/dataproducts.tar.gz
+            deactivate
+            curl -o /data/analytics/content-snapshot/jars/etl-jobs-1.0/lib/guava-18.0.jar "https://repo1.maven.org/maven2/com/google/guava/guava/18.0/guava-18.0.jar"
+            curl -o /opt/bitnami/spark/jars/jetty-util-6.1.26.jar "https://repo1.maven.org/maven2/org/mortbay/jetty/jetty-util/6.1.26/jetty-util-6.1.26.jar"
+            curl -o /opt/bitnami/spark/jars/config-1.3.3.jar "https://repo1.maven.org/maven2/com/typesafe/config/1.3.3/config-1.3.3.jar"
+            curl -o /opt/bitnami/spark/jars/spark-sql_2.12-3.1.0-tests.jar "https://repo1.maven.org/maven2/org/apache/spark/spark-sql_2.12/3.1.0/spark-sql_2.12-3.1.0-tests.jar"
+            curl -o /data/analytics/content-snapshot/jars/etl-jobs-1.0/lib/spark-sql_2.12-3.1.0-tests.jar "https://repo1.maven.org/maven2/org/apache/spark/spark-sql_2.12/3.1.0/spark-sql_2.12-3.1.0-tests.jar"
+
+            cp "$data_path/models-2.0/data-products-1.0/lib/guava-19.0.jar" /opt/bitnami/spark/jars/
+            rm /opt/bitnami/spark/jars/guava-14.0.1.jar
+            cp /data/analytics/spark-conf/spark-defaults.conf /opt/bitnami/spark/conf/
+            cp /data/analytics/spark-conf/spark-env.sh /opt/bitnami/spark/conf/
+            /opt/bitnami/scripts/spark/entrypoint.sh /opt/bitnami/scripts/spark/run.sh
+
+      initContainers:
+        - name: analytics
+          image: alpine/curl
+          volumeMounts:
+          - name: data-volume
+            mountPath: /data
+          command:
+            - "/bin/sh"
+            - "-c"
+            - |
+              data_path="/data/analytics" # persistent path
+              jar_location="$data_path/content-snapshot.zip"
+              [[ -d $data_path ]] || mkdir -p $data_path
+              # Download the ZIP file
+              [[ -f $jar_location ]] || curl -o $data_path/content-snapshot.zip "https://{{.Values.global.azure_storage_account_name}}.blob.core.windows.net/{{ .Values.global.azure_public_container_name }}/artifacts-{{.Values.global.release_version}}/content-snapshot.zip"
+              curl -o /data/analytics/spark-3.1.3-bin-hadoop2.7.tgz "https://{{.Values.global.azure_storage_account_name}}.blob.core.windows.net/{{ .Values.global.azure_public_container_name }}/artifacts-{{.Values.global.release_version}}/spark-3.1.3-bin-hadoop2.7.tgz"
+              unzip -o $jar_location -d $data_path
+
+              tar -xvf /data/analytics/spark-3.1.3-bin-hadoop2.7.tgz -C "/data/analytics"
+
+              #  dataproducts
+              jar_location_sbob="$data_path/sunbird-obsrv-1.0-bkp-v3.zip"
+              extracted_location="$data_path/sunbird-obsrv-1.0-bkp"
+              # Create the target directory if it doesn't exist
+              [[ -d $data_path ]] || mkdir -p $data_path
+
+              # Download the ZIP file if it doesn't exist
+              [[ -f $jar_location_sbob ]] || curl -o $jar_location_sbob "https://{{.Values.global.azure_storage_account_name}}.blob.core.windows.net/{{ .Values.global.azure_public_container_name }}/artifacts-{{.Values.global.release_version}}/sunbird-obsrv-1.0-v3.zip"
+
+              # Extract the ZIP file if not already extracted
+              [[ -d $extracted_location ]] || unzip -o $jar_location_sbob -d $data_path
+
+              # Copy all files from the extracted directory to /data/analytics
+              cp -R "$extracted_location"/* "$data_path"
+              rm "$jar_location_sbob"
+              ls $data_path
+
+              # adhoc-dataproducts
+              adhoc_loc="$data_path/dataproducts.zip"
+              adhoc_extracted_loc="$data_path/dataproducts.tar.gz"
+
+              # dowload the tar.gz adhoc dataproducts
+              curl -o $data_path/dataproducts.zip https://{{.Values.global.azure_storage_account_name}}.blob.core.windows.net/{{ .Values.global.azure_public_container_name }}/artifacts-{{.Values.global.release_version}}/dataproducts_artifacts_release-3.6.zip
+
+              # Extract the ZIP file if not already extracted
+              [[ -d $adhoc_extracted_loc ]] || unzip -o $adhoc_loc -d $data_path
+
+spark: &spark
+  enabled: true
+  nameOverride: "spark"
+  fullnameOverride: "spark"
+  image:
+    repository: sowmyadixit/spark
+    tag: 3.2.4_2
+  master:
+      <<: *confVolume
+  worker:
+      replicaCount: 1
+
+
+global:
+  redis: *redis
+  zookeeper: *zookeeper
+  kafka: *kafka
+  postgresql: *postgresql
+  cassandra: *cassandra
+  elasticsearch: *es
+  druid: *druid
+  installation: *installation
+  channel: *channel
+  spark: *spark
+  keycloak_kid_keys_configmap: keycloak-kids-keys
+  kong_desktop_device_consumer_names_for_opa: '["portal", "desktop"]'
+
+analytics:
+  opa_enabled: true
+
+migration:
+  cassandra:
+    waitTime: 120
+    jarUrl: "https://github.com/user/repo/releases/download/v1.0/migration.jar"
+  postgresql:
+    waitTimeout: 120

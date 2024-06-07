@@ -1,0 +1,198 @@
+fullname: kbb
+knowlg_automation_repo_branch: release-5.5.0
+
+provisioningAnnotations: &provisioningAnnotations
+  "helm.sh/hook-weight": "-4"
+
+neo4j: &neo4j
+  enabled: true
+  host: "neo4j"
+  port: 7687
+  boltPort: 8687
+  image:
+    repository: sunbirded.azurecr.io/neo4j
+    tag: "3.3.0"
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  provisioning:
+    annotations: *provisioningAnnotations
+    waitForNeo4j: "true"
+
+elasticsearch: &es
+  enabled: true
+  fullnameOverride: "elasticsearch"
+  host: "elasticsearch"
+  port: 9200
+  image:
+    registry: docker.io
+    repository: bitnami/elasticsearch
+    tag: 6.8.23
+  master:
+    masterOnly: false
+    replicaCount: 1
+    resources:
+      requests:
+        cpu: "1"
+        memory: "2Gi"
+      limits:
+        cpu: "2"
+        memory: "4Gi"
+    heapSize: 2G
+    persistence:
+      size: 25Gi
+  data:
+    replicaCount: 0
+  coordinating:
+    replicaCount: 0
+  ingest:
+    enabled: false
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  provisioning:
+    annotations: *provisioningAnnotations
+  sysctlImage:
+    registry: docker.io
+    repository: bitnami/bitnami-shell-archived
+    tag: 11-debian-11-r54
+
+redis: &redis
+  enabled: true
+  nameOverride: "redis"
+  fullnameOverride: "redis"
+  auth:
+    enabled: false
+  host: "redis-master"
+  port: 6379
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  replica:
+    replicaCount: 0
+  master:
+    persistence:
+      size: 25Gi
+
+cassandra: &cassandra
+  enabled: true
+  nameOverride: "cassandra"
+  fullnameOverride: "cassandra"
+  host: "cassandra"
+  port: 9042
+  provisioning:
+    annotations: *provisioningAnnotations
+  image:
+    repository: bitnami/cassandra
+    tag: 3.11.13-debian-11-r3
+  extraEnvVars:
+    - name: CASSANDRA_AUTHENTICATOR
+      value: AllowAllAuthenticator
+    - name: CASSANDRA_AUTHORIZER
+      value: AllowAllAuthorizer
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  persistence:
+    size: 25Gi
+
+zookeeper: &zookeeper
+  fullnameOverride: zookeeper
+  nameOverride: zookeeper
+  host: "zookeeper"
+  port: 2181
+  persistence:
+    size: 2Gi
+
+kafka: &kafka
+  zookeeper: *zookeeper
+  enabled: true
+  nameOverride: "kafka"
+  fullnameOverride: "kafka"
+  clientProtocol: PLAINTEXT
+  host: "kafka"
+  port: 9092
+  image:
+    registry: docker.io
+    repository: bitnami/kafka
+    tag: 3.3.1-debian-11-r25
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  persistence:
+    size: 25Gi
+  provisioning:
+    annotations: *provisioningAnnotations
+    replicationFactor: 1
+    numPartitions: 1
+    topics:
+    - name: "{{ .Values.global.env }}.knowlg.qrimage.request"
+      partitions: 1
+      replicationFactor: 1
+    - name: "{{ .Values.global.env }}.knowlg.publish.job.request"
+      partitions: 1
+      replicationFactor: 1
+    - name: "{{ .Values.global.env }}.knowlg.content.postpublish.request"
+      partitions: 1
+      replicationFactor: 1
+    - name: "{{ .Values.global.env }}.knowlg.learning.job.request"
+      partitions: 1
+      replicationFactor: 1
+    - name: "{{ .Values.global.env }}.knowlg.learning.graph.events"
+      partitions: 1
+      replicationFactor: 1
+    - name: "{{ .Values.global.env }}.knowlg.learning.events.failed"
+      partitions: 1
+      replicationFactor: 1
+    - name: "{{ .Values.global.env }}.knowlg.qrimage.request"
+      partitions: 1
+      replicationFactor: 1
+    - name: "{{ .Values.global.env }}.knowlg.telemetry.raw"
+      partitions: 1
+      replicationFactor: 1
+    - name: "{{ .Values.global.env }}.knowlg.dialcode.context.job.request"
+      partitions: 1
+      replicationFactor: 1
+    - name: "{{ .Values.global.env }}.knowlg.dialcode.context.job.request.failed"
+      partitions: 1
+      replicationFactor: 1
+    - name: "{{ .Values.global.env }}.knowlg.auto.creation.job.request"
+      partitions: 1
+      replicationFactor: 1
+    - name: "{{ .Values.global.env }}.knowlg.transaction.meta"
+      partitions: 1
+      replicationFactor: 1
+    parallel: 1
+
+
+play_http: &play_http
+  secret_key: "secretKey"
+schema: &schema
+  base_path: "https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net/{{ .Values.global.azure_public_container_name }}/schemas/local"
+graph_passport: &graph_passport
+  key_base: "secretKey"
+installation: &installation
+  id: ekstep
+channel: &channel
+  default: "in.ekstep"
+objectcategorydefinition: &objectcategorydefinition
+  keyspace: "{{ .Values.global.env }}_category_store"
+
+global:
+  redis: *redis
+  elasticsearch: *es
+  neo4j: *neo4j
+  cassandra: *cassandra
+  zookeeper: *zookeeper
+  kafka: *kafka
+  play_http: *play_http
+  schema: *schema
+  graph_passport: *graph_passport
+  installation: *installation
+  channel: *channel
+  objectcategorydefinition: *objectcategorydefinition
+  provisioningAnnotations: *provisioningAnnotations
+  keycloak_kid_keys_configmap: keycloak-kids-keys
+  kong_desktop_device_consumer_names_for_opa: '["portal", "desktop"]'
+
+content:
+  opa_enabled: true
+
+migration:
+  cassandra:
+    waitTime: 120

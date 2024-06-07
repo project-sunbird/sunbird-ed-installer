@@ -1,0 +1,47 @@
+replicaCount: 1
+fullname: monitoring
+
+loki:
+  loki:
+    auth_enabled: false
+    commonConfig:
+      replication_factor: 1
+    storage:
+      type: 'filesystem'
+    compactor:
+      shared_store: filesystem
+      working_directory: /var/loki/boltdb-shipper-compactor
+      compaction_interval: 10m
+      retention_enabled: true
+      retention_delete_delay: 1h
+      retention_delete_worker_count: 150
+    limits_config:
+      retention_period: 2d
+    storage_config:
+      boltdb_shipper:
+        active_index_directory: /var/loki/boltdb-shipper-active
+        cache_location: /var/loki/boltdb-shipper-cache
+        cache_ttl: 24h
+        shared_store: filesystem
+      filesystem:
+        directory: /var/loki/chunks
+  singleBinary:
+    replicas: 1
+    persistence:
+      size: 25Gi
+
+kube-prometheus-stack:
+  prometheus:
+    prometheusSpec:
+      retention: "30d"
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 25Gi
+  grafana:
+    env:
+      GF_SERVER_SERVE_FROM_SUB_PATH: "true"
+      GF_SERVER_ROOT_URL: http://example.com/grafana/

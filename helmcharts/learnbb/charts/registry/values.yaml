@@ -1,0 +1,167 @@
+fullnameOverride: "registry"
+
+replicaCount: 1
+
+image:
+  repository: sunbirded.azurecr.io/sunbird-rc-core
+  tag: "release-5.1.0_ece7ed3_14"
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+podAnnotations: {}
+
+service:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8081
+      targetPort: 8081
+
+ingress: {}
+  # enabled: false
+  # annotations: {}
+  # hosts:
+  #   - host: chart-example.local
+  #     paths:
+  #     - /
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 100Mi
+  limits:
+    cpu: 1
+    memory: 2G
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+configmap:
+  enabled: true
+  mountPath: /home/sunbirdrc/config/public/_schemas
+
+serviceAccount:
+  create: true
+  name: ""
+
+serviceMonitor:
+  enabled: true
+  interval: 30s
+  scrapeTimeout: 10s
+  labels:
+    release: monitoring
+  honorLabels: true
+  jobLabel: "app.kubernetes.io/name"
+
+# Example values.yaml structure
+initContainers: {}
+  # - name: init-myservice
+  #   image: busybox:1.28
+  #   command: ['sh', '-c', "until nslookup kubernetes.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for myservice; sleep 2; done"]
+
+sidecars: {}
+  # - name: log-reader # Sidecar container
+  #   image: busybox # Use another busybox image
+  #   command: ["/bin/sh"] # Override the default command
+  #   args: ["-c", "tail -f /var/log/app.log"] # Run a shell script that tails the log file
+
+opa_enabled: false
+
+elastic_search_enabled: "true"
+search_provider: "dev.sunbirdrc.registry.service.ElasticSearchService"
+search_providerName: "dev.sunbirdrc.registry.service.ElasticSearchService"
+enable_external_templates: "true"
+sign_ur: "http://certificatesign-service:8079/sign"
+signature_enabled: "true"
+pdf_url: "http://certificateapi-service:8078/api/v1/certificatePDF"
+template_base_url: "http://registry-service:8081/api/v1/templates/"
+workflow_enable: "false"
+connectionInfo_maxPoolSize: 200
+auditTaskExecutor_queueCapacity: 100
+taskExecutor_index_queueCapacity: 100
+authentication_enabled: "false"
+async_enabled: "true"
+webhook_enabled: "true"
+registry_listener_security_protocol_map: INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+registry_inter_broker_listener_name: INTERNAL
+registry_offsets_topic_replication_factor: 1
+logging_level: INFO
+registry_zookeeper_tick_time: "2000"
+registry_kafka_broker_id: "1"
+zookeeper_client_port: "2181"
+kafka_zookeeper_connect: zookeeper
+kafka_advertised_listeners: kafka
+upstream_url: " {{ .Values.global.cloud_storage.cloud_public_storage_accountname }}:{{ .Values.global.cloud_storage.cloud_storage_content_bucketname }}"
+ZOOKEEPER_TICK_TIME: 2000
+KAFKA_BROKER_ID: 1
+KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT"
+KAFKA_INTER_BROKER_LISTENER_NAME:  "INTERNAL"
+KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR:  1
+logging_level_root : "INFO"
+registry_database: registry
+
+envoy_probes:
+  failureThreshold: 2
+  httpGet:
+    path: /ready
+    port: 10000
+    scheme: HTTP
+  initialDelaySeconds: 5
+  periodSeconds: 15
+  timeoutSeconds: 5
+
+opa_probes:
+  failureThreshold: 3
+  httpGet:
+    path: /health?plugins
+    port: 8282
+    scheme: HTTP
+  initialDelaySeconds: 5
+  periodSeconds: 15
+  timeoutSeconds: 5
+
+envoy_resources:
+  requests:
+    cpu: "100m"
+    memory: "100Mi"
+  limits:
+    cpu: "1"
+    memory: "1024Mi"
+
+opa_resources:
+  requests:
+    cpu: "100m"
+    memory: "100Mi"
+  limits:
+    cpu: "1"
+    memory: "1024Mi"
+
+init_container_resources:
+  requests:
+    cpu: "100m"
+    memory: "100Mi"
+  limits:
+    cpu: "1"
+    memory: "1024Mi"
+
+commonAnnotations:
+  reloader.stakater.com/auto: "true"

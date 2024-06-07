@@ -1,0 +1,114 @@
+nameOverride: "taxonomy"
+fullnameOverride: "taxonomy"
+replicaCount: 1
+
+image:
+  repository: sunbirded.azurecr.io/taxonomy-service
+  tag: "release-5.5.0_RC1_551878a_124"
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # runAsNonRoot: true
+  # runAsUser: 1001
+  # fsGroup: 1001
+
+securityContext: {}
+  # readOnlyRootFilesystem: false
+  # capabilities:
+  #   drop:
+  #   - ALL
+
+service:
+  type: ClusterIP
+  protocol: TCP
+  ports:
+    - name: http-taxonomy
+      port: 9000
+      targetPort: 9000
+
+ingress: {}
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 100Mi
+  limits:
+    cpu: 1
+    memory: 1024Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+
+livenessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+  httpGet:
+    path: /health
+    port: 9000
+readinessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+  httpGet:
+    path: /health
+    port: 9000
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+configmap:
+  enabled: true
+  mountPath: /home/sunbird/taxonomy-service-1.0-SNAPSHOT/config
+
+commonAnnotations:
+  reloader.stakater.com/auto: "true"
+
+serviceAccount:
+  create: true
+
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  scrapeTimeout: 10s
+  labels: {} # additional labels e.g. release: prometheus
+  honorLabels: true
+  jobLabel: "app.kubernetes.io/name"
+
+framework:
+  keyspace: "{{ .Values.global.env }}_hierarchy_store"
+  hierarchy_table: framework_hierarchy
+  categories_cached: '["subject", "medium", "gradeLevel", "board"]'
+
+cloud_storage: 
+  type: "azure"
+
+javaenv: 
+  javaoptions: -Xms500m -Xmx500m
+  _javaoptions: -Dlog4j2.formatMsgNoLookups=true
+
+opa:
+  enabled: false

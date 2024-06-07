@@ -1,0 +1,27 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  annotations:
+    "helm.sh/hook-weight": "-2"
+spec:
+  template:
+    spec:
+      serviceAccountName: {{ include "common.names.fullname" . }}
+      containers:
+        - name: {{ .Chart.Name }}
+          command:
+          - /bin/bash
+          - -c
+          args:
+          - |
+            sleep 30
+            /usr/local/bin/execute_query.sh
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          envFrom:
+          - configMapRef:
+              name: {{ include "common.names.fullname" . }}-env
+      restartPolicy: Never
+  backoffLimit: 30

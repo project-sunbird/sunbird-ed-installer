@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "common.names.fullname" . }}-claim
+  labels:
+    app: {{ include "common.names.fullname" . }}
+  annotations: 
+    helm.sh/resource-policy: "{{ .Values.neo4j.pvc.annotations }}"
+spec:
+  accessModes:
+    - {{ .Values.neo4j.pvc.accessModes }}
+  resources:
+    requests:
+      storage: {{ .Values.neo4j.pvc.resources.requests.storage }}

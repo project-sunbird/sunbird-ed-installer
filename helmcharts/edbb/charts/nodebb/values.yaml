@@ -1,0 +1,138 @@
+nameOverride: "nodebb"
+fullnameOverride: "nodebb"
+
+replicaCount: 1
+
+image:
+  registry: docker.io
+  repository: ssksanthosh/nodebb
+  tag: release-5.0.0_RC1_1_v1.18.6
+  pullSecrets: []
+
+podAnnotations: {}
+
+podSecurityContext:
+  runAsNonRoot: false
+  runAsUser: 0
+  fsGroup: 0
+
+securityContext: {}
+  # readOnlyRootFilesystem: false
+  # capabilities:
+  #   drop:
+  #   - ALL
+
+service:
+  type: ClusterIP
+  ports:
+    - name: http-nodebb
+      port: 4567
+      targetPort: 4567
+
+ingress:
+  enabled: false
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+      - /
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 100M
+  limits:
+    cpu: 1
+    memory: 2G
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+
+# livenessProbe: {}
+# Example:
+livenessProbe:
+  failureThreshold: 20
+  httpGet:
+      path: /discussions/api/category/2
+      port: 4567
+  initialDelaySeconds: 45
+  periodSeconds: 15
+  timeoutSeconds: 5
+
+# readinessProbe: {}
+# Example:
+readinessProbe:
+  failureThreshold: 20
+  httpGet:
+      path: /discussions/api/category/2
+      port: 4567
+  initialDelaySeconds: 45
+  periodSeconds: 15
+  timeoutSeconds: 5
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+configmap:
+  enabled: true
+  mountPath: /config
+
+serviceAccount:
+  create: true
+  name: ""
+
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  scrapeTimeout: 10s
+  labels: {} # additional labels e.g. release: prometheus
+  honorLabels: true
+  jobLabel: "app.kubernetes.io/name"
+
+# Example values.yaml structure
+initContainers:
+  # - name: init-myservice
+  #   image: busybox:1.28
+  #   command: ['sh', '-c', "until nslookup kubernetes.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for myservice; sleep 2; done"]
+  - name: wait-for-redis
+    image: busybox
+    command: ["/bin/sh", "-c"]
+    args:
+    - "timeout 300 sh -c 'until nc -z redis-master 6379; do echo waiting for redis; sleep 10; done'"
+
+sidecars: {}
+  # - name: log-reader # Sidecar container
+  #   image: busybox # Use another busybox image
+  #   command: ["/bin/sh"] # Override the default command
+  #   args: ["-c", "tail -f /var/log/app.log"] # Run a shell script that tails the log file
+
+javaOptions: -Xmx600m
+
+opa:
+  enabled: false
+
+
+redis: &redis
+  host: "redis-master"
+  port: 6379
+global:
+  redis: *redis
+
+commonAnnotations:
+  reloader.stakater.com/auto: "true"

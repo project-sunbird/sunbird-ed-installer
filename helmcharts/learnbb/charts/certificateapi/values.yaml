@@ -1,0 +1,109 @@
+fullnameOverride: "certificateapi"
+
+replicaCount: 1
+
+image:
+  repository: sunbirded.azurecr.io/sunbird-rc-certificate-api
+  tag: "release-5.1.0_2bc7760_10"
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+  # readOnlyRootFilesystem: false
+  # capabilities:
+  #   drop:
+  #   - ALL
+
+service:
+  type: ClusterIP
+  protocol: TCP
+  ports:
+    - name: http
+      port: 8078
+      targetPort: 8078
+
+ingress: {}
+  # enabled: false
+  # annotations: {}
+  # hosts:
+  #   - host: chart-example.local
+  #     paths:
+  #     - /
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 100Mi
+  limits:
+    cpu: 1
+    memory: 1024Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+
+livenessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+  httpGet:
+    path: /health
+    port: 8078
+
+readinessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+  httpGet:
+    path: /health
+    port: 8078
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+configmap:
+  enabled: false
+  mountPath: /config
+
+commonAnnotations:
+  reloader.stakater.com/auto: "true"
+
+serviceAccount:
+  create: true
+
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  scrapeTimeout: 10s
+  labels: {} # additional labels e.g. release: prometheus
+  honorLabels: true
+  jobLabel: "app.kubernetes.io/name"
+
+port: 8078
+QR_TYPE: "URL"
+CERTIFICATE_PUBLIC_KEY: ""
+CERTIFICATE_PRIVATE_KEY: ""
+java_options: -Xmx600m

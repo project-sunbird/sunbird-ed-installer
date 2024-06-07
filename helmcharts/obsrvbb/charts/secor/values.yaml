@@ -1,0 +1,174 @@
+# Azure Container Details
+azure_account: "{{.Values.global.azure_storage_account_name}}"
+azure_secret: "{{ .Values.global.azure_storage_account_key }}"
+azure_container_name: "telemetry-data-store"
+
+s3_access_key: "cloud_private_storage_accountname"
+s3_secret_id: "cloud_private_storage_secret"
+s3_region: "cloud_private_storage_region"
+s3_endpoint: "cloud_private_storage_endpoint"
+s3_path_style_access: "s3_path_style_access"
+s3_bucket_name: "telemetry-data-store"
+
+storage_type: "Azure"
+storageClass: "default"
+
+image:
+  pullSecrets: []
+
+kafka: &kafka
+  host: "kafka"
+  port: "9092"
+
+zookeeper: &zookeeper
+  host: "zookeeper"
+  port: "2181"
+
+global:
+  kafka: *kafka
+  zookeeper: *zookeeper
+  env: "dev"
+
+base_config: &base_config
+  enabled: true
+  replicas: 1
+  service_name: "raw_telemetry_backup"
+  timestamp_key: "syncts"
+  fallback_timestamp_key: "@timestamp"
+  topic: "{{.Values.global.env}}.telemetry.raw"
+  kafka_broker_host: "{{.Values.global.kafka.host}}"
+  zookeeper_quorum: "{{.Values.global.zookeeper.host}}:{{.Values.global.zookeeper.port}}"
+  max_file_size: "100000000"
+  max_file_age: "14400"
+  partition_prefix_enabled: "false"
+  partition_prefix_key: "nil"
+  partition_prefix_mapping: "{}"
+  message_channel_identifier: "nil"
+  output_file_pattern: "{partition}-{currentTimestamp}.json"
+  message_parser: "com.pinterest.secor.parser.PatternDateMessageParser"
+  storage:
+    size: 10Gi
+  requests:
+    cpu: 500m
+    memory: 500Mi
+  lag_threshold_warning: 50000
+  lag_threshold_critical: 100000
+
+secor_jobs:
+  raw-telemetry-backup:
+    <<: *base_config
+    consumer_group: "{{.Values.global.env}}.telemetry.raw.backup"
+    base_path: "raw"
+  failed-telemetry-backup:
+    <<: *base_config
+    consumer_group: "{{ .Values.global.env }}.telemetry.failed.backup"
+    base_path: "failed"
+  unique-telemetry-backup:
+    <<: *base_config
+    consumer_group: "{{ .Values.global.env }}.telemetry.unique.backup"
+    base_path: "unique/raw"
+  denorm-events-backup:
+    <<: *base_config
+    consumer_group: "{{ .Values.global.env }}.telemetry.denorm.backup"
+    base_path: "telemetry-denormalized"
+  derived-denorm-events-backup:
+    <<: *base_config
+    consumer_group: "{{ .Values.global.env }}.summary.backup"
+    base_path: "telemetry-denormalized/summary"
+  channel-telemetry-backup:
+    <<: *base_config
+    consumer_group: "{{ .Values.global.env }}.telemetry.channel.backup"
+    base_path: "data-exhaust/raw"
+  channel-summary-backup:
+    <<: *base_config
+    consumer_group: "{{ .Values.global.env }}.summary.channel.backup"
+    base_path: "data-exhaust/summary"
+  extractor-failed-backup:
+    <<: *base_config
+    consumer_group: "{{ .Values.global.env }}.extractor.failed.backup"
+    base_path: "extractor-failed"
+  assess-raw-events-backup:
+    <<: *base_config
+    consumer_group: "{{ .Values.global.env }}.telemetry.assess.raw"
+    base_path: "telemetry-raw-assess"
+  telemetry-duplicate-backup:
+    <<: *base_config
+    consumer_group: "{{ .Values.global.env }}.telemetry.duplicate.backup"
+    base_path: "telemetry-duplicate"
+  extractor-duplicate-backup:
+    <<: *base_config
+    consumer_group: "{{ .Values.global.env }}.extractor.duplicate.backup"
+    base_path: "extractor-duplicate"
+  derived-telemetry-backup:
+    <<: *base_config
+    consumer_group: "{{ .Values.global.env }}.telemetry.derived.unique.backup"
+    base_path: "unique/summary"
+  device-profile-backup:
+    <<: *base_config
+    consumer_group: "{{ .Values.global.env }}.events.device.profile.backup"
+    base_path: "evice-profile-events"
+  learning-events-backup:
+    <<: *base_config
+    consumer_group: "{{ .Values.global.env }}.learning.graph.events.backup"
+    base_path: "learning-events"
+  learning-failed-backup:
+    <<: *base_config
+    consumer_group: "{{ .Values.global.env }}.failed.learning.events.backup"
+    base_path: "learning-failed-events"
+  assess-events-backup:
+    <<: *base_config
+    consumer_group: "{{ .Values.global.env }}.telemetry.assess.events.backup"
+    base_path: "telemetry-batch-assess"
+  batch-assess-failed-events-backup:
+    <<: *base_config
+    consumer_group: "{{ .Values.global.env }}.telemetry.assess.failed.events.backup"
+    base_path: "telemetry-batch-assess-failed"
+  ingestion-telemetry-backup:
+    <<: *base_config
+    consumer_group: "{{ .Values.global.env }}.telemetry.ingestion.events.backup"
+    base_path: "ingestion-telemetry"
+  content-consumption-events-backup:
+    <<: *base_config
+    consumer_group: "{{ .Values.global.env }}.coursebatch.job.request.backup"
+    base_path: "content-consumption-events"
+  issue-certificate-events-backup:
+    <<: *base_config
+    consumer_group: "{{ .Values.global.env }}.issue.certificate.request.backup"
+    base_path: "issue-certificate-events"
+  content-auto-creation-events-backup:
+    <<: *base_config
+    consumer_group: "{{ .Values.global.env }}.auto.creation.job.request.backup"
+    base_path: "content-auto-creation-events"
+  error-telemetry-backup:
+    <<: *base_config
+    consumer_group: '{{ .Values.global.env }}.druid.events.error.backup'
+    base_path: "error_events"
+
+image:
+  repository: sanketikahub/secor
+  tag: 1.0.0-GA
+  pullPolicy: IfNotPresent
+
+exporter:
+  image:
+    repository: prom/statsd-exporter
+    tag: latest
+    pullPolicy: IfNotPresent
+
+prometheus_rule_selector_app: prometheus-operator
+prometheus_rule_selector_release: prometheus-operator
+
+# If you enable this, secor lag alert rules will be created in the flink cluster.
+# In our case the consumer group lag metrics available in core prometheus.
+# So we need to create the secor lag alert rule in core prometheus.
+# By adding this condition we are avoiding creating the secor lag alert rule in flink cluster.
+alertrules:
+  enabled: false
+
+# This condition is whether to create the secor lag alert rule or not.
+secor_alertrule:
+  enabled: false
+
+
+commonAnnotations:
+    "helm.sh/hook-weight": "-5"

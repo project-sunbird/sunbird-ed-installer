@@ -1,0 +1,8 @@
+apiVersion: v2
+name: dataproducts
+description: A Helm chart for creating ConfigMaps
+version: 0.1.0
+dependencies:
+  - name: common
+    repository: https://nimbushubin.github.io/helmcharts
+    version: 0.1.0

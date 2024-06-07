@@ -1,0 +1,14 @@
+apiVersion: v2
+name: druid-raw-cluster
+version: 0.1.1
+appVersion: 0.21.1
+description: Helm chart to deploy a druid cluster on Kubernetes
+keywords:
+- druid
+- zookeeper
+- postgres
+maintainers:
+- name: druid-operator-maintainers
+sources:
+- https://github.com/druid-io/druid-operator
+home: https://github.com/druid-io/druid-operator

@@ -1,0 +1,247 @@
+nameOverride: "content"
+fullnameOverride: "content"
+replicaCount: 1
+
+image:
+  repository: sunbirded.azurecr.io/content-service
+  tag: "release-5.5.0_RC1_551878a_107"
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+ingress: {}
+podAnnotations: {}
+commonLabels: {}
+
+podSecurityContext: {}
+  # runAsNonRoot: true
+  # runAsUser: 1001
+  # fsGroup: 1001
+
+securityContext: {}
+  # readOnlyRootFilesystem: false
+  # capabilities:
+  #   drop:
+  #   - ALL
+
+service:
+  type: ClusterIP
+  protocol: TCP
+  ports:
+    - name: http-content
+      port: 9000
+      targetPort: 9000
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 100Mi
+  limits:
+    cpu: 1
+    memory: 1024Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+
+livenessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+  httpGet:
+    path: /health
+    port: 9000
+readinessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+  httpGet:
+    path: /health
+    port: 9000
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+configmap:
+  enabled: true
+  mountPath: /home/sunbird/content-service-1.0-SNAPSHOT/config
+
+commonAnnotations:
+  reloader.stakater.com/auto: "true"
+
+
+serviceAccount:
+  create: true
+
+serviceMonitor:
+  enabled: true
+  interval: 30s
+  scrapeTimeout: 10s
+  labels:
+    release: monitoring
+  honorLabels: true
+  jobLabel: "app.kubernetes.io/name"
+
+
+cloud_storage:
+  type: "azure"
+
+content:
+  h5p_library_path: "https://sunbirdpublic.blob.core.windows.net/installation/h5p-standalone-1.3.4.zip"
+  media_base_url: "https://{{ .Values.global.domain }}"
+  telemetry_env: staging
+
+composite_search_url: "http://search-service:9000"
+dialservice_base_url: "http://dial-service:9000"
+taxonomy_base_url: "http://taxonomy-service:9000"
+content_base_url: "http://content-service:9000"
+
+kafka_topics_instruction: "{{ .Values.global.env }}.knowlg.learning.job.request"
+kafka_publish_request_topic: "{{ .Values.global.env }}.knowlg.publish.job.request"
+import_output_topic_name: "{{ .Values.global.env }}.knowlg.auto.creation.job.request"
+import_required_props: '["name","code","mimeType","primaryCategory","artifactUrl","framework"]'
+import_remove_props: '["downloadUrl","variants","previewUrl","streamingUrl","itemSets","level1Name","level1Concept","level2Name","level2Concept","level3Name","level3Concept","me_totalPlaySessionCount","me_totalTimeSpentInSec","me_totalSessionsCount","me_totalTimespent","me_totalInteractions","me_creationSessions","me_creationTimespent","me_averageInteractionsPerMin","me_averageSessionsPerDevice","me_totalDevices","me_averageTimespentPerSession","me_averageRating","me_totalDownloads","me_totalSideloads","me_totalRatings","me_totalComments","me_totalDialcode","me_totalDialcodeLinkedToContent","me_totalDialcodeAttached","me_hierarchyLevel","origin","originData","contentPolicyCheck","questions"]'
+master_category_validation_enabled: "Yes"
+youtube_application_name: "fetch-youtube-license"
+youtube_apikey: ""
+drive_apiKey: ""
+collection_keyspace: "{{ .Values.global.env }}_hierarchy_store"
+content_keyspace: "{{ .Values.global.env }}_content_store"
+kafka_dial_request_topic: "{{ .Values.global.env }}.knowlg.qrimage.request"
+dialcode_keyspace: dialcodes
+cloud_storage_content_folder: "content"
+cloud_storage_asset_folder: "assets"
+cloud_storage_artefact_folder: "artifact"
+cloud_storage_bundle_folder: "bundle"
+cloud_storage_media_folder: "media"
+cloud_storage_ecar_folder: "ecar_files"
+cloud_storage_metadata_replace_absolute_path: true
+cloud_storage_upload_url_ttl: "54000"
+cloudstorage_relative_path_prefix_content: CONTENT_STORAGE_BASE_PATH
+cloudstorage_metadata_list: '["appIcon", "artifactUrl", "posterImage", "previewUrl", "thumbnail", "assetsMap", "certTemplate", "itemSetPreviewUrl", "grayScaleAppIcon", "sourceURL", "variants", "downloadUrl", "streamingUrl", "toc_url", "data", "question", "solutions", "editorState", "media", "pdfUrl", "transcripts"]'
+cloudstorage_write_base_path: '["https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net"]'
+cloudstorage_read_base_path: "https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net"
+
+envoy_probes:
+  failureThreshold: 2
+  httpGet:
+    path: /ready
+    port: 10000
+    scheme: HTTP
+  initialDelaySeconds: 5
+  periodSeconds: 15
+  timeoutSeconds: 5
+
+opa_probes:
+  failureThreshold: 3
+  httpGet:
+    path: /health?plugins
+    port: 8282
+    scheme: HTTP
+  initialDelaySeconds: 5
+  periodSeconds: 15
+  timeoutSeconds: 5
+
+envoy_resources:
+  requests:
+    cpu: "100m"
+    memory: "100Mi"
+  limits:
+    cpu: "1"
+    memory: "1024Mi"
+
+opa_resources:
+  requests:
+    cpu: "100m"
+    memory: "100Mi"
+  limits:
+    cpu: "1"
+    memory: "1024Mi"
+
+init_container_resources:
+  requests:
+    cpu: "100m"
+    memory: "100Mi"
+  limits:
+    cpu: "1"
+    memory: "1024Mi"
+
+javaenv:
+  javaoptions: -Xms500m -Xmx500m
+  _javaoptions: -Dlog4j2.formatMsgNoLookups=true
+# Example values.yaml structure
+initContainers: {}
+  # - name: init-myservice
+  #   image: busybox:1.28
+  #   command: ['sh', '-c', "until nslookup kubernetes.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for myservice; sleep 2; done"]
+
+sidecars: {}
+  # - name: log-reader # Sidecar container
+  #   image: busybox # Use another busybox image
+  #   command: ["/bin/sh"] # Override the default command
+  #   args: ["-c", "tail -f /var/log/app.log"] # Run a shell script that tails the log file
+
+envoy_probes:
+  failureThreshold: 2
+  httpGet:
+    path: /ready
+    port: 10000
+    scheme: HTTP
+  initialDelaySeconds: 5
+  periodSeconds: 15
+  timeoutSeconds: 5
+
+opa_probes:
+  failureThreshold: 3
+  httpGet:
+    path: /health?plugins
+    port: 8282
+    scheme: HTTP
+  initialDelaySeconds: 5
+  periodSeconds: 15
+  timeoutSeconds: 5
+
+envoy_resources:
+  requests:
+    cpu: "100m"
+    memory: "100Mi"
+  limits:
+    cpu: "1"
+    memory: "1024Mi"
+
+opa_resources:
+  requests:
+    cpu: "100m"
+    memory: "100Mi"
+  limits:
+    cpu: "1"
+    memory: "1024Mi"
+
+init_container_resources:
+  requests:
+    cpu: "100m"
+    memory: "100Mi"
+  limits:
+    cpu: "1"
+    memory: "1024Mi"
+
+opa:
+  enabled: true

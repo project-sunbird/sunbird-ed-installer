@@ -1,0 +1,14 @@
+cassandra:
+  enabled: false
+kafka:
+  enabled: false
+redis:
+  enabled: false
+postgresql:
+  enabled: false
+neo4j:
+  enabled: false
+druid-operator:
+  enabled: false
+druid-raw-cluster:
+  enabled: false

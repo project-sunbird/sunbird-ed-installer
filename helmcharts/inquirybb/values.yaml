@@ -1,0 +1,153 @@
+fullname: inquirybb
+
+provisioningAnnotations: &provisioningAnnotations
+  "helm.sh/hook-weight": "-4"
+
+neo4j: &neo4j
+  enabled: true
+  host: "neo4j"
+  port: 7687
+  boltPort: 8687
+  image:
+    repository: sunbirded.azurecr.io/neo4j
+    tag: "3.3.0"
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  provisioning:
+    annotations: *provisioningAnnotations
+    waitForNeo4j: "true"
+
+redis: &redis
+  enabled: true
+  nameOverride: "redis"
+  fullnameOverride: "redis"
+  auth:
+    enabled: false
+  host: "redis-master"
+  port: 6379
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  replica:
+    replicaCount: 0
+  master:
+    persistence:
+      size: 25Gi
+
+zookeeper: &zookeeper
+  fullnameOverride: zookeeper
+  nameOverride: zookeeper
+  host: "zookeeper"
+  port: 2181
+  persistence:
+    size: 2Gi
+
+elasticsearch: &es
+  enabled: true
+  fullnameOverride: "elasticsearch"
+  host: "elasticsearch"
+  port: 9200
+  image:
+    registry: docker.io
+    repository: bitnami/elasticsearch
+    tag: 6.8.23
+  master:
+    masterOnly: false
+    replicaCount: 1
+    resources:
+      requests:
+        cpu: "1"
+        memory: "2Gi"
+      limits:
+        cpu: "2"
+        memory: "4Gi"
+    heapSize: 2G
+  data:
+    replicaCount: 0
+  coordinating:
+    replicaCount: 0
+  ingest:
+    enabled: false
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  provisioning:
+    annotations: *provisioningAnnotations
+  persistence:
+    size: 25Gi
+  sysctlImage:
+    registry: docker.io
+    repository: bitnami/bitnami-shell-archived
+    tag: 11-debian-11-r54
+
+cassandra: &cassandra
+  enabled: true
+  nameOverride: "cassandra"
+  fullnameOverride: "cassandra"
+  host: "cassandra"
+  port: 9042
+  provisioning:
+    annotations: *provisioningAnnotations
+  image:
+    tag: 3.11.13-debian-11-r3
+  extraEnvVars:
+    - name: CASSANDRA_AUTHENTICATOR
+      value: AllowAllAuthenticator
+    - name: CASSANDRA_AUTHORIZER
+      value: AllowAllAuthorizer
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  persistence:
+    size: 25Gi
+
+kafka: &kafka
+  zookeeper: *zookeeper
+  enabled: true
+  nameOverride: "kafka"
+  fullnameOverride: "kafka"
+  clientProtocol: PLAINTEXT
+  host: "kafka"
+  port: 9092
+  image:
+    registry: docker.io
+    repository: bitnami/kafka
+    tag: 3.3.1-debian-11-r25
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  provisioning:
+    annotations:
+      "helm.sh/hook-weight": "-4"
+    replicationFactor: 1
+    numPartitions: 1
+    topics:
+    - name: "{{ .Values.global.env }}.object.import.request"
+      partitions: 1
+      replicationFactor: 1
+    - name: "{{ .Values.global.env }}.assessment.publish.request"
+      partitions: 1
+      replicationFactor: 1
+    parallel: 1
+  persistence:
+    size: 25Gi
+
+cloud_storage:
+  type: "azure"
+play_http: &play_http
+  secret_key: "a-dummy-play-http-secret-key"
+schema: &schema
+  base_path: "https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net/{{ .Values.global.azure_public_container_name }}/schemas/local"
+graph_passport: &graph_passport
+  key_base: "a-dummy-graph_passport-secret-key"
+installation: &installation
+  id: ekstep
+
+global:
+  redis: *redis
+  neo4j: *neo4j
+  cassandra: *cassandra
+  zookeeper: *zookeeper
+  kafka: *kafka
+  play_http: *play_http
+  schema: *schema
+  graph_passport: *graph_passport
+  installation: *installation
+  elasticsearch: *es
+  provisioningAnnotations: *provisioningAnnotations

@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "common.names.name" . }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "common.names.name" . }}
+      annotations:
+        checksum/config: {{ .Files.Glob "files/*" | toYaml | sha256sum }}
+    spec:
+      serviceAccountName: {{ include "common.names.fullname" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- with .Values.image.pullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: {{ .Values.neo4j.env.name }}
+              value: "{{ .Values.neo4j.env.value }}"
+          {{- if .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          {{- end }}
+          ports:
+            {{- range .Values.service.ports }}
+            - name: {{ .name }}
+              containerPort: {{ .targetPort }}
+            {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+      {{- if .Values.configmap.enabled }}
+          volumeMounts:
+          - name: shared-data
+            mountPath: {{ .Values.neo4j.mountPath.sharedData }}
+          - name: neo4j-data
+            mountPath: "{{ .Values.neo4j.mountPath.neo4jData }}"
+        - name: {{ .Values.logstash.name }}
+          image: {{ .Values.logstash.image }}
+          imagePullPolicy: {{ .Values.logstash.imagePullPolicy }}
+          volumeMounts:
+            - name: config
+              mountPath: {{ .Values.logstash.mountPath.config }}
+              subPath: {{ .Values.logstash.mountPath.name }}
+            - name: shared-data
+              mountPath: {{ .Values.logstash.mountPath.sharedData }}
+      volumes:
+      - name: config
+        configMap:
+          name: {{ .Values.logstash.configmap.name }}
+          items:
+          - key: {{ .Values.logstash.mountPath.name }}
+            path: {{ .Values.logstash.mountPath.name }}
+      - name: shared-data
+        emptyDir: {}
+      - name: neo4j-data
+        persistentVolumeClaim:
+          claimName: {{ .Values.neo4j.pvc.claimName }}
+      {{- end }}

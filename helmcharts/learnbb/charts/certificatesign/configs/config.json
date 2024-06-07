@@ -1,0 +1,10 @@
+{
+    "issuers": {
+      "default": {
+        "publicKey": "{{ .Values.CERTIFICATESIGN_PUBLIC_KEY }}",
+        "privateKey": "{{ .Values.CERTIFICATESIGN_PRIVATE_KEY }}",
+        "signatureType": "{{ .Values.SIGNING_KEY_TYPE }}",
+        "verificationMethod": "did:india"
+      }
+    }
+  }

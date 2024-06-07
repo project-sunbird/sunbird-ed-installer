@@ -1,0 +1,131 @@
+# Default values for obsrvbb.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+fullname: edbb
+
+provisioningAnnotations: &provisioningAnnotations
+  "helm.sh/hook-weight": "-4"
+  # "helm.sh/hook": post-install,post-upgrade
+
+redis: &redis
+  enabled: true
+  replica:
+    replicaCount: 0
+  nameOverride: "redis"
+  fullnameOverride: "redis"
+  auth:
+    enabled: false
+  host: "redis-master"
+  port: 6379
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  master:
+    persistence:
+      size: 25Gi
+
+cassandra: &cassandra
+  enabled: true
+  nameOverride: "cassandra"
+  fullnameOverride: "cassandra"
+  host: "cassandra"
+  port: 9042
+  provisioning:
+    annotations: *provisioningAnnotations
+  image:
+    tag: 3.11.13-debian-11-r3
+  extraEnvVars:
+    - name: CASSANDRA_AUTHENTICATOR
+      value: AllowAllAuthenticator
+    - name: CASSANDRA_AUTHORIZER
+      value: AllowAllAuthorizer
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  persistence:
+    size: 25Gi
+
+postgresql: &postgresql
+  enabled: true
+  image:
+    repository: bitnami/postgresql
+    tag: 11.14.0-debian-10-r49
+  fullnameOverride: postgresql
+  host: postgresql
+  port: 5432
+  postgresqlUsername: postgres
+  postgresqlPassword: postgres
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  provisioning:
+    annotations: *provisioningAnnotations
+  persistence:
+    size: 25Gi
+  databases:
+  - name: "kong"
+  - name: "druid_raw"
+
+zookeeper: &zookeeper
+  fullnameOverride: zookeeper
+  nameOverride: zookeeper
+  host: "zookeeper"
+  port: 2181
+  persistence:
+    size: 2Gi
+
+kafka: &kafka
+  zookeeper: *zookeeper
+  enabled: true
+  nameOverride: kafka
+  fullnameOverride: kafka
+  clientProtocol: PLAINTEXT
+  host: kafka
+  port: 9092
+  image:
+    registry: docker.io
+    repository: bitnami/kafka
+    tag: 3.3.1-debian-11-r25
+  persistence:
+    size: 25Gi
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    timeoutSeconds: 5
+    failureThreshold: 10
+    periodSeconds: 30
+    successThreshold: 1
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    failureThreshold: 5
+    timeoutSeconds: 10
+    periodSeconds: 30
+    successThreshold: 1
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  provisioning:
+    annotations: *provisioningAnnotations
+    replicationFactor: 1
+    numPartitions: 1
+
+global:
+  redis: *redis
+  zookeeper: *zookeeper
+  kafka: *kafka
+  cassandra: *cassandra
+  postgresql: *postgresql
+  keycloak_kid_keys_configmap: keycloak-kids-keys
+  keycloak_key_configmap: keycloak-key
+  kong_desktop_device_consumer_names_for_opa: '["portal", "desktop"]'
+
+knowledgemw:
+  opa_enabled: true
+report:
+  opa_enabled: true
+
+migration:
+  postgresql:
+    waitTime: 120
+
+devops_release_branch: release-6.0.0

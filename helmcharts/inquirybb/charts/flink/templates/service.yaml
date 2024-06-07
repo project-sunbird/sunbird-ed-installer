@@ -1,0 +1,36 @@
+{{- define "flink.servicetpl" -}}
+{{- $jobName := index . "jobName" }}
+{{- $component := index . "component" }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $jobName }}-{{ $component }}
+  labels:
+    {{- include "common.labels.standard" (dict "customLabels" .context.Values.commonLabels "context" .context) | nindent 4 }}
+  {{- if .context.Values.commonAnnotations }}
+  annotations:
+    {{- include "common.tplvalues.render" (dict "value" .context.Values.commonAnnotations "context" .context) | nindent 4 }}
+  {{- end }}
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    {{- range .context.Values.service.ports }}
+    - name: {{ .name }}
+      port: {{ .port }}
+      targetPort: {{ .targetPort }}
+    {{- end }}
+  selector:
+    app.kubernetes.io/component: {{ $jobName }}-{{ $component }}
+{{- end }}
+
+{{- $currentScope := . }}
+{{- range $jobName, $jobData := .Values.flink_jobs }}
+{{- if $jobData.enabled }}
+    {{- /* Include the service template for JobManager */}}
+    {{- include "flink.servicetpl" (dict "jobName" $jobName "component" "jobmanager" "context" $currentScope) }}
+    {{- include "flink.servicetpl" (dict "jobName" $jobName "component" "taskmanager" "context" $currentScope) }}
+    {{- /* Include again for another component if needed, with different parameters */}}
+{{- end }}
+{{- end }}

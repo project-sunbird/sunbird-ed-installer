@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spark-conf
+data:
+  spark-defaults.conf: |-
+    spark.executor.extraJavaOptions  -Dconfig.file=/data/analytics/scripts/common.conf -Dlog4j.configurationFile=/data/analytics/models-2.0/log4j2.xml
+    spark.driver.extraJavaOptions    -Dconfig.file=/data/analytics/scripts/common.conf -Dlog4j.configurationFile=/data/analytics/models-2.0/models-2.0/log4j2.xml
+    spark.local.dir                  /data/analytics/tmp
+  spark-env.sh: |-
+    LD_PRELOAD=/opt/bitnami/common/lib/libnss_wrapper.so
+    export azure_storage_key={{ .Values.global.azure_storage_account_name }}
+    export azure_storage_secret={{ .Values.global.azure_storage_account_key }}
+    export druid_storage_account_key=
+    export druid_storage_account_secret=
+    reports_storage_key="{{ .Values.global.azure_storage_account_name }}"
+    reports_storage_secret="{{ .Values.global.azure_storage_account_key }}"
+    export aws_storage_key=
+    export aws_storage_secret=
+    export cloud_storage_key=
+    export cloud_storage_secret=
+

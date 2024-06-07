@@ -1,0 +1,3 @@
+{{ if .Values.apple_universal_links }}
+{{ .Values.apple_universal_links }}
+{{ end }}

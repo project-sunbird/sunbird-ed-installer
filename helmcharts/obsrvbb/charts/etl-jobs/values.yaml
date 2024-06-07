@@ -1,0 +1,93 @@
+configmap:
+  enabled: true
+  mountPath: /config
+
+content:
+  snapshotPath: "/data/analytics/content-snapshot"
+  snapshotJarPath: "{{ .Values.content.snapshotPath }}/jars/etl-jobs-1.0/lib"
+  snapshotJarName: "etl-jobs-1.0.jar"
+jobConfig:
+  deviceProfilePath: "{{ .Values.content.snapshotPath }}/conf/DeviceProfile.conf"
+  esCloudUploaderPath: "{{ .Values.content.snapshotPath }}/conf/ESCloudUploader.conf"
+  esContentIndexerPath: "{{ .Values.content.snapshotPath }}/conf/ESContentIndexer.conf"
+  esDialCodeIndexerPath: "{{ .Values.content.snapshotPath }}/conf/DialcodeRedisIndexer.conf"
+  cassandraRedisPath: "{{ .Values.content.snapshotPath }}/conf/cassandraRedis.conf"
+sparkHome: "/data/analytics/spark-3.1.3-bin-hadoop2.7"
+
+redis:
+  user:
+    index: "12"
+    input_index: "4"
+    source_key: "id"
+  content:
+    index: "5"
+    source_key: "identifier"
+  dialcode:
+    index: "6"
+    source_key: "identifier"
+  connection:
+    idle_max: 20
+    idle_min: 10
+    min_evict_idle_seconds: 120
+    time_evict_run_second: 300
+    max: 20
+  max_pipeline_size: "100000"
+  key_expiry_seconds: 3600
+  scan_count: "100000"
+
+
+cloud_storage_type: "azure"
+elasticsearch:
+  content:
+    index: "compositesearch"
+    query: '"{\"query\":{\"bool\":{\"must\":[{\"match\":{\"status\":{\"query\":\"Live\"}}},{\"match\":{\"objectType\":{\"query\":\"Content\"}}}]}}}"'
+  dialcode:
+    index: "dialcode"
+    query: '"{\"query\":{\"match_all\":{}}}"'
+  cloud:
+    index: "compositesearch"
+    query: '"{\"query\":{\"match_all\":{}}}"'
+  scroll_size: "1000"
+
+output_file_path: "{{ .Values.content.snapshotPath }}/compositeSearchBatchData"
+content_snapshot_distribuction_name: "etl-jobs-1.0-distribution.tar.gz"
+analytics_user: analytics
+analytics_group: analytics
+config_files:
+  [
+    "application",
+    "cassandraRedis",
+    "DeviceProfile",
+    "ESCloudUploader",
+    "ESContentIndexer",
+    "DialcodeRedisIndexer",
+  ]
+script_files:
+  [
+    "DeviceProfileScripts",
+    "DruidContentIndexer",
+    "RedisContentIndexer",
+    "RedisDialcodeIndexer",
+    "RedisUserDataIndexer",
+    "run-script",
+  ]
+#redis multiprocess config
+dialcode_port: 6379
+content_port: 6379
+
+dataSource: "content-model-snapshot"
+ingestionSpecPath: "{{ .Values.content.snapshotPath }}/jars/etl-jobs-1.0/druid_models/content_index_batch.json"
+
+cassandra:
+  keyspace: "sunbird"
+  read_timeout: "500000"
+  retry_count: "100"
+  cassandra_consistency_level: "local_quorum"
+  user:
+    table: "user"
+  device_profile:
+    old_table: "device_profile"
+    new_table: "device_profile_temp"
+
+container_name: telemetry-data-store
+object_key: "druid-content-snapshot/snapshot.txt"
