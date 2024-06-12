@@ -40,7 +40,7 @@
 								}
 							}
 						},
-						"url": "{{host}}/data/v1/form/create"
+						"url": "{{host}}/api/data/v1/form/create"
 					},
 					"response": []
 				},
@@ -75,7 +75,7 @@
 								}
 							}
 						},
-						"url": "{{host}}/data/v1/form/create"
+						"url": "{{host}}/api/data/v1/form/create"
 					},
 					"response": []
 				},
@@ -110,7 +110,7 @@
 								}
 							}
 						},
-						"url": "{{host}}/data/v1/form/create"
+						"url": "{{host}}/api/data/v1/form/create"
 					},
 					"response": []
 				},
@@ -145,7 +145,7 @@
 								}
 							}
 						},
-						"url": "{{host}}/data/v1/form/create"
+						"url": "{{host}}/api/data/v1/form/create"
 					},
 					"response": []
 				}
@@ -185,7 +185,7 @@
 								}
 							}
 						},
-						"url": "{{host}}/data/v1/form/create"
+						"url": "{{host}}/api/data/v1/form/create"
 					},
 					"response": []
 				},
@@ -220,7 +220,7 @@
 								}
 							}
 						},
-						"url": "{{host}}/data/v1/form/create"
+						"url": "{{host}}/api/data/v1/form/create"
 					},
 					"response": []
 				}
@@ -260,7 +260,7 @@
 								}
 							}
 						},
-						"url": "{{host}}/object/category/definition/v1/update/obj-cat:digital-textbook_collection_all"
+						"url": "{{host}}/api/object/category/definition/v1/update/obj-cat:digital-textbook_collection_all"
 					},
 					"response": [
 						{
@@ -385,7 +385,7 @@
 								}
 							}
 						},
-						"url": "{{host}}/object/category/definition/v1/update/obj-cat:course_collection_all"
+						"url": "{{host}}/api/object/category/definition/v1/update/obj-cat:course_collection_all"
 					},
 					"response": [
 						{
