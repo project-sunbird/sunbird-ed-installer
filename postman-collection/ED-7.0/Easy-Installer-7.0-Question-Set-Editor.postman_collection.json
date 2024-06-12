@@ -19,7 +19,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "Bearer {{apiKey}}",
+										"value": "Bearer {{apikey}}",
 										"type": "text"
 									}
 								],
