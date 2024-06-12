@@ -16,7 +16,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer {{api_key}}",
+								"value": "Bearer {{apikey}}",
 								"type": "text"
 							},
 							{
@@ -27,7 +27,8 @@
 							{
 								"key": "user-authenticated-token",
 								"value": "{{auth_token}}",
-								"type": "text"
+								"type": "text",
+								"disabled": true
 							}
 						],
 						"body": {
@@ -50,7 +51,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer {{api_key}}",
+								"value": "Bearer {{apikey}}",
 								"type": "text"
 							},
 							{
@@ -61,7 +62,8 @@
 							{
 								"key": "user-authenticated-token",
 								"value": "{{auth_token}}",
-								"type": "text"
+								"type": "text",
+								"disabled": true
 							}
 						],
 						"body": {
@@ -84,7 +86,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer {{api_key}}",
+								"value": "Bearer {{apikey}}",
 								"type": "text"
 							},
 							{
@@ -95,7 +97,8 @@
 							{
 								"key": "user-authenticated-token",
 								"value": "{{auth_token}}",
-								"type": "text"
+								"type": "text",
+								"disabled": true
 							}
 						],
 						"body": {
@@ -118,7 +121,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer {{api_key}}",
+								"value": "Bearer {{apikey}}",
 								"type": "text"
 							},
 							{
@@ -129,7 +132,8 @@
 							{
 								"key": "user-authenticated-token",
 								"value": "{{auth_token}}",
-								"type": "text"
+								"type": "text",
+								"disabled": true
 							}
 						],
 						"body": {
@@ -157,7 +161,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer {{api_key}}",
+								"value": "Bearer {{apikey}}",
 								"type": "text"
 							},
 							{
@@ -168,7 +172,8 @@
 							{
 								"key": "user-authenticated-token",
 								"value": "{{auth_token}}",
-								"type": "text"
+								"type": "text",
+								"disabled": true
 							}
 						],
 						"body": {
@@ -191,7 +196,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer {{api_key}}",
+								"value": "Bearer {{apikey}}",
 								"type": "text"
 							},
 							{
@@ -202,7 +207,8 @@
 							{
 								"key": "user-authenticated-token",
 								"value": "{{auth_token}}",
-								"type": "text"
+								"type": "text",
+								"disabled": true
 							}
 						],
 						"body": {
@@ -236,7 +242,7 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "Bearer {{api_key}}",
+								"value": "Bearer {{apikey}}",
 								"type": "text"
 							},
 							{
@@ -361,7 +367,7 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "Bearer {{api_key}}",
+								"value": "Bearer {{apikey}}",
 								"type": "text"
 							},
 							{
