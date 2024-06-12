@@ -16,7 +16,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer {{apiKey}}",
+								"value": "Bearer {{apikey}}",
 								"type": "text"
 							},
 							{
@@ -51,7 +51,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer {{apiKey}}",
+								"value": "Bearer {{apikey}}",
 								"type": "text"
 							},
 							{
@@ -86,7 +86,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer {{apiKey}}",
+								"value": "Bearer {{apikey}}",
 								"type": "text"
 							},
 							{
@@ -121,7 +121,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer {{apiKey}}",
+								"value": "Bearer {{apikey}}",
 								"type": "text"
 							},
 							{
@@ -161,7 +161,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer {{apiKey}}",
+								"value": "Bearer {{apikey}}",
 								"type": "text"
 							},
 							{
@@ -196,7 +196,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer {{apiKey}}",
+								"value": "Bearer {{apikey}}",
 								"type": "text"
 							},
 							{
@@ -242,7 +242,7 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "Bearer {{apiKey}}",
+								"value": "Bearer {{apikey}}",
 								"type": "text"
 							},
 							{
@@ -367,7 +367,7 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "Bearer {{apiKey}}",
+								"value": "Bearer {{apikey}}",
 								"type": "text"
 							},
 							{
