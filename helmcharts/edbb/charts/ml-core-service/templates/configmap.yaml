@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}-access-keys
+data:
+{{- range $key, $value := .Values.global.access_v1_public_keys }}
+  {{ $key }}: |-
+{{- $value | trim | nindent 4 }}
+{{- end }}
