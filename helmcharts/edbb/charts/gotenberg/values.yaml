@@ -1,0 +1,40 @@
+nameOverride: "gotenberg-service"
+fullnameOverride: "gotenberg-service"
+
+replicaCount: 1
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 100Mi
+  limits:
+    cpu: 500m
+    memory: 500Mi
+
+service:
+  type: ClusterIP
+  ports:
+    - name: gotenberg-service
+      port: 3000
+      targetPort: 3000
+
+commonAnnotations:
+  reloader.stakater.com/auto: "true"
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80

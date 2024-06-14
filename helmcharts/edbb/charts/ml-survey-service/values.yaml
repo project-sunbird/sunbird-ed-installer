@@ -1,0 +1,55 @@
+nameOverride: "ml-survey-service"
+fullnameOverride: "ml-survey-service"
+
+replicaCount: 1
+
+image:
+  repository: raghukanna/ml-survey-service
+  tag: "latest"
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 100Mi
+  limits:
+    cpu: 1
+    memory: 1G
+
+service:
+  type: ClusterIP
+  ports:
+    - name: ml-survey
+      port: 3000
+      targetPort: 3000
+
+commonAnnotations:
+  reloader.stakater.com/auto: "true"
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+
+
+configmap:
+  enabled: false
+  mountPath: /config
+
+ml_survey_access_basepath: "/opt/core/keycloak-public-keys/"
+
+opa_enabled: false
