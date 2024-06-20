@@ -1292,7 +1292,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"request\": {\n        \"type\": \"customresourcebundles\",\n        \"subType\": \"global\",\n        \"action\": \"list\",\n        \"component\": \"*\",\n        \"framework\": \"*\",\n        \"data\": {\n            \"defaultLanguage\": \"en\",\n            \"en\": {\n                \"frameworkCategory1\": \"Organisation\",\n                \"frameworkCategory2\": \"Role\",\n                \"frameworkCategory3\": \"Verticals\",\n                \"frameworkCategory4\": \"Section\"\n            },\n            \"hi\": {\n                \"frameworkCategory1\": \"संगठन\",\n                \"frameworkCategory2\": \"भूमिका\"\n            }\n        },\n        \"rootOrgId\": \"*\"\n    }\n}"
+									"raw": "{\n    \"request\": {\n        \"type\": \"customresourcebundles\",\n        \"subType\": \"global\",\n        \"action\": \"list\",\n        \"component\": \"*\",\n        \"framework\": \"*\",\n        \"data\": {\n            \"defaultLanguage\": \"en\",\n            \"en\": {\n                \"frameworkCategory1\": \"Board\",\n                \"frameworkCategory2\": \"Medium\",\n                \"frameworkCategory3\": \"Grade\",\n                \"frameworkCategory4\": \"Subject\"\n            },\n            \"hi\": {\n                \"frameworkCategory1\": \"संगठन\",\n                \"frameworkCategory2\": \"भूमिका\"\n            }\n        },\n        \"rootOrgId\": \"*\"\n    }\n}"
 								},
 								"description": "https://documenter.getpostman.com/view/25186239/2sA2rAxMg6#82aab728-c477-4cfa-b081-b174db622cd0"
 							},
