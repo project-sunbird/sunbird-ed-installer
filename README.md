@@ -18,6 +18,7 @@
 9. PyJwt python package (you can using using pip)
 10. [kubectl](https://kubernetes.io/docs/tasks/tools/)
 11. [helm](https://helm.sh/docs/intro/quickstart/#install-helm)
+12. Postman CLI (https://learning.postman.com/docs/getting-started/installation/installation-and-updates/)
 
 **Note:**
 
