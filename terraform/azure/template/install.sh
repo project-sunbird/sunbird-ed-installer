@@ -154,6 +154,48 @@ function run_post_install() {
     if [ "$(basename $current_directory)" != "$environment" ]; then
         cd ../terraform/azure/$environment 2>/dev/null || true
     fi
+    check_pod_status
+    echo "Starting post install..."
+    cp ../../../postman-collection/collection${RELEASE}.json .
+    postman collection run collection${RELEASE}.json --environment env.json --delay-request 500 --bail --insecure
+}
+
+function create_client_forms() {
+    local current_directory="$(pwd)"
+    if [ "$(basename $current_directory)" != "$environment" ]; then
+        cd ../terraform/azure/$environment 2>/dev/null || true
+    fi
+    cp -rf ../../../postman-collection/ED-${RELEASE}  .
+    check_pod_status
+    #loop through files inside collection folder
+    for FILES in ED-${RELEASE}/*.json; do
+     echo "Creating client forms in.. $FILES"
+      postman collection run $FILES --environment env.json --delay-request 500 --bail --insecure
+    done 
+   }
+
+function cleanworkspace() {
+        rm  certkey.pem certpubkey.pem
+        sed -i '/CERTIFICATE_PRIVATE_KEY:/d' global-values.yaml
+        sed -i '/CERTIFICATE_PUBLIC_KEY:/d' global-values.yaml
+        sed -i '/CERTIFICATESIGN_PRIVATE_KEY:/d' global-values.yaml
+        sed -i '/CERTIFICATESIGN_PUBLIC_KEY:/d' global-values.yaml
+        echo "cleanup completed"
+}
+function destroy_tf_resources() {
+    source tf.sh
+    cleanworkspace
+    echo -e "Destroying resources on azure cloud"
+    terragrunt run-all destroy
+}
+
+function invoke_functions() {
+    for func in "$@"; do
+        $func
+    done
+}
+
+function check_pod_status() {
     echo -e "\nRemove any orphaned pods if they exist."
     kubectl get pod -n sunbird --no-headers | grep -v Completed | grep -v Running | awk '{print $1}' | xargs -I {} kubectl delete -n sunbird pod {} || true
     local timeout=$((SECONDS + 600))
@@ -177,30 +219,8 @@ function run_post_install() {
         sleep 10
     done
     echo "All pods are running successfully."
-    echo "Starting post install..."
-    cp ../../../postman-collection/collection${RELEASE}.json .
-    postman collection run collection${RELEASE}.json --environment env.json --delay-request 500 --bail --insecure
-}
-function cleanworkspace() {
-        rm  certkey.pem certpubkey.pem
-        sed -i '/CERTIFICATE_PRIVATE_KEY:/d' global-values.yaml
-        sed -i '/CERTIFICATE_PUBLIC_KEY:/d' global-values.yaml
-        sed -i '/CERTIFICATESIGN_PRIVATE_KEY:/d' global-values.yaml
-        sed -i '/CERTIFICATESIGN_PUBLIC_KEY:/d' global-values.yaml
-        echo "cleanup completed"
-}
-function destroy_tf_resources() {
-    source tf.sh
-    cleanworkspace
-    echo -e "Destroying resources on azure cloud"
-    terragrunt run-all destroy
 }
 
-function invoke_functions() {
-    for func in "$@"; do
-        $func
-    done
-}
 
 RELEASE="release700"
 POSTMAN_COLLECTION_LINK="https://api.postman.com/collections/5338608-e28d5510-20d5-466e-a9ad-3fcf59ea9f96?access_key=PMAT-01HMV5SB2ZPXCGNKD74J7ARKRQ"
@@ -249,6 +269,9 @@ else
         ;;
     "certificate_config")
         certificate_config
+        ;;
+    "create_client_forms")
+        create_client_forms
         ;;
     *)
         invoke_functions "$@"
