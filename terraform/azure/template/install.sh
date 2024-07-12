@@ -73,6 +73,8 @@ function install_component() {
     ### Generate the key pair required for certificate template
     if [ $component = "learnbb" ]; then
         if [ -f "certkey.pem" ] && [ -f "certpubkey.pem" ]; then
+            echo "Certificate keys are already created. Skipping the keys creation..."
+        else
           certificate_keys
         fi
     fi
@@ -81,7 +83,7 @@ function install_component() {
         -f "../terraform/azure/$environment/global-values.yaml" \
         -f "../terraform/azure/$environment/global-values-jwt-tokens.yaml" \
         -f "../terraform/azure/$environment/global-values-rsa-keys.yaml" \
-        -f "../terraform/azure/$environment/global-cloud-values.yaml" --timeout 30m --debug
+        -f "../terraform/azure/$environment/global-cloud-values.yaml" --timeout 30m 
 }
 
 function install_helm_components() {
