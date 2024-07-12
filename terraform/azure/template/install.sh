@@ -71,11 +71,13 @@ function install_component() {
         ed_values_flag="-f $component/ed-values.yaml --wait --wait-for-jobs"
     fi
     ### Generate the key pair required for certificate template
-    if [ $component = "learnbb" ]; then
+      if [ $component = "learnbb" ]; then
         if [ -f "certkey.pem" ] && [ -f "certpubkey.pem" ]; then
+            echo "Certificate keys are already created. Skipping the keys creation..."
+        else
           certificate_keys
         fi
-    fi
+      fi
     helm upgrade --install "$component" "$component" --namespace sunbird -f "$component/values.yaml" \
         $ed_values_flag \
         -f "../terraform/azure/$environment/global-values.yaml" \
