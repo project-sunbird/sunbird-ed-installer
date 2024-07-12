@@ -394,7 +394,7 @@ flink_jobs:
         input.topic = "{{ .Values.global.env }}.knowlg.content.postpublish.request"
         groupId = "{{ .Values.global.env }}-post-publish-processor-group"
         publish.topic = "{{ .Values.global.env }}.learning.job.request"
-        qrimage.topic = "{{ .Values.global.env }}.qrimage.request"
+        qrimage.topic = "{{ .Values.global.env }}.knowlg.qrimage.request"
         dialcode.context.topic = "{{ .Values.global.env }}.knowlg.dialcode.context.job.request"
       }
 
@@ -524,7 +524,7 @@ flink_jobs:
       }
 
       kafka {
-        input.topic = "{{ .Values.global.env }}.qrimage.request"
+        input.topic = "{{ .Values.global.env }}.knowlg.qrimage.request"
         groupId = "{{ .Values.global.env }}-qrcode-image-generator-group"
       }
 
