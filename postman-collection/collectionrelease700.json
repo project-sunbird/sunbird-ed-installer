@@ -3685,7 +3685,7 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"value": "Bearer {{apiKey}}"
+												"value": "Bearer {{apikey}}"
 											},
 											{
 												"key": "Content-Type",
@@ -3720,7 +3720,7 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"value": "Bearer {{apiKey}}"
+												"value": "Bearer {{apikey}}"
 											},
 											{
 												"key": "Content-Type",
@@ -3755,7 +3755,7 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"value": "Bearer {{apiKey}}"
+												"value": "Bearer {{apikey}}"
 											},
 											{
 												"key": "Content-Type",
