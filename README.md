@@ -60,3 +60,10 @@ cd dev
 ```
 2. Update required values in `environment.hcl` and `global-values.yaml` files
 3. Run `bash install.sh`
+
+## Client form setup
+To setup client forms - Run  the install.sh with the function create_client_forms
+
+`bash install.sh create_client_forms`
+
+   
