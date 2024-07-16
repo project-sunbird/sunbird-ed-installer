@@ -4,7 +4,7 @@ fullnameOverride: "keycloak-kids-keys"
 replicaCount: 1
 
 image:
-  repository: keshavprasad/keycloak-kids-keys
+  repository: sunbirded.azurecr.io/keycloak-kids-keys
   tag: "0.1.5"
   pullPolicy: IfNotPresent
   pullSecrets: []
