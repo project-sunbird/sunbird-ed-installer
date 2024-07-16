@@ -58,7 +58,7 @@ function certificate_config() {
 }
 function install_component() {
     # We need a dummy cm for configmap to start. Later Lernbb will create real one
-    kubectl create confifmap keycloak-key -n sunbird 2>/dev/null || true
+    kubectl create configmap keycloak-key -n sunbird 2>/dev/null || true
     local current_directory="$(pwd)"
     if [ "$(basename $current_directory)" != "helmcharts" ]; then
         cd ../../../helmcharts 2>/dev/null || true
