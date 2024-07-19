@@ -66,4 +66,16 @@ To setup client forms - Run  the install.sh with the function create_client_form
 
 `bash install.sh create_client_forms`
 
+## Default users in the instance 
+This installation setup creates the following default users with different roles. Feel free to update the password using "Forgot password" option or create new users using API's
+
+|Role	|Email/User Name	|Password|
+|-----|-----------------|----------|
+|Admin	|admin@yopmail.com	| Admin@123|
+|Content Creator|	contentcreator@yopmail.com	| Creator@123|
+|Content Reviewer |	contentreviewer@yopmail.com |	Reviewer@123|
+|Book Creator	| bookcreator@yopmail.com	| Bookcreator@123|
+|Book Reviewer	| bookreviewer@yopmail.com	| bookReviewer@123|
+|Public User 1	| user3@yopmail.com	| User1@123|
+|Public User 2	| user2@yopmail.com	| User2@123|
    
