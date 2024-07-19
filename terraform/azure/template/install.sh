@@ -72,10 +72,15 @@ function install_component() {
     fi
     ### Generate the key pair required for certificate template
       if [ $component = "learnbb" ]; then
+        if kubectl get job keycloak-kids-keys -n sunbird >/dev/null 2>&1; then
+            echo "Deleting existing job keycloak-kids-keys..."
+            kubectl delete job keycloak-kids-keys -n sunbird
+        fi
+
         if [ -f "certkey.pem" ] && [ -f "certpubkey.pem" ]; then
             echo "Certificate keys are already created. Skipping the keys creation..."
         else
-          certificate_keys
+            certificate_keys
         fi
       fi
     helm upgrade --install "$component" "$component" --namespace sunbird -f "$component/values.yaml" \
@@ -83,7 +88,7 @@ function install_component() {
         -f "../terraform/azure/$environment/global-values.yaml" \
         -f "../terraform/azure/$environment/global-values-jwt-tokens.yaml" \
         -f "../terraform/azure/$environment/global-values-rsa-keys.yaml" \
-        -f "../terraform/azure/$environment/global-cloud-values.yaml" --timeout 30m 
+        -f "../terraform/azure/$environment/global-cloud-values.yaml" --timeout 30m --debug
 }
 
 function install_helm_components() {
