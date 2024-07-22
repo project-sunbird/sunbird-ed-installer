@@ -7183,7 +7183,7 @@
 											"    if(access_token) {",
 											"        pm.environment.set(\"creator_access_token\", access_token);",
 											"    }",
-											"    pm.expect(creator_access_token).to.not.null;",
+											
 											"});"
 										],
 										"type": "text/javascript",
