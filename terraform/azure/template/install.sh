@@ -34,8 +34,8 @@ function certificate_keys() {
     echo "Creation of RSA keys for certificate signing"
     openssl genrsa -out ../terraform/azure/$environment/certkey.pem;
     openssl rsa -in ../terraform/azure/$environment/certkey.pem -pubout -out ../terraform/azure/$environment/certpubkey.pem;
-    CERTPRIVATEKEY=$(sed 's/KEY-----/KEY-----\\n/g' certkey.pem | sed 's/-----END/\\n-----END/g' | awk '{printf("%s",$0)}')
-    CERTPUBLICKEY=$(sed 's/KEY-----/KEY-----\\n/g' certpubkey.pem | sed 's/-----END/\\n-----END/g' | awk '{printf("%s",$0)}')
+    CERTPRIVATEKEY=$(sed 's/KEY-----/KEY-----\\n/g' ../terraform/azure/$environment/certkey.pem | sed 's/-----END/\\n-----END/g' | awk '{printf("%s",$0)}')
+    CERTPUBLICKEY=$(sed 's/KEY-----/KEY-----\\n/g' ../terraform/azure/$environment/certpubkey.pem | sed 's/-----END/\\n-----END/g' | awk '{printf("%s",$0)}')
     echo "  CERTIFICATE_PRIVATE_KEY: \"$CERTPRIVATEKEY\"" >> ../terraform/azure/$environment/global-values.yaml
     echo "  CERTIFICATE_PUBLIC_KEY: \"$CERTPUBLICKEY\"" >> ../terraform/azure/$environment/global-values.yaml
     echo "  CERTIFICATESIGN_PRIVATE_KEY: \"$CERTPRIVATEKEY\"" >> ../terraform/azure/$environment/global-values.yaml
