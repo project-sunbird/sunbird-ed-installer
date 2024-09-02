@@ -1361,6 +1361,54 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "23 - System Settings - TncConfig",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Authenticated-User-Token",
+								"value": "{{access_token}}"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{apikey}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"request\": {\n        \"id\": \"tncConfig\",\n        \"field\": \"tncConfig\",\n        \"value\": \"{\\\"latestVersion\\\":\\\"3.5.0\\\",\\\"3.5.0\\\":{\\\"url\\\":\\\"https:\\/\\/sunbirdstagingpublic.blob.core.windows.net\\/terms-and-conditions\\/terms-and-conditions-v9.html#termsOfUse\\\"}}\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/data/v1/system/settings/set",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"data",
+								"v1",
+								"system",
+								"settings",
+								"set"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
