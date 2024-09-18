@@ -7940,6 +7940,19 @@
 									"mode": "raw",
 									"raw": "{\n    \"request\": {\n        \"type\": \"workspace\",\n        \"subType\": \"categories\",\n        \"action\": \"get\",\n        \"component\": \"*\",\n        \"framework\": \"*\",\n        \"data\": {\n            \"templateName\": \"defaultTemplate\",\n            \"action\": \"display\",\n            \"fields\": [\n                {\n                    \"code\": \"book\",\n                    \"name\": \"Book\",\n                    \"visible\": true\n                },\n                {\n                    \"code\": \"course\",\n                    \"name\": \"Course\",\n                    \"visible\": true\n                },\n                {\n                    \"code\": \"resource\",\n                    \"name\": \"Resource\",\n                    \"visible\": true\n                },\n                {\n                    \"code\": \"collection\",\n                    \"name\": \"Collection\",\n                    \"visible\": true\n                },\n                {\n                    \"code\": \"lessonPlan\",\n                    \"name\": \"Lesson Plan\",\n                    \"visible\": true\n                },\n                {\n                    \"code\": \"contentupload\",\n                    \"name\": \"Upload Content\",\n                    \"visible\": true\n                },\n                {\n                    \"code\": \"contentuploadlarge\",\n                    \"name\": \"Upload Large Videos(>50MB)\",\n                    \"visible\": true\n                },\n                {\n                    \"code\": \"assessment\",\n                    \"name\": \"Cource Assesment\",\n                    \"visible\": true\n                },\n                {\n                    \"code\": \"questionsets\",\n                    \"name\": \"Questionsets\",\n                    \"visible\": true\n                }\n            ]\n        },\n        \"rootOrgId\": \"*\"\n    }\n}"
 								},
+								"url": {
+									"raw": "{{host}}/api/data/v1/form/create",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"data",
+										"v1",
+										"form",
+										"create"
+									]
+								},
 								"description": "Generated from Node.js script"
 							},
 							"response": []
@@ -9096,6 +9109,162 @@
 									"body": "{\n    \"id\": \"api.form.create\",\n    \"params\": {\n        \"resmsgid\": \"0ec8d94c-2528-4b3f-9a0c-bf4a4ad16097\",\n        \"msgid\": \"2f8de9f8-2c9a-4e39-8c8d-06cf09a71ed0\",\n        \"status\": \"successful\"\n    },\n    \"responseCode\": \"OK\",\n    \"result\": {\n        \"created\": \"OK\"\n    },\n    \"ts\": \"2024-04-02T05:24:19.843Z\",\n    \"ver\": \"1.0\"\n}"
 								}
 							]
+						},
+						{
+							"name": "28 - Lesson Plan Resource Filters",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{apikey}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"request\": {\n        \"type\": \"content\",\n        \"subType\": \"lessonplan\",\n        \"action\": \"resource-filters\",\n        \"component\": \"*\",\n        \"framework\": \"*\",\n        \"data\": {\n            \"templateName\": \"resourceFilterTemplate\",\n            \"action\": \"resource-filters\",\n            \"fields\": [\n                {\n                    \"code\": \"contentType\",\n                    \"visible\": true,\n                    \"editable\": true,\n                    \"dataType\": \"list\",\n                    \"renderingHints\": {},\n                    \"description\": \"Category\",\n                    \"index\": 1,\n                    \"range\": [\n                        \"Resource\",\n                        \"Collection\",\n                        \"Content\"\n                    ],\n                    \"label\": \"contentType\",\n                    \"required\": false,\n                    \"name\": \"contentType\",\n                    \"inputType\": \"multiselect\",\n                    \"placeholder\": \"Select contentType\"\n                },\n                {\n                    \"code\": \"board\",\n                    \"visible\": true,\n                    \"editable\": true,\n                    \"dataType\": \"list\",\n                    \"renderingHints\": {},\n                    \"name\": \"Curriculum\",\n                    \"description\": \"Curriculum\",\n                    \"index\": 2,\n                    \"inputType\": \"multiselect\",\n                    \"label\": \"Curriculum\",\n                    \"placeholder\": \"Select Curriculum\",\n                    \"required\": false\n                },\n                {\n                    \"code\": \"gradeLevel\",\n                    \"visible\": true,\n                    \"editable\": true,\n                    \"dataType\": \"list\",\n                    \"renderingHints\": {},\n                    \"name\": \"Class\",\n                    \"description\": \"Class\",\n                    \"index\": 3,\n                    \"inputType\": \"multiselect\",\n                    \"label\": \"Class\",\n                    \"placeholder\": \"Select Class\",\n                    \"required\": false\n                },\n                {\n                    \"code\": \"subject\",\n                    \"visible\": true,\n                    \"editable\": true,\n                    \"dataType\": \"list\",\n                    \"renderingHints\": {},\n                    \"name\": \"Subject\",\n                    \"description\": \"\",\n                    \"index\": 4,\n                    \"inputType\": \"multiselect\",\n                    \"label\": \"Subject\",\n                    \"placeholder\": \"Select Subject\",\n                    \"required\": false\n                },\n                {\n                    \"code\": \"medium\",\n                    \"visible\": true,\n                    \"editable\": true,\n                    \"dataType\": \"list\",\n                    \"renderingHints\": {},\n                    \"name\": \"medium\",\n                    \"description\": \"\",\n                    \"index\": 5,\n                    \"inputType\": \"multiselect\",\n                    \"label\": \"Medium\",\n                    \"placeholder\": \"Select Medium\",\n                    \"required\": false\n                },\n                {\n                    \"code\": \"topic\",\n                    \"visible\": true,\n                    \"editable\": true,\n                    \"dataType\": \"list\",\n                    \"renderingHints\": {},\n                    \"name\": \"Topic\",\n                    \"description\": \"Choose a Topics\",\n                    \"index\": 6,\n                    \"inputType\": \"topicselector\",\n                    \"label\": \"Topics\",\n                    \"placeholder\": \"Choose Topics\",\n                    \"required\": false\n                }\n            ]\n        },\n        \"rootOrgId\": \"*\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/data/v1/form/create",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"data",
+										"v1",
+										"form",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "29 - Lesson Plan Publish",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{apikey}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"request\": {\n        \"type\": \"content\",\n        \"subType\": \"lessonplan\",\n        \"action\": \"publish\",\n        \"component\": \"*\",\n        \"framework\": \"*\",\n        \"data\": {\n            \"templateName\": \"defaultTemplate\",\n            \"action\": \"publish\",\n            \"fields\": [\n                [\n                    {\n                        \"contents\": [\n                            {\n                                \"name\": \"Appropriateness\",\n                                \"checkList\": [\n                                    \"No Hate speech, Abuse, Violence, Profanity\",\n                                    \"No Sexual content, Nudity or Vulgarity\",\n                                    \"No Discrimination or Defamation\",\n                                    \"Is suitable for children\"\n                                ]\n                            },\n                            {\n                                \"name\": \"Content details\",\n                                \"checkList\": [\n                                    \"Appropriate Title, Description\",\n                                    \"Correct Board, Grade, Subject, Medium\",\n                                    \"Appropriate tags such as Resource Type, Concepts\",\n                                    \"Relevant Keywords\"\n                                ]\n                            },\n                            {\n                                \"name\": \"Usability\",\n                                \"checkList\": [\n                                    \"Content plays correctly\",\n                                    \"Can see the content clearly on Desktop and App\",\n                                    \"Audio (if any) is clear and easy to understand\",\n                                    \"No Spelling mistakes in the text\",\n                                    \"Language is simple to understand\"\n                                ]\n                            }\n                        ],\n                        \"title\": \"Please confirm that ALL the following items are verified (by ticking the check-boxes) before you can publish:\"\n                    }\n                ]\n            ]\n        },\n        \"rootOrgId\": \"*\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/data/v1/form/create",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"data",
+										"v1",
+										"form",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "30- Lesson Plan Request For Changes",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{apikey}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"request\": {\n        \"type\": \"content\",\n        \"subType\": \"lessonplan\",\n        \"action\": \"requestforchanges\",\n        \"component\": \"*\",\n        \"framework\": \"*\",\n        \"data\": {\n            \"templateName\": \"defaultTemplate\",\n            \"action\": \"requestforchanges\",\n            \"fields\": [\n                {\n                    \"otherReason\": \"Other Issue(s) (if there are any other issues, tick this and provide details in the comments box)\",\n                    \"contents\": [\n                        {\n                            \"name\": \"Appropriateness\",\n                            \"checkList\": [\n                                \"Has Hate speech, Abuse, Violence, Profanity\",\n                                \"Has Sexual content, Nudity or Vulgarity\",\n                                \"Has Discriminatory or Defamatory content\",\n                                \"Is not suitable for children\"\n                            ]\n                        },\n                        {\n                            \"name\": \"Content details\",\n                            \"checkList\": [\n                                \"Inappropriate Title or Description\",\n                                \"Incorrect Board, Grade, Subject or Medium\",\n                                \"Inappropriate tags such as Resource Type or Concepts\",\n                                \"Irrelevant Keywords\"\n                            ]\n                        },\n                        {\n                            \"name\": \"Usability\",\n                            \"checkList\": [\n                                \"Content is NOT playing correctly\",\n                                \"CANNOT see the content clearly on Desktop and App\",\n                                \"Audio is NOT clear or NOT easy to understand\",\n                                \"Spelling mistakes found in text used\",\n                                \"Language is NOT simple to understand\"\n                            ]\n                        }\n                    ],\n                    \"title\": \"Please tick the reasons for requesting changes and provide detailed comments:\"\n                }\n            ]\n        },\n        \"rootOrgId\": \"*\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/data/v1/form/create",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"data",
+										"v1",
+										"form",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "31- Lesson Plan Review",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{apikey}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"request\": {\n        \"type\": \"content\",\n        \"subType\": \"lessonplan\",\n        \"action\": \"review\",\n        \"component\": \"*\",\n        \"framework\": \"*\",\n        \"data\": {\n            \"templateName\": \"defaultTemplate\",\n            \"action\": \"review\",\n            \"fields\": [\n                {\n                    \"code\": \"primaryCategory\",\n                    \"dataType\": \"text\",\n                    \"description\": \"Collection Type\",\n                    \"editable\": false,\n                    \"index\": 0,\n                    \"inputType\": \"text\",\n                    \"label\": \"Collection Type\",\n                    \"name\": \"Collection Type\",\n                    \"placeholder\": \"\",\n                    \"required\": true,\n                    \"visible\": true\n                },\n                {\n                    \"code\": \"additionalCategories\",\n                    \"dataType\": \"list\",\n                    \"description\": \"Additonal Category of the Content\",\n                    \"editable\": true,\n                    \"index\": 1,\n                    \"inputType\": \"multiselect\",\n                    \"label\": \"Additional Category\",\n                    \"name\": \"Additional Category\",\n                    \"placeholder\": \"Select Additional Category\",\n                    \"renderingHints\": {},\n                    \"range\": [\n                        \"Textbook\",\n                        \"Lesson Plan\"\n                    ],\n                    \"required\": false,\n                    \"visible\": true\n                },\n                {\n                    \"code\": \"name\",\n                    \"visible\": true,\n                    \"editable\": true,\n                    \"dataType\": \"text\",\n                    \"renderingHints\": {},\n                    \"name\": \"Name\",\n                    \"description\": \"Name of the content\",\n                    \"inputType\": \"text\",\n                    \"label\": \"Name\",\n                    \"placeholder\": \"Name\",\n                    \"required\": true,\n                    \"validation\": [\n                        {\n                            \"type\": \"max\",\n                            \"message\": \"Input is Exceded\",\n                            \"value\": \"120\"\n                        }\n                    ]\n                },\n                {\n                    \"code\": \"description\",\n                    \"visible\": true,\n                    \"editable\": true,\n                    \"dataType\": \"text\",\n                    \"renderingHints\": {},\n                    \"name\": \"Description\",\n                    \"description\": \"Brief description\",\n                    \"inputType\": \"textarea\",\n                    \"label\": \"Description\",\n                    \"placeholder\": \"Description\",\n                    \"required\": false,\n                    \"validation\": [\n                        {\n                            \"type\": \"max\",\n                            \"message\": \"Input is Exceded\",\n                            \"value\": \"1000\"\n                        }\n                    ]\n                },\n                {\n                    \"code\": \"keywords\",\n                    \"visible\": true,\n                    \"editable\": true,\n                    \"dataType\": \"list\",\n                    \"name\": \"Keywords\",\n                    \"description\": \"Keywords for the content\",\n                    \"inputType\": \"keywordsuggestion\",\n                    \"label\": \"keywords\",\n                    \"placeholder\": \"Enter Keywords\",\n                    \"required\": false\n                },\n                {\n                    \"code\": \"appicon\",\n                    \"visible\": true,\n                    \"editable\": true,\n                    \"dataType\": \"url\",\n                    \"renderingHints\": {},\n                    \"name\": \"App Icon\",\n                    \"description\": \"App Icon\",\n                    \"index\": 6,\n                    \"inputType\": \"file\",\n                    \"label\": \"Icon\",\n                    \"placeholder\": \"App Icon\",\n                    \"required\": true\n                },\n                {\n                    \"code\": \"board\",\n                    \"visible\": true,\n                    \"depends\": [\n                        \"gradeLevel\",\n                        \"medium\",\n                        \"subject\",\n                        \"topic\"\n                    ],\n                    \"editable\": true,\n                    \"dataType\": \"text\",\n                    \"renderingHints\": {},\n                    \"description\": \"Board\",\n                    \"index\": 0,\n                    \"label\": \"Board/Syllabus\",\n                    \"required\": true,\n                    \"name\": \"Board/Syllabus\",\n                    \"inputType\": \"select\",\n                    \"placeholder\": \"Select Board/Syllabus\"\n                },\n                {\n                    \"code\": \"medium\",\n                    \"visible\": true,\n                    \"depends\": [\n                        \"gradeLevel\",\n                        \"subject\",\n                        \"topic\"\n                    ],\n                    \"editable\": true,\n                    \"dataType\": \"list\",\n                    \"renderingHints\": {},\n                    \"description\": \"\",\n                    \"index\": 1,\n                    \"label\": \"medium\",\n                    \"required\": true,\n                    \"name\": \"medium\",\n                    \"inputType\": \"multiselect\",\n                    \"placeholder\": \"Select Medium\"\n                },\n                {\n                    \"code\": \"gradeLevel\",\n                    \"visible\": true,\n                    \"depends\": [\n                        \"subject\",\n                        \"topic\"\n                    ],\n                    \"editable\": true,\n                    \"dataType\": \"list\",\n                    \"renderingHints\": {},\n                    \"description\": \"Class\",\n                    \"index\": 2,\n                    \"label\": \"Class\",\n                    \"required\": true,\n                    \"name\": \"Class\",\n                    \"inputType\": \"multiselect\",\n                    \"placeholder\": \"Select Class\"\n                },\n                {\n                    \"code\": \"subject\",\n                    \"visible\": true,\n                    \"depends\": [\n                        \"topic\"\n                    ],\n                    \"editable\": true,\n                    \"dataType\": \"list\",\n                    \"renderingHints\": {},\n                    \"description\": \"\",\n                    \"index\": 3,\n                    \"label\": \"Subject\",\n                    \"required\": true,\n                    \"name\": \"Subject\",\n                    \"inputType\": \"multiselect\",\n                    \"placeholder\": \"Select Subject\"\n                },\n                {\n                    \"code\": \"topic\",\n                    \"visible\": true,\n                    \"editable\": true,\n                    \"dataType\": \"list\",\n                    \"renderingHints\": {},\n                    \"name\": \"Topic\",\n                    \"description\": \"Choose a Topics\",\n                    \"index\": 8,\n                    \"inputType\": \"topicselector\",\n                    \"label\": \"Topics\",\n                    \"placeholder\": \"Choose Topics\",\n                    \"required\": false\n                },\n                {\n                    \"code\": \"notes\",\n                    \"visible\": true,\n                    \"editable\": true,\n                    \"dataType\": \"text\",\n                    \"renderingHints\": {},\n                    \"name\": \"learningObjective\",\n                    \"description\": \"Add Notes\",\n                    \"index\": 4,\n                    \"inputType\": \"text\",\n                    \"label\": \"Notes to teacher\",\n                    \"placeholder\": \"Add Notes\",\n                    \"required\": false\n                },\n                {\n                    \"code\": \"learningObjective\",\n                    \"visible\": true,\n                    \"editable\": true,\n                    \"dataType\": \"list\",\n                    \"renderingHints\": {},\n                    \"name\": \"learningObjective\",\n                    \"description\": \"Brief desciption about learning objective\",\n                    \"index\": 5,\n                    \"inputType\": \"text\",\n                    \"label\": \"Learning objective\",\n                    \"placeholder\": \"Brief desciption about learning objective\",\n                    \"required\": false\n                },\n                {\n                    \"code\": \"duration\",\n                    \"visible\": true,\n                    \"editable\": true,\n                    \"dataType\": \"text\",\n                    \"renderingHints\": {},\n                    \"name\": \"duration\",\n                    \"description\": \"Duration of Lesson Plan\",\n                    \"index\": 7,\n                    \"inputType\": \"number\",\n                    \"label\": \"Duration\",\n                    \"placeholder\": \"In minutes\",\n                    \"required\": false\n                },\n                {\n                    \"code\": \"year\",\n                    \"visible\": true,\n                    \"editable\": false,\n                    \"dataType\": \"text\",\n                    \"renderingHints\": {},\n                    \"name\": \"Year\",\n                    \"description\": \"\",\n                    \"index\": 9,\n                    \"inputType\": \"select\",\n                    \"label\": \"Year\",\n                    \"placeholder\": \"Select Year\",\n                    \"required\": true\n                },\n                {\n                    \"code\": \"author\",\n                    \"visible\": true,\n                    \"editable\": true,\n                    \"dataType\": \"text\",\n                    \"renderingHints\": {},\n                    \"name\": \"Author\",\n                    \"description\": \"Original Author\",\n                    \"index\": 12,\n                    \"inputType\": \"text\",\n                    \"label\": \"Original Author\",\n                    \"placeholder\": \"Author\",\n                    \"required\": false\n                },\n                {\n                    \"code\": \"attributions\",\n                    \"visible\": true,\n                    \"editable\": true,\n                    \"dataType\": \"list\",\n                    \"renderingHints\": {},\n                    \"name\": \"attribution\",\n                    \"description\": \"Attributions\",\n                    \"index\": 13,\n                    \"inputType\": \"text\",\n                    \"label\": \"Attributions\",\n                    \"placeholder\": \"Attributions\",\n                    \"required\": false\n                },\n                {\n                    \"code\": \"copyright\",\n                    \"visible\": true,\n                    \"editable\": true,\n                    \"dataType\": \"text\",\n                    \"renderingHints\": {},\n                    \"name\": \"Copyright\",\n                    \"description\": \"Copyright\",\n                    \"index\": 14,\n                    \"inputType\": \"text\",\n                    \"label\": \"Copyright\",\n                    \"placeholder\": \"Copyright\",\n                    \"required\": false\n                },\n                {\n                    \"code\": \"copyrightYear\",\n                    \"visible\": true,\n                    \"editable\": true,\n                    \"dataType\": \"number\",\n                    \"renderingHints\": {},\n                    \"description\": \"Year of Creation\",\n                    \"index\": 15,\n                    \"label\": \"Year of Creation\",\n                    \"required\": true,\n                    \"name\": \"Year of Creation\",\n                    \"inputType\": \"number\",\n                    \"placeholder\": \"Enter Year of Creation\",\n                    \"validation\": [\n                        {\n                            \"type\": \"min\",\n                            \"message\": \"Maximum length of the year should be 4\",\n                            \"value\": \"4\"\n                        },\n                        {\n                            \"type\": \"max\",\n                            \"message\": \"Minimum length of the year should be 4\",\n                            \"value\": \"4\"\n                        }\n                    ]\n                },\n                {\n                    \"code\": \"license\",\n                    \"visible\": true,\n                    \"editable\": true,\n                    \"dataType\": \"text\",\n                    \"renderingHints\": {},\n                    \"name\": \"license\",\n                    \"description\": \"License of the content\",\n                    \"index\": 16,\n                    \"inputType\": \"licenses\",\n                    \"label\": \"license\",\n                    \"placeholder\": \"license\",\n                    \"required\": true\n                },\n                {\n                    \"code\": \"licenseterms\",\n                    \"visible\": true,\n                    \"editable\": true,\n                    \"defaultValue\": \"By creating any type of content (resources, books, courses etc.) on DIKSHA, you consent to publish it under the Creative Commons License Framework. Please choose the applicable creative commons license you wish to apply to your content.\",\n                    \"dataType\": \"text\",\n                    \"renderingHints\": {\n                        \"value\": {\n                            \"video/x-youtube\": \"By linking or uploading YouTube videos on DIKSHA, you consent to publishing it as per the terms of the YouTube video license. DIKSHA accepts only videos with YouTube Standard License or Creative Commons License.\"\n                        },\n                        \"class\": \"twelve wide field\"\n                    },\n                    \"description\": \"licenseterms\",\n                    \"index\": 17,\n                    \"label\": \"License Terms\",\n                    \"required\": false,\n                    \"name\": \"licenseterms\",\n                    \"inputType\": \"label\",\n                    \"placeholder\": \"license\"\n                }\n            ]\n        },\n        \"rootOrgId\": \"*\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/data/v1/form/create",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"data",
+										"v1",
+										"form",
+										"create"
+									]
+								}
+							},
+							"response": []
 						}
 					],
 					"description": "Consumption portal form API's to enable the consumption workflows."
