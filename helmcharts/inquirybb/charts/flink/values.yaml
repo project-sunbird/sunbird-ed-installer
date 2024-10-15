@@ -143,7 +143,7 @@ user_pii_target_object_types: '{
   "Collection": ["1.0"]
 }'
 user_pii_replacement_value: "Deleted User"
-user_org_service_base_url: "http://{{ .Values.global.private_ingressgateway_ip }}/userorg"
+user_org_service_base_url: "http://userorg-service:9000"
 email_notification_subject: "User Account Deletion Notification"
 email_notification_regards: "Team"
 
@@ -343,34 +343,34 @@ flink_jobs:
       taskmanager.memory.network.fraction: 0.1
     job_classname: org.sunbird.job.questionset.republish.task.QuestionSetRePublishStreamTask  
   
-user-pii-data-updater:
-  enabled: true
-  config: |+
-    include file("/data/flink/conf/base-config.conf")
-    kafka {
-      input.topic = "{{ .Values.user_pii_updater_kafka_topic_name }}"
-      groupId = "{{ .Values.user_pii_updater_group }}"
-    }
-    task {
-      consumer.parallelism = 1
-      parallelism = 1
-      router.parallelism = 1
-    }
-    target_object_types={{ .Values.user_pii_target_object_typess }}
-    user_pii_replacement_value="{{ .Values.user_pii_replacement_value }}"
-    admin_email_notification_enable=True
-    userorg_service_base_url="{{ .Values.user_org_service_base_url }}"
-    notification {
-      email {
-        subject: "{{ .Values.email_notification_subject }}",
-        regards: "{{ .Values.email_notification_regards }}"
+  user-pii-data-updater:
+    enabled: true
+    config: |+
+      include file("/data/flink/conf/base-config.conf")
+      kafka {
+        input.topic = "{{- include "common.tplvalues.render" (dict "value" .Values.user_pii_updater_kafka_topic_name "context" $) }}"
+        groupId = "{{- include "common.tplvalues.render" (dict "value" .Values.user_pii_updater_group "context" $) }}"
       }
-    }
-  flink-conf: |+
-    jobmanager.memory.flink.size: 1024m
-    taskmanager.memory.flink.size: 1024m
-    taskmanager.numberOfTaskSlots: 1
-    parallelism.default: 1
-    jobmanager.execution.failover-strategy: region
-    taskmanager.memory.network.fraction: 0.1
-  job_classname: org.sunbird.job.user.pii.updater.task.UserPiiUpdaterStreamTask
+      task {
+        consumer.parallelism = 1
+        parallelism = 1
+        router.parallelism = 1
+      }
+      target_object_types={{ .Values.user_pii_target_object_types }}
+      user_pii_replacement_value="{{ .Values.user_pii_replacement_value }}"
+      admin_email_notification_enable=true
+      userorg_service_base_url="{{- include "common.tplvalues.render" (dict "value" .Values.user_org_service_base_url "context" $) }}"
+      notification {
+        email {
+          subject: "{{ .Values.email_notification_subject }}",
+          regards: "{{ .Values.email_notification_regards }}"
+        }
+      }
+    flink-conf: |+
+      jobmanager.memory.flink.size: 1024m
+      taskmanager.memory.flink.size: 1024m
+      taskmanager.numberOfTaskSlots: 1
+      parallelism.default: 1
+      jobmanager.execution.failover-strategy: region
+      taskmanager.memory.network.fraction: 0.1
+    job_classname: org.sunbird.job.user.pii.updater.task.UserPiiUpdaterStreamTask
