@@ -122,7 +122,7 @@ inquiry_assessment_post_publish_kafka_topic_name: "{{ .Values.global.env }}.asse
 inquiry_assessment_publish_group: "{{ .Values.global.env }}-questionset-publish-group"
 question_keyspace_name: "{{ .Values.global.env }}_question_store"
 hierarchy_keyspace_name: "{{ .Values.global.env }}_hierarchy_store"
-kp_print_service_base_url: "http://print:9000"
+kp_print_service_base_url: "http://print:5000"
 # CNAME Config
 cloudstorage_relative_path_prefix: "CONTENT_STORAGE_BASE_PATH"
 cloudstorage_base_path: "https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net"
