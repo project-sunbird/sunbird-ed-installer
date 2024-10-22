@@ -3404,7 +3404,7 @@
       "auth": "true",
       "port": "587",
       "host": "{{ .Values.global.mail_server_host }}",
-      "from": "{{ .Values.mail_server_from_email }}",
+      "from": "{{ .Values.global.mail_server_from_email }}",
       "ssl": "",
       "user": "{{ .Values.global.mail_server_username }}"
     },
