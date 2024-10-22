@@ -1,17 +1,17 @@
-nameOverride: "knowledge-mw"
-fullnameOverride: "knowledge-mw"
+nameOverride: ""
+fullnameOverride: ""
 
 replicaCount: 1
 
 image:
-  repository: sunbirded.azurecr.io/knowledge-mw-service
-  tag: "release-5.6.0_RC1_f24f1dd_10"
+  repository: sunbirded.azurecr.io/print-service
+  tag: "release-3.0.0_RC1"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
 podAnnotations: {}
 
-podSecurityContext: {}
+podSecurityContext:
   # runAsNonRoot: true
   # runAsUser: 1001
   # fsGroup: 1001
@@ -29,13 +29,13 @@ service:
       port: 5000
       targetPort: 5000
 
-ingress:
-  enabled: false
-  annotations: {}
-  hosts:
-    - host: chart-example.local
-      paths:
-      - /
+ingress: {}
+  # enabled: false
+  # annotations: {}
+  # hosts:
+  #   - host: chart-example.local
+  #     paths:
+  #     - /
 
 resources:
   requests:
@@ -43,7 +43,7 @@ resources:
     memory: 100Mi
   limits:
     cpu: 1
-    memory: 1G
+    memory: 1024Mi
 
 autoscaling:
   enabled: false
@@ -64,22 +64,24 @@ autoscaling:
           averageUtilization: 80
 
 livenessProbe:
-  failureThreshold: 2
-  httpGet:
-      path: /service/health
-      port: 5000
-  initialDelaySeconds: 15
-  periodSeconds: 15
+  initialDelaySeconds: 30
+  periodSeconds: 10
   timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+  httpGet:
+    path: /health
+    port: 5000
 
 readinessProbe:
-  failureThreshold: 2
-  httpGet:
-      path: /service/health
-      port: 5000
-  initialDelaySeconds: 15
-  periodSeconds: 15
+  initialDelaySeconds: 30
+  periodSeconds: 10
   timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+  httpGet:
+    path: /health
+    port: 5000
 
 nodeSelector: {}
 tolerations: []
@@ -94,11 +96,10 @@ serviceAccount:
   name: ""
 
 serviceMonitor:
-  enabled: true
+  enabled: false
   interval: 30s
   scrapeTimeout: 10s
-  labels:
-    release: monitoring
+  labels: {} # additional labels e.g. release: prometheus
   honorLabels: true
   jobLabel: "app.kubernetes.io/name"
 
@@ -114,51 +115,5 @@ sidecars: {}
   #   command: ["/bin/sh"] # Override the default command
   #   args: ["-c", "tail -f /var/log/app.log"] # Run a shell script that tails the log file
 
-envoy_probes:
-  failureThreshold: 2
-  httpGet:
-    path: /ready
-    port: 10000
-    scheme: HTTP
-  initialDelaySeconds: 5
-  periodSeconds: 15
-  timeoutSeconds: 5
-
-opa_probes:
-  failureThreshold: 3
-  httpGet:
-    path: /health?plugins
-    port: 8282
-    scheme: HTTP
-  initialDelaySeconds: 5
-  periodSeconds: 15
-  timeoutSeconds: 5
-
-envoy_resources:
-  requests:
-    cpu: "100m"
-    memory: "100Mi"
-  limits:
-    cpu: "1"
-    memory: "1024Mi"
-
-opa_resources:
-  requests:
-    cpu: "100m"
-    memory: "100Mi"
-  limits:
-    cpu: "1"
-    memory: "1024Mi"
-
-init_container_resources:
-  requests:
-    cpu: "100m"
-    memory: "100Mi"
-  limits:
-    cpu: "1"
-    memory: "1024Mi"
-
-opa_enabled: false
-
-commonAnnotations:
-  reloader.stakater.com/auto: "true"
+opa:
+  enabled: false

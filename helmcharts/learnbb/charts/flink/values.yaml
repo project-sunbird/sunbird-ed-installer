@@ -819,7 +819,7 @@ flink_jobs:
       }
       fcm_account_key= "{{ .Values.core_vault_sunbird_fcm_account_key }}"
       sms_auth_key= "{{ .Values.global.sunbird_msg_91_auth }}"
-      mail_server_from_email= "{{ .Values.global.sunbird_mail_server_from_email }}"
+      mail_server_from_email= "{{ .Values.global.mail_server_from_email }}"
       sms_default_sender= "{{ .Values.notification_msg_default_sender }}"
       mail_server_username= "{{ .Values.global.mail_server_username }}"
       mail_server_password= "{{ .Values.global.mail_server_password }}"

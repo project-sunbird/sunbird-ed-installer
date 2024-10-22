@@ -40,7 +40,7 @@ We will copy your existing files in the below location with a `.bak` extension a
 |      Name      |   Description    |
 |----------------|------------------|
 |`environment`   | Environment name (between 1 - 9 charcaters). Example: *dev*, *stage* |
-|`random_string` | Alphanumeric random string (between 12 - 24) characters. Example: *U2PNfwcz6rb9756ZwAwZ*  |
+|`random_string` | Alphanumeric random string with characters. Example: *BKjglkpglBYJUhzBpxxtWB67Axs1fdLH*  |
 
 #### Mandatory variables in `global-values.yaml`
 |      Name      |   Description   |
