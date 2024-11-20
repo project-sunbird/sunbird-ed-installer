@@ -115,7 +115,7 @@ sidecars: {}
   #   args: ["-c", "tail -f /var/log/app.log"] # Run a shell script that tails the log file
 
 opa_enabled: false
-
+random_string: zqvESM5JgjZ0YMliA99HOrfjVnaSkkEY
 global:
   azure_private_container_name: ""
   azure_storage_account_name: sunbird
@@ -126,7 +126,6 @@ global:
   sunbird_anonymous_default_token: ""
   sunbird_logged_default_token: ""
   adminutil_learner_api_auth_key: ""
-  random_string: superrandom
   kafka:
     host: kafka
     port: 9092
