@@ -49,9 +49,9 @@ spec:
           cd /opt/shared-volume/knowlg-automation/terraform/modules/helm/cassandra/cassandra-helm-chart/files
           export ENV={{ .Values.global.env }}
           
-          sed -i "s/{{ env }}/$ENV/g" generalized-cassandra.cql
-          echo cqlsh cassandra -f "generalized-cassandra.cql"
-          cqlsh cassandra -f "generalized-cassandra.cql"
+          sed -i "s/{{"{{ env }}"}}/$ENV/g" generalized-cassandra.cql
+          echo cqlsh {{.Values.global.cassandra.host}} -f "generalized-cassandra.cql"
+          cqlsh {{.Values.global.cassandra.host}} -f "generalized-cassandra.cql"
         volumeMounts:
           - name: shared-volume
             mountPath: /opt/shared-volume
