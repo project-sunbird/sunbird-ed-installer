@@ -13,6 +13,7 @@ global:
   sunbird_msg_sender: ""
   mail_server_password: ""
   youtube_apikey: ""
+  random_encryption_string: "" #use lowercase alphanumeric string of 32 characters
   # The merge domain is optional and is required only if user merge workflow is required.
   # For most audience, this workflow is not required. If you need this workflow, then
   # set the value of merge_domain_status to "true" and provide a subdomain / another domain

@@ -115,7 +115,6 @@ sidecars: {}
   #   args: ["-c", "tail -f /var/log/app.log"] # Run a shell script that tails the log file
 
 opa_enabled: false
-random_string: zqvESM5JgjZ0YMliA99HOrfjVnaSkkEY
 global:
   azure_private_container_name: ""
   azure_storage_account_name: sunbird
