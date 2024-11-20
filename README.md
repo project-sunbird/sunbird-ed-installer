@@ -6,6 +6,7 @@
 
 1. Domain Name
 2. SSL Certificate(FullChain -> private key and Certificate+CA_Bundle). **Fullchain is mandatory**, else installation will fail.
+3. Refer this Document (https://ed.sunbird.org/use/getting-started/pre-requisites) to generate keys and then update those keys [youtube_apikey, sunbird_google_captcha_site_keygoogle_captcha_private_key, sunbird_google_oauth_clientId, sunbird_google_oauth_clientSecret ] in 'global-values.yaml'
 
 #### Required CLI tools
 1. Azure CLI (https://learn.microsoft.com/en-us/cli/azure/install-azure-cli)
@@ -40,7 +41,7 @@ We will copy your existing files in the below location with a `.bak` extension a
 |      Name      |   Description    |
 |----------------|------------------|
 |`environment`   | Environment name (between 1 - 9 charcaters). Example: *dev*, *stage* |
-|`random_string` | Alphanumeric random string with characters. Example: *BKjglkpglBYJUhzBpxxtWB67Axs1fdLH*  |
+|`random_string` | Alphanumeric random string with 12-24 characters. Example: *BKjglkpglBYJUhzBpxxtWB67Axs1fdLH*  |
 
 #### Mandatory variables in `global-values.yaml`
 |      Name      |   Description   |
