@@ -5,7 +5,7 @@ locals {
   env = local.environment_vars.locals.env
   environment = local.environment_vars.locals.environment
   building_block = local.environment_vars.locals.building_block
-  random_string  = local.environment_vars.locals.random_string
+  # random_string  = local.environment_vars.locals.random_string
 }
 
 # For local development
@@ -32,12 +32,18 @@ dependency "aks" {
     config_path = "../aks"
 }
 
+dependency "keys" {
+    config_path = "../keys"
+    mock_outputs = {
+      random_string = "dummy-string"
+    }
+}
+
 inputs = {
   env                                = local.environment_vars.locals.env
   environment                        = local.environment
   building_block                     = local.building_block
   private_ingressgateway_ip          = dependency.aks.outputs.private_ingressgateway_ip
-  random_string                      = local.random_string
   storage_account_name               = dependency.storage.outputs.azurerm_storage_account_name
   storage_container_public           = dependency.storage.outputs.azurerm_storage_container_public
   storage_container_private          = dependency.storage.outputs.azurerm_storage_container_private
@@ -45,6 +51,8 @@ inputs = {
   backups_container_private          = dependency.storage.outputs.azurerm_backups_container_private
   flink_container_private            = dependency.storage.outputs.azurerm_flink_state_container_private
   dial_state_container_public        = dependency.storage.outputs.azurerm_dial_state_container_public
-  telemetry_container_public         = dependency.storage.outputs.azurerm_telemetry_container_public
+  telemetry_container_private        = dependency.storage.outputs.azurerm_telemetry_container_private
   storage_account_primary_access_key = dependency.storage.outputs.azurerm_storage_account_key
+  encryption_string                  = dependency.keys.outputs.encryption_string
+  random_string                      = dependency.keys.outputs.random_string
 }

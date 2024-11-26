@@ -12,5 +12,6 @@ global:
   azure_backups_container_name: ${azure_backups_container_name}
   azure_telemetry_container_name: ${azure_telemetry_container_name}
   private_ingressgateway_ip: ${private_ingressgateway_ip}
-
+  encryption__string: ${encryption_string}
+  random_string: ${random_string}
   
