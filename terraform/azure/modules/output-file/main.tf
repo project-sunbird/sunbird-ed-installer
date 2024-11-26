@@ -18,7 +18,7 @@ content  = templatefile("${path.module}/global-cloud-values.yaml.tfpl", {
     azure_telemetry_container_name = var.telemetry_container_private,
     private_ingressgateway_ip = var.private_ingressgateway_ip,
     encrypted_string = var.encryption_string,
-    randam_string = var.random_string
+    random_string = var.random_string
   })
   filename = local.global_values_cloud_file
 }
