@@ -111,7 +111,7 @@ taskmanager:
 
 # Azure Container Details
 checkpoint_store_type: "azure"
-cloud_storage_flink_bucketname: flink-state-backend
+cloud_storage_flink_bucketname: {{ .Values.global.azure_flink_state_container_name }}
 
 # AWS S3 Details
 s3_access_key: ""

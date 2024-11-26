@@ -10,8 +10,12 @@ content  = templatefile("${path.module}/global-cloud-values.yaml.tfpl", {
     azure_storage_account_name = var.storage_account_name,
     azure_storage_account_key = var.storage_account_primary_access_key,
     azure_public_container_name = var.storage_container_public,
-    azure_private_container_name = var.storage_container_private
-    random_string = var.random_string
+    azure_private_container_name = var.storage_container_private,
+    azure_reports_container_name = var.reports_container_private,
+    azure_backups_container_name = var.backups_container_private,
+    azure_flink_state_container_name = var.flink_container_private,
+    azure_dial_state_container_name = var.dial_state_container_public,
+    azure_telemetry_container_name = var.telemetry_container_public,
     private_ingressgateway_ip = var.private_ingressgateway_ip
   })
   filename = local.global_values_cloud_file
