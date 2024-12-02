@@ -170,7 +170,7 @@ base_config: |
       blob {
         storage {
           account = "{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net"
-          container = "flink-check-points-store"
+          container = "{{ .Values.global.azure_public_container_name }}"
           checkpointing.dir = "checkpoint"
         }
       }

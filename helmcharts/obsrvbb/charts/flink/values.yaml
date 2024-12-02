@@ -134,7 +134,7 @@ azure_secret: "azure-secret"
 
 # Azure Container Details
 checkpoint_store_type: "azure"
-cloud_storage_flink_bucketname: {{ .Values.global.azure_flink_state_container_name }}
+cloud_storage_flink_bucketname: "{{ .Values.global.azure_flink_state_container_name }}"
 cloud_storage_content_bucketname: sunbird-content-dev
 cert_container_name: dev-e-credentials
 cloud_storage_endpoint: https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net
@@ -287,7 +287,7 @@ base_config: |
           blob {
             storage {
               account = "{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net"
-              container = "{{ .Values.container }}"
+              container = "{{ .Values.global.azure_flink_state_container_name }}"
               checkpointing.dir = "checkpoint"
             }
           }

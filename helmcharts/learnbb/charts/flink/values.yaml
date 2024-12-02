@@ -111,7 +111,7 @@ taskmanager:
 
 # Azure Container Details
 checkpoint_store_type: "azure"
-cloud_storage_flink_bucketname: {{ .Values.global.azure_flink_state_container_name }}
+cloud_storage_flink_bucketname: "{{ .Values.global.azure_flink_state_container_name }}"
 
 # AWS S3 Details
 s3_access_key: ""
@@ -365,7 +365,7 @@ base_config: |
              {{- else if eq .Values.checkpoint_store_type "s3" -}}
               "{{- .Values.flink_dp_storage_container }}"
              {{- end }}
-            container = "{{ .Values.cloud_storage_flink_bucketname }}"
+            container = "{{ .Values.global.azure_flink_state_container_name }}"
             checkpointing.dir = "checkpoint"
           }
         }
