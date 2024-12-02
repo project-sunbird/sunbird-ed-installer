@@ -4,7 +4,7 @@ locals {
   environment_vars = read_terragrunt_config(find_in_parent_folders("environment.hcl"))
   environment = local.environment_vars.locals.environment
   building_block = local.environment_vars.locals.building_block
-  random_string  = local.environment_vars.locals.random_string
+  # random_string  = local.environment_vars.locals.random_string 
 }
 
 # For local development
@@ -29,5 +29,5 @@ inputs = {
   storage_container_public           = dependency.storage.outputs.azurerm_storage_container_public
   storage_container_private          = dependency.storage.outputs.azurerm_storage_container_private
   storage_account_primary_access_key = dependency.storage.outputs.azurerm_storage_account_key
-  random_string                      = local.random_string
+  # random_string                      = local.random_string 
 }

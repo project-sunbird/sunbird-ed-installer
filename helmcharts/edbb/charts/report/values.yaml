@@ -173,3 +173,5 @@ global:
 
 commonAnnotations:
   reloader.stakater.com/auto: "true"
+
+sunbird_portal_auth_server_client: portal

@@ -179,7 +179,7 @@ notification_service_base_url: "http://notification-service:9000"
 keys_basepath: "/keys/"
 PORTAL_SERVICE_PORT: "http://player:3000"
 sunbird_installation_display_name_for_sms: "Sunbird"
-sunbird_sso_lb_ip: ""
+sunbird_sso_lb_ip: http://keycloak:8080/
 sunbird_cloud_service_provider: "azure"
 isMultiDCEnabled: "false"
 java_options: -Xmx600m

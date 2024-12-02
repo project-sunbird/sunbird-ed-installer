@@ -89,5 +89,5 @@ cassandra:
     old_table: "device_profile"
     new_table: "device_profile_temp"
 
-container_name: telemetry-data-store
+container_name: {{ .Values.global.azure_telemetry_container_name }}
 object_key: "druid-content-snapshot/snapshot.txt"

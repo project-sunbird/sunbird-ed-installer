@@ -76,3 +76,4 @@ global:
     REPLACE_ME
   proxy_certificate: |
     REPLACE_ME
+  # CERTIFICATE-KEYS 

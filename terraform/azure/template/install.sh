@@ -38,6 +38,7 @@ function certificate_keys() {
     CERTPUBLICKEY=$(sed 's/KEY-----/KEY-----\\n/g' ../terraform/azure/$environment/certpubkey.pem | sed 's/-----END/\\n-----END/g' | awk '{printf("%s",$0)}')
     CERTIFICATESIGNPRKEY=$(sed 's/BEGIN PRIVATE KEY-----/BEGIN PRIVATE KEY-----\\\\n/g' ../terraform/azure/$environment/certkey.pem | sed 's/-----END PRIVATE KEY/\\\\n-----END PRIVATE KEY/g' | awk '{printf("%s",$0)}')
     CERTIFICATESIGNPUKEY=$(sed 's/BEGIN PUBLIC KEY-----/BEGIN PUBLIC KEY-----\\\\n/g' ../terraform/azure/$environment/certpubkey.pem | sed 's/-----END PUBLIC KEY/\\\\n-----END PUBLIC KEY/g' | awk '{printf("%s",$0)}')
+    printf "\n" >> ../terraform/azure/$environment/global-values.yaml
     echo "  CERTIFICATE_PRIVATE_KEY: \"$CERTPRIVATEKEY\"" >> ../terraform/azure/$environment/global-values.yaml
     echo "  CERTIFICATE_PUBLIC_KEY: \"$CERTPUBLICKEY\"" >> ../terraform/azure/$environment/global-values.yaml
     echo "  CERTIFICATESIGN_PRIVATE_KEY: \"$CERTIFICATESIGNPRKEY\"" >> ../terraform/azure/$environment/global-values.yaml
@@ -250,6 +251,7 @@ if [ $# -eq 0 ]; then
     dns_mapping
     generate_postman_env
     run_post_install
+    create_client_forms
 else
     case "$1" in
     "create_tf_backend")

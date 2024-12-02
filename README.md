@@ -4,21 +4,27 @@
 
 #### Pre-requisites
 
-1. Domain Name
-2. SSL Certificate(FullChain -> private key and Certificate+CA_Bundle). **Fullchain is mandatory**, else installation will fail.
+1. **Domain Name**
+2. **SSL Certificate**: The FullChain, consisting of the private key and Certificate+CA_Bundle, is mandatory for installation.
+3. **Google OAuth Credentials**: [Create credentials](https://developers.google.com/workspace/guides/create-credentials#oauth-client-id)
+4. **Google V3 ReCaptcha Credentials**: [Create credentials](https://www.google.com/recaptcha/admin)
+5. **Email Service Provider**
+6. **MSG91 SMS Service Provider API Token** (Optional): Required for sending OTPs to registered email addresses during user registration or password reset.
+7. **YouTube API Token** (Optional): Necessary for uploading video content directly via YouTube URL.
 
-#### Required CLI tools
-1. Azure CLI (https://learn.microsoft.com/en-us/cli/azure/install-azure-cli)
-2. jq (https://jqlang.github.io/jq/download/)
-3. rclone (https://rclone.org/)
-4. Terraform (https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
-5. Terragrunt (https://terragrunt.gruntwork.io/docs/getting-started/install/)
-7. Linux / Macos / Gitbash (Windows)
-8. Python 3
-9. PyJwt python package (you can using using pip)
-10. [kubectl](https://kubernetes.io/docs/tasks/tools/)
-11. [helm](https://helm.sh/docs/intro/quickstart/#install-helm)
-12. Postman CLI (https://learning.postman.com/docs/getting-started/installation/installation-and-updates/)
+#### Required CLI Tools
+
+1. [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli)
+2. [jq](https://jqlang.github.io/jq/download/)
+3. [rclone](https://rclone.org/)
+4. [Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+5. [Terragrunt](https://terragrunt.gruntwork.io/docs/getting-started/install/)
+6. Linux / MacOS / GitBash (Windows)
+7. Python 3
+8. PyJWT Python Package (install via pip)
+9. [kubectl](https://kubernetes.io/docs/tasks/tools/)
+10. [helm](https://helm.sh/docs/intro/quickstart/#install-helm)
+11. [Postman CLI](https://learning.postman.com/docs/getting-started/installation/installation-and-updates/)
 
 
 **Note:**
@@ -40,7 +46,6 @@ We will copy your existing files in the below location with a `.bak` extension a
 |      Name      |   Description    |
 |----------------|------------------|
 |`environment`   | Environment name (between 1 - 9 charcaters). Example: *dev*, *stage* |
-|`random_string` | Alphanumeric random string with characters. Example: *BKjglkpglBYJUhzBpxxtWB67Axs1fdLH*  |
 
 #### Mandatory variables in `global-values.yaml`
 |      Name      |   Description   |

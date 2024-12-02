@@ -25,7 +25,7 @@ restartPolicy: "OnFailure"
 
 CRON_SCHEDULE: '"00 00 * * *"'
 REDIS_MASTER_POD: "redis-master-0"
-azure_backups_container_name: "backups"
+azure_backups_container_name: "{{ .Values.global.azure_backups_container_name }}"
 
 global:
   azure_storage_account_name: your_storage_account_name
