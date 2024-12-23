@@ -103,7 +103,7 @@ function install_helm_components() {
 }
 
 function dns_mapping() {
-    domain_name=$(kubectl get cm -n sunbird report-env -ojsonpath='{.data.SUNBIRD_ENV}')
+    domain_name=$(kubectl get cm -n sunbird lms-env -ojsonpath='{.data.sunbird_web_url}')
     PUBLIC_IP=$(kubectl get svc -n sunbird nginx-public-ingress -ojsonpath='{.status.loadBalancer.ingress[0].ip}')
 
     local timeout=$((SECONDS + 1200))
@@ -133,7 +133,7 @@ function generate_postman_env() {
     if [ "$(basename $current_directory)" != "$environment" ]; then
         cd ../terraform/azure/$environment 2>/dev/null || true
     fi
-    domain_name=$(kubectl get cm -n sunbird report-env -ojsonpath='{.data.SUNBIRD_ENV}')
+    domain_name=$(kubectl get cm -n sunbird lms-env -ojsonpath='{.data.sunbird_web_url}')
     api_key=$(kubectl get cm -n sunbird player-env -ojsonpath='{.data.sunbird_api_auth_token}')
     keycloak_secret=$(kubectl get cm -n sunbird player-env -ojsonpath='{.data.sunbird_portal_session_secret}')
     keycloak_admin=$(kubectl get cm -n sunbird userorg-env -ojsonpath='{.data.sunbird_sso_username}')
