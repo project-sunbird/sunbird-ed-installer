@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-export SPARK_HOME=/opt/bitnami/spark
+export SPARK_HOME={{ .Values.global.spark_home }}
 export MODELS_HOME={{ .Values.analytics.home }}/models-{{ .Values.model_version }}
 export DP_LOGS={{ .Values.analytics.home }}/logs/data-products
 

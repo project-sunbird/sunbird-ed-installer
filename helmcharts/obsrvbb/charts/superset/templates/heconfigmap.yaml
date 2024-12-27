@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: envvar-configmap
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ template "superset.name" . }}
+    chart: {{ template "superset.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  PG_USER: {{ .Values.PG_USER }}
+  PG_PASS: {{ .Values.PG_PASS }}
+  PG_HOST: {{ .Values.PG_HOST }}
+  PORTAL_HOST: {{ .Values.PORTAL_HOST }}
+  PORTAL_API_HOST: {{ .Values.PORTAL_API_HOST }}
+  PORTAL_API_KEY:  {{ .Values.PORTAL_API_KEY }}
+  ANALYTICS_API_KEY: {{ .Values.ANALYTICS_API_KEY }}
+  ANALYTICS_API_HOST: {{ .Values.ANALYTICS_API_HOST }}

@@ -50,3 +50,6 @@ dependencies:
   - name: postgresql
     condition: postgresql.enabled
     version: 10.16.3
+  - name: superset
+    version: 0.1.0
+    condition: superset.enabled
