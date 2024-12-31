@@ -320,11 +320,19 @@ In the below instructions, `demo` is the environment name. You can change it as 
 | `proxy_private_key` | SSL private key |
 | `proxy_certificate` | SSL public key |
 
-4. Set up the GCP credentials and login by running the following command:
+4. Set up the AWS  credentials and login by running the following command:
 
-    ```bash
-    gcloud auth login
-    ```
+```bash
+export AWS_ACCESS_KEY_ID=<your-access-key-id>
+export AWS_SECRET_ACCESS_KEY=<your-secret-access-key>
+export AWS_DEFAULT_REGION=<your-region>
+```
+
+Alternatively, you can use the `aws configure` method to set up the credentials:
+
+```bash
+aws configure
+```
 
 5. Run the installation script:
 
