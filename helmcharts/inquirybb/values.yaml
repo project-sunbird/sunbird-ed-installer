@@ -138,7 +138,9 @@ play_http: &play_http
   secret_key: "a-dummy-play-http-secret-key"
 schema: &schema
   base_path: "https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net/{{ .Values.global.azure_public_container_name }}/schemas/local"
-graph_passport: &graph_passport
+  base_gcp_path: "https://storage.googleapis.com/{{ .Values.global.gcp_public_bucket_name }}/schemas/local"
+  base_aws_path: "{{ .Values.global.aws_public_bucket_name }}/schemas/local"
+  graph_passport: &graph_passport
   key_base: "a-dummy-graph_passport-secret-key"
 installation: &installation
   id: ekstep

@@ -164,6 +164,9 @@ play_http: &play_http
   secret_key: "secretKey"
 schema: &schema
   base_path: "https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net/{{ .Values.global.azure_public_container_name }}/schemas/local"
+  base_gcp_path: "https://storage.googleapis.com/{{ .Values.global.gcp_public_bucket_name }}/schemas/local"
+  base_aws_path: "{{ .Values.global.aws_public_bucket_name }}/schemas/local"
+  
 graph_passport: &graph_passport
   key_base: "secretKey"
 installation: &installation
@@ -174,6 +177,7 @@ objectcategorydefinition: &objectcategorydefinition
   keyspace: "{{ .Values.global.env }}_category_store"
 
 global:
+  # cloud_provider: "azure" 
   redis: *redis
   elasticsearch: *es
   neo4j: *neo4j
@@ -189,6 +193,7 @@ global:
   provisioningAnnotations: *provisioningAnnotations
   keycloak_kid_keys_configmap: keycloak-kids-keys
   kong_desktop_device_consumer_names_for_opa: '["portal", "desktop"]'
+  
 
 content:
   opa_enabled: true

@@ -147,8 +147,7 @@ user_org_service_base_url: "http://userorg-service:9000"
 email_notification_subject: "User Account Deletion Notification"
 email_notification_regards: "Team"
 
-cloud_storage: 
-  type: "azure"
+
 
 log4j_console_properties: |
   # This affects logging for both user code and Flink
@@ -192,16 +191,26 @@ base_config: |
     job {
       env = "{{ .Values.global.env }}"
       enable.distributed.checkpointing = true
-      {{- if eq "oci" .Values.cloud_storage.type }}
+      {{- if eq "oci" .Values.global.cloud_provider }}
             statebackend {
               s3 {
                 storage {
                   endpoint = "{{ .Values.oci_flink_s3_storage_endpoint }}"
-                  container = "{{ .Values.flink_container_name }}"
+                  container = "{{ .Values.global.aws_public_bucket_name }}"
                   checkpointing.dir = "checkpoint"
                 }
               }
               base.url = "s3://"${job.statebackend.s3.storage.container}"/"${job.statebackend.s3.storage.checkpointing.dir}
+            }
+            {{- else if eq "gcp" .Values.global.cloud_provider }}
+            statebackend {
+              gcs {
+                storage {
+                  bucket = "{{ .Values.global.gcp_public_bucket_name }}"
+                  checkpointing.dir = "checkpoint"
+                }
+              }
+              base.url = "gs://"${job.statebackend.gcs.storage.bucket}"/"${job.statebackend.gcs.storage.checkpointing.dir}
             }
       {{- else }}
       statebackend {
@@ -241,7 +250,15 @@ base_config: |
         basePath = "{{.Values.global.elasticsearch.host}}:{{.Values.global.elasticsearch.port}}"
     }
     schema {
-      basePath = "{{- include "common.tplvalues.render" (dict "value" .Values.global.schema.base_path "context" $) }}"
+      basePath = {{- if eq .Values.global.cloud_provider "azure" -}}
+  "{{ include "common.tplvalues.render" (dict "value" .Values.global.schema.base_path "context" $) }}"
+  {{- else if eq .Values.global.cloud_provider "gcp" -}}
+    "{{ include "common.tplvalues.render" (dict "value" .Values.global.schema.base_gcp_path "context" $) }}"
+  {{- else if eq .Values.global.cloud_provider "aws" -}}
+    "{{ include "common.tplvalues.render" (dict "value" .Values.global.schema.base_aws_path "context" $) }}"
+  {{- else -}}
+    unsupported-cloud-provider
+  {{- end }}
       supportedVersion = {
         itemset = "2.0"
       }
@@ -275,7 +292,16 @@ flink_jobs:
       cloud_storage_key: "{{ .Values.global.azure_storage_account_name }}"
       cloud_storage_secret: "{{ .Values.global.azure_storage_account_key }}"
       cloud_storage_endpoint: ""
-      cloud_storage_container: "{{ .Values.global.azure_public_container_name }}"
+      cloud_storage_container: 
+        {{- if eq .Values.global.cloud_provider "azure" -}}
+        "{{ .Values.global.azure_public_container_name }}"
+        {{- else if eq .Values.global.cloud_provider "gcp" -}}
+          "{{ .Values.global.gcp_public_bucket_name }}"
+        {{- else if eq .Values.global.cloud_provider "aws" -}}
+          "{{ .Values.global.aws_public_bucket_name }}"
+        {{- else -}}
+          "unsupported-cloud-provider"
+        {{- end }}
 
       master.category.validation.enabled ="{{ .Values.master_category_validation_enabled }}"
       cloudstorage {
@@ -323,7 +349,16 @@ flink_jobs:
       cloud_storage_key: "{{ .Values.global.azure_storage_account_name }}"
       cloud_storage_secret: "{{ .Values.global.azure_storage_account_key }}"
       cloud_storage_endpoint: ""
-      cloud_storage_container: "{{ .Values.global.azure_public_container_name }}"
+      cloud_storage_container: 
+        {{- if eq .Values.global.cloud_provider "azure" -}}
+        "{{ .Values.global.azure_public_container_name }}"
+        {{- else if eq .Values.global.cloud_provider "gcp" -}}
+          "{{ .Values.global.gcp_public_bucket_name }}"
+        {{- else if eq .Values.global.cloud_provider "aws" -}}
+          "{{ .Values.global.aws_public_bucket_name }}"
+        {{- else -}}
+          "unsupported-cloud-provider"
+        {{- end }}
       
       master.category.validation.enabled ="{{ .Values.master_category_validation_enabled }}"
       cloudstorage {

@@ -357,24 +357,39 @@ base_config: |
     job {
       env = "{{ .Values.global.env }}"
       enable.distributed.checkpointing = true
+      {{- if eq "oci" .Values.global.cloud_provider }}
+            statebackend {
+              s3 {
+                storage {
+                  endpoint = "{{ .Values.oci_flink_s3_storage_endpoint }}"
+                  container = "{{ .Values.global.aws_public_bucket_name }}"
+                  checkpointing.dir = "checkpoint"
+                }
+              }
+              base.url = "s3://"${job.statebackend.s3.storage.container}"/"${job.statebackend.s3.storage.checkpointing.dir}
+            }
+            {{- else if eq "gcp" .Values.global.cloud_provider }}
+            statebackend {
+              gcs {
+                storage {
+                  bucket = "{{ .Values.global.gcp_public_bucket_name }}"
+                  checkpointing.dir = "checkpoint"
+                }
+              }
+              base.url = "gs://"${job.statebackend.gcs.storage.bucket}"/"${job.statebackend.gcs.storage.checkpointing.dir}
+            }
+      {{- else }}
       statebackend {
         blob {
           storage {
-            account = {{- if eq .Values.checkpoint_store_type "azure" -}}
-              "{{- .Values.global.azure_storage_account_name }}.blob.core.windows.net"
-             {{- else if eq .Values.checkpoint_store_type "s3" -}}
-              "{{- .Values.flink_dp_storage_container }}"
-             {{- end }}
-            container = "{{ .Values.global.azure_flink_state_container_name }}"
+            account = "{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net"
+            container = "{{ .Values.global.azure_public_container_name }}"
             checkpointing.dir = "checkpoint"
           }
         }
-        {{- if eq .Values.checkpoint_store_type "azure" }}
         base.url = "wasbs://"${job.statebackend.blob.storage.container}"@"${job.statebackend.blob.storage.account}"/"${job.statebackend.blob.storage.checkpointing.dir}
-        {{- else if eq .Values.checkpoint_store_type "s3" }}
-        base.url = "s3://"${job.statebackend.blob.storage.container}"/"${job.statebackend.blob.storage.checkpointing.dir}
-        {{ end }}
       }
+    {{- end }}
     }
     task {
       parallelism = 1

@@ -283,17 +283,40 @@ base_config: |
       job {
         env = "dev"
         enable.distributed.checkpointing = false
-        statebackend {
-          blob {
-            storage {
-              account = "{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net"
-              container = "{{ .Values.global.azure_flink_state_container_name }}"
-              checkpointing.dir = "checkpoint"
+        {{- if eq "oci" .Values.global.cloud_provider }}
+            statebackend {
+              s3 {
+                storage {
+                  endpoint = "{{ .Values.oci_flink_s3_storage_endpoint }}"
+                  container = "{{ .Values.global.aws_public_bucket_name }}"
+                  checkpointing.dir = "checkpoint"
+                }
+              }
+              base.url = "s3://"${job.statebackend.s3.storage.container}"/"${job.statebackend.s3.storage.checkpointing.dir}
             }
+            {{- else if eq "gcp" .Values.global.cloud_provider }}
+            statebackend {
+              gcs {
+                storage {
+                  bucket = "{{ .Values.global.gcp_public_bucket_name }}"
+                  checkpointing.dir = "checkpoint"
+                }
+              }
+              base.url = "gs://"${job.statebackend.gcs.storage.bucket}"/"${job.statebackend.gcs.storage.checkpointing.dir}
+            }
+      {{- else }}
+      statebackend {
+        blob {
+          storage {
+            account = "{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net"
+            container = "{{ .Values.global.azure_public_container_name }}"
+            checkpointing.dir = "checkpoint"
           }
-          base.url = "wasbs://"${job.statebackend.blob.storage.container}"@"${job.statebackend.blob.storage.account}"/"${job.statebackend.blob.storage.checkpointing.dir}
         }
+        base.url = "wasbs://"${job.statebackend.blob.storage.container}"@"${job.statebackend.blob.storage.account}"/"${job.statebackend.blob.storage.checkpointing.dir}
       }
+    {{- end }}
+    }
       task {
         parallelism = 1
         consumer.parallelism = 1

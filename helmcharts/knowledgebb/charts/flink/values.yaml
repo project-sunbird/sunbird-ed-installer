@@ -166,17 +166,40 @@ base_config: |
   job {
     env = "{{ .Values.global.env }}"
     enable.distributed.checkpointing = false
-    statebackend {
-      blob {
-        storage {
-          account = "{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net"
-          container = "{{ .Values.global.azure_public_container_name }}"
-          checkpointing.dir = "checkpoint"
+    {{- if eq "oci" .Values.global.cloud_provider }}
+            statebackend {
+              s3 {
+                storage {
+                  endpoint = "{{ .Values.oci_flink_s3_storage_endpoint }}"
+                  container = "{{ .Values.global.aws_public_bucket_name }}"
+                  checkpointing.dir = "checkpoint"
+                }
+              }
+              base.url = "s3://"${job.statebackend.s3.storage.container}"/"${job.statebackend.s3.storage.checkpointing.dir}
+            }
+            {{- else if eq "gcp" .Values.global.cloud_provider }}
+            statebackend {
+              gcs {
+                storage {
+                  bucket = "{{ .Values.global.gcp_public_bucket_name }}"
+                  checkpointing.dir = "checkpoint"
+                }
+              }
+              base.url = "gs://"${job.statebackend.gcs.storage.bucket}"/"${job.statebackend.gcs.storage.checkpointing.dir}
+            }
+      {{- else }}
+      statebackend {
+        blob {
+          storage {
+            account = "{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net"
+            container = "{{ .Values.global.azure_public_container_name }}"
+            checkpointing.dir = "checkpoint"
+          }
         }
+        base.url = "wasbs://"${job.statebackend.blob.storage.container}"@"${job.statebackend.blob.storage.account}"/"${job.statebackend.blob.storage.checkpointing.dir}
       }
-      base.url = "wasbs://"${job.statebackend.blob.storage.container}"@"${job.statebackend.blob.storage.account}"/"${job.statebackend.blob.storage.checkpointing.dir}
+    {{- end }}
     }
-  }
   task {
     parallelism = 1
     consumer.parallelism = 1
@@ -247,7 +270,16 @@ flink_jobs:
       cloudstorage.read_base_path="{{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_read_base_path "context" $) }}"
       cloudstorage.write_base_path=["https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net"] 
       cloudstorage.mecloudstorage.metadata.list={{ .Values.cloudstorage_metadatalist }}
-      cloud_storage_container="{{ .Values.global.azure_public_container_name }}"
+      cloud_storage_container: 
+        {{- if eq .Values.global.cloud_provider "azure" -}}
+        "{{ .Values.global.azure_public_container_name }}"
+        {{- else if eq .Values.global.cloud_provider "gcp" -}}
+          "{{ .Values.global.gcp_public_bucket_name }}"
+        {{- else if eq .Values.global.cloud_provider "aws" -}}
+          "{{ .Values.global.aws_public_bucket_name }}"
+        {{- else -}}
+          "unsupported-cloud-provider"
+        {{- end }}
 
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m

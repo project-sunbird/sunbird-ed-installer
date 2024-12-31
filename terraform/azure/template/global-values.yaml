@@ -1,4 +1,5 @@
 global:
+  cloud_provider: "azure" 
   release_version: release-7.0.0
   # Provide your domain name
   # Example: sunbird.com
