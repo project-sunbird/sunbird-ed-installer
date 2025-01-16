@@ -58,7 +58,7 @@ function certificate_config() {
 }
 function install_component() {
     # We need a dummy cm for configmap to start. Later Lernbb will create real one
-    kubectl create confifmap keycloak-key -n sunbird 2>/dev/null || true
+    kubectl create configmap keycloak-key -n sunbird 2>/dev/null || true
     local current_directory="$(pwd)"
     if [ "$(basename $current_directory)" != "helmcharts" ]; then
         cd ../../../helmcharts 2>/dev/null || true
@@ -73,6 +73,8 @@ function install_component() {
     ### Generate the key pair required for certificate template
     if [ $component = "learnbb" ]; then
         if [ -f "certkey.pem" ] && [ -f "certpubkey.pem" ]; then
+            echo "Certificate keys are already created. Skipping the keys creation..."
+        else
           certificate_keys
         fi
     fi
@@ -81,7 +83,7 @@ function install_component() {
         -f "../terraform/azure/$environment/global-values.yaml" \
         -f "../terraform/azure/$environment/global-values-jwt-tokens.yaml" \
         -f "../terraform/azure/$environment/global-values-rsa-keys.yaml" \
-        -f "../terraform/azure/$environment/global-cloud-values.yaml" --timeout 30m --debug
+        -f "../terraform/azure/$environment/global-cloud-values.yaml" --timeout 30m 
 }
 
 function install_helm_components() {

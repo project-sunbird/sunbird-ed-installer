@@ -18,6 +18,7 @@
 9. PyJwt python package (you can using using pip)
 10. [kubectl](https://kubernetes.io/docs/tasks/tools/)
 11. [helm](https://helm.sh/docs/intro/quickstart/#install-helm)
+12. Postman CLI (https://learning.postman.com/docs/getting-started/installation/installation-and-updates/)
 
 **Note:**
 
@@ -58,3 +59,16 @@ cd dev
 ```
 2. Update required values in `environment.hcl` and `global-values.yaml` files
 3. Run `bash install.sh`
+
+## Default users in the instance 
+This installation setup creates the following default users with different roles. Feel free to update the password using "Forgot password" option or create new users using API's
+
+|Role	|Email/User Name	|Password|
+|-----|-----------------|----------|
+|Admin	|admin@yopmail.com	| Admin@123|
+|Content Creator|	contentcreator@yopmail.com	| Creator@123|
+|Content Reviewer |	contentreviewer@yopmail.com |	Reviewer@123|
+|Book Creator	| bookcreator@yopmail.com	| Bookcreator@123|
+|Book Reviewer	| bookreviewer@yopmail.com	| bookReviewer@123|
+|Public User 1	| user3@yopmail.com	| User1@123|
+|Public User 2	| user2@yopmail.com	| User2@123|
