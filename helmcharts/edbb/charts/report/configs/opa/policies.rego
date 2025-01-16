@@ -5,6 +5,8 @@ import input.attributes.request.http as http_request
 
 x_authenticated_user_token := http_request.headers["x-authenticated-user-token"]
 
+api_key := trim_prefix(http_request.headers.authorization, "Bearer ")
+
 urls_to_action_mapping := {
   "/report/get": "getReport",
   "/report/list": "listReports",
@@ -51,11 +53,21 @@ createReport {
   super.is_an_internal_request
 }
 
+createReport {
+  [_, payload, _] := io.jwt.decode(api_key)
+  payload.iss == "api_admin"
+}
+
 deleteReport {
   acls := ["deleteReport"]
   roles := ["REPORT_ADMIN", "ORG_ADMIN"]
   super.acls_check(acls)
   super.role_check(roles)
+}
+
+updateReport {
+  [_, payload, _] := io.jwt.decode(api_key)
+  payload.iss == "api_admin"
 }
 
 updateReport {

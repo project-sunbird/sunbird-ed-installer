@@ -3,7 +3,7 @@ DATA_DIR=/data/analytics/logs/data-products
 [[ -d $DATA_DIR ]] || mkdir -p $DATA_DIR
 SERVICE_LOGS=/data/analytics/logs/services
 [[ -d $SERVICE_LOGS ]] || mkdir -p $SERVICE_LOGS
-export SPARK_HOME=/opt/bitnami/spark
+export SPARK_HOME={{ .Values.global.spark_home }}
 export MODELS_HOME={{ .Values.analytics_home }}/models-2.0
 export DP_LOGS=$DATA_DIR
 export SERVICE_LOGS=$SERVICE_LOGS

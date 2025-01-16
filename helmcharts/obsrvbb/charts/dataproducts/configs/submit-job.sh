@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-export SPARK_HOME=/opt/bitnami/spark
+export SPARK_HOME={{ .Values.global.spark_home }}
 export MODELS_HOME={{ .Values.analytics.home }}/models-{{ .Values.model_version }}
 export DP_LOGS={{ .Values.analytics.home }}/logs/data-products
-export KAFKA_HOME={{ .Values.analytics.soft_path }}/kafka_2.11-0.10.1.0
+export KAFKA_HOME=/opt/bitnami/kafka_2.12-2.8.0
 
 ## job broker-list and kafka-topic
 job_brokerList={{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}
