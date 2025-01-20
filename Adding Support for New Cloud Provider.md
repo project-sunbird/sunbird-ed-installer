@@ -1,4 +1,4 @@
-```# Adding Support for a New Cloud Provider
+# Adding Support for a New Cloud Provider
 
 ## Requirements
 
