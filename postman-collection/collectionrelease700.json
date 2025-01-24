@@ -1229,7 +1229,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"request\": {\n                \"id\": \"groupsTnc\",\n                \"field\": \"groupsTnc\",\n                \"value\": \"{\\\"latestVersion\\\":\\\"3.5.0\\\",\\\"3.5.0\\\":{\\\"url\\\":\\\"https:\\/\\/sunbirdstagingpublic.blob.core.windows.net\\/termsandcondtions\\/terms-and-conditions-v9.html#groupGuidelines\\\"}}\"\n    }\n\n}"
+							"raw": "{\n  \"request\": {\n                \"id\": \"groupsTnc\",\n                \"field\": \"groupsTnc\",\n                \"value\": \"{\\\"latestVersion\\\":\\\"3.5.0\\\",\\\"3.5.0\\\":{\\\"url\\\":\\\"https:\\/\\/{{blob_store_path}}.blob.core.windows.net\\/termsandcondtions\\/terms-and-conditions-v9.html#groupGuidelines\\\"}}\"\n    }\n\n}"
 						},
 						"url": {
 							"raw": "{{host}}/api/data/v1/system/settings/set",
@@ -1386,7 +1386,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"request\": {\n        \"id\": \"tncConfig\",\n        \"field\": \"tncConfig\",\n        \"value\": \"{\\\"latestVersion\\\":\\\"3.5.0\\\",\\\"3.5.0\\\":{\\\"url\\\":\\\"https:\\/\\/sunbirdstagingpublic.blob.core.windows.net\\/terms-and-conditions\\/terms-and-conditions-v9.html#termsOfUse\\\"}}\"\n    }\n}",
+							"raw": "{\n    \"request\": {\n        \"id\": \"tncConfig\",\n        \"field\": \"tncConfig\",\n        \"value\": \"{\\\"latestVersion\\\":\\\"3.5.0\\\",\\\"3.5.0\\\":{\\\"url\\\":\\\"https:\\/\\/{{blob_store_path}}.blob.core.windows.net\\/terms-and-conditions\\/terms-and-conditions-v9.html#termsOfUse\\\"}}\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -9275,7 +9275,7 @@
 			"name": "4 - Portal Basic",
 			"item": [
 				{
-					"name": "1 - FAQ link",
+					"name": "1 - portal FAQ link",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -9301,6 +9301,29 @@
 						},
 						"url": "{{host}}/api/data/v1/system/settings/set",
 						"description": "{\"request\":{\"type\":\"content\",\"action\":\"save\",\"subType\":\"resource\"}}"
+					},
+					"response": []
+				},
+				{
+					"name": "2- app FAQ link",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"request\": {\n            \"id\": \"appFaqURL\",\n            \"field\": \"appFaqURL\",\n            \"value\": \"https://{{blob_store_path}}.blob.core.windows.net/public/app-faq/resources/res\"\n        }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{host}}/api/data/v1/system/settings/set"
 					},
 					"response": []
 				}
