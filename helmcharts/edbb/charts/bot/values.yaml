@@ -5,7 +5,7 @@ replicaCount: 1
 
 image:
   repository: sunbirded.azurecr.io/bot
-  tag: "release-3.9.0_RC1_30_bot"
+  tag: "release-5.1.0_RC1_29_bot"
   pullPolicy: IfNotPresent
   pullSecrets: []
 

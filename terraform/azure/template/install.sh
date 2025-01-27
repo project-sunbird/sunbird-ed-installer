@@ -34,11 +34,15 @@ function certificate_keys() {
     echo "Creation of RSA keys for certificate signing"
     openssl genrsa -out ../terraform/azure/$environment/certkey.pem;
     openssl rsa -in ../terraform/azure/$environment/certkey.pem -pubout -out ../terraform/azure/$environment/certpubkey.pem;
-    CERTPRIVATEKEY=`sed 's/KEY-----/KEY-----\\n/g' ../terraform/azure/$environment/certkey.pem | sed 's/-----END/\\n-----END/g' | awk '{printf("%s",$0)}' `
-    echo "CERTIFICATE_PRIVATE_KEY: \""$CERTPRIVATEKEY"\"" >> ../terraform/azure/$environment/global-values.yaml
-    awk '{if($0 !~ /END/)  printf "%s\\r\\n",$0;} END{printf "-----END PUBLIC KEY-----"}' ../terraform/azure/$environment/certpubkey.pem |awk '{print "CERTIFICATE_PUBLIC_KEY: \""$0"\""}' >> ../terraform/azure/$environment/global-values.yaml
-    echo "CERTIFICATESIGN_PRIVATE_KEY: \""$CERTPRIVATEKEY"\"" >> ../terraform/azure/$environment/global-values.yaml
-    awk '{if($0 !~ /END/)  printf "%s\\r\\n",$0;} END{printf "-----END PUBLIC KEY-----"}' ../terraform/azure/$environment/certpubkey.pem |awk '{print "CERTIFICATESIGN_PUBLIC_KEY: \""$0"\""}' >> ../terraform/azure/$environment/global-values.yaml
+    CERTPRIVATEKEY=$(sed 's/KEY-----/KEY-----\\n/g' ../terraform/azure/$environment/certkey.pem | sed 's/-----END/\\n-----END/g' | awk '{printf("%s",$0)}')
+    CERTPUBLICKEY=$(sed 's/KEY-----/KEY-----\\n/g' ../terraform/azure/$environment/certpubkey.pem | sed 's/-----END/\\n-----END/g' | awk '{printf("%s",$0)}')
+    CERTIFICATESIGNPRKEY=$(sed 's/BEGIN PRIVATE KEY-----/BEGIN PRIVATE KEY-----\\\\n/g' ../terraform/azure/$environment/certkey.pem | sed 's/-----END PRIVATE KEY/\\\\n-----END PRIVATE KEY/g' | awk '{printf("%s",$0)}')
+    CERTIFICATESIGNPUKEY=$(sed 's/BEGIN PUBLIC KEY-----/BEGIN PUBLIC KEY-----\\\\n/g' ../terraform/azure/$environment/certpubkey.pem | sed 's/-----END PUBLIC KEY/\\\\n-----END PUBLIC KEY/g' | awk '{printf("%s",$0)}')
+    printf "\n" >> ../terraform/azure/$environment/global-values.yaml
+    echo "  CERTIFICATE_PRIVATE_KEY: \"$CERTPRIVATEKEY\"" >> ../terraform/azure/$environment/global-values.yaml
+    echo "  CERTIFICATE_PUBLIC_KEY: \"$CERTPUBLICKEY\"" >> ../terraform/azure/$environment/global-values.yaml
+    echo "  CERTIFICATESIGN_PRIVATE_KEY: \"$CERTIFICATESIGNPRKEY\"" >> ../terraform/azure/$environment/global-values.yaml
+    echo "  CERTIFICATESIGN_PUBLIC_KEY: \"$CERTIFICATESIGNPUKEY\"" >> ../terraform/azure/$environment/global-values.yaml
 }
 
 function certificate_config() {
@@ -71,19 +75,24 @@ function install_component() {
         ed_values_flag="-f $component/ed-values.yaml --wait --wait-for-jobs"
     fi
     ### Generate the key pair required for certificate template
-    if [ $component = "learnbb" ]; then
+      if [ $component = "learnbb" ]; then
+        if kubectl get job keycloak-kids-keys -n sunbird >/dev/null 2>&1; then
+            echo "Deleting existing job keycloak-kids-keys..."
+            kubectl delete job keycloak-kids-keys -n sunbird
+        fi
+
         if [ -f "certkey.pem" ] && [ -f "certpubkey.pem" ]; then
             echo "Certificate keys are already created. Skipping the keys creation..."
         else
-          certificate_keys
+            certificate_keys
         fi
-    fi
+      fi
     helm upgrade --install "$component" "$component" --namespace sunbird -f "$component/values.yaml" \
         $ed_values_flag \
         -f "../terraform/azure/$environment/global-values.yaml" \
         -f "../terraform/azure/$environment/global-values-jwt-tokens.yaml" \
         -f "../terraform/azure/$environment/global-values-rsa-keys.yaml" \
-        -f "../terraform/azure/$environment/global-cloud-values.yaml" --timeout 30m 
+        -f "../terraform/azure/$environment/global-cloud-values.yaml" --timeout 30m --debug
 }
 
 function install_helm_components() {
@@ -94,7 +103,7 @@ function install_helm_components() {
 }
 
 function dns_mapping() {
-    domain_name=$(kubectl get cm -n sunbird report-env -ojsonpath='{.data.SUNBIRD_ENV}')
+    domain_name=$(kubectl get cm -n sunbird lms-env -ojsonpath='{.data.sunbird_web_url}')
     PUBLIC_IP=$(kubectl get svc -n sunbird nginx-public-ingress -ojsonpath='{.status.loadBalancer.ingress[0].ip}')
 
     local timeout=$((SECONDS + 1200))
@@ -124,11 +133,12 @@ function generate_postman_env() {
     if [ "$(basename $current_directory)" != "$environment" ]; then
         cd ../terraform/azure/$environment 2>/dev/null || true
     fi
-    domain_name=$(kubectl get cm -n sunbird report-env -ojsonpath='{.data.SUNBIRD_ENV}')
+    domain_name=$(kubectl get cm -n sunbird lms-env -ojsonpath='{.data.sunbird_web_url}')
+    blob_store_path=$(kubectl get cm -n sunbird player-env -ojsonpath='{.data.cloud_private_storage_accountname}')
     api_key=$(kubectl get cm -n sunbird player-env -ojsonpath='{.data.sunbird_api_auth_token}')
     keycloak_secret=$(kubectl get cm -n sunbird player-env -ojsonpath='{.data.sunbird_portal_session_secret}')
-    keycloak_admin=$(kubectl get cm -n sunbird learner-env -ojsonpath='{.data.sunbird_sso_username}')
-    keycloak_password=$(kubectl get cm -n sunbird learner-env -ojsonpath='{.data.sunbird_sso_password}')
+    keycloak_admin=$(kubectl get cm -n sunbird userorg-env -ojsonpath='{.data.sunbird_sso_username}')
+    keycloak_password=$(kubectl get cm -n sunbird userorg-env -ojsonpath='{.data.sunbird_sso_password}')
     generated_uuid=$(uuidgen)
     temp_file=$(mktemp)
     cp postman.env.json "${temp_file}"
@@ -138,6 +148,7 @@ function generate_postman_env() {
         -e "s|REPLACE_WITH_KEYCLOAK_ADMIN|${keycloak_admin}|g" \
         -e "s|REPLACE_WITH_KEYCLOAK_PASSWORD|${keycloak_password}|g" \
         -e "s|GENERATE_UUID|${generated_uuid}|g" \
+        -e "s|BLOB_STORE_PATH|${blob_store_path}|g" \
         "${temp_file}" >"env.json"
 
     echo -e "A env.json file is created in this directory: terraform/azure/$environment"
@@ -146,10 +157,9 @@ function generate_postman_env() {
 
 function restart_workloads_using_keys() {
     echo -e "\nRestart workloads using keycloak keys and wait for them to start..."
-    kubectl rollout restart deployment -n sunbird neo4j knowledge-mw player report content adminutil cert-registry groups learner lms notification registry analytics
-    kubectl rollout status deployment -n sunbird neo4j knowledge-mw player report content adminutil cert-registry groups learner lms notification registry analytics
+    kubectl rollout restart deployment -n sunbird neo4j knowledge-mw player report content adminutil cert-registry groups userorg lms notification registry analytics
+    kubectl rollout status deployment -n sunbird neo4j knowledge-mw player report content adminutil cert-registry groups userorg lms notification registry analytics
     echo -e "\nWaiting for all pods to start"
-    certificate_config
 }
 
 function run_post_install() {
@@ -157,6 +167,48 @@ function run_post_install() {
     if [ "$(basename $current_directory)" != "$environment" ]; then
         cd ../terraform/azure/$environment 2>/dev/null || true
     fi
+    check_pod_status
+    echo "Starting post install..."
+    cp ../../../postman-collection/collection${RELEASE}.json .
+    postman collection run collection${RELEASE}.json --environment env.json --delay-request 500 --bail --insecure
+}
+
+function create_client_forms() {
+    local current_directory="$(pwd)"
+    if [ "$(basename $current_directory)" != "$environment" ]; then
+        cd ../terraform/azure/$environment 2>/dev/null || true
+    fi
+    cp -rf ../../../postman-collection/ED-${RELEASE}  .
+    check_pod_status
+    #loop through files inside collection folder
+    for FILES in ED-${RELEASE}/*.json; do
+     echo "Creating client forms in.. $FILES"
+      postman collection run $FILES --environment env.json --delay-request 500 --bail --insecure
+    done 
+   }
+
+function cleanworkspace() {
+        rm  certkey.pem certpubkey.pem
+        sed -i '/CERTIFICATE_PRIVATE_KEY:/d' global-values.yaml
+        sed -i '/CERTIFICATE_PUBLIC_KEY:/d' global-values.yaml
+        sed -i '/CERTIFICATESIGN_PRIVATE_KEY:/d' global-values.yaml
+        sed -i '/CERTIFICATESIGN_PUBLIC_KEY:/d' global-values.yaml
+        echo "cleanup completed"
+}
+function destroy_tf_resources() {
+    source tf.sh
+    cleanworkspace
+    echo -e "Destroying resources on azure cloud"
+    terragrunt run-all destroy
+}
+
+function invoke_functions() {
+    for func in "$@"; do
+        $func
+    done
+}
+
+function check_pod_status() {
     echo -e "\nRemove any orphaned pods if they exist."
     kubectl get pod -n sunbird --no-headers | grep -v Completed | grep -v Running | awk '{print $1}' | xargs -I {} kubectl delete -n sunbird pod {} || true
     local timeout=$((SECONDS + 600))
@@ -180,32 +232,9 @@ function run_post_install() {
         sleep 10
     done
     echo "All pods are running successfully."
-    echo "Starting post install..."
-    cp ../../../postman-collection/collection${RELEASE}.json .
-    postman collection run collection${RELEASE}.json --environment env.json --delay-request 500 --bail --insecure
-}
-function cleanworkspace() {
-        rm  certkey.pem certpubkey.pem
-        sed -i '/CERTIFICATE_PRIVATE_KEY:/d' global-values.yaml
-        sed -i '/CERTIFICATE_PUBLIC_KEY:/d' global-values.yaml
-        sed -i '/CERTIFICATESIGN_PRIVATE_KEY:/d' global-values.yaml
-        sed -i '/CERTIFICATESIGN_PUBLIC_KEY:/d' global-values.yaml
-        echo "cleanup completed"
-}
-function destroy_tf_resources() {
-    source tf.sh
-    cleanworkspace
-    echo -e "Destroying resources on azure cloud"
-    terragrunt run-all destroy
 }
 
-function invoke_functions() {
-    for func in "$@"; do
-        $func
-    done
-}
-
-RELEASE="release600"
+RELEASE="release700"
 POSTMAN_COLLECTION_LINK="https://api.postman.com/collections/5338608-e28d5510-20d5-466e-a9ad-3fcf59ea9f96?access_key=PMAT-01HMV5SB2ZPXCGNKD74J7ARKRQ"
 CERTPUBLICKEY=""
 CERTPRIVATEKEY=""
@@ -219,9 +248,11 @@ if [ $# -eq 0 ]; then
     install_helm_components
     cd ../terraform/azure/$environment
     restart_workloads_using_keys
+    certificate_config
     dns_mapping
     generate_postman_env
     run_post_install
+    create_client_forms
 else
     case "$1" in
     "create_tf_backend")
@@ -251,6 +282,9 @@ else
         ;;
     "certificate_config")
         certificate_config
+        ;;
+    "create_client_forms")
+        create_client_forms
         ;;
     *)
         invoke_functions "$@"

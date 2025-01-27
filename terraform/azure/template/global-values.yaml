@@ -1,8 +1,18 @@
 global:
-  release_version: release-6.0.0
+  release_version: release-7.0.0
   # Provide your domain name
   # Example: sunbird.com
   domain: "REPLACE_ME"
+  # Provide values for the following variables
+  sunbird_google_captcha_site_key: 
+  google_captcha_private_key: 
+  sunbird_google_oauth_clientId: 
+  sunbird_google_oauth_clientSecret: 
+  mail_server_from_email: ""
+  sunbird_msg_91_auth: ""
+  sunbird_msg_sender: ""
+  mail_server_password: ""
+  youtube_apikey: ""
   # The merge domain is optional and is required only if user merge workflow is required.
   # For most audience, this workflow is not required. If you need this workflow, then
   # set the value of merge_domain_status to "true" and provide a subdomain / another domain
@@ -66,3 +76,4 @@ global:
     REPLACE_ME
   proxy_certificate: |
     REPLACE_ME
+  # CERTIFICATE-KEYS 

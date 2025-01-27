@@ -124,7 +124,7 @@ keycloak_user: admin
 keycloak_password: admin
 keycloak_database_type: postgres
 keycloak_database_name: keycloak
-sunbird_user_service_base_url: "http://learner-service:9000"
+sunbird_user_service_base_url: "http://userorg-service:9000"
 nodebb_client_secret: "nodebb"
 trampoline_client_secret: "trampoline"
 android_client_secret: "android"

@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: sunbirded.azurecr.io/data-pipeline
-  tag: release-5.3.1_df6c38d_41
+  tag: release-7.0.0_RC5_4a07143_21
   pullPolicy: IfNotPresent
   pullSecrets: []
 
@@ -111,7 +111,7 @@ taskmanager:
 
 # Azure Container Details
 checkpoint_store_type: "azure"
-cloud_storage_flink_bucketname: flink-state-backend
+cloud_storage_flink_bucketname: "{{ .Values.global.azure_flink_state_container_name }}"
 
 # AWS S3 Details
 s3_access_key: ""
@@ -143,11 +143,12 @@ sunbird_msg_91_auth: "your-msg-91-auth-key"
 
 cassandra_isMultiDCEnabled: false
 kp_schema_base_path: "https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net/{{ .Values.global.azure_public_container_name }}/schemas/local"
+lms_service_base_url: "http://lms-service:9000"
 kp_search_service_base_url: "http://search-service:9000"
 content_read_api_host: "http://content-service:9000"
 content_read_api_endpoint: "content/v3/read/"
 content_service_base_url: "http://content-service:9000"
-learner_service_base_url: "http://learner-service:9000"
+userorg_service_base_url: "http://userorg-service:9000"
 cert_reg_service_base_url: "http://certreg:9000/certreg"
 enc_service_base_url: "http://enc:9000/enc"
 cert_rc_base_url: "http://registry-service:8081/api/v1"
@@ -306,6 +307,10 @@ mail_server_password: "password"
 mail_server_host: "smtp.sendgrid.net"
 mail_server_port: "587"
 
+### User-deletion-cleanup Job vars
+user_deletion_cleanup_job_parallelism: 1
+sunbird_keycloak_user_federation_provider_id: "cassandrafederationid"
+
 log4j_console_properties: |
   # This affects logging for both user code and Flink
   rootLogger.level = INFO
@@ -360,7 +365,7 @@ base_config: |
              {{- else if eq .Values.checkpoint_store_type "s3" -}}
               "{{- .Values.flink_dp_storage_container }}"
              {{- end }}
-            container = "{{ .Values.cloud_storage_flink_bucketname }}"
+            container = "{{ .Values.global.azure_flink_state_container_name }}"
             checkpointing.dir = "checkpoint"
           }
         }
@@ -412,7 +417,12 @@ base_config: |
       port = "{{ .Values.global.cassandra.port }}"
       isMultiDCEnabled = "{{ .Values.cassandra_isMultiDCEnabled }}"
     }
-
+    ml-mongo {
+        host = ""
+        port = "27017"
+        database = ""
+    }
+    sunbird_instance_name = "Sunbird"
 flink_jobs:
   activity-aggregate-updater:
     enabled: true
@@ -578,12 +588,18 @@ flink_jobs:
         assessment_aggregator.table = "{{ .Values.middleware_assessment_aggregator_table }}"
         user_activity_agg.table = "{{ .Values.middleware_user_activity_agg_table }}"
       }
+      redis {
+          database {
+            contentCache.id = 5
+            collectionCache.id = 0
+          }
+      }
       cert_domain_url = "https://{{ .Values.global.domain }}"
       user_read_api = "/private/user/v1/read"
       content_read_api = "/content/v3/read"
       service {
         content.basePath = "{{ .Values.content_service_base_url }}"
-        learner.basePath = "{{ .Values.learner_service_base_url }}"
+        learner.basePath = "{{ .Values.userorg_service_base_url }}"
       }
       enable.suppress.exception = "{{ include "common.tplvalues.render" (dict "value" .Values.collection_certificate_pre_processor_enable_suppress_exception "context" $) }}"
       redis-meta {
@@ -641,10 +657,11 @@ flink_jobs:
       cloud_storage_cname_url = "{{ include "common.tplvalues.render" (dict "value" .Values.cloud_storage_cname_url "context" $) }}"
       service {
         certreg.basePath = "{{ .Values.cert_reg_service_base_url }}"
-        learner.basePath = "{{ .Values.learner_service_base_url }}"
+        learner.basePath = "{{ .Values.userorg_service_base_url }}"
         enc.basePath = "{{ .Values.enc_service_base_url }}"
         rc.basePath = "{{ .Values.cert_rc_base_url }}"
         rc.entity = "{{ .Values.cert_rc_entity }}"
+        rc.rcApiKey = "{{ .Values.sunbird_api_auth_token }}"
       }
       enable.suppress.exception = "{{ include "common.tplvalues.render" (dict "value" .Values.collection_certificate_generator_enable_suppress_exception "context" $) }}"
       enable.rc.certificate = "{{ include "common.tplvalues.render" (dict "value" .Values.collection_certificate_generator_enable_rc_certificate "context" $) }}"
@@ -691,7 +708,7 @@ flink_jobs:
       cloud_storage_cname_url = "{{ include "common.tplvalues.render" (dict "value" .Values.cloud_storage_cname_url "context" $) }}"
       service {
         certreg.basePath = "{{ .Values.cert_reg_service_base_url }}"
-        learner.basePath = "{{ .Values.learner_service_base_url }}"
+        learner.basePath = "{{ .Values.userorg_service_base_url }}"
         enc.basePath = "{{ .Values.enc_service_base_url }}"
         rc.basePath = "{{ .Values.cert_rc_base_url }}"
         rc.entity = "{{ .Values.cert_rc_entity }}"
@@ -801,11 +818,11 @@ flink_jobs:
         parallelism = "{{ .Values.notification_job_parallelism }}"
       }
       fcm_account_key= "{{ .Values.core_vault_sunbird_fcm_account_key }}"
-      sms_auth_key= "{{ .Values.sunbird_msg_91_auth }}"
-      mail_server_from_email= "{{ .Values.sunbird_mail_server_from_email }}"
+      sms_auth_key= "{{ .Values.global.sunbird_msg_91_auth }}"
+      mail_server_from_email= "{{ .Values.global.mail_server_from_email }}"
       sms_default_sender= "{{ .Values.notification_msg_default_sender }}"
-      mail_server_username= "{{ .Values.mail_server_username }}"
-      mail_server_password= "{{ .Values.mail_server_password }}"
+      mail_server_username= "{{ .Values.global.mail_server_username }}"
+      mail_server_password= "{{ .Values.global.mail_server_password }}"
       mail_server_host= "{{ .Values.mail_server_host }}"
       mail_server_port= "{{ .Values.mail_server_port }}"
     flink-conf: |+
@@ -848,6 +865,46 @@ flink_jobs:
       jobmanager.execution.failover-strategy: region
       taskmanager.memory.network.fraction: 0.1
     job_classname: org.sunbird.dp.userinfo.task.ProgramUserInfoStreamTask
-
+  
+  user-deletion-cleanup:
+    enabled: true
+    config: |+
+      include file("/data/flink/conf/base-config.conf")
+      kafka {
+        input.topic = "{{ .Values.global.env }}.delete.user"
+        groupId = "{{ .Values.global.env }}-delete-user-group"
+      }
+      task {
+        user.deletion.cleanup.parallelism = "{{ .Values.user_deletion_cleanup_job_parallelism }}"
+      }
+  
+      service {
+          lms {
+              basePath = "{{ .Values.lms_service_base_url }}"
+          }
+          userorg {
+              basePath = "{{ .Values.userorg_service_base_url }}"
+          }
+      }
+  
+      sunbird_keycloak_user_federation_provider_id="{{ .Values.core_vault_sunbird_keycloak_user_federation_provider_id }}"
+      user_read_api = "/user/v5/read/"
+      batch_search_api = "/course/v1/batch/list"
+  
+      user {
+          keyspace = "sunbird"
+          lookup.table = "user_lookup"
+          table = "user"
+          externalIdentity.table = "usr_external_identity"
+          org.table = "user_organisation"
+      }
+    flink-conf: |+
+      jobmanager.memory.flink.size: 1024m
+      taskmanager.memory.flink.size: 1024m
+      taskmanager.numberOfTaskSlots: 1
+      parallelism.default: 1
+      jobmanager.execution.failover-strategy: region
+      taskmanager.memory.network.fraction: 0.1
+    job_classname: org.sunbird.job.deletioncleanup.task.UserDeletionCleanupStreamTask
 commonAnnotations:
   reloader.stakater.com/auto: "true"

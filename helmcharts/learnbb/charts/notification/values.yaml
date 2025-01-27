@@ -5,7 +5,7 @@ replicaCount: 1
 
 image:
   repository: sunbirded.azurecr.io/notification_service
-  tag: "release-5.4.0_4bc4b24_67"
+  tag: "release-7.0.0_RC2_42c4145_8"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
@@ -132,7 +132,7 @@ sunbird_sso_password: "admin"
 sunbird_keycloak_user_federation_provider_id: "cassandrafederationid"
 sunbird_keycloak_required_action_link_expiration_seconds: "2592000"
 keys_basepath: "/keys/"
-LEARNER_SERVICE_PORT: "http://learner-service:9000"
+LEARNER_SERVICE_PORT: "http://userorg-service:9000"
 sunbird_us_system_setting_url: "/api/data/v1/system/settings/list"
 sunbird_us_org_read_url: "/v1/org/read"
 notification_category_type_config: "certificateUpdate"

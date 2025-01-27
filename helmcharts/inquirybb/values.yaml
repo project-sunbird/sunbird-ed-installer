@@ -1,5 +1,5 @@
 fullname: inquirybb
-
+inquiry_automation_repo_branch: release-7.0.0
 provisioningAnnotations: &provisioningAnnotations
   "helm.sh/hook-weight": "-4"
 
@@ -87,6 +87,7 @@ cassandra: &cassandra
   provisioning:
     annotations: *provisioningAnnotations
   image:
+    repository: bitnami/cassandra
     tag: 3.11.13-debian-11-r3
   extraEnvVars:
     - name: CASSANDRA_AUTHENTICATOR
@@ -124,6 +125,9 @@ kafka: &kafka
     - name: "{{ .Values.global.env }}.assessment.publish.request"
       partitions: 1
       replicationFactor: 1
+    - name: "{{ .Values.global.env }}.delete.user"
+      partitions: 1
+      replicationFactor: 1
     parallel: 1
   persistence:
     size: 25Gi
@@ -151,3 +155,7 @@ global:
   installation: *installation
   elasticsearch: *es
   provisioningAnnotations: *provisioningAnnotations
+
+migration:
+ cassandra:
+   waitTime: 120

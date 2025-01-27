@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 DATA_DIR=/data/analytics/logs/data-products
 [[ -d $DATA_DIR ]] || mkdir -p $DATA_DIR
-export SPARK_HOME=/opt/bitnami/spark
+export SPARK_HOME={{ .Values.global.spark_home }}
 export MODELS_HOME={{ .Values.analytics_home }}/models-2.0
 export DP_LOGS=$DATA_DIR
 ## Job to run daily

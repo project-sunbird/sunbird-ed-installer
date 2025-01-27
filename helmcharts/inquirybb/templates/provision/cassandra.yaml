@@ -1,0 +1,58 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Chart.Name }}-cassandra-migration-job
+  labels:
+    app: {{ .Chart.Name }}-cassandra-migration
+    scope: provisioning
+  annotations:
+    {{.Values.global.cassandra.provisioning.annotations | toYaml }}
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}-cassandra-migration
+    spec:
+      restartPolicy: Never
+      volumes:
+      - name: shared-volume
+        emptyDir: {}
+      initContainers:
+      - name: wait-for-cassandra
+        image: alpine/git
+        imagePullPolicy: IfNotPresent
+        command: ['sh', '-c']
+        args:
+          - |
+            timeout {{ .Values.migration.cassandra.waitTime }} sh -c 'until nc -z {{ .Values.global.cassandra.host }} {{ .Values.global.cassandra.port }}; do echo waiting for cassandra; sleep 10; done'
+            set -e
+            cd /opt/shared-volume
+            export inquiry_automation_version={{ .Values.inquiry_automation_repo_branch | default "main"}}
+
+            # Download the migration files
+            git clone --filter=blob:none --no-checkout https://github.com/Sunbird-inQuiry/inquiry-api-service --branch=$inquiry_automation_version --depth 1
+            cd inquiry-api-service
+            git sparse-checkout init --cone
+            git sparse-checkout set scripts/cassandra-db
+            git checkout
+            chmod -R 777 /opt/shared-volume
+        volumeMounts:
+          - name: shared-volume
+            mountPath: /opt/shared-volume
+      containers:
+      - name: migration
+        image: {{.Values.global.cassandra.image.repository}}:{{.Values.global.cassandra.image.tag}}
+        imagePullPolicy: IfNotPresent
+        command: ['bash', '-c']
+        args:
+        - |
+          cd /opt/shared-volume/inquiry-api-service/scripts/cassandra-db
+          export ENV={{ .Values.global.env }}
+          
+          sed -i "s/{{"{{ env }}"}}/$ENV/g" generalized-cassandra.cql
+          echo cqlsh {{.Values.global.cassandra.host}} -f "generalized-cassandra.cql"
+          cqlsh {{.Values.global.cassandra.host}} -f "generalized-cassandra.cql"
+        volumeMounts:
+          - name: shared-volume
+            mountPath: /opt/shared-volume
+  backoffLimit: 0

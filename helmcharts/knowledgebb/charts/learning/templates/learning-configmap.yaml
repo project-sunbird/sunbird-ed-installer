@@ -231,7 +231,7 @@ data:
     #Youtube Standard Licence Validation
     learning.content.youtube.validate.license=true
     learning.content.youtube.application.name="fetch-youtube-license"
-    learning_content_youtube_apikey=""
+    learning_content_youtube_apikey="{{ .Values.global.youtube_apikey }}"
 
     #Telemetry pdata ID
     telemetry_env="sunbird"

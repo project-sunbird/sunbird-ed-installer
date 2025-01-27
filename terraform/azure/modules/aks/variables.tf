@@ -29,13 +29,13 @@ variable "big_nodepool_name" {
 variable "big_node_count" {
   type        = number
   description = "Big node pool node count."
-  default     = 1
+  default     = 3
 }
 
 variable "big_node_size" {
   type        = string
   description = "Big node pool node size."
-  default     = "Standard_B32as_v2"
+  default     = "Standard_B16as_v2"
 }
 variable "resource_group_name" {
   type        = string
@@ -53,23 +53,23 @@ variable "vnet_subnet_id" {
   description = "AKS cluster subnet id."
 }
 
-variable "small_nodepool_name" {
-  type        = string
-  description = "Small nodepool name."
-  default     = "smallpool"
-}
+# variable "small_nodepool_name" {
+#   type        = string
+#   description = "Small nodepool name."
+#   default     = "smallpool"
+# }
 
-variable "small_node_count" {
-  type        = number
-  description = "Small nodepool node count."
-  default     = 1
-}
+# variable "small_node_count" {
+#   type        = number
+#   description = "Small nodepool node count."
+#   default     = 1
+# }
 
-variable "small_node_size" {
-  type        = string
-  description = "Small nodepool node size."
-  default     = "Standard_B8as_v2"
-}
+# variable "small_node_size" {
+#   type        = string
+#   description = "Small nodepool node size."
+#   default     = "Standard_B8as_v2"
+# }
 
 variable "service_cidr" {
   type        = string

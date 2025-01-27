@@ -23,22 +23,23 @@
   }
 
   resource "azuread_service_principal_password" "aks_sp_password" {
-    service_principal_id = azuread_service_principal.aks_sp.id
-    end_date_relative    = var.end_date_relative
-  }
+  service_principal_id = azuread_service_principal.aks_sp.id
+  end_date             = timeadd(timestamp(), var.end_date_relative)
+}
 
-  resource "azurerm_role_assignment" "aks_sp_assignment" {
-    principal_id         = azuread_service_principal.aks_sp.id
-    scope                = var.vnet_subnet_id
-    role_definition_name = "Network Contributor"
-  }
+resource "azurerm_role_assignment" "aks_sp_assignment" {
+  principal_id         = split("/", azuread_service_principal.aks_sp.id)[2]
+  scope                = var.vnet_subnet_id
+  role_definition_name = "Network Contributor"
+}
 
   resource "azurerm_kubernetes_cluster" "aks" {
     name                = "${local.environment_name}"
     location            = var.location
     resource_group_name = var.resource_group_name
     dns_prefix          = "${local.environment_name}"
-
+    #Uncomment the below line to create a private cluster
+    # private_cluster_enabled = true
     default_node_pool {
       name           = var.big_nodepool_name
       node_count     = var.big_node_count
@@ -65,22 +66,22 @@
     depends_on = [ azurerm_role_assignment.aks_sp_assignment ]
   }
 
-  resource "azurerm_kubernetes_cluster_node_pool" "small_nodepool" {
-    name                  = var.small_nodepool_name
-    kubernetes_cluster_id = azurerm_kubernetes_cluster.aks.id
-    vm_size               = var.small_node_size
-    node_count            = var.small_node_count
-    vnet_subnet_id        = var.vnet_subnet_id
-    mode                  = "System"
-    enable_auto_scaling   = true
-    min_count             = 1
-    max_count             = var.max_small_nodepool_nodes
-    tags = merge(
-        local.common_tags,
-        var.additional_tags
-        )
-    depends_on = [ azurerm_kubernetes_cluster.aks ]
-  }
+  # resource "azurerm_kubernetes_cluster_node_pool" "small_nodepool" {
+  #   name                  = var.small_nodepool_name
+  #   kubernetes_cluster_id = azurerm_kubernetes_cluster.aks.id
+  #   vm_size               = var.small_node_size
+  #   node_count            = var.small_node_count
+  #   vnet_subnet_id        = var.vnet_subnet_id
+  #   mode                  = "System"
+  #   enable_auto_scaling   = true
+  #   min_count             = 1
+  #   max_count             = var.max_small_nodepool_nodes
+  #   tags = merge(
+  #       local.common_tags,
+  #       var.additional_tags
+  #       )
+  #   depends_on = [ azurerm_kubernetes_cluster.aks ]
+  # }
   resource "local_file" "kubeconfig" {
     content      = azurerm_kubernetes_cluster.aks.kube_config_raw
     filename     = pathexpand("~/.kube/config")

@@ -7,8 +7,8 @@ replicaCount: 1
 #   tag: "release-5.2.0_RC1_2c615f8_12"
 # docker pull sunbirded.azurecr.io/sunbird-datapipeline:release-4.9.0_RC4_1
 image:
-  repository: aimansharief/obsrv-jobs
-  tag: "R5.2.0"
+  repository: sunbirded.azurecr.io/sunbird-datapipeline
+  tag: "release-5.2.0_RC3_49d7f23_10"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
@@ -134,7 +134,7 @@ azure_secret: "azure-secret"
 
 # Azure Container Details
 checkpoint_store_type: "azure"
-cloud_storage_flink_bucketname: flink-state-backend
+cloud_storage_flink_bucketname: "{{ .Values.global.azure_flink_state_container_name }}"
 cloud_storage_content_bucketname: sunbird-content-dev
 cert_container_name: dev-e-credentials
 cloud_storage_endpoint: https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net
@@ -219,7 +219,7 @@ dialcode_api_auth_key: ""
 
 #(user read api details)
 user_read_api_endpoint: "/private/user/v1/read/"
-user_read_api_url: "learner-service:9000"
+user_read_api_url: "userorg-service:9000"
 
 ### User-cache-updater related vars
 usercache_updater_parallelism: 1
@@ -287,7 +287,7 @@ base_config: |
           blob {
             storage {
               account = "{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net"
-              container = "{{ .Values.container }}"
+              container = "{{ .Values.global.azure_flink_state_container_name }}"
               checkpointing.dir = "checkpoint"
             }
           }
@@ -805,7 +805,7 @@ flink_jobs:
           url = "http://{{ .Values.user_read_api_url }}/{{ .Values.user_read_api_endpoint }}"
         }
       }
-      regd.user.producer.pid = "learner-service"
+      regd.user.producer.pid = "userorg-service"
       user.self.signin.types = ["google","self"]
       user.validated.types = ["sso"]
       user.self.signin.key = "Self-Signed-In"

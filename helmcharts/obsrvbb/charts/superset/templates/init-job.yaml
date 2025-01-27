@@ -1,0 +1,74 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "superset.fullname" . }}-init
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ template "superset.name" . }}
+    chart: {{ template "superset.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ template "superset.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: {{ .Chart.Name }}-init
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          envFrom:
+            - configMapRef:
+                name: envvar-configmap
+          command:
+            - /bin/sh
+            - -c
+            - |
+              # Wait for database
+              echo "Waiting for database..."
+              until superset db upgrade; do
+                echo "Database not ready, retrying in 5 seconds..."
+                sleep 5
+              done
+              
+              # Initialize Superset
+              echo "Initializing Superset..."
+              superset init
+              
+              # Create admin user
+              echo "Creating admin user..."
+              superset fab create-user \
+                --username {{ .Values.credentials.adminUser }} \
+                --firstname Super \
+                --lastname Admin \
+                --email {{ .Values.credentials.adminEmail }} \
+                --password {{ .Values.credentials.adminPassword }} \
+                --role Admin
+           
+              
+              # Create report reviewer
+              echo "Creating report reviewer user..."
+              superset fab create-user \
+                --username {{ .Values.credentials.reviewerUser }} \
+                --firstname Report \
+                --lastname Reviewer \
+                --email {{ .Values.credentials.reviewerEmail }} \
+                --password {{ .Values.credentials.reviewerPassword }} \
+                --role "Report Reviewer"
+              
+              # Create report creator
+              echo "Creating report creator user..."
+              superset fab create-user \
+                --username {{ .Values.credentials.creatorUser }} \
+                --firstname Report \
+                --lastname Creator \
+                --email {{ .Values.credentials.creatorEmail }} \
+                --password {{ .Values.credentials.creatorPassword }} \
+                --role "Report Creator" 

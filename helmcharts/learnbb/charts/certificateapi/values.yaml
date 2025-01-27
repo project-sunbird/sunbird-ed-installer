@@ -104,6 +104,4 @@ serviceMonitor:
 
 port: 8078
 QR_TYPE: "URL"
-CERTIFICATE_PUBLIC_KEY: ""
-CERTIFICATE_PRIVATE_KEY: ""
 java_options: -Xmx600m

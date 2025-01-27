@@ -43,14 +43,14 @@ media_service_azure_account_name : ""
 media_service_azure_tenant: ""
 media_service_azure_subscription_id: ""
 es_search_index: "compositesearch"
-channelSearchServiceEndpoint: "http://learner-service:9000/v1/org/search"
+channelSearchServiceEndpoint: "http://userorg-service:9000/v1/org/search"
 hierarchySearchServiceUrl: "http://content-service:9000/action/content"
 hierarchySearchServicEndpoint: /v3/hierarchy/
 stream_base_url: ""
 cassandra_hierarchy_store_keyspace: "{{ .Values.global.env }}_hierarchy_store"
 assessment_metric_primary_category: "{{  .Values.exhaust_job_assessment_primary_category }}"
 exhaust_job_assessment_primary_category: "Practice Question Set"
-sunbird_learner_service_url: "http://learner-service:9000"
+sunbird_userorg_service_url: "http://userorg-service:9000"
 location_search_url: "https://lms-service:9000"
 etb_dialcode_list_druid_length: 70
 user_table_keyspace: "sunbird"
@@ -89,7 +89,7 @@ producer_env: "dev.sunbird"
 spark_output_temp_dir: /data/analytics/tmp/
 
 #modelconfig.josn
-reports_container: "reports"
+reports_container: "{{ .Values.global.azure_reports_container_name }}"
 
 #start-jobmanager
 analytics_job_list: ["wfs", "content-rating-updater", "monitor-job-summ"]
@@ -99,8 +99,7 @@ analytics_cluster:
 jobmanager_logs_directory: "/data/analytics/logs/services"
 run_logs_directory: "/data/analytics/logs/data-products"
 
-reports_container: "reports"
-blob_container_name: "telemetry-data-store"
+blob_container_name: "{{ .Values.global.azure_telemetry_container_name }}"
 cloud_storage_type: "azure"
 dp_raw_telemetry_backup_location: "unique/raw/"
 cloud_storage_endpoint: https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net

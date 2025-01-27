@@ -5,7 +5,7 @@ replicaCount: 1
 
 image:
   repository: sunbirded.azurecr.io/data-pipeline
-  tag: release-5.7.0_RC1_58d52be_7
+  tag: release-7.0.0_RC7_7425f7c_15
   pullPolicy: IfNotPresent
   pullSecrets: []  
 
@@ -122,7 +122,7 @@ inquiry_assessment_post_publish_kafka_topic_name: "{{ .Values.global.env }}.asse
 inquiry_assessment_publish_group: "{{ .Values.global.env }}-questionset-publish-group"
 question_keyspace_name: "{{ .Values.global.env }}_question_store"
 hierarchy_keyspace_name: "{{ .Values.global.env }}_hierarchy_store"
-kp_print_service_base_url: "http://print:9000"
+kp_print_service_base_url: "http://print:5000"
 # CNAME Config
 cloudstorage_relative_path_prefix: "CONTENT_STORAGE_BASE_PATH"
 cloudstorage_base_path: "https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net"
@@ -132,6 +132,20 @@ cloudstorage_replace_absolute_path: false
 ### QuestionSet RePublish Job Config
 inquiry_assessment_republish_kafka_topic_name: "{{ .Values.global.env }}.assessment.republish.request"
 inquiry_assessment_republish_group: "{{ .Values.global.env }}-questionset-republish-group"
+### user_pii Job Config
+user_pii_updater_kafka_topic_name: "{{ .Values.global.env }}.delete.user"
+user_pii_updater_group: "{{ .Values.global.env }}-user-pii-updater-group"
+user_pii_target_object_types: '{
+  "Question": ["1.0", "1.1"],
+  "QuestionSet": ["1.0", "1.1"],
+  "Asset": ["1.0"],
+  "Content": ["1.0"],
+  "Collection": ["1.0"]
+}'
+user_pii_replacement_value: "Deleted User"
+user_org_service_base_url: "http://userorg-service:9000"
+email_notification_subject: "User Account Deletion Notification"
+email_notification_regards: "Team"
 
 cloud_storage: 
   type: "azure"
@@ -328,4 +342,35 @@ flink_jobs:
       jobmanager.execution.failover-strategy: region
       taskmanager.memory.network.fraction: 0.1
     job_classname: org.sunbird.job.questionset.republish.task.QuestionSetRePublishStreamTask  
- 
+  
+  user-pii-data-updater:
+    enabled: true
+    config: |+
+      include file("/data/flink/conf/base-config.conf")
+      kafka {
+        input.topic = "{{- include "common.tplvalues.render" (dict "value" .Values.user_pii_updater_kafka_topic_name "context" $) }}"
+        groupId = "{{- include "common.tplvalues.render" (dict "value" .Values.user_pii_updater_group "context" $) }}"
+      }
+      task {
+        consumer.parallelism = 1
+        parallelism = 1
+        router.parallelism = 1
+      }
+      target_object_types={{ .Values.user_pii_target_object_types }}
+      user_pii_replacement_value="{{ .Values.user_pii_replacement_value }}"
+      admin_email_notification_enable=true
+      userorg_service_base_url="{{- include "common.tplvalues.render" (dict "value" .Values.user_org_service_base_url "context" $) }}"
+      notification {
+        email {
+          subject: "{{ .Values.email_notification_subject }}",
+          regards: "{{ .Values.email_notification_regards }}"
+        }
+      }
+    flink-conf: |+
+      jobmanager.memory.flink.size: 1024m
+      taskmanager.memory.flink.size: 1024m
+      taskmanager.numberOfTaskSlots: 1
+      parallelism.default: 1
+      jobmanager.execution.failover-strategy: region
+      taskmanager.memory.network.fraction: 0.1
+    job_classname: org.sunbird.job.user.pii.updater.task.UserPiiUpdaterStreamTask

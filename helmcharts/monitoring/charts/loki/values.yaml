@@ -708,7 +708,13 @@ monitoring:
     # -- Environment variables from secrets or configmaps to add to the canary pods
     extraEnvFrom: []
     # -- Resource requests and limits for the canary
-    resources: {}
+    resources:
+      limits:
+        cpu: 0.1
+        memory: 256Mi
+      requests:
+        cpu: 0.1
+        memory: 128Mi
     # -- DNS config for canary pods
     dnsConfig: {}
     # -- Node selector for canary pods
@@ -737,7 +743,7 @@ monitoring:
 # Configuration for the write pod(s)
 write:
   # -- Number of replicas for the write
-  replicas: 3
+  replicas: 1
   autoscaling:
     # -- Enable autoscaling for the write.
     enabled: false
@@ -811,7 +817,13 @@ write:
   # -- volumeClaimTemplates to add to StatefulSet
   extraVolumeClaimTemplates: []
   # -- Resource requests and limits for the write
-  resources: {}
+  resources:
+    limits:
+      cpu: 512m
+      memory: 1024Mi
+    requests:
+      cpu: 256m
+      memory: 512Mi
   # -- Grace period to allow the write to shutdown before it is killed. Especially for the ingester,
   # this must be increased. It must be long enough so writes can be gracefully shutdown flushing/transferring
   # all data and to successfully leave the member ring on shutdown.
@@ -924,7 +936,7 @@ tableManager:
 # Configuration for the read pod(s)
 read:
   # -- Number of replicas for the read
-  replicas: 3
+  replicas: 1
   autoscaling:
     # -- Enable autoscaling for the read, this is only used if `queryIndex.enabled: true`
     enabled: false
@@ -991,7 +1003,13 @@ read:
   # -- Volumes to add to the read pods
   extraVolumes: []
   # -- Resource requests and limits for the read
-  resources: {}
+  resources:
+    limits:
+      cpu: 512m
+      memory: 1024Mi
+    requests:
+      cpu: 256m
+      memory: 512Mi
   # -- Grace period to allow the read to shutdown before it is killed
   terminationGracePeriodSeconds: 30
   # -- Affinity for read pods. Passed through `tpl` and, thus, to be configured as string
@@ -1123,7 +1141,7 @@ backend:
     dataVolumeParameters:
       emptyDir: {}
     # -- Enable StatefulSetAutoDeletePVC feature
-    enableStatefulSetAutoDeletePVC: true
+    enableStatefulSetAutoDeletePVC: false
     # -- Size of persistent disk
     size: 10Gi
     # -- Storage class to be used.
@@ -1188,7 +1206,13 @@ singleBinary:
   # -- Volumes to add to the single binary pods
   extraVolumes: []
   # -- Resource requests and limits for the single binary
-  resources: {}
+  resources:
+    limits:
+      cpu: 0.5
+      memory: 1024Mi
+    requests:
+      cpu: 0.5
+      memory: 128Mi
   # -- Grace period to allow the single binary to shutdown before it is killed
   terminationGracePeriodSeconds: 30
   # -- Affinity for single binary pods. Passed through `tpl` and, thus, to be configured as string
@@ -1352,7 +1376,13 @@ gateway:
         - ALL
     allowPrivilegeEscalation: false
   # -- Resource requests and limits for the gateway
-  resources: {}
+  resources: 
+    limits:
+      cpu: 0.1
+      memory: 256Mi
+    requests:
+      cpu: 0.1
+      memory: 128Mi
   # -- Containers to add to the gateway pods
   extraContainers: []
   # -- Grace period to allow the gateway to shutdown before it is killed
@@ -1532,8 +1562,11 @@ minio:
   persistence:
     size: 5Gi
   resources:
+    limits:
+      cpu: 0.1
+      memory: 256Mi
     requests:
-      cpu: 100m
+      cpu: 0.1
       memory: 128Mi
 # Create extra manifests via values. Would be passed through `tpl` for templating
 extraObjects: []

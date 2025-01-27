@@ -128,4 +128,4 @@ migration:
   postgresql:
     waitTime: 120
 
-devops_release_branch: release-6.0.0
+devops_release_branch: release-7.0.0

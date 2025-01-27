@@ -144,6 +144,7 @@ kafka: &kafka
     - name: sunbirddev.telemetry.sink
     - name: sunbirddev.telemetry.metrics
     - name: sunbirddev.telemetry.assess
+    - name: sunbirddev.druid.report.job_queue
     - name: "{{ .Values.global.env }}.telemetry.ingest"
     - name: "{{ .Values.global.env }}.telemetry.raw"
     - name: "{{ .Values.global.env }}.druid.events.log"
@@ -224,6 +225,10 @@ confVolume: &confVolume
                 path: common.conf
               - key: collection-summary-ingestion-spec.json
                 path: collection-summary-ingestion-spec.json
+              - key: druid-report-processor.py
+                path: druid-report-processor.py
+              - key: druid-report-submitter.py
+                path: druid-report-submitter.py
         - name: obsrvbb-user-cache-indexer-conf
           configMap:
             name: obsrvbb-etl-jobs
@@ -283,24 +288,25 @@ confVolume: &confVolume
           mountPath: /data/analytics/content-snapshot/conf
 
       command:
-          - "/bin/sh"
-          - "-c"
+          - /bin/sh
+          - -c
           - |
-            data_path="/
-            data/analytics" # persistent path
+            data_path="/data/analytics" # persistent path
             python -m venv /data/analytics/venv  # run dataproducts.tar.gz
-            . /data/analytics/venv/bin/activate && pip install /data/analytics/dataproducts.tar.gz
+            . /data/analytics/venv/bin/activate && pip install /data/analytics/dataproducts.tar.gz 
             deactivate
+            pip install kafka-python
+            
             curl -o /data/analytics/content-snapshot/jars/etl-jobs-1.0/lib/guava-18.0.jar "https://repo1.maven.org/maven2/com/google/guava/guava/18.0/guava-18.0.jar"
-            curl -o /opt/bitnami/spark/jars/jetty-util-6.1.26.jar "https://repo1.maven.org/maven2/org/mortbay/jetty/jetty-util/6.1.26/jetty-util-6.1.26.jar"
-            curl -o /opt/bitnami/spark/jars/config-1.3.3.jar "https://repo1.maven.org/maven2/com/typesafe/config/1.3.3/config-1.3.3.jar"
-            curl -o /opt/bitnami/spark/jars/spark-sql_2.12-3.1.0-tests.jar "https://repo1.maven.org/maven2/org/apache/spark/spark-sql_2.12/3.1.0/spark-sql_2.12-3.1.0-tests.jar"
+            curl -o /data/analytics/spark-3.1.3-bin-hadoop2.7/jars/jetty-util-6.1.26.jar "https://repo1.maven.org/maven2/org/mortbay/jetty/jetty-util/6.1.26/jetty-util-6.1.26.jar"
+            curl -o /data/analytics/spark-3.1.3-bin-hadoop2.7/jars/config-1.3.3.jar "https://repo1.maven.org/maven2/com/typesafe/config/1.3.3/config-1.3.3.jar"
+            curl -o /data/analytics/spark-3.1.3-bin-hadoop2.7/jars/spark-sql_2.12-3.1.0-tests.jar "https://repo1.maven.org/maven2/org/apache/spark/spark-sql_2.12/3.1.0/spark-sql_2.12-3.1.0-tests.jar"
             curl -o /data/analytics/content-snapshot/jars/etl-jobs-1.0/lib/spark-sql_2.12-3.1.0-tests.jar "https://repo1.maven.org/maven2/org/apache/spark/spark-sql_2.12/3.1.0/spark-sql_2.12-3.1.0-tests.jar"
 
-            cp "$data_path/models-2.0/data-products-1.0/lib/guava-19.0.jar" /opt/bitnami/spark/jars/
-            rm /opt/bitnami/spark/jars/guava-14.0.1.jar
-            cp /data/analytics/spark-conf/spark-defaults.conf /opt/bitnami/spark/conf/
-            cp /data/analytics/spark-conf/spark-env.sh /opt/bitnami/spark/conf/
+            cp "$data_path/models-2.0/data-products-1.0/lib/guava-19.0.jar" /data/analytics/spark-3.1.3-bin-hadoop2.7/jars/
+            rm /data/analytics/spark-3.1.3-bin-hadoop2.7/jars/guava-14.0.1.jar
+            cp /data/analytics/spark-conf/spark-defaults.conf /data/analytics/spark-3.1.3-bin-hadoop2.7/conf/
+            cp /data/analytics/spark-conf/spark-env.sh /data/analytics/spark-3.1.3-bin-hadoop2.7/conf/
             /opt/bitnami/scripts/spark/entrypoint.sh /opt/bitnami/scripts/spark/run.sh
 
       initContainers:
@@ -359,6 +365,21 @@ spark: &spark
     tag: 3.2.4_2
   master:
       <<: *confVolume
+      extraEnvVars:
+        - name: BITNAMI_DEBUG
+          value: "false"
+        - name: SPARK_MODE
+          value: master
+        - name: SPARK_DAEMON_MEMORY
+          value: ""
+        - name: SPARK_MASTER_PORT
+          value: "7077"
+        - name: SPARK_MASTER_WEBUI_PORT
+          value: "8080"
+        - name: KAFKA_BROKER_HOST
+          value: "kafka:9092"
+        - name: ENV
+          value: "sunbirddev"
   worker:
       replicaCount: 1
 
@@ -376,6 +397,7 @@ global:
   spark: *spark
   keycloak_kid_keys_configmap: keycloak-kids-keys
   kong_desktop_device_consumer_names_for_opa: '["portal", "desktop"]'
+  spark_home: /data/analytics/spark-3.1.3-bin-hadoop2.7
 
 analytics:
   opa_enabled: true
@@ -386,3 +408,19 @@ migration:
     jarUrl: "https://github.com/user/repo/releases/download/v1.0/migration.jar"
   postgresql:
     waitTimeout: 120
+
+
+superset:
+  enabled: true
+  image:
+    repository: sunbirded.azurecr.io/superset
+    tag: 1.0.0
+    pullPolicy: Always
+  PG_USER: {{ .Values.global.postgresql.postgresqlUsername }}
+  PG_PASS: {{ .Values.global.postgresql.postgresqlPassword }}
+  PG_HOST: {{ .Values.global.postgresql.host }}
+  PORTAL_HOST: "http://{{ .Values.global.domain }}"
+  PORTAL_API_HOST: {{ .Values.report_service_url }}
+  PORTAL_API_KEY: {{.Values.global.sunbird_admin_api_token}}
+  ANALYTICS_API_KEY: {{ .Values.global.adminutil_learner_api_auth_key }}
+  ANALYTICS_API_HOST: {{ .Values.analytics_api_service_url }}

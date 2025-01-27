@@ -7,13 +7,32 @@ locals {
   global_values_jwt_file_location = "${var.base_location}/../../../../scripts/global-values-jwt-tokens.yaml"
   global_values_rsa_file_location = "${var.base_location}/../../../../scripts/global-values-rsa-keys.yaml"
 }
+resource "random_password" "generated_string" {
+  length  = 16          # Length of the string (can be between 12 and 24)
+  special = false        # Do not include special characters
+  upper   = true         # Include uppercase letters
+  lower   = true         # Include lowercase letters
+  numeric = true         # Include numbers
+}
+resource "random_password" "encryption_string" {
+  length  = 32          # Length of the string (can be between 32)
+  special = false        # Do not include special characters
+  upper   = true         # Include uppercase letters
+  lower   = true         # Include lowercase letters
+  numeric = true         # Include numbers
+}
+
 
 resource "null_resource" "generate_jwt_keys" {
   triggers = {
     command = "${timestamp()}"
   }
+
   provisioner "local-exec" {
-      command = "python3 ${local.jwt_script_location} ${var.random_string} && cp ${local.global_values_jwt_file_location} ${var.base_location}/../global-values-jwt-tokens.yaml"
+    command = <<EOT
+      python3 ${local.jwt_script_location} ${random_password.generated_string.result} && \
+      cp ${local.global_values_jwt_file_location} ${var.base_location}/../global-values-jwt-tokens.yaml
+    EOT
   }
 }
 resource "null_resource" "generate_rsa_keys" {
@@ -50,6 +69,8 @@ resource "null_resource" "upload_global_rsa_values_yaml" {
 #     command = "${timestamp()}"
 #   }
 #   provisioner "local-exec" {
-#       command = "terrahelp encrypt -simple-key=${var.random_string} -file=${local.global_values_keys_file}"
+#       command = "terrahelp encrypt -simple-key=${random_password.generated_string.result} } -file=${local.global_values_keys_file}"
 #   }
 # }
+
+

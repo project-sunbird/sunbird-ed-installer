@@ -4,7 +4,7 @@ replicaCount: 1
 
 image:
   repository: sunbirded.azurecr.io/groups_service
-  tag: "release-5.0.0_RC2_1"
+  tag: "release-7.0.0_RC1_e82e95d_3"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
@@ -112,7 +112,7 @@ commonAnnotations:
 
 sunbird_cassandra_username: ""
 sunbird_cassandra_password: ""
-learner_service_url: http://learner-service:9000
+userorg_service_url: http://userorg-service:9000
 content_service_url: http://search-service:9000
 sunbird_user_service_search_url: /private/user/v1/search
 sunbird_cs_search_url: /v3/search
