@@ -4,8 +4,8 @@ fullnameOverride: "keycloak"
 replicaCount: 1
 
 image:
-  repository: keshavprasad/keycloak
-  tag: "7.0.1"
+  repository: sunbirded.azurecr.io/keycloak
+  tag: "21.1.2"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
@@ -89,7 +89,7 @@ affinity: {}
 
 configmap:
   enabled: true
-  mountPath: /config
+  mountPath: /opt/keycloak/imports
 
 serviceAccount:
   create: true
