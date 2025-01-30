@@ -775,7 +775,7 @@ flink_jobs:
         bundleLocation = "/tmp/contentBundle"
         isECARExtractionEnabled = true
         retry_asset_download_count = 1
-        keyspace = "dev_content_store"
+        keyspace = "{{ .Values.global.env }}_content_store"
         table = "content_data"
         tmp_file_location = "/tmp"
         objectType = ["Content", "ContentImage","Collection","CollectionImage"]
