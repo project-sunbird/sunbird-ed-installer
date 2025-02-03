@@ -361,7 +361,8 @@ spark: &spark
   nameOverride: "spark"
   fullnameOverride: "spark"
   image:
-    repository: sowmyadixit/spark
+    registry: sunbirded.azurecr.io
+    repository: spark
     tag: 3.2.4_2
   master:
       <<: *confVolume
@@ -413,14 +414,7 @@ migration:
 superset:
   enabled: true
   image:
-    repository: sunbirded.azurecr.io/superset
-    tag: 1.0.0
+    repository: gayathrisrividya/superset
+    tag: v10 
     pullPolicy: Always
-  PG_USER: {{ .Values.global.postgresql.postgresqlUsername }}
-  PG_PASS: {{ .Values.global.postgresql.postgresqlPassword }}
-  PG_HOST: {{ .Values.global.postgresql.host }}
-  PORTAL_HOST: "http://{{ .Values.global.domain }}"
-  PORTAL_API_HOST: {{ .Values.report_service_url }}
-  PORTAL_API_KEY: {{.Values.global.sunbird_admin_api_token}}
-  ANALYTICS_API_KEY: {{ .Values.global.adminutil_learner_api_auth_key }}
-  ANALYTICS_API_HOST: {{ .Values.analytics_api_service_url }}
+  

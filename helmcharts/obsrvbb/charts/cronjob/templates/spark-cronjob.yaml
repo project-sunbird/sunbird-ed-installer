@@ -398,7 +398,7 @@ spec:
             - name: KAFKA_HOME
               value: "/opt/bitnami/kafka_2.12-2.8.0"
             - name: KAFKA_TOPIC
-              value: "{{ .Values.global.kafka.topics.analytics_job_queue }}"
+              value: "{{ .Values.analytics_job_queue_topic }}"
             - name: KAFKA_BOOTSTRAP_SERVERS
               value: "kafka:9092"
             - name: KAFKA_CONSUMER_GROUP

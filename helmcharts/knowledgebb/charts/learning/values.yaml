@@ -1,7 +1,7 @@
 ### Default variable file for learning-service ###
 
 replicaCount: 1
-repository: shouryasolanki/learning-service
+repository: sunbirded.azurecr.io/learning-service
 image_tag: latest
 resources:
   requests:
