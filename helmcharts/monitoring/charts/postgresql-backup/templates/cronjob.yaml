@@ -37,7 +37,7 @@ spec:
                 - name: CLOUD_SERVICE
                   value: {{ .Values.CLOUD_SERVICE }}
                 - name: AZURE_CONTAINER
-                  value: {{ .Values.azure_backups_container_name }}
+                  value: {{ .Values.global.azure_backups_container_name }}
                 - name: AZURE_STORAGE_ACCOUNT
                   value: {{ .Values.global.azure_storage_account_name }}
                 - name: AZURE_KEY

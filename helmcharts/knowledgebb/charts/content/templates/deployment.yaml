@@ -99,7 +99,7 @@ spec:
               --set=plugins.print_decision_logs_on_failure.stdout=true \
               --log-level=error \
               --ignore=.*
-          image: keshavprasad/opa:0.34.2-envoy
+          image: sunbirded.azurecr.io/opa:0.34.2-envoy
           imagePullPolicy: IfNotPresent
           name: opa
           livenessProbe:

@@ -9,11 +9,14 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 data:
-  PG_USER: {{ .Values.PG_USER }}
-  PG_PASS: {{ .Values.PG_PASS }}
-  PG_HOST: {{ .Values.PG_HOST }}
-  PORTAL_HOST: {{ .Values.PORTAL_HOST }}
-  PORTAL_API_HOST: {{ .Values.PORTAL_API_HOST }}
-  PORTAL_API_KEY:  {{ .Values.PORTAL_API_KEY }}
-  ANALYTICS_API_KEY: {{ .Values.ANALYTICS_API_KEY }}
-  ANALYTICS_API_HOST: {{ .Values.ANALYTICS_API_HOST }}
+  PG_USER: "{{ .Values.global.postgresql.postgresqlUsername }}"
+  PG_PASS: "{{ .Values.global.postgresql.postgresqlPassword }}"
+  PG_HOST: "{{ .Values.global.postgresql.host }}"
+  PORTAL_HOST: "{{ .Values.PORTAL_HOST }}"
+  PORTAL_API_HOST: "{{ .Values.report_service_url }}"
+  PORTAL_API_KEY:  "{{ .Values.global.sunbird_admin_api_token }}"
+  ANALYTICS_API_KEY: "{{ .Values.global.adminutil_learner_api_auth_key }}"
+  ANALYTICS_API_HOST: "{{ .Values.analytics_api_service_url }}"
+
+  
+                

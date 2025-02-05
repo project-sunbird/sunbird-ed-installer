@@ -5,7 +5,7 @@ replicaCount: 1
 
 image:
   repository: sunbirded.azurecr.io/data-pipeline
-  tag: release-7.0.0_RC7_7425f7c_15
+  tag: release-8.0.0_RC1_c30fd96_5
   pullPolicy: IfNotPresent
   pullSecrets: []  
 
@@ -34,10 +34,10 @@ ingress: {}
 resources:
   requests:
     cpu: 100m
-    memory: 100M
+    memory: 500M
   limits:
     cpu: 1
-    memory: 1G
+    memory: 2048Mi
 
 autoscaling:
   enabled: false
@@ -188,7 +188,13 @@ base_config: |
       producer {
         max-request-size = {{ .Values.producer_max_request_size }}
       }
+      input {
+      user_pii_topic = "{{ .Values.global.env }}.delete.user.job.request"
+      ownership_transfer_topic = "{{ .Values.global.env }}.user.ownership.transfer"
     }
+    groupId = "{{ .Values.global.env }}-user-pii-data-updater-group"
+  }
+
     job {
       env = "{{ .Values.global.env }}"
       enable.distributed.checkpointing = true
@@ -212,7 +218,8 @@ base_config: |
             checkpointing.dir = "checkpoint"
           }
         }
-        base.url = "wasbs://"${job.statebackend.blob.storage.container}"@"${job.statebackend.blob.storage.account}"/"${job.statebackend.blob.storage.checkpointing.dir}
+        base.url = "wasbs://{{ .Values.global.azure_flink_state_container_name }}@{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net/{{ .Values.flink_checkpointing_dir }}"
+
       }
     {{- end }}
     }

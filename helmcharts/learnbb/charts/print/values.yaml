@@ -5,7 +5,7 @@ replicaCount: 1
 
 image:
   repository: sunbirded.azurecr.io/print-service
-  tag: "release-3.0.0_RC1"
+  tag: "release-3.1.0_f9a608c"
   pullPolicy: IfNotPresent
   pullSecrets: []
 

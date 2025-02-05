@@ -3,7 +3,7 @@ fullnameOverride: "telemetry"
 
 replicaCount: 1
 image:
-  repository: sunbird/telemetry-service
+  repository: sunbirded.azurecr.io/telemetry-service
   pullPolicy: Always
   tag: "release-3.3.0_RC1"
   pullSecrets: []

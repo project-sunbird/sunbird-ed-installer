@@ -6,7 +6,7 @@ replicaCount: 1
 image:
   registry: docker.io
   repository: sunbirded.azurecr.io/discussion-middleware
-  tag: release-5.0.0_RC2_1
+  tag: release-7.0.0_RC1_850b795_3
   pullSecrets: []
 
 podAnnotations: {}

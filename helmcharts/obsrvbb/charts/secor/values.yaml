@@ -145,7 +145,7 @@ secor_jobs:
     base_path: "error_events"
 
 image:
-  repository: sanketikahub/secor
+  repository: sunbirded.azurecr.io/secor
   tag: 1.0.0-GA
   pullPolicy: IfNotPresent
 

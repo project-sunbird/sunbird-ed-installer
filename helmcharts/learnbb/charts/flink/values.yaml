@@ -37,10 +37,10 @@ ingress: {}
 resources:
   requests:
     cpu: 100m
-    memory: 100Mi
+    memory: 500Mi
   limits:
     cpu: 1
-    memory: 1024Mi
+    memory: 2048Mi
 
 autoscaling:
   enabled: false
@@ -370,9 +370,10 @@ base_config: |
           }
         }
         {{- if eq .Values.checkpoint_store_type "azure" }}
-        base.url = "wasbs://"${job.statebackend.blob.storage.container}"@"${job.statebackend.blob.storage.account}"/"${job.statebackend.blob.storage.checkpointing.dir}
+        base.url = "wasbs://{{ .Values.global.azure_flink_state_container_name }}@{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net/{{ .Values.flink_checkpointing_dir }}"
         {{- else if eq .Values.checkpoint_store_type "s3" }}
-        base.url = "s3://"${job.statebackend.blob.storage.container}"/"${job.statebackend.blob.storage.checkpointing.dir}
+        base.url = "s3://{{ .Values.flink_dp_storage_container }}/{{ .Values.flink_checkpointing_dir }}"
+
         {{ end }}
       }
     }

@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: sunbirded.azurecr.io/search-service
-  tag: "release-5.2.0_e0120a3_4"
+  tag: "release-6.1.0_RC4_2272e93_40"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
