@@ -70,4 +70,4 @@ spec:
       volumes:
         - name: "superset-config"
           configMap:
-            name: superset-configmap
+            name: superset

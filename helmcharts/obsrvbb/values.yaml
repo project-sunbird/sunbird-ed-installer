@@ -414,7 +414,7 @@ migration:
 superset:
   enabled: true
   image:
-    repository: gayathrisrividya/superset
-    tag: v10 
+    repository: sunbirded.azurecr.io/superset
+    tag: release-7.0.0
     pullPolicy: Always
   

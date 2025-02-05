@@ -234,7 +234,8 @@ ALTER TABLE report ALTER COLUMN type TYPE varchar(10);
 
 
 
-
+-- superset
+CREATE DATABASE superset;
 
 
 ---- dataproducts helm chart 

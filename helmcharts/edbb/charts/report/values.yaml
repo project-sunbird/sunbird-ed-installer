@@ -5,7 +5,7 @@ replicaCount: 1
 
 image:
   repository: sunbirded.azurecr.io/report-service
-  tag: "release-5.0.0_f79999c_22"
+  tag: "release-5.0.0_692f225_4"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
