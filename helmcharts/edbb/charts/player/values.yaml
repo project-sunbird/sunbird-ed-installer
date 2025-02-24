@@ -5,7 +5,7 @@ replicaCount: 1
 
 image:
   repository: sunbirded.azurecr.io/player
-  tag: "release-8.0.0_99ac15d8c6_3695"
+  tag: "release-7.0.0_RC16_25baa89_2461"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
