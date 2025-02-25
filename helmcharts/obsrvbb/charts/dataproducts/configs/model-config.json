@@ -4,7 +4,7 @@
         "type": "azure",
         "queries": [
           {
-            "bucket": "{{ .Values.blob_container_name }}",
+            "bucket": "{{ .Values.global.azure_telemetry_container_name }}",
             "prefix": "unique/raw/",
             "endDate": "$(date --date yesterday '+%Y-%m-%d')",
             "delta": 0
@@ -27,7 +27,7 @@
         {
           "to": "azure",
           "params": {
-            "bucket": "{{ .Values.blob_container_name }}",
+            "bucket": "{{ .Values.global.azure_telemetry_container_name }}",
             "key": "{{ .Values.job_manager_tmp_dir }}/wfs/$(date --date yesterday '+%Y-%m-%d')"
           }
         },
@@ -268,7 +268,7 @@
                     "basePath": "{{ .Values.spark_output_temp_dir }}",
                     "rollup": 0,
                     "reportPath": "dialcode_counts.csv",
-            "postContainer":"{{  .Values.reports_container }}"
+            "postContainer": "{{ .Values.global.azure_reports_container_name }}"
                 }
             },
             "dialcodeReportConfig": {
@@ -288,11 +288,11 @@
                         "rollupAge": "ACADEMIC_YEAR",
                         "rollupCol": "Date",
                         "rollupRange": 10,
-              "postContainer":"{{  .Values.reports_container }}"
+              "postContainer":"{{ .Values.global.azure_reports_container_name }}"
                     }
             },
             "etbFileConfig": {
-                "bucket": "{{  .Values.reports_container }}",
+                "bucket": "{{ .Values.global.azure_reports_container_name }}",
                 "file": "dialcode_scans/dialcode_counts.csv"
             },
             "druidConfig": {"queryType": "groupBy","dataSource": "content-model-snapshot","intervals": "1901-01-01T00:00:00+00:00/2101-01-01T00:00:00+00:00","aggregations": [{"name": "count","type": "count"}],"dimensions": [{"fieldName": "channel","aliasName": "channel"},{"fieldName": "identifier","aliasName": "identifier","type": "Extraction","outputType": "STRING","extractionFn": [{"type": "javascript","fn": "function(str){return str == null ? null: str.split(\".\")[0]}"}]},{"fieldName": "name","aliasName": "name"},{"fieldName": "createdFor","aliasName": "createdFor"},{"fieldName": "createdOn","aliasName": "createdOn"},{"fieldName": "lastUpdatedOn","aliasName": "lastUpdatedOn"},{"fieldName": "board","aliasName": "board"},{"fieldName": "medium","aliasName": "medium"},{"fieldName": "gradeLevel","aliasName": "gradeLevel"},{"fieldName": "subject","aliasName": "subject"},{"fieldName": "status","aliasName": "status"}],"filters": [{"type": "equals","dimension": "contentType","value": "TextBook"},{"type": "in","dimension": "status","values": ["Live","Draft","Review"]}],"postAggregation": [],"descending": "false","limitSpec": {"type": "default","limit": 1000000,"columns": [{"dimension": "count","direction": "descending"}]}},
@@ -304,7 +304,7 @@
             "format": "csv",
             "key": "druid-reports/",
             "filePath": "druid-reports/",
-            "container": "{{ .Values.blob_container_name }}",
+            "container": "{{ .Values.global.azure_telemetry_container_name }}",
             "folderPrefix": ["slug", "reportName"]
         },
         "output": [{
@@ -353,7 +353,7 @@
           "format":"csv",
           "key": "druid-reports/",
           "filePath": "druid-reports/",
-          "container": "{{ .Values.blob_container_name }}",
+          "container": "{{ .Values.global.azure_telemetry_container_name }}",
           "folderPrefix": ["slug", "reportName"],
           "sparkCassandraConnectionHost": "{{ .Values.core_cassandra_host | default .Values.global.cassandra.host }}",
           "sparkElasticsearchConnectionHost": "{{ .Values.sunbird_es_host | default .Values.global.elasticsearch.host }}"
@@ -465,7 +465,7 @@
         "format":"csv",
         "key": "druid-reports/",
         "filePath": "druid-reports/",
-        "container": "{{ .Values.blob_container_name }}",
+        "container": "{{ .Values.global.azure_telemetry_container_name }}",
         "folderPrefix": ["slug", "reportName"],
         "sparkCassandraConnectionHost": "{{ .Values.core_cassandra_host | default .Values.global.cassandra.host }}",
         "sparkElasticsearchConnectionHost": "{{ .Values.sunbird_es_host | default .Values.global.elasticsearch.host }}"
@@ -494,7 +494,7 @@
                 "type": "azure",
                 "queries": [
                   {
-                    "bucket": "{{ .Values.blob_container_name }}",
+                    "bucket": "{{ .Values.global.azure_telemetry_container_name }}",
                     "prefix": "telemetry-denormalized/raw/",
                     "startDate": "$(date --date yesterday '+%Y-%m-%d')",
                     "endDate": "$(date --date yesterday '+%Y-%m-%d')"
@@ -540,7 +540,7 @@
                 "type": "azure",
                 "queries": [
                   {
-                    "bucket": "{{ .Values.blob_container_name }}",
+                    "bucket": "{{ .Values.global.azure_telemetry_container_name }}",
                     "prefix": "failed/",
                     "startDate": "$(date --date yesterday '+%Y-%m-%d')",
                     "endDate": "$(date --date yesterday '+%Y-%m-%d')"
@@ -554,7 +554,7 @@
                 "type": "azure",
                 "queries": [
                   {
-                    "bucket": "{{ .Values.blob_container_name }}",
+                    "bucket": "{{ .Values.global.azure_telemetry_container_name }}",
                     "prefix": "unique/",
                     "startDate": "$(date --date yesterday '+%Y-%m-%d')",
                     "endDate": "$(date --date yesterday '+%Y-%m-%d')"
@@ -568,7 +568,7 @@
                 "type": "azure",
                 "queries": [
                   {
-                    "bucket": "{{ .Values.blob_container_name }}",
+                    "bucket": "{{ .Values.global.azure_telemetry_container_name }}",
                     "prefix": "raw/",
                     "startDate": "$(date --date yesterday '+%Y-%m-%d')",
                     "endDate": "$(date --date yesterday '+%Y-%m-%d')"
@@ -583,7 +583,7 @@
                 "queries": [
                   {
                     "folder": true,
-                    "bucket": "{{ .Values.blob_container_name }}",
+                    "bucket": "{{ .Values.global.azure_telemetry_container_name }}",
                     "prefix": "channel/*/raw/",
                     "startDate": "$(date --date yesterday '+%Y-%m-%d')",
                     "endDate": "$(date --date yesterday '+%Y-%m-%d')*.json.gz"
@@ -598,7 +598,7 @@
                 "queries": [
                   {
                     "folder": true,
-                    "bucket": "{{ .Values.blob_container_name }}",
+                    "bucket": "{{ .Values.global.azure_telemetry_container_name }}",
                     "prefix": "channel/*/summary/",
                     "startDate": "$(date --date yesterday '+%Y-%m-%d')",
                     "endDate": "$(date --date yesterday '+%Y-%m-%d')*.json.gz"
@@ -612,7 +612,7 @@
                 "type": "azure",
                 "queries": [
                   {
-                    "bucket": "{{ .Values.blob_container_name }}",
+                    "bucket": "{{ .Values.global.azure_telemetry_container_name }}",
                     "prefix": "derived/wfs/",
                     "startDate": "$(date --date yesterday '+%Y-%m-%d')",
                     "endDate": "$(date --date yesterday '+%Y-%m-%d')"
