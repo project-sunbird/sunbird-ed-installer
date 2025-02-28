@@ -96,7 +96,7 @@ function install_component() {
 }
 
 function install_helm_components() {
-    components=("monitoring" "edbb" "learnbb" "knowledgebb" "obsrvbb" "inquirybb")
+    components=("monitoring" "edbb" "learnbb" "knowledgebb" "obsrvbb" "inquirybb" "additional")
     for component in "${components[@]}"; do
         install_component "$component"
     done

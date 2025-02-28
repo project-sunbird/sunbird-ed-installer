@@ -15,3 +15,20 @@ global:
   encryption__string: ${encryption_string}
   random_string: ${random_string}
   
+
+velero:
+  enabled: true
+  credentials:
+    useSecret: true
+    secretContents:
+      cloud: |
+        AZURE_STORAGE_ACCOUNT_NAME: ${azure_storage_account_name}
+        AZURE_STORAGE_ACCOUNT_KEY: ${azure_storage_account_key}
+  configuration:
+    backupStorageLocation:
+      - name: default
+        provider: "azure"
+        bucket: backups
+        config:
+          storageAccount: ${azure_storage_account_name}
+          storageAccountKeyEnvVar: AZURE_STORAGE_ACCOUNT_KEY
