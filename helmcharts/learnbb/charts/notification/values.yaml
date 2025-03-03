@@ -5,7 +5,7 @@ replicaCount: 1
 
 image:
   repository: sunbirded.azurecr.io/notification_service
-  tag: "release-7.0.0_RC2_42c4145_8"
+  tag: "release-7.0.0_RC4_db7555c_10"
   pullPolicy: IfNotPresent
   pullSecrets: []
 

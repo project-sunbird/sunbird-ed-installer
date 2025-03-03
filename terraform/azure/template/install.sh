@@ -10,7 +10,7 @@ environment=$(basename "$(pwd)")
 
 function create_tf_backend() {
     echo -e "Creating terraform state backend"
-    bash create_tf_backend.sh "$environment"
+    bash create_tf_backend.sh
 }
 
 function backup_configs() {

@@ -3,6 +3,7 @@ global:
   # Provide your domain name
   # Example: sunbird.com
   domain: "REPLACE_ME"
+  sunbird_cloud_storage_provider: azure # Provide the cloud storage provider
   # Provide values for the following variables
   sunbird_google_captcha_site_key: 
   google_captcha_private_key: 
