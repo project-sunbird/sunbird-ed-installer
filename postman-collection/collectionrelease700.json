@@ -3009,7 +3009,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\"request\":{\"framework\":{\"name\":\"CBSE\",\"description\":\"Sunbirdk-12framework\",\"type\":\"K-12\",\"code\":\"{{framework_default}}\",\"channels\":[{\"identifier\":\"{{channel_id}}\"}],\"systemDefault\":\"Yes\"}}}"
+									"raw": "{\"request\":{\"framework\":{\"name\":\"CBSE\",\"description\":\"Sunbird k-12 framework\",\"type\":\"K-12\",\"code\":\"{{framework_default}}\",\"channels\":[{\"identifier\":\"{{channel_id}}\"}],\"systemDefault\":\"Yes\"}}}"
 								},
 								"url": "{{host}}/api/framework/v1/create",
 								"description": "Framework type is case sensitive. Make sure framework type while creating & updating to the channel with the same value(Case sensitive)\n\n#### Example:\n\n`\"type\": \"K-12\",`\n\n`Or`\n\n`\"type\": \"TPD\",`"
@@ -3052,7 +3052,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\"request\":{\"framework\":{\"name\":\"{{default_Course_Framework}}\",\"description\":\"SunbirdTPDframework\",\"type\":\"TPD\",\"code\":\"{{default_Course_Framework}}\",\"channels\":[{\"identifier\":\"{{channel_id}}\"}],\"systemDefault\":\"Yes\"}}}"
+									"raw": "{\"request\":{\"framework\":{\"name\":\"{{default_Course_Framework}}\",\"description\":\"Sunbird TPD framework\",\"type\":\"TPD\",\"code\":\"{{default_Course_Framework}}\",\"channels\":[{\"identifier\":\"{{channel_id}}\"}],\"systemDefault\":\"Yes\"}}}"
 								},
 								"url": "{{host}}/api/framework/v1/create",
 								"description": "Framework type is case sensitive. Make sure framework type while creating & updating to the channel with the same value(Case sensitive)\n\n#### Example:\n\n`\"type\": \"K-12\",`\n\n`Or`\n\n`\"type\": \"TPD\",`"
