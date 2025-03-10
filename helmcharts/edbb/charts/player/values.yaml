@@ -115,6 +115,7 @@ sidecars: {}
   #   args: ["-c", "tail -f /var/log/app.log"] # Run a shell script that tails the log file
 
 opa_enabled: false
+google_auth_client_secret: "google-auth"
 global:
   azure_private_container_name: ""
   azure_storage_account_name: sunbird
