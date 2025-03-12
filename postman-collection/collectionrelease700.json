@@ -1057,7 +1057,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"request\": {\n        \"id\": \"tncConfig\",\n        \"field\": \"tncConfig\",\n        \"value\": \"{\\\"latestVersion\\\":\\\"3.5.0\\\",\\\"3.5.0\\\":{\\\"url\\\":\\\"https:\\/\\/{{blob_store_path}}.blob.core.windows.net\\/terms-and-conditions\\/terms-and-conditions-v9.html#termsOfUse\\\"}}\"\n    }\n}",
+							"raw": "{\n    \"request\": {\n        \"id\": \"tncConfig\",\n        \"field\": \"tncConfig\",\n        \"value\": \"{\\\"latestVersion\\\":\\\"3.5.0\\\",\\\"3.5.0\\\":{\\\"url\\\":\\\"https:\\/\\/{{blob_store_path}}.blob.core.windows.net\\/termsandcondtions\\/terms-and-conditions-v9.html#termsOfUse\\\"}}\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
