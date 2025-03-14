@@ -25,10 +25,30 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+
+      initContainers:
+        - name: wait-for-elasticsearch
+          image: curlimages/curl:latest
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              while true; do
+                status=$(curl --silent --location "http://elasticsearch:9200/_cluster/health" | grep -o '"status":"[^"]*' | grep -o '[^"]*$');
+                status=$(echo $status | tr '[:upper:]' '[:lower:]');
+                if [[ "$status" == "green" || "$status" == "yellow" ]]; then
+                  echo "Elasticsearch is healthy";
+                  break;
+                else
+                  echo "Elasticsearch is not reachable, retrying..."
+                  sleep 5;
+                fi;
+              done
+
       {{- with .Values.initContainers }}
       initContainers:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -58,82 +78,7 @@ spec:
           - name: config
             mountPath: {{ .Values.configmap.mountPath }}
           {{- end }}
-{{- if .Values.opa_enabled }}
-        - args:
-          - envoy
-          - --config-path
-          - /config/config.yaml
-          env:
-          - name: ENVOY_UID
-            value: "1111"
-          image: envoyproxy/envoy:v1.20.0
-          imagePullPolicy: IfNotPresent
-          name: envoy
-          livenessProbe:
-            {{ toYaml .Values.envoy_probes | nindent 12 }}
-          readinessProbe:
-            {{ toYaml .Values.envoy_probes | nindent 12 }}
-          resources:
-            {{ toYaml .Values.envoy_resources | nindent 12 }}
-          volumeMounts:
-            - mountPath: /config
-              name: envoy-config
-              readOnly: true
-        - command: ["/bin/sh", "-c"]
-          args:
-          - |
-            KID=$(cat /keys/KEYCLOAK_PUBLIC_KEY_KID) && PUBLIC_KEY=$(cat /keys/KEYCLOAK_PUBLIC_KEY) && \
-            PUBLIC_KEY_PEM=$(echo "$PUBLIC_KEY" | sed -e 's/.\{64\}/&\\\\n/g' -e '1s/^/-----BEGIN PUBLIC KEY-----\\\\n/' -e '$s/$/\\\\n-----END PUBLIC KEY-----/') && \
-            mkdir /policies && cp -Lr /opa-policies/*.rego /policies && \
-            sed -i "s|KEYCLOAK_KID|$KID|g" /policies/common.rego && \
-            sed -i "s|KEYCLOAK_PUBLIC_KEY|$PUBLIC_KEY_PEM|g" /policies/common.rego && \
-            /app/opa run --server /policies \
-              --addr=localhost:8181 \
-              --diagnostic-addr=0.0.0.0:8282 \
-              --set=plugins.envoy_ext_authz_grpc.addr=:9191 \
-              --set=plugins.envoy_ext_authz_grpc.path=main/allow \
-              --set=decision_logs.plugin=print_decision_logs_on_failure \
-              --set=plugins.print_decision_logs_on_failure.stdout=true \
-              --log-level=error \
-              --ignore=.*
-          image: sunbirded.azurecr.io/opa:0.34.2-envoy
-          imagePullPolicy: IfNotPresent
-          name: opa
-          livenessProbe:
-            {{- toYaml .Values.opa_probes | nindent 12 }}
-          readinessProbe:
-            {{- toYaml .Values.opa_probes | nindent 12 }}
-          resources:
-            {{- toYaml .Values.opa_resources | nindent 12 }}
-          volumeMounts:
-            - mountPath: /opa-policies
-              name: opa-policy
-              readOnly: true
-            - name: keycloak-key
-              mountPath: /keys/
-      initContainers:
-        - args:
-          - -p
-          - "9999"
-          - -u
-          - "1111"
-          - -w
-          - "8282,10000"
-          image: openpolicyagent/proxy_init:v5
-          imagePullPolicy: IfNotPresent
-          name: proxy-init
-          resources:
-            {{ toYaml .Values.init_container_resources | nindent 12 }}
-          securityContext:
-            capabilities:
-              add:
-              - NET_ADMIN
-            runAsNonRoot: false
-            runAsUser: 0
-{{- end }}
-        {{- with .Values.sidecars }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+
       volumes:
       - name: env
         configMap:
@@ -143,14 +88,3 @@ spec:
         configMap:
           name: {{ include "common.names.fullname" . }}
       {{- end }}
-{{- if .Values.opa_enabled }}
-      - name: envoy-config
-        configMap:
-          name: {{ include "common.names.fullname" . }}-envoy
-      - name: opa-policy
-        configMap:
-          name: {{ include "common.names.fullname" . }}-opa
-      - name: keycloak-key
-        configMap:
-          name: {{ .Values.global.keycloak_kid_keys_configmap }}
-{{- end }}
