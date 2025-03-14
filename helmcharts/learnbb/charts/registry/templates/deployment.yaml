@@ -2,11 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}
-  labels: 
-    {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
-  annotations: 
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
@@ -27,7 +25,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-
+      {{- with .Values.initContainers }}
       initContainers:
         - name: wait-for-elasticsearch
           image: curlimages/curl:latest
@@ -44,13 +42,7 @@ spec:
                   echo "Elasticsearch is not reachable, retrying..."
                   sleep 5;
                 fi;
-              done
-
-      {{- with .Values.initContainers }}
-      initContainers:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-
+              done  
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -80,8 +72,7 @@ spec:
           - name: config
             mountPath: {{ .Values.configmap.mountPath }}
           {{- end }}
-
-      {{- if .Values.opa_enabled }}
+{{- if .Values.opa_enabled }}
         - args:
           - envoy
           - --config-path
@@ -153,13 +144,10 @@ spec:
               - NET_ADMIN
             runAsNonRoot: false
             runAsUser: 0
-      {{- end }}
-
-      {{- with .Values.sidecars }}
-      sidecars:
+{{- end }}
+        {{- with .Values.sidecars }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
-
+        {{- end }}
       volumes:
       - name: env
         configMap:
@@ -169,8 +157,7 @@ spec:
         configMap:
           name: {{ include "common.names.fullname" . }}
       {{- end }}
-
-      {{- if .Values.opa_enabled }}
+{{- if .Values.opa_enabled }}
       - name: envoy-config
         configMap:
           name: {{ include "common.names.fullname" . }}-envoy
@@ -180,4 +167,4 @@ spec:
       - name: keycloak-key
         configMap:
           name: {{ .Values.global.keycloak_kid_keys_configmap }}
-      {{- end }}
+{{- end }}
