@@ -5911,6 +5911,37 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Associating framework with Custodian channel",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{apikey}}"
+									},
+									{
+										"key": "x-channel-id",
+										"value": "{{channel_custodian_id}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"request\": {\n        \"channel\": {\n            \"frameworks\": [\n                {\n                    \"identifier\": \"{{framework_default}}\",\n                    \"name\": \"CBSE\"\n                }\n            ],\n            \"defaultFramework\": \"{{framework_default}}\"\n        }\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{host}}/api/channel/v1/update/{{channel_custodian_id}}"
+							},
+							"response": []
 						}
 					]
 				},
@@ -6191,7 +6222,7 @@
 							"response": []
 						},
 						{
-							"name": "Create certificate template",
+							"name": "Create certificate template for default org",
 							"event": [
 								{
 									"listen": "test",
@@ -6233,14 +6264,14 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"request\": {\n        \"asset\": {\n            \"certType\": \"cert template layout\",\n            \"code\": \"1 logo 1 signature\",\n            \"data\": {\n                \"title\": \"1 logo 1 signature\"\n            },\n            \"channel\": \"{{channel_id}}\",\n            \"mimeType\": \"image/svg+xml\",\n            \"issuer\": {\n                \"name\": \"cbse\",\n                \"url\": \"https://diksha.gov.in/cbse/\"\n            },\n            \"primaryCategory\": \"Certificate Template\",\n            \"mediaType\": \"image\",\n            \"signatoryList\": [\n                {\n                    \"image\": \"https://diksha.gov.in/cbse/cbse-logo.png\",\n                    \"name\": \"CBSE\",\n                    \"id\": \"cbse\",\n                    \"designation\": \"XBSE\"\n                }\n            ],\n            \"license\": \"CC BY 4.0\",\n            \"name\": \"1 logo 1 signature\"\n        }\n    }\n}"
+									"raw": "{\n    \"request\": {\n        \"asset\": {\n            \"certType\": \"cert template\",\n            \"code\": \"1 logo 1 signature\",\n            \"data\": {\n                \"title\": \"1 logo 1 signature\"\n            },\n            \"channel\": \"{{channel_id}}\",\n            \"mimeType\": \"image/svg+xml\",\n            \"issuer\": {\n                \"name\": \"cbse\",\n                \"url\": \"https://diksha.gov.in/cbse/\"\n            },\n            \"primaryCategory\": \"Certificate Template\",\n            \"mediaType\": \"image\",\n            \"signatoryList\": [\n                {\n                    \"image\": \"https://diksha.gov.in/cbse/cbse-logo.png\",\n                    \"name\": \"CBSE\",\n                    \"id\": \"cbse\",\n                    \"designation\": \"XBSE\"\n                }\n            ],\n            \"license\": \"CC BY 4.0\",\n            \"name\": \"1 logo 1 signature\"\n        }\n    }\n}"
 								},
 								"url": "{{host}}/api/asset/v1/create"
 							},
 							"response": []
 						},
 						{
-							"name": "Upload Certificate Template",
+							"name": "Upload Certificate Template for Default org",
 							"request": {
 								"method": "POST",
 								"header": [
@@ -7422,6 +7453,94 @@
 							}
 						},
 						"url": "{{host}}/api/data/v1/system/settings/set"
+					},
+					"response": []
+				},
+				{
+					"name": "3 - Page Section Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Your do id\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var sectionId = jsonData.result.sectionId;",
+									"    console.log(jsonData);",
+									"    if(sectionId) {",
+									"        pm.environment.set(\"section_id\", sectionId);",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{apikey}}"
+							},
+							{
+								"key": "x-authenticated-user-token",
+								"value": "{{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"request\": {\n        \"name\": \"Linked Content\",\n        \"sectionDataType\": \"content\",\n        \"searchQuery\": {\n            \"request\": {\n                \"facets\": [\n                    \"language\",\n                    \"grade\",\n                    \"domain\",\n                    \"contentType\",\n                    \"primaryCategory\",\n                    \"subject\",\n                    \"medium\"\n                ],\n                \"filters\": {\n                    \"primaryCategory\": [\n                        \"Digital Textbook\",\n                        \"Textbook Unit\",\n                        \"Course\",\n                        \"Explanation Content\",\n                        \"Content Playlist\"\n                    ],\n                    \"contentType\": [\n                        \"Collection\",\n                        \"TextBook\",\n                        \"TextBookUnit\",\n                        \"Resource\",\n                        \"Course\"\n                    ],\n                    \"status\": [\n                        \"Live\"\n                    ],\n                    \"compatibilityLevel\": {\n                        \"max\": 4,\n                        \"min\": 1\n                    }\n                },\n                \"mode\": \"collection\",\n                \"limit\": 10,\n                \"sort_by\": {\n                    \"lastUpdatedOn\": \"desc\"\n                }\n            }\n        },\n        \"display\": {\n            \"name\": {\n                \"en\": \"Linked Content\"\n            }\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{host}}/api/data/v1/page/section/create"
+					},
+					"response": []
+				},
+				{
+					"name": "4 - Page Create",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-authenticated-user-token",
+								"value": "{{access_token}}"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{apikey}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"request\": {\n        \"name\": \"DIAL Code Consumption\",\n        \"portalMap\": [\n            {\n                \"id\": {{section_id}},\n                \"index\": 1,\n                \"group\": 1\n            }\n        ],\n        \"appMap\": [\n            {\n                \"id\": {{section_id}},\n                \"index\": 1,\n                \"group\": 1\n            }\n        ]\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{host}}/api/data/v1/page/create"
 					},
 					"response": []
 				}
