@@ -4,7 +4,7 @@ replicaCount: 1
 
 image:
   repository: sunbirded.azurecr.io/content-service
-  tag: "release-5.7.0_RC7_a9fa6d9_23"
+  tag: "release-6.1.0_RC7"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
@@ -127,6 +127,7 @@ collection_keyspace: "{{ .Values.global.env }}_hierarchy_store"
 content_keyspace: "{{ .Values.global.env }}_content_store"
 kafka_dial_request_topic: "{{ .Values.global.env }}.knowlg.qrimage.request"
 dialcode_keyspace: dialcodes
+dial_container: dial
 cloud_storage_content_folder: "content"
 cloud_storage_asset_folder: "assets"
 cloud_storage_artefact_folder: "artifact"

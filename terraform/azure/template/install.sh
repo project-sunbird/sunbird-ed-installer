@@ -10,7 +10,7 @@ environment=$(basename "$(pwd)")
 
 function create_tf_backend() {
     echo -e "Creating terraform state backend"
-    bash create_tf_backend.sh "$environment"
+    bash create_tf_backend.sh
 }
 
 function backup_configs() {
@@ -69,6 +69,7 @@ function install_component() {
     fi
     local component="$1"
     kubectl create namespace sunbird 2>/dev/null || true
+    kubectl create namespace velero 2>/dev/null || true
     echo -e "\nInstalling $component"
     local ed_values_flag=""
     if [ -f "$component/ed-values.yaml" ]; then
@@ -96,7 +97,7 @@ function install_component() {
 }
 
 function install_helm_components() {
-    components=("monitoring" "edbb" "learnbb" "knowledgebb" "obsrvbb" "inquirybb")
+    components=("monitoring" "edbb" "learnbb" "knowledgebb" "obsrvbb" "inquirybb" "additional")
     for component in "${components[@]}"; do
         install_component "$component"
     done

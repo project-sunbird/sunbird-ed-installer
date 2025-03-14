@@ -367,7 +367,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"request\": {\n        \"type\": \"organization\",\n        \"subType\": \"organization\",\n        \"action\": \"sign-in\",\n        \"component\": \"*\",\n        \"framework\": \"*\",\n        \"data\": {\n            \"fields\": [\n                {\n                    \"name\": \"TN Staging SSO\",\n                    \"loginUrl\": \"https://ops.staging.sunbirded.org/\"\n                }\n            ]\n        },\n        \"rootOrgId\": \"*\"\n    }\n}"
+									"raw": "{\n    \"request\": {\n        \"type\": \"organization\",\n        \"subType\": \"organization\",\n        \"action\": \"sign-in\",\n        \"component\": \"*\",\n        \"framework\": \"*\",\n        \"data\": {\n            \"fields\": [\n                {\n                    \"name\": \"TN Staging SSO\",\n                    \"loginUrl\": \"{{host}}/\"\n                }\n            ]\n        },\n        \"rootOrgId\": \"*\"\n    }\n}"
 								},
 								"description": "https://documenter.getpostman.com/view/25186239/2sA2rAxMg6#40d7d664-6fbd-496b-85f8-8d3504000a46"
 							},

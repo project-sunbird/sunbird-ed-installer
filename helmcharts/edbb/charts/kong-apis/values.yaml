@@ -2,7 +2,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 image:
-  repository: keshavprasad/kong-scripts
+  repository: sunbirded.azurecr.io/kong-scripts
   tag: "0.1.8"
   pullPolicy: IfNotPresent
   pullSecrets: []

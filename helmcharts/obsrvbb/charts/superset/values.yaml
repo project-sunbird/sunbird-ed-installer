@@ -20,12 +20,14 @@
 # Declare variables to be passed into your templates.
 
 namespace: sunbird
+nameOverride: superset
+fullnameOverride: superset
 
 replicaCount: 1
 
 image:
   repository: sunbirded.azurecr.io/superset
-  tag: 1.0.0
+  tag: release-7.0.0
   pullPolicy: Always
 
 service:
@@ -80,11 +82,18 @@ credentials:
   creatorPassword: creator
   creatorEmail: report_creator@example.com
 
-PG_USER: {{ .Values.global.postgresql.postgresqlUsername }}
-PG_PASS: {{ .Values.global.postgresql.postgresqlPassword }}
-PG_HOST: {{ .Values.global.postgresql.host }}
-PORTAL_HOST: "http://{{ .Values.global.domain }}"
-PORTAL_API_HOST: {{ .Values.report_service_url }}
-PORTAL_API_KEY: {{.Values.global.sunbird_admin_api_token}}
-ANALYTICS_API_KEY: {{ .Values.global.adminutil_learner_api_auth_key }}
-ANALYTICS_API_HOST: {{ .Values.analytics_api_service_url }}
+postgresql: &postgresql
+  enabled: true
+  host: postgresql
+  postgresqlUsername: postgres
+  postgresqlPassword: postgres
+
+global:
+  postgresql: *postgresql
+  adminutil_learner_api_auth_key: ""
+
+
+
+report_service_url: "http://report-service:3030"
+analytics_api_service_url: "http://analytics-service:9000"
+

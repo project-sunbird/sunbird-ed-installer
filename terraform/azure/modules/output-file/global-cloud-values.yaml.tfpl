@@ -11,7 +11,27 @@ global:
   azure_dial_state_container_name: ${azure_dial_state_container_name}
   azure_backups_container_name: ${azure_backups_container_name}
   azure_telemetry_container_name: ${azure_telemetry_container_name}
+  azure_terms_and_conditions_container_name: ${azure_terms_and_conditions_container_name}
+  azure_public_state_container_name: ${azure_public_state_container_name}
+  azure_sourcing_state_container_name: ${azure_sourcing_state_container_name}
   private_ingressgateway_ip: ${private_ingressgateway_ip}
   encryption__string: ${encryption_string}
   random_string: ${random_string}
   
+
+velero:
+  enabled: true
+  credentials:
+    useSecret: true
+    secretContents:
+      cloud: |
+        AZURE_STORAGE_ACCOUNT_NAME: ${azure_storage_account_name}
+        AZURE_STORAGE_ACCOUNT_KEY: ${azure_storage_account_key}
+  configuration:
+    backupStorageLocation:
+      - name: default
+        provider: "azure"
+        bucket: backups
+        config:
+          storageAccount: ${azure_storage_account_name}
+          storageAccountKeyEnvVar: AZURE_STORAGE_ACCOUNT_KEY

@@ -5,7 +5,7 @@ replicaCount: 1
 
 image:
   repository: sunbirded.azurecr.io/knowledge-mw-service
-  tag: "release-5.6.0_RC1_f24f1dd_10"
+  tag: "release-6.0.0_c245041_235"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
