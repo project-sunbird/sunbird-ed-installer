@@ -22,7 +22,7 @@
                 <div class="left-section">
                     <div class="illustration-section">
                         <!-- <img src="${url.resourcesPath}/img/contact.png" alt="Contact Illustration"> -->
-                        <video width="540" height="315" controls>
+                        <video style="max-width: -webkit-fill-available;" height="315" controls>
                           <source src="https://storage.googleapis.com/ed-sunbird-public/landing-video/Video-02.mp4" type="video/mp4">
                         </video>
                     </div>

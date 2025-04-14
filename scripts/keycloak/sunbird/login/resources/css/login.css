@@ -880,7 +880,7 @@ input:focus-visible {
     line-height: 1.5;
     height: 52px;
     box-sizing: border-box;
-    min-width: 300px;
+    min-width: fit-content;
 }
 
 .ui.form .field {
