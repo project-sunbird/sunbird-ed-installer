@@ -23,7 +23,11 @@ dependency "storage" {
       azurerm_dial_state_container_public = "dummy-container-dail"
       azurerm_telemetry_container_public  = "dummy-container-telemetry"
       azurerm_reports_container_private = "dummy-container-report"
-      azurerm_backups_container_private ="dummy-container-backups"
+      azurerm_backups_container_private = "dummy-container-backups"
+      azurerm_telemetry_container_private = "dummy-container-terms"
+      azurerm_public_state_container= "dummy-container-public-state"
+      azurerm_sourcing_state_container = "dummy-container-sourcing"
+      azurerm_terms_and_conditions_container = "dummy-container-terms"
       azurerm_storage_account_key = "dummy-key"
     }
 }
@@ -52,6 +56,9 @@ inputs = {
   flink_container_private            = dependency.storage.outputs.azurerm_flink_state_container_private
   dial_state_container_public        = dependency.storage.outputs.azurerm_dial_state_container_public
   telemetry_container_private        = dependency.storage.outputs.azurerm_telemetry_container_private
+  terms_and_conditions_container     = dependency.storage.outputs.azurerm_terms_and_conditions_container
+  public_state_container             = dependency.storage.outputs.azurerm_public_state_container
+  sourcing_state_container           = dependency.storage.outputs.azurerm_sourcing_state_container
   storage_account_primary_access_key = dependency.storage.outputs.azurerm_storage_account_key
   encryption_string                  = dependency.keys.outputs.encryption_string
   random_string                      = dependency.keys.outputs.random_string

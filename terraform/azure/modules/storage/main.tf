@@ -80,3 +80,20 @@ resource "azurerm_storage_container" "dial_state_container_public" {
   storage_account_name  = azurerm_storage_account.storage_account.name
   container_access_type = "blob"
 }
+
+resource "azurerm_storage_container" "terms_and_conditions_container" {
+    name        = "termsandcondtions"
+    storage_account_name  = azurerm_storage_account.storage_account.name
+    container_access_type = "container"
+}
+
+resource "azurerm_storage_container"  "public_state_container" {
+    name                  = "public"
+    storage_account_name  = azurerm_storage_account.storage_account.name
+    container_access_type = "container"
+}
+resource "azurerm_storage_container" "sourcing_state_container" {
+    name                  = "sourcing"
+    storage_account_name  = azurerm_storage_account.storage_account.name
+    container_access_type = "container"
+}

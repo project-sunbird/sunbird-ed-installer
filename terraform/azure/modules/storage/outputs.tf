@@ -29,3 +29,14 @@ output "azurerm_dial_state_container_public" {
 output "azurerm_telemetry_container_private" {
   value = azurerm_storage_container.telemetry_container_private.name
 }
+output azurerm_terms_and_conditions_container {
+  value = azurerm_storage_container.terms_and_conditions_container.name
+}
+
+output azurerm_public_state_container {
+  value = azurerm_storage_container.public_state_container.name
+}
+
+output azurerm_sourcing_state_container {
+  value = azurerm_storage_container.sourcing_state_container.name
+}

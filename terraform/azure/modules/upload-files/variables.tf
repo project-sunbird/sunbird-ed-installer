@@ -8,6 +8,25 @@ variable "storage_container_public" {
     description = "Public storage container name with blob access."
 }
 
+variable "terms_and_conditions_container" {
+    type        = string
+    description = "The container name dedicated for terms and conditions."
+    default     = "termsandconditions"
+  
+}
+
+variable "public_state_container" {
+    type        = string
+    description = "The container name dedicated for public state."
+    default     = "public"
+}
+
+variable "sourcing_state_container" {
+    type        = string
+    description = "The container name dedicated for sourcing state."
+    default     = "sourcing"
+}
+
 variable "storage_account_primary_access_key" {
     type        = string
     description = "Storage account primary access key."
@@ -29,4 +48,23 @@ variable "sunbird_public_artifacts_container" {
     type        = string
     description = "The container name dedicated for this release which holds the storage artifatcs."
     default     = "release700"
+}
+
+variable "sunbird_terms_and_conditions_container" {
+    type        = string
+    description = "terms_and_conditions storage container name."
+    default = "termsandcondtions"
+  
+}
+
+variable "sunbird_public_state_container" {
+    type        = string
+    description = "public_state storage container name."
+    default = "public"
+}
+
+variable "sunbird_sourcing_state_container" {
+    type        = string
+    description = "sourcing_state storage container name."
+    default = "sourcing"
 }
