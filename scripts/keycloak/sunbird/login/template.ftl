@@ -5,6 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com; frame-ancestors 'self'; object-src 'none';">
     <meta name="robots" content="noindex, nofollow">
     <meta http-equiv="cache-control" content="max-age=0" />
     <meta http-equiv="cache-control" content="no-cache" />
@@ -84,27 +85,18 @@
                     </div>
                     <script type="text/javascript">
                         var sessionTenant = sessionStorage.getItem("rootTenantLogo");
-                        
-                        if(sessionTenant){
-                            var imgSrc = "${url.resourcesPath}/img/tenants/"+sessionTenant+".png";
-                        }else{
-                            var imgSrc = "${url.resourcesPath}/img/logo.png";
-                        }
-
                         var logoImg =  document.querySelector(".ui.header img");
-                        if(logoImg){
-                            logoImg.setAttribute('class','logo-image');
-                            if(sessionTenant) {
-                                var logoname = sessionTenant + 'logo';
-                                logoImg.setAttribute('alt',logoname);
-                            } else {
-                                var logoname = 'Sunbird logo';
-                                logoImg.setAttribute('alt',logoname);
-                            }
-                            logoImg.src = imgSrc;
-                            logoImg.addEventListener("error", ()=>{ logoImg.onerror=null;logoImg.src='${url.resourcesPath}/img/logo.png'});
-                        }
 
+                        if(logoImg && sessionTenant){
+                            var imgSrc = "${url.resourcesPath}/img/tenants/"+sessionTenant+".png";
+                            logoImg.setAttribute('class','logo-image');
+                            var logoname = sessionTenant + 'logo';
+                            logoImg.setAttribute('alt',logoname);
+                            logoImg.src = imgSrc;
+                        } else if(logoImg) {
+                            // Remove logo element if no tenant logo is available
+                            logoImg.remove();
+                        }
                     </script>
                     <#if displayInfo>
                         <div id="kc-info" class="${properties.kcInfoAreaClass!}">
