@@ -2,22 +2,17 @@ global:
   env: ${env}
   environment: ${environment}
   building_block: ${building_block}
-  azure_storage_account_name: ${azure_storage_account_name}
-  azure_storage_account_key: ${azure_storage_account_key}
-  azure_public_container_name: ${azure_public_container_name}
-  azure_private_container_name: ${azure_private_container_name}
-  azure_reports_container_name: ${azure_reports_container_name}
-  azure_flink_state_container_name: ${azure_flink_state_container_name}
-  azure_dial_state_container_name: ${azure_dial_state_container_name}
-  azure_backups_container_name: ${azure_backups_container_name}
-  azure_telemetry_container_name: ${azure_telemetry_container_name}
-  azure_terms_and_conditions_container_name: ${azure_terms_and_conditions_container_name}
-  azure_public_state_container_name: ${azure_public_state_container_name}
-  azure_sourcing_state_container_name: ${azure_sourcing_state_container_name}
+  cloud_storage_access_key: ${azure_storage_account_name}
+  cloud_storage_secret_key: ${azure_storage_account_key}
+  public_container_name: ${azure_public_container_name}
+  private_container_name: ${azure_private_container_name}
+  dial_state_container_public: ${azure_dial_state_container_name}
   private_ingressgateway_ip: ${private_ingressgateway_ip}
   encryption__string: ${encryption_string}
   random_string: ${random_string}
-  
+  object_storage_endpoint: ${azure_storage_account_name}.blob.core.windows.net
+
+
 
 velero:
   enabled: true
@@ -31,7 +26,11 @@ velero:
     backupStorageLocation:
       - name: default
         provider: "azure"
-        bucket: backups
+        bucket: ${azure_public_container_name}/backups
         config:
           storageAccount: ${azure_storage_account_name}
           storageAccountKeyEnvVar: AZURE_STORAGE_ACCOUNT_KEY
+nginx-public-ingress:
+  commonAnnotations:
+    reloader.stakater.com/auto: "true"
+    service.beta.kubernetes.io/azure-load-balancer-external: "true"                     

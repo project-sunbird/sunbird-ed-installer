@@ -949,7 +949,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"request\": {\n                \"id\": \"groupsTnc\",\n                \"field\": \"groupsTnc\",\n                \"value\": \"{\\\"latestVersion\\\":\\\"3.5.0\\\",\\\"3.5.0\\\":{\\\"url\\\":\\\"https:\\/\\/{{blob_store_path}}.blob.core.windows.net\\/termsandcondtions\\/terms-and-conditions-v9.html#groupGuidelines\\\"}}\"\n    }\n\n}"
+							"raw": "{\n  \"request\": {\n                \"id\": \"groupsTnc\",\n                \"field\": \"groupsTnc\",\n                \"value\": \"{\\\"latestVersion\\\":\\\"3.5.0\\\",\\\"3.5.0\\\":{\\\"url\\\":\\\"{{blob_store_path}}\\/{{public_container_name}}/termsandcondtions\\/terms-and-conditions-v9.html#groupGuidelines\\\"}}\"\n    }\n\n}"
 						},
 						"url": "{{host}}/api/data/v1/system/settings/set"
 					},
@@ -1057,7 +1057,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"request\": {\n        \"id\": \"tncConfig\",\n        \"field\": \"tncConfig\",\n        \"value\": \"{\\\"latestVersion\\\":\\\"3.5.0\\\",\\\"3.5.0\\\":{\\\"url\\\":\\\"https:\\/\\/{{blob_store_path}}.blob.core.windows.net\\/termsandcondtions\\/terms-and-conditions-v9.html#termsOfUse\\\"}}\"\n    }\n}",
+							"raw": "{\n    \"request\": {\n        \"id\": \"tncConfig\",\n        \"field\": \"tncConfig\",\n        \"value\": \"{\\\"latestVersion\\\":\\\"3.5.0\\\",\\\"3.5.0\\\":{\\\"url\\\":\\\"{{blob_store_path}}\\/{{public_container_name}}/termsandcondtions\\/terms-and-conditions-v9.html#termsOfUse\\\"}}\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -7421,7 +7421,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\r\n\t\"request\" :\r\n\t\t{\r\n\t\t\t \"id\": \"portalFaqURL\",\r\n             \"field\": \"portalFaqURL\",\r\n             \"value\": \"https://{{blob_store_path}}.blob.core.windows.net/public/portal-faq/resources/res\"\r\n\t}\r\n}",
+							"raw": "{\r\n\t\r\n\t\"request\" :\r\n\t\t{\r\n\t\t\t \"id\": \"portalFaqURL\",\r\n             \"field\": \"portalFaqURL\",\r\n             \"value\": \"{{blob_store_path}}/{{public_container_name}}/public/portal-faq/resources/res\"\r\n\t}\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -7441,11 +7441,23 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json"
+							},
+							{
+								"key": "x-authenticated-user-token",
+								"value": "{{access_token}}",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{apikey}}",
+								"type": "text"
 							}
+							
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"request\": {\n            \"id\": \"appFaqURL\",\n            \"field\": \"appFaqURL\",\n            \"value\": \"https://{{blob_store_path}}.blob.core.windows.net/public/app-faq/resources/res\"\n        }\n}",
+							"raw": "{\n    \"request\": {\n            \"id\": \"appFaqURL\",\n            \"field\": \"appFaqURL\",\n            \"value\": \"{{blob_store_path}}/{{public_container_name}}/public/app-faq/resources/res\"\n        }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -7533,7 +7545,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"request\": {\n        \"name\": \"DIAL Code Consumption\",\n        \"portalMap\": [\n            {\n                \"id\": {{section_id}},\n                \"index\": 1,\n                \"group\": 1\n            }\n        ],\n        \"appMap\": [\n            {\n                \"id\": {{section_id}},\n                \"index\": 1,\n                \"group\": 1\n            }\n        ]\n    }\n}",
+							"raw": "{\n    \"request\": {\n        \"name\": \"DIAL Code Consumption\",\n        \"portalMap\": [\n            {\n                \"id\": \"{{section_id}}\",\n                \"index\": 1,\n                \"group\": 1\n            }\n        ],\n        \"appMap\": [\n            {\n                \"id\": \"{{section_id}}\",\n                \"index\": 1,\n                \"group\": 1\n            }\n        ]\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"

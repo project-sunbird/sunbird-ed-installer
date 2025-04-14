@@ -4,7 +4,7 @@ replicaCount: 1
 image:
   registry: sunbirded.azurecr.io
   repository: sunbird-analytics-service
-  tag: release-5.1.3_RC1_fc5578f_16
+  tag: release-5.1.4
 imagePullSecrets: ""
 
 podAnnotations: {}
@@ -117,7 +117,7 @@ user_profile_read_url: "http://userorg-service:9000/v1/user/read/"
 org_search_url: "http://userorg-service:9000/v1/org/search"
 dataexhaust_super_admin_channel: "sunbird"
 exhaust_api_consumer_ids: exhaust_api_consumer_ids
-channel_data_exhaust_bucket: "{{ .Values.global.azure_telemetry_container_name }}"
+channel_data_exhaust_bucket: "{{ .Values.global.public_container_name }}/telemetry-data-store"
 public_data_exhaust_bucket: "datasets"
 proxy_server_name: proxy_server_name # TODO check with the team if its needed. In staging this url doesn't exists
 public_exhaust_datasets: ['public-data-exhaust']

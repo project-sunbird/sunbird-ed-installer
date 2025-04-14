@@ -125,9 +125,9 @@ hierarchy_keyspace_name: "{{ .Values.global.env }}_hierarchy_store"
 kp_print_service_base_url: "http://print:5000"
 # CNAME Config
 cloudstorage_relative_path_prefix: "CONTENT_STORAGE_BASE_PATH"
-cloudstorage_base_path: "https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net"
+cloudstorage_base_path: "https://{{ .Values.global.object_storage_endpoint }}"
 cloudstorage_metadata_list: '["appIcon","posterImage","artifactUrl","downloadUrl","variants","previewUrl","pdfUrl"]'
-valid_cloudstorage_base_urls: '["https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net"]'
+valid_cloudstorage_base_urls: '["https://{{ .Values.global.object_storage_endpoint }}"]'
 cloudstorage_replace_absolute_path: false
 ### QuestionSet RePublish Job Config
 inquiry_assessment_republish_kafka_topic_name: "{{ .Values.global.env }}.assessment.republish.request"
@@ -147,8 +147,6 @@ user_org_service_base_url: "http://userorg-service:9000"
 email_notification_subject: "User Account Deletion Notification"
 email_notification_regards: "Team"
 
-cloud_storage: 
-  type: "azure"
 
 log4j_console_properties: |
   # This affects logging for both user code and Flink
@@ -195,34 +193,29 @@ base_config: |
     groupId = "{{ .Values.global.env }}-user-pii-data-updater-group"
   }
 
-    job {
-      env = "{{ .Values.global.env }}"
-      enable.distributed.checkpointing = true
-      {{- if eq "oci" .Values.cloud_storage.type }}
-            statebackend {
-              s3 {
-                storage {
-                  endpoint = "{{ .Values.oci_flink_s3_storage_endpoint }}"
-                  container = "{{ .Values.flink_container_name }}"
-                  checkpointing.dir = "checkpoint"
-                }
-              }
-              base.url = "s3://"${job.statebackend.s3.storage.container}"/"${job.statebackend.s3.storage.checkpointing.dir}
-            }
-      {{- else }}
-      statebackend {
-        blob {
-          storage {
-            account = "{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net"
-            container = "{{ .Values.global.azure_public_container_name }}"
-            checkpointing.dir = "checkpoint"
-          }
-        }
-        base.url = "wasbs://{{ .Values.global.azure_flink_state_container_name }}@{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net/{{ .Values.flink_checkpointing_dir }}"
+  job {
+    env = "{{ .Values.global.env }}"
+    enable.distributed.checkpointing = true
 
-      }
-    {{- end }}
+    {{- if eq "oci" .Values.global.checkpoint_store_type }}
+    statebackend {
+      base.url = "s3://{{ .Values.global.public_container_name }}/checkpoint"
     }
+
+    {{- else if eq "azure" .Values.global.checkpoint_store_type }}
+    statebackend {
+      base.url = "wasbs://{{ .Values.global.public_container_name }}@{{ .Values.global.object_storage_endpoint }}/checkpoint"
+    }
+
+    {{- else if eq "gcs" .Values.global.checkpoint_store_type }}
+    statebackend {
+      base.url = "gs://{{ .Values.global.public_container_name }}/checkpoint"
+    }
+    {{- else }}
+    # No valid checkpoint_store_type configured, skipping statebackend.
+    {{- end }}
+  }
+  
     task {
       parallelism = 1
       consumer.parallelism = 1
@@ -278,11 +271,11 @@ flink_jobs:
       }
       print_service.base_url = "{{ .Values.kp_print_service_base_url }}"
       #Cloud Storage Config
-      cloud_storage_type: "{{ .Values.cloud_storage.type }}"
-      cloud_storage_key: "{{ .Values.global.azure_storage_account_name }}"
-      cloud_storage_secret: "{{ .Values.global.azure_storage_account_key }}"
+      cloud_storage_type: "{{ .Values.global.checkpoint_store_type }}"
+      cloud_storage_key: "{{ .Values.global.cloud_storage_access_key }}"  
+      cloud_storage_secret: "{{ .Values.global.cloud_storage_secret_key }}" 
       cloud_storage_endpoint: ""
-      cloud_storage_container: "{{ .Values.global.azure_public_container_name }}"
+      cloud_storage_container: "{{ .Values.global.public_container_name }}"
 
       master.category.validation.enabled ="{{ .Values.master_category_validation_enabled }}"
       cloudstorage {
@@ -326,11 +319,11 @@ flink_jobs:
       }
       print_service.base_url = "{{ .Values.kp_print_service_base_url }}"
       #Cloud Storage Config
-      cloud_storage_type: "{{ .Values.cloud_storage.type }}"
-      cloud_storage_key: "{{ .Values.global.azure_storage_account_name }}"
-      cloud_storage_secret: "{{ .Values.global.azure_storage_account_key }}"
+      cloud_storage_type: "{{ .Values.global.checkpoint_store_type }}"
+      cloud_storage_key: "{{ .Values.global.cloud_storage_access_key }}"
+      cloud_storage_secret: "{{ .Values.global.cloud_storage_secret_key }}"
       cloud_storage_endpoint: ""
-      cloud_storage_container: "{{ .Values.global.azure_public_container_name }}"
+      cloud_storage_container: "{{ .Values.global.public_container_name }}"
       
       master.category.validation.enabled ="{{ .Values.master_category_validation_enabled }}"
       cloudstorage {

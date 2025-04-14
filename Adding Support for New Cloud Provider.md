@@ -14,13 +14,9 @@
 
 ### Storage Buckets
 Create the following buckets:
-1. `storage_container_private`
-2. `storage_container_public`
-3. `reports_container_private`
-4. `telemetry_container_private`
-5. `backups_container_private`
-6. `flink_state_container_private`
-7. `dial_state_container_public`
+1. `private_container_name`
+2. `public_container_name`
+3. `dial_state_container_public`
 
 ### Additional Requirements
 1. Storage Account
@@ -61,7 +57,6 @@ terraform/<cloud_provider>/
     ├── kubernetescluster
     │   └── terragrunt.hcl
     ├── create_tf_backend.sh
-    ├── environment.hcl
     ├── global-values.yaml
     ├── install.sh
     ├── keys
@@ -81,7 +76,7 @@ terraform/<cloud_provider>/
 ### Step 3: Copy Template Files
 Copy the template files from the Azure configuration:
 ```sh
-cp sunbird-ed-installer/terraform/azure/template/{environment.hcl,global-values.yaml,install.sh} sunbird-ed-installer/terraform/gcp/template/
+cp sunbird-ed-installer/terraform/azure/template/{global-values.yaml,install.sh} sunbird-ed-installer/terraform/gcp/template/
 In global-values.yaml, add this variable:
 cloud_provider: "REPLACE_ME" # for configuring GCP and AWS installations
 ```
@@ -90,16 +85,15 @@ cloud_provider: "REPLACE_ME" # for configuring GCP and AWS installations
 This will become the input for Helm bundles:
 ```plaintext
   global-cloud-values.yaml
-  environment.hcl
   global-values.yaml 
 ```
 
 ### Step 5: Helm Changes
 In Helm charts, wherever cloud values are being referred to, use the following format:
 ```yaml
-{{- if eq .Values.global.cloud_provider "aws" }}
+{{- if eq .Values.global.cloud_storage_provider "aws" }}
 # AWS Specific Values
-{{- else if eq .Values.global.cloud_provider "gcp" }}
+{{- else if eq .Values.global.cloud_storage_provider "gcp" }}
 # GCP Specific Values
 {{- end }}
 ```
@@ -107,16 +101,16 @@ In Helm charts, wherever cloud values are being referred to, use the following f
 #### Example:
 In **Helm charts**, using a direct reference for **Azure**:
 ```yaml
-container_name: "{{ .Values.global.azure_telemetry_container_name }}"
+container_name: "{{ .Values.global.public_container_name }}"
 ```
 
 Using an `if-else` condition for multiple cloud providers:
 ```yaml
 container_name: 
-  {{- if eq .Values.global.cloud_provider "aws" }}
-  "{{ .Values.global.aws_public_bucket_name }}"
-  {{- else if eq .Values.global.cloud_provider "gcp" }}
-  "{{ .Values.global.gcp_public_bucket_name }}"
+  {{- if eq .Values.global.cloud_storage_provider "aws" }}
+  "{{ .Values.global.public_container_name }}"
+  {{- else if eq .Values.global.cloud_storage_provider "gcp" }}
+  "{{ .Values.global.public_container_namee }}"
   {{- else }}
   "{{ .Values.telemetry_container_private }}"
   {{- end }}

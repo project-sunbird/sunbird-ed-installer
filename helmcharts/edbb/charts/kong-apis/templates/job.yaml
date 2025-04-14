@@ -1,4 +1,3 @@
----
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -6,6 +5,10 @@ metadata:
   annotations:
     {{- .Values.provisioningAnnotations | toYaml | nindent 4 }}
 spec:
+  completions: 1  # Ensure the job runs successfully only once
+  parallelism: 1  # Run only one pod at a time
+  backoffLimit: 30
+  ttlSecondsAfterFinished: 100  # Auto-cleanup job after completion
   template:
     spec:
       initContainers:
@@ -36,4 +39,3 @@ spec:
           name: {{ include "common.names.fullname" . }}
       {{- end }}
       restartPolicy: Never
-  backoffLimit: 30

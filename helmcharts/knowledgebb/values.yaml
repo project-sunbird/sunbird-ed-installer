@@ -163,7 +163,7 @@ kafka: &kafka
 play_http: &play_http
   secret_key: "secretKey"
 schema: &schema
-  base_path: "https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net/{{ .Values.global.azure_public_container_name }}/schemas/local"
+  base_path: "https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
 graph_passport: &graph_passport
   key_base: "secretKey"
 installation: &installation

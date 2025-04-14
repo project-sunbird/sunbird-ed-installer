@@ -47,7 +47,7 @@ spec:
           git sparse-checkout set sunbird-cassandra-migration/cassandra-migration/src/main/resources/db/migration/cassandra
           git checkout
           cd sunbird-cassandra-migration/cassandra-migration/src/main/resources/db/migration/
-          wget https://{{.Values.global.azure_storage_account_name}}.blob.core.windows.net/{{ .Values.global.azure_public_container_name }}/artifacts-{{.Values.global.release_version}}/cassandra-migration-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+          wget https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/artifacts-{{.Values.global.release_version}}/cassandra-migration-0.0.1-SNAPSHOT-jar-with-dependencies.jar
           for folder in ./cassandra/*/; do
             folder_name=$(basename "$folder");
             echo "$folder_name"

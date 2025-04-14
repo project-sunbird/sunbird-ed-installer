@@ -1,9 +1,9 @@
 locals {
   # This section will be enabled after final code is pushed and tagged
   # source_base_url = "github.com/<org>/modules.git//app"
-  environment_vars = read_terragrunt_config(find_in_parent_folders("environment.hcl"))
-  environment = local.environment_vars.locals.environment
-  building_block = local.environment_vars.locals.building_block
+  global_vars  = yamldecode(file(find_in_parent_folders("global-values.yaml")))
+  environment  = local.global_vars.global.environment
+  building_block = local.global_vars.global.building_block
   # random_string  = local.environment_vars.locals.random_string 
 }
 
