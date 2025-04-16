@@ -7681,6 +7681,39 @@
 						"url": "{{host}}/api/data/v1/page/create"
 					},
 					"response": []
+				},
+				{
+					"name": "5 - Error Log Sync Settings",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-authenticated-user-token",
+								"value": "{{access_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{apikey}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"request\": {\n            \"id\": \"errorLogSyncSettings\",\n            \"field\": \"errorLogSyncSettings\",\n            \"value\": \"{\\\"bandwidth\\\":10,\\\"frequency\\\":86400000}\"\n        }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{host}}/api/data/v1/system/settings/set"
+					},
+					"response": []
 				}
 			]
 		}
