@@ -6313,6 +6313,55 @@
 							"response": []
 						},
 						{
+							"name": "Create certificate template layout for default org",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Your do id\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    var cert_layout_content_id = jsonData.result.identifier;",
+											"    console.log(jsonData);",
+											"    if(cert_content_id) {",
+											"        pm.environment.set(\"cert_layout_content_id\", cert_layout_content_id);",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "X-Channel-Id",
+										"value": "{{channel_id}}"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{apikey}}"
+									},
+									{
+										"key": "x-authenticated-user-token",
+										"value": "{{creator_access_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"request\": {\n        \"asset\": {\n            \"certType\": \"cert template layout\",\n            \"code\": \"1 logo 1 signature\",\n            \"data\": {\n                \"title\": \"1 logo 1 signature\"\n            },\n            \"channel\": \"{{channel_id}}\",\n            \"mimeType\": \"image/svg+xml\",\n            \"issuer\": {\n                \"name\": \"cbse\",\n                \"url\": \"https://diksha.gov.in/cbse/\"\n            },\n            \"primaryCategory\": \"Certificate Template\",\n            \"mediaType\": \"image\",\n            \"signatoryList\": [\n                {\n                    \"image\": \"https://diksha.gov.in/cbse/cbse-logo.png\",\n                    \"name\": \"CBSE\",\n                    \"id\": \"cbse\",\n                    \"designation\": \"XBSE\"\n                }\n            ],\n            \"license\": \"CC BY 4.0\",\n            \"name\": \"1 logo 1 signature\"\n        }\n    }\n}"
+								},
+								"url": "{{host}}/api/asset/v1/create"
+							},
+							"response": []
+						},
+						{
 							"name": "Upload Certificate Template for Default org",
 							"request": {
 								"method": "POST",
@@ -6346,6 +6395,43 @@
 									]
 								},
 								"url": "{{host}}/api/asset/v1/upload/{{cert_content_id}}"
+							},
+							"response": []
+						},
+						{
+							"name": "Upload Certificate Template Layout for Default org",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{apikey}}"
+									},
+									{
+										"key": "x-authenticated-user-token",
+										"value": "{{creator_access_token}}"
+									},
+									{
+										"key": "X-Channel-Id",
+										"value": "{{channel_id}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "fileUrl",
+											"value": "https://downloadableartifacts.blob.core.windows.net/release600/certificate_template.svg",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{host}}/api/asset/v1/upload/{{cert_layout_content_id}}"
 							},
 							"response": []
 						}
