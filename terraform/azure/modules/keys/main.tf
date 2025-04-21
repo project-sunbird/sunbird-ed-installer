@@ -28,17 +28,28 @@ resource "null_resource" "generate_jwt_keys" {
     command = "${timestamp()}"
   }
 
+  #working 
   provisioner "local-exec" {
     command = <<EOT
       python3 ${local.jwt_script_location} ${random_password.generated_string.result} && \
-      cp ${local.global_values_jwt_file_location} ${var.base_location}/../global-values-jwt-tokens.yaml
+      yq eval-all 'select(fileIndex == 0) *+ {"global": (select(fileIndex == 0).global * load("${local.global_values_jwt_file_location}"))}' -i ${var.base_location}/../global-values.yaml
+
     EOT
   }
 }
+
+
 resource "null_resource" "generate_rsa_keys" {
-  provisioner "local-exec" {
-      command = "python3 ${local.rsa_script_location} ${var.rsa_keys_count} && cp ${local.global_values_rsa_file_location} ${var.base_location}/../global-values-rsa-keys.yaml"
+   triggers = {
+    command = "${timestamp()}"
   }
+
+ provisioner "local-exec" {
+  command = <<EOT
+    python3 ${local.rsa_script_location} ${var.rsa_keys_count} && \
+    yq eval-all 'select(fileIndex == 0) *+ {"global": (select(fileIndex == 0).global * load("${local.global_values_rsa_file_location}"))}' -i ${var.base_location}/../global-values.yaml
+  EOT
+}
 }
 
 resource "null_resource" "upload_global_jwt_values_yaml" {
@@ -46,7 +57,7 @@ resource "null_resource" "upload_global_jwt_values_yaml" {
     command = "${timestamp()}"
   }
   provisioner "local-exec" {
-      command = "az storage blob upload --account-name ${var.storage_account_name} --account-key ${var.storage_account_primary_access_key} --container-name ${var.storage_container_private} --file ${var.base_location}/../global-values-jwt-tokens.yaml --name ${var.environment}-global-values-jwt-tokens.yaml --overwrite"
+      command = "az storage blob upload --account-name ${var.storage_account_name} --account-key ${var.storage_account_primary_access_key} --container-name ${var.storage_container_private}  --file ${var.base_location}/../../../../scripts/global-values-jwt-tokens.yaml --name ${var.environment}-global-values-jwt-tokens.yaml --overwrite"
   }
   depends_on = [ null_resource.generate_jwt_keys ]
 }
@@ -56,7 +67,7 @@ resource "null_resource" "upload_global_rsa_values_yaml" {
     command = "${timestamp()}"
   }
   provisioner "local-exec" {
-      command = "az storage blob upload --account-name ${var.storage_account_name} --account-key ${var.storage_account_primary_access_key} --container-name ${var.storage_container_private} --file ${var.base_location}/../global-values-rsa-keys.yaml --name ${var.environment}-global-values-rsa-keys.yaml --overwrite"
+      command = "az storage blob upload --account-name ${var.storage_account_name} --account-key ${var.storage_account_primary_access_key} --container-name ${var.storage_container_private} --file ${var.base_location}/../../../../scripts/global-values-rsa-keys.yaml --name ${var.environment}-global-values-rsa-keys.yaml --overwrite"
   }
   depends_on = [ null_resource.generate_rsa_keys ]
 }

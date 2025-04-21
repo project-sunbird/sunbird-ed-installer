@@ -100,3 +100,9 @@ variable "private_ingressgateway_ip" {
     description = "Nginx private ingress ip."
     default = "10.0.0.10"
 }
+
+
+variable "subscription_id" {
+  description = "Azure Subscription ID"
+  type        = string
+}

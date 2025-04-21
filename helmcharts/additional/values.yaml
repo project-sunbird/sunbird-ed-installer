@@ -4,8 +4,8 @@ velero:
     useSecret: true
     secretContents:
       cloud: |
-        AZURE_STORAGE_ACCOUNT_NAME: {{ .Values.global.azure_storage_account_name }}
-        AZURE_STORAGE_ACCOUNT_KEY: {{ .Values.global.azure_storage_account_key }}
+        AZURE_STORAGE_ACCOUNT_NAME: {{ .Values.global.cloud_storage_access_key }}
+        AZURE_STORAGE_ACCOUNT_KEY: {{ .Values.global.cloud_storage_secret_key }}
   configuration:
     backupStorageLocation:
       - name: default
@@ -20,7 +20,7 @@ velero:
   schedules:
     edcluster-backup:
       disabled: false
-      schedule: "*/5 * * * *"
+      schedule: "0 0 * * *"
       useOwnerReferencesInBackup: false
       template:
         ttl: "240h"

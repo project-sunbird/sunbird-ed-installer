@@ -8,6 +8,7 @@ variable "storage_container_public" {
     description = "Public storage container name with blob access."
 }
 
+
 variable "storage_account_primary_access_key" {
     type        = string
     description = "Storage account primary access key."
@@ -30,3 +31,4 @@ variable "sunbird_public_artifacts_container" {
     description = "The container name dedicated for this release which holds the storage artifatcs."
     default     = "release700"
 }
+

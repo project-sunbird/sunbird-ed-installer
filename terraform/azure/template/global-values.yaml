@@ -1,19 +1,29 @@
 global:
+  building_block: "" # building block name
+  env: "" 
+  environment: "" # use lowercase alphanumeric string between 1-9 characters
   release_version: release-7.0.0
-  # Provide your domain name
-  # Example: sunbird.com
-  domain: "REPLACE_ME"
-  # Provide values for the following variables
+  domain: ""
+  subscription_id: ""
+  cloud_storage_region: "Central India"
+  sunbird_cloud_storage_provider: "azure" # Provide the cloud storage provider
+  checkpoint_store_type: "azure"
+  cloud_service_provider: "azure"
+  cloud_storage_provider: "azure"
+  sunbird_cloud_storage_provider: azure 
   sunbird_google_captcha_site_key: 
   google_captcha_private_key: 
   sunbird_google_oauth_clientId: 
   sunbird_google_oauth_clientSecret: 
   mail_server_from_email: ""
+  mail_server_password: ""
+  mail_server_host: smtp.sendgrid.net
+  mail_server_port: "587"
+  mail_server_username: apikey
   sunbird_msg_91_auth: ""
   sunbird_msg_sender: ""
-  mail_server_password: ""
   youtube_apikey: ""
-  # The merge domain is optional and is required only if user merge workflow is required.
+  # The merge domain is optional and is required  `only if user merge workflow is required.
   # For most audience, this workflow is not required. If you need this workflow, then
   # set the value of merge_domain_status to "true" and provide a subdomain / another domain
   merge_domain_status: "false"

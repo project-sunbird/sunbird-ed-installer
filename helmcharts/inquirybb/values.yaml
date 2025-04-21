@@ -133,11 +133,10 @@ kafka: &kafka
     size: 25Gi
 
 cloud_storage:
-  type: "azure"
 play_http: &play_http
   secret_key: "a-dummy-play-http-secret-key"
 schema: &schema
-  base_path: "https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net/{{ .Values.global.azure_public_container_name }}/schemas/local"
+    base_path: "https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
 graph_passport: &graph_passport
   key_base: "a-dummy-graph_passport-secret-key"
 installation: &installation

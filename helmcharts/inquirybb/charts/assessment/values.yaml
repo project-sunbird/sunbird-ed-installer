@@ -115,8 +115,8 @@ inquiry:
   required_props: '["name", "code", "mimeType", "framework", "channel"]'
   cloudstorage_metadata_list: '["appIcon", "artifactUrl", "posterImage", "previewUrl", "thumbnail", "assetsMap", "certTemplate", "itemSetPreviewUrl", "grayScaleAppIcon", "sourceURL", "variants", "downloadUrl", "streamingUrl", "toc_url", "data", "question", "solutions", "editorState", "media", "pdfUrl", "transcripts"]'
   cloudstorage_relative_path_prefix: CONTENT_STORAGE_BASE_PATH
-  cloudstorage_base_path: "https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net"
-  valid_cloudstorage_base_urls: '["https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net","https://obj.dev.sunbird.org"]'
+  cloudstorage_base_path: "https://{{ .Values.global.object_storage_endpoint }}"
+  valid_cloudstorage_base_urls: '["https://{{ .Values.global.object_storage_endpoint }}","https://obj.dev.sunbird.org"]'
   search_service_base_url: http://search-service:9000/v3/search
   question_list_limit: 20
   # V5 API Configurations

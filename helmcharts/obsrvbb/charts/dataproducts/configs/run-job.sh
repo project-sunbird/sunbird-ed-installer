@@ -80,6 +80,32 @@ echo "Starting the job - $1" >> "$DP_LOGS/$today-job-execution.log"
 
 echo "Job modelName - $job_id" >> "$DP_LOGS/$today-job-execution.log"
 
-nohup $SPARK_HOME/bin/spark-submit --conf spark.jars.ivy=/tmp/.ivy --conf spark.driver.extraJavaOptions='-Dconfig.file=/data/analytics/scripts/common.conf' --master 'local[*]' --jars $(echo ${libs_path}/lib/*.jar | tr ' ' ','),$MODELS_HOME/analytics-framework-2.0.jar,$MODELS_HOME/scruid_2.12-2.5.0.jar,$MODELS_HOME/batch-models-2.0.jar --class org.ekstep.analytics.job.JobExecutor $MODELS_HOME/batch-models-2.0.jar --model "$job_id" --config "$job_config$batchIds" >> "$DP_LOGS/$today-job-execution.log" 2>&1
+if [[ "{{ .Values.global.sunbird_cloud_storage_provider }}" == "gcloud" ]]; then
+  nohup $SPARK_HOME/bin/spark-submit \
+    --conf spark.jars.ivy=/tmp/.ivy \
+    --conf spark.driver.extraJavaOptions='-Dconfig.file=/data/analytics/scripts/common.conf' \
+    --conf spark.hadoop.fs.gs.impl=com.google.cloud.hadoop.fs.gcs.GoogleHadoopFileSystem \
+    --conf spark.hadoop.fs.AbstractFileSystem.gs.impl=com.google.cloud.hadoop.fs.gcs.GoogleHadoopFS \
+    --conf spark.hadoop.google.cloud.auth.service.account.json.keyfile=/data/analytics/spark-conf/gcp-credentials.json \
+    --master 'local[*]' \
+    --jars $(echo ${libs_path}/lib/*.jar | tr ' ' ','),$MODELS_HOME/analytics-framework-2.0.jar,$MODELS_HOME/scruid_2.12-2.5.0.jar,$MODELS_HOME/batch-models-2.0.jar,/data/analytics/models-2.0/data-products-1.0/lib/google-cloud-storage-2.0.1.jar,/data/analytics/models-2.0/data-products-1.0/lib/gcs-connector-hadoop2-2.0.1-shaded.jar \
+    --class org.ekstep.analytics.job.JobExecutor \
+    $MODELS_HOME/batch-models-2.0.jar --model "$job_id" --config "$job_config$batchIds" \
+    >> "$DP_LOGS/$today-job-execution.log" 2>&1
+else
+  nohup $SPARK_HOME/bin/spark-submit \
+    --conf spark.jars.ivy=/tmp/.ivy \
+    --conf spark.driver.extraJavaOptions='-Dconfig.file=/data/analytics/scripts/common.conf' \
+    --master 'local[*]' \
+    --jars $(echo ${libs_path}/lib/*.jar | tr ' ' ','),$MODELS_HOME/analytics-framework-2.0.jar,$MODELS_HOME/scruid_2.12-2.5.0.jar,$MODELS_HOME/batch-models-2.0.jar \
+    --class org.ekstep.analytics.job.JobExecutor \
+    $MODELS_HOME/batch-models-2.0.jar --model "$job_id" --config "$job_config$batchIds" \
+    >> "$DP_LOGS/$today-job-execution.log" 2>&1
+fi
 
-echo "Job execution completed - $1" >> "$DP_LOGS/$today-job-execution.log"
+# Log completion
+if [[ $? -eq 0 ]]; then
+  echo "Job execution completed successfully - $1" >> "$DP_LOGS/$today-job-execution.log"
+else
+  echo "Job execution failed - $1" >> "$DP_LOGS/$today-job-execution.log"
+fi

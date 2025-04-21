@@ -57,9 +57,9 @@ fi
 if [ $? == 0 ]
 	then
 	echo "$1 replay executed successfully" >> "$DP_LOGS/$end_date-$1-replay.log"
-	delete "{{ .Values.global.azure_telemetry_container_name }}" "derived/backup-$backup_key" >> "$DP_LOGS/$end_date-$1-replay.log"
+	delete "{{ .Values.global.public_container_name }}/telemetry-data-store" "derived/backup-$backup_key" >> "$DP_LOGS/$end_date-$1-replay.log"
 else
 	echo "$1 replay failed" >> "$DP_LOGS/$end_date-$1-replay.log"
- 	rollback "{{ .Values.global.azure_telemetry_container_name }}"  "derived/$backup_key" "backup-$backup_key" >> "$DP_LOGS/$end_date-$1-replay.log"
- 	delete "{{ .Values.global.azure_telemetry_container_name }}" "derived/backup-$backup_key" >> "$DP_LOGS/$end_date-$1-replay.log"
+ 	rollback "{{ .Values.global.public_container_name }}/telemetry-data-store"  "derived/$backup_key" "backup-$backup_key" >> "$DP_LOGS/$end_date-$1-replay.log"
+ 	delete "{{ .Values.global.public_container_name }}/telemetry-data-store" "derived/backup-$backup_key" >> "$DP_LOGS/$end_date-$1-replay.log"
 fi

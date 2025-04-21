@@ -37,3 +37,7 @@ variable "aks_subnet_service_endpoints" {
   description = "Azure AKS subnet service endpoints."
   default     = ["Microsoft.Sql", "Microsoft.Storage"]
 }
+variable "subscription_id" {
+  description = "Azure Subscription ID"
+  type        = string
+}

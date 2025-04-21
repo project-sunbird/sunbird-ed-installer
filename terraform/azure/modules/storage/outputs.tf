@@ -14,18 +14,7 @@ output "azurerm_storage_container_private" {
 output "azurerm_storage_container_public" {
   value = azurerm_storage_container.storage_container_public.name
 }
-output "azurerm_reports_container_private" {
-  value = azurerm_storage_container.reports_container_private.name
-}
-output "azurerm_backups_container_private" {
-  value = azurerm_storage_container.backups_container_private.name
-}
-output "azurerm_flink_state_container_private" {
-  value = azurerm_storage_container.flink_state_container_private.name
-}
+
 output "azurerm_dial_state_container_public" {
   value = azurerm_storage_container.dial_state_container_public.name
-}
-output "azurerm_telemetry_container_private" {
-  value = azurerm_storage_container.telemetry_container_private.name
 }

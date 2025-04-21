@@ -36,7 +36,7 @@ redis:
   scan_count: "100000"
 
 
-cloud_storage_type: "azure"
+cloud_storage_type: "azure"  #not using  anywhere
 elasticsearch:
   content:
     index: "compositesearch"
@@ -89,5 +89,5 @@ cassandra:
     old_table: "device_profile"
     new_table: "device_profile_temp"
 
-container_name: "{{ .Values.global.azure_telemetry_container_name }}"
+container_name: "{{ .Values.global.public_container_name }}/telemetry-data-store"
 object_key: "druid-content-snapshot/snapshot.txt"

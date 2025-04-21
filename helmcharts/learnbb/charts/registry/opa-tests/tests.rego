@@ -37,7 +37,7 @@ test_rc_certificate_create_internal_request {
           "name": "Dummy testing course",
           "batchId": "0134949"
         },
-        "templateUrl": "https://sunbirddev.blob.core.windows.net/sunbird-content-dev/content/do_1131445945205145601809/artifact/template-2.svg",
+        "templateUrl": "https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/content/do_1131445945205145601809/artifact/template-2.svg",
         "issuer": {
           "name": "Gujarat Council of Educational Research and Training",
           "url": "http://gcert.gujarat.gov.in",

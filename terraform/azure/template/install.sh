@@ -10,7 +10,7 @@ environment=$(basename "$(pwd)")
 
 function create_tf_backend() {
     echo -e "Creating terraform state backend"
-    bash create_tf_backend.sh "$environment"
+    bash create_tf_backend.sh
 }
 
 function backup_configs() {
@@ -26,6 +26,8 @@ function backup_configs() {
 function create_tf_resources() {
     source tf.sh
     echo -e "\nCreating resources on azure cloud"
+    terraform init -upgrade
+    terragrunt init -upgrade
     terragrunt run-all apply --terragrunt-non-interactive
     chmod 600 ~/.kube/config
 }
@@ -69,6 +71,7 @@ function install_component() {
     fi
     local component="$1"
     kubectl create namespace sunbird 2>/dev/null || true
+    kubectl create namespace velero 2>/dev/null || true
     echo -e "\nInstalling $component"
     local ed_values_flag=""
     if [ -f "$component/ed-values.yaml" ]; then
@@ -90,8 +93,6 @@ function install_component() {
     helm upgrade --install "$component" "$component" --namespace sunbird -f "$component/values.yaml" \
         $ed_values_flag \
         -f "../terraform/azure/$environment/global-values.yaml" \
-        -f "../terraform/azure/$environment/global-values-jwt-tokens.yaml" \
-        -f "../terraform/azure/$environment/global-values-rsa-keys.yaml" \
         -f "../terraform/azure/$environment/global-cloud-values.yaml" --timeout 30m --debug
 }
 
@@ -100,6 +101,22 @@ function install_helm_components() {
     for component in "${components[@]}"; do
         install_component "$component"
     done
+}
+
+function post_install_nodebb_plugins() {
+    echo ">> Waiting for NodeBB to be ready..."
+    kubectl rollout status deployment nodebb -n sunbird --timeout=300s
+
+    echo ">> Activating NodeBB plugins..."
+    kubectl exec -n sunbird deploy/nodebb -- ./nodebb activate nodebb-plugin-create-forum
+    kubectl exec -n sunbird deploy/nodebb -- ./nodebb activate nodebb-plugin-sunbird-oidc
+    kubectl exec -n sunbird deploy/nodebb -- ./nodebb activate nodebb-plugin-write-api
+
+    echo ">> Rebuilding and restarting NodeBB..."
+    kubectl exec -n sunbird deploy/nodebb -- ./nodebb build
+    kubectl exec -n sunbird deploy/nodebb -- ./nodebb restart
+
+    echo "✅ NodeBB plugins are activated and NodeBB has been restarted."
 }
 
 function dns_mapping() {
@@ -134,7 +151,8 @@ function generate_postman_env() {
         cd ../terraform/azure/$environment 2>/dev/null || true
     fi
     domain_name=$(kubectl get cm -n sunbird lms-env -ojsonpath='{.data.sunbird_web_url}')
-    blob_store_path=$(kubectl get cm -n sunbird player-env -ojsonpath='{.data.cloud_private_storage_accountname}')
+    blob_store_path=$(kubectl get cm -n sunbird player-env -o jsonpath='{.data.sunbird_public_storage_account_name}' | sed 's|/$||')
+    public_container_name=$(kubectl get cm -n sunbird player-env -ojsonpath='{.data.cloud_storage_resourceBundle_bucketname}') 
     api_key=$(kubectl get cm -n sunbird player-env -ojsonpath='{.data.sunbird_api_auth_token}')
     keycloak_secret=$(kubectl get cm -n sunbird player-env -ojsonpath='{.data.sunbird_portal_session_secret}')
     keycloak_admin=$(kubectl get cm -n sunbird userorg-env -ojsonpath='{.data.sunbird_sso_username}')
@@ -149,6 +167,7 @@ function generate_postman_env() {
         -e "s|REPLACE_WITH_KEYCLOAK_PASSWORD|${keycloak_password}|g" \
         -e "s|GENERATE_UUID|${generated_uuid}|g" \
         -e "s|BLOB_STORE_PATH|${blob_store_path}|g" \
+        -e "s|PUBLIC_CONTAINER_NAME|${public_container_name}|g" \
         "${temp_file}" >"env.json"
 
     echo -e "A env.json file is created in this directory: terraform/azure/$environment"
@@ -247,6 +266,7 @@ if [ $# -eq 0 ]; then
     cd ../../../helmcharts
     install_helm_components
     cd ../terraform/azure/$environment
+    post_install_nodebb_plugins
     restart_workloads_using_keys
     certificate_config
     dns_mapping

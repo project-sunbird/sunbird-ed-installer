@@ -1,11 +1,16 @@
-  provider "azurerm" {
-    features {}
-    skip_provider_registration = true
+ terraform {
+  required_providers {
+    azurerm = {
+      version = "~> 4.0.1"  # Define the version constraint for the AzureRM provider
+      source  = "hashicorp/azurerm"
+    }
   }
-
-  provider "azuread" {
+}
+provider "azurerm" {
+  subscription_id ="${var.subscription_id}"
+  features {}  # Always include the features block for Azure provider
+  skip_provider_registration = true  # Optional
   }
-
   locals {
       common_tags = {
         environment = "${var.environment}"

@@ -1,8 +1,16 @@
-provider "azurerm" {
-  features {}
-  skip_provider_registration = true
+ terraform {
+  required_providers {
+    azurerm = {
+      version = "~> 4.0.1"  # Define the version constraint for the AzureRM provider
+      source  = "hashicorp/azurerm"
+    }
+  }
 }
-
+provider "azurerm" {
+  subscription_id ="${var.subscription_id}"
+  features {}  # Always include the features block for Azure provider
+  resource_provider_registrations = "none"  # Optional
+  }
 data "azurerm_subscription" "current" {}
 
 locals {
@@ -23,7 +31,7 @@ resource "azurerm_storage_account" "storage_account" {
   location                 = var.location
   account_tier             = var.azure_storage_tier
   account_replication_type = var.azure_storage_replication
-  enable_https_traffic_only = false
+  https_traffic_only_enabled = false
   blob_properties {
     cors_rule {
       max_age_in_seconds = 200
@@ -49,30 +57,6 @@ resource "azurerm_storage_container" "storage_container_public" {
   name                  = "${local.environment_name}-public"
   storage_account_name  = azurerm_storage_account.storage_account.name
   container_access_type = "blob"
-}
-
-resource "azurerm_storage_container" "reports_container_private" {
-  name                  = "reports"
-  storage_account_name  = azurerm_storage_account.storage_account.name
-  container_access_type = "private"
-}
-
-resource "azurerm_storage_container" "telemetry_container_private" {
-  name                  = "telemetry-data-store"
-  storage_account_name  = azurerm_storage_account.storage_account.name
-  container_access_type = "private"
-}
-
-resource "azurerm_storage_container" "backups_container_private" {
-  name                  = "backups"
-  storage_account_name  = azurerm_storage_account.storage_account.name
-  container_access_type = "private"
-}
-
-resource "azurerm_storage_container" "flink_state_container_private" {
-  name                  = "flink-state-backend"
-  storage_account_name  = azurerm_storage_account.storage_account.name
-  container_access_type = "private"
 }
 
 resource "azurerm_storage_container" "dial_state_container_public" {
