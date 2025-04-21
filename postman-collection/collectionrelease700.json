@@ -3034,7 +3034,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird"
+										"value": "{{channel_id}}"
 									}
 								],
 								"body": {
@@ -3062,7 +3062,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird",
+										"value": "{{channel_id}}",
 										"type": "text"
 									}
 								],
@@ -3091,7 +3091,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird",
+										"value": "{{channel_id}}",
 										"type": "text"
 									}
 								],
@@ -3120,7 +3120,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird",
+										"value": "{{channel_id}}",
 										"type": "text"
 									}
 								],
@@ -3153,7 +3153,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird"
+										"value": "{{channel_id}}"
 									},
 									{
 										"key": "Authorization",
@@ -3207,7 +3207,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird"
+										"value": "{{channel_id}}"
 									},
 									{
 										"key": "Authorization",
@@ -3252,7 +3252,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird"
+										"value": "{{channel_id}}"
 									},
 									{
 										"key": "Authorization",
@@ -3297,7 +3297,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird"
+										"value": "{{channel_id}}"
 									},
 									{
 										"key": "Authorization",
@@ -3342,7 +3342,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird"
+										"value": "{{channel_id}}"
 									},
 									{
 										"key": "Authorization",
@@ -3393,7 +3393,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird"
+										"value": "{{channel_id}}"
 									},
 									{
 										"key": "Authorization",
@@ -3447,7 +3447,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird"
+										"value": "{{channel_id}}"
 									},
 									{
 										"key": "Authorization",
@@ -3492,7 +3492,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird"
+										"value": "{{channel_id}}"
 									},
 									{
 										"key": "Authorization",
@@ -3537,7 +3537,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird"
+										"value": "{{channel_id}}"
 									},
 									{
 										"key": "Authorization",
@@ -3582,7 +3582,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird"
+										"value": "{{channel_id}}"
 									},
 									{
 										"key": "Authorization",
@@ -4169,7 +4169,7 @@
 											},
 											{
 												"key": "X-Channel-Id",
-												"value": "{{channel_name}}"
+												"value": "{{channel_id}}"
 											},
 											{
 												"key": "Authorization",
@@ -4432,7 +4432,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -4458,7 +4459,7 @@
 											"raw": "{\n    \"request\": {\n        \"term\": {\n            \"name\": \"English\",\n            \"code\": \"english\"\n        }\n    }\n}"
 										},
 										"url": {
-											"raw": "{{host}}/api/framework/v1/term/create?framework={{framework_default}}&category=subject",
+											"raw": "{{host}}/api/framework/v1/term/create?framework={{framework_default}}&category=subject&X-Channel-Id={{channel_id}}",
 											"host": [
 												"{{host}}"
 											],
@@ -4477,6 +4478,10 @@
 												{
 													"key": "category",
 													"value": "subject"
+												},
+												{
+													"key": "X-Channel-Id",
+													"value": "{{channel_id}}"
 												}
 											]
 										}
@@ -4492,7 +4497,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -4518,7 +4524,7 @@
 											"raw": "{\n    \"request\": {\n        \"term\": \n            {\n                \"code\": \"hindi\",\n                \"name\": \"Hindi\"\n            }\n    }\n}"
 										},
 										"url": {
-											"raw": "{{host}}/api/framework/v1/term/create?framework={{framework_default}}&category=subject",
+											"raw": "{{host}}/api/framework/v1/term/create?framework={{framework_default}}&category=subject&X-Channel-Id={{channel_id}}",
 											"host": [
 												"{{host}}"
 											],
@@ -4537,6 +4543,10 @@
 												{
 													"key": "category",
 													"value": "subject"
+												},
+												{
+													"key": "X-Channel-Id",
+													"value": "{{channel_id}}"
 												}
 											]
 										}
@@ -4552,7 +4562,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -4565,7 +4576,7 @@
 											},
 											{
 												"key": "X-Channel-Id",
-												"value": "{{channel_name}}"
+												"value": "{{channel_id}}"
 											},
 											{
 												"key": "Authorization",
@@ -4612,7 +4623,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -4625,7 +4637,7 @@
 											},
 											{
 												"key": "X-Channel-Id",
-												"value": "{{channel_name}}"
+												"value": "{{channel_id}}"
 											},
 											{
 												"key": "Authorization",
