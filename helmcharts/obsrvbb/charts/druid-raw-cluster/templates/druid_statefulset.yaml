@@ -65,30 +65,30 @@ spec:
     druid.metadata.storage.connector.password={{ .Values.global.postgresql.postgresqlPassword }}
 
     # Deep storage
-    druid.storage.type={{ .Values.druid_deepstorage_type }}
+    druid.storage.type={{ .Values.global.cloud_service_provider }}
     # AWS
     # Azure
-    druid.azure.account = {{ .Values.global.azure_storage_account_name }}
-    druid.azure.key = {{ .Values.global.azure_storage_account_key }}
-    druid.azure.container = {{ .Values.azure_storage_container }}
+    druid.azure.account = {{ .Values.global.cloud_storage_access_key }}
+    druid.azure.key = {{ .Values.global.cloud_storage_secret_key }}
+    druid.azure.container = {{ .Values.global.public_container_name }}/reports
     #druid.storage.storageDirectory = {{ .Values.druid_storage_directory }}
     druid.storage.disableAcl=true
 
 
     # # Indexing service logs
     # # For local disk (only viable in a cluster if this is a network mount):
-    druid.indexer.logs.type={{ .Values.druid_indexer_logs_type }}
+    druid.indexer.logs.type={{ .Values.global.cloud_service_provider }}
     druid.indexer.logs.prefix={{ .Values.druid_indexer_logs_prefix }}
     druid.indexer.logs.disableAcl=true
 
-    {{- if eq .Values.druid_deepstorage_type "azure" }}
-    druid.indexer.logs.container={{ .Values.druid_indexer_logs_container }}
-    druid.indexer.logs.s3Bucket={{ .Values.azure_storage_container }}
+    {{- if eq .Values.global.cloud_service_provider "azure" }}
+    druid.indexer.logs.container={{ .Values.global.public_container_name }}/reports
+    druid.indexer.logs.s3Bucket={{ .Values.global.public_container_name }}/reports
     druid.indexer.logs.s3Prefix= {{ .Values.druid_indexer_logs_prefix }}
     {{- end }}
 
-    {{- if eq .Values.druid_deepstorage_type "google" }}
-    druid.indexer.logs.bucket={{ .Values.gcs_bucket }}
+    {{- if eq .Values.global.cloud_service_provider "google" }}
+    druid.indexer.logs.bucket={{ .Values.global.public_container_name }}/reports
     {{- end }}
 
     # Service discovery

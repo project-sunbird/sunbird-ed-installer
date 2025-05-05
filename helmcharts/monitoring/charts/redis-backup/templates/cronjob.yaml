@@ -36,9 +36,9 @@ spec:
                   kubectl cp redis-master-0:/data/dump.rdb dump.rdb
                   bzip2 dump.rdb
                   mv dump.rdb.bz2 dump-$backup_date.rdb.bz2
-                  az storage blob upload --account-name {{ .Values.global.azure_storage_account_name }} \
-                                          --account-key {{ .Values.global.azure_storage_account_key }} \
-                                          --container-name {{ .Values.azure_backups_container_name }} \
+                  az storage blob upload --account-name {{ .Values.global.cloud_storage_access_key }} \
+                                          --account-key {{ .Values.global.cloud_storage_secret_key }} \
+                                          --container-name {{ .Values.public_container_name }}/backups \
                                           --name dump-$backup_date.rdb.bz2 \
                                           --type block \
                                           --file "dump-$backup_date.rdb.bz2"

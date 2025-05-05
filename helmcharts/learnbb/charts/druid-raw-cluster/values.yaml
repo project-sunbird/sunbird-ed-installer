@@ -85,7 +85,7 @@ storageClass: "managed-premium"
 
 ######################### Druid common variables ########################
 druid_directory: "/opt/druid"
-druid_extensions_loadList: '"postgresql-metadata-storage", "druid-kafka-indexing-service", "druid-azure-extensions"'
+druid_extensions_loadList: '"postgresql-metadata-storage", "druid-kafka-indexing-service", "druid-azure-extensions", "druid-google-extensions"'
 
 # Logging
 # Log all runtime properties on startup. Disable to avoid logging properties on startup:
@@ -107,7 +107,7 @@ azure_storage_container: "reports"
 
 # Indexing service logs
 # For local disk (only viable in a cluster_type if this is a network mount):
-druid_indexer_logs_type: "azure"
+druid_indexer_logs_type: "{{ .Values.global.deep_store_type}}"
 druid_indexer_logs_container: "reports"
 druid_indexer_logs_prefix: "backups/druid/druid-task-logs"
 druid_indexer_logs_directory: "backups/druid/druid-task-logs"

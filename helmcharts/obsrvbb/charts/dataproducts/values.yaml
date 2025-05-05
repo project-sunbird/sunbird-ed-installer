@@ -89,7 +89,7 @@ producer_env: "dev.sunbird"
 spark_output_temp_dir: /data/analytics/tmp/
 
 #modelconfig.josn
-reports_container: "{{ .Values.global.azure_reports_container_name }}"
+reports_container: "{{ .Values.global.public_container_name }}/reports"
 
 #start-jobmanager
 analytics_job_list: ["wfs", "content-rating-updater", "monitor-job-summ"]
@@ -99,10 +99,10 @@ analytics_cluster:
 jobmanager_logs_directory: "/data/analytics/logs/services"
 run_logs_directory: "/data/analytics/logs/data-products"
 
-blob_container_name: "{{ .Values.global.azure_telemetry_container_name }}"
+blob_container_name: "{{ .Values.global.public_container_name }}/telemetry-data-store"
 cloud_storage_type: "azure"
 dp_raw_telemetry_backup_location: "unique/raw/"
-cloud_storage_endpoint: https://{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net
+cloud_storage_endpoint: https://{{ .Values.global.object_storage_endpoint }}
 
 
 

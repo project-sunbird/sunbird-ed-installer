@@ -48,10 +48,13 @@ spec:
           workingDir: {{ .Values.taskmanager.flink_work_dir }}
           command: ["/opt/flink/bin/taskmanager.sh"]
           args: ["start-foreground",
-  {{- if eq .Values.checkpoint_store_type "azure" }}
-            "-Dfs.azure.account.key.{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net={{ .Values.global.azure_storage_account_key }}",
+  {{- if eq .Values.global.checkpoint_store_type "azure" }}
+            "-Dfs.azure.account.key.{{ .Values.global.object_storage_endpoint }}={{ .Values.global.cloud_storage_secret_key }}",
   {{- end }}
-  {{- if eq .Values.checkpoint_store_type "s3" }}
+  {{- if eq .Values.global.checkpoint_store_type "gcs" }}
+            "-Dgoogle.cloud.auth.service.account.enable=true",
+  {{- end }}
+  {{- if eq .Values.global.checkpoint_store_type "s3" }}
             "-Ds3.access-key={{ .Values.s3_access_key }}",
             "-Ds3.secret-key={{ .Values.s3_secret_key }}",
             "-Ds3.endpoint={{ .Values.s3_endpoint }}",
@@ -159,19 +162,17 @@ spec:
   {{- else if eq $jobName "ingest-router" }}
                 "--job-classname={{ .Values.ingest_router_job_classname }}",
   {{- end }}
-  {{- if eq .Values.checkpoint_store_type "azure" }}
-                "-Dfs.azure.account.key.{{ .Values.global.azure_storage_account_name }}.blob.core.windows.net={{ .Values.global.azure_storage_account_key }}",
+  {{- if eq .Values.global.checkpoint_store_type "azure" }}
+            "-Dfs.azure.account.key.{{ .Values.global.object_storage_endpoint }}={{ .Values.global.cloud_storage_secret_key }}",
   {{- end }}
-  {{- if eq .Values.checkpoint_store_type "s3" }}
-                "-Ds3.access-key={{ .Values.global.azure_storage_account_name }}",
-                "-Ds3.secret-key={{ .Values.global.azure_storage_account_key }}",
-                "-Ds3.endpoint={{ .Values.cloud_storage_endpoint }}",
-                "-Ds3.path.style.access={{ .Values.cloud_storage_path_style_access }}",
+  {{- if eq .Values.global.checkpoint_store_type "gcs" }}
+            "-Dgoogle.cloud.auth.service.account.enable=true",
   {{- end }}
-  {{- if eq .Values.checkpoint_store_type "gcloud" }}
-                "-Dfs.gs.auth.client.id={{ .Values.global.azure_storage_account_name }}",
-                "-Dfs.gs.auth.client.secret={{ .Values.global.azure_storage_account_key }}",
-                "-Dfs.gs.project.id={{ .Values.cloud_storage_project_id }}",
+  {{- if eq .Values.global.checkpoint_store_type "s3" }}
+            "-Ds3.access-key={{ .Values.s3_access_key }}",
+            "-Ds3.secret-key={{ .Values.s3_secret_key }}",
+            "-Ds3.endpoint={{ .Values.s3_endpoint }}",
+            "-Ds3.path.style.access={{ .Values.s3_path_style_access }}",
   {{- end }}
                 "-Dweb.submit.enable=false",
                 "-Dmetrics.reporter.prom.class=org.apache.flink.metrics.prometheus.PrometheusReporter",

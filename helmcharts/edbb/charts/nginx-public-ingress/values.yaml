@@ -141,13 +141,16 @@ sidecars: {}
 
 global:
   domain: "example.com"
-  azure_public_container_name: "public-storage-acc"
-  azure_cloud_storage_base_url: "cloudworklabs.in"
   local_development: false
+  clusterDomain: "cluster.local"
+  # -- configures DNS service name
+  dnsService: "kube-dns"
+  # -- configures DNS service namespace
+  dnsNamespace: "kube-system"
 
 commonAnnotations:
   reloader.stakater.com/auto: "true"
-  service.beta.kubernetes.io/azure-load-balancer-external: "true"
+  service.beta.kubernetes.io/azure-load-balancer-external: "true" 
 
 merge_domain: "merge.example.com"
 merge_domain_status: true

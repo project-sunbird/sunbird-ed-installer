@@ -18,36 +18,6 @@ resource "null_resource" "copy_from_sunbird_container" {
   depends_on = [local_sensitive_file.rclone_config]
 }
 
-resource "null_resource" "copy_terms_and_conditions" {
-  triggers = {
-    command = "${timestamp()}"
-  }
-  provisioner "local-exec" {
-      command = "rclone copy sunbird:${var.sunbird_terms_and_conditions_container} ownaccount:${var.terms_and_conditions_container} --transfers 600 --checkers 600 --exclude .terragrunt-source-manifest"
-  }
-  depends_on = [local_sensitive_file.rclone_config]
-}
-
-resource "null_resource" "copy_public_state" {
-  triggers = {
-    command = "${timestamp()}"
-  }
-  provisioner "local-exec" {
-      command = "rclone copy sunbird:${var.sunbird_public_state_container} ownaccount:${var.public_state_container} --transfers 600 --checkers 600 --exclude .terragrunt-source-manifest"
-  }
-  depends_on = [local_sensitive_file.rclone_config]
-}
-
-resource "null_resource" "copy_sourcing_state" {
-  triggers = {
-    command = "${timestamp()}"
-  }
-  provisioner "local-exec" {
-      command = "rclone copy sunbird:${var.sunbird_sourcing_state_container} ownaccount:${var.sourcing_state_container} --transfers 600 --checkers 600 --exclude .terragrunt-source-manifest"
-  }
-  depends_on = [local_sensitive_file.rclone_config]
-}
-
 locals {
   template_files = fileset("${path.module}/sunbird-rc/schemas", "*.json")
 }

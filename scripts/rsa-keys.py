@@ -42,16 +42,15 @@ def generate_key_pair(prefix, count):
 
 def write_to_file(keys, filename):
     with open(filename, 'w') as file:
-        file.write("global:\n")
         for prefix, key_data in keys.items():
-            file.write(f"  {prefix}_private_keys:\n")
+            file.write(f"{prefix}_private_keys:\n")
             for key_name, values in key_data.items():
-                file.write(f"    {key_name}: |-\n")
-                file.write(textwrap.indent(values['private_key'].lstrip(), '      '))
-            file.write(f"  {prefix}_public_keys:\n")
+                file.write(f"  {key_name}: |-\n")
+                file.write(textwrap.indent(values['private_key'].lstrip(), '    '))
+            file.write(f"{prefix}_public_keys:\n")
             for key_name, values in key_data.items():
-                file.write(f"    {key_name}: |-\n")
-                file.write(textwrap.indent(values['public_key'].lstrip(), '      '))
+                file.write(f"  {key_name}: |-\n")
+                file.write(textwrap.indent(values['public_key'].lstrip(), '    '))
 
 
 if __name__ == "__main__":
