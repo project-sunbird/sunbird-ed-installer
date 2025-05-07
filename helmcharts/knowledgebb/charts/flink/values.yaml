@@ -5,7 +5,7 @@ replicaCount: 1
 
 image:
   repository: sunbirded.azurecr.io/knowledge-platform-jobs
-  tag: "release-5.7.0_RC3_18c0d23_90"
+  tag: "release-5.7.0_RC3_gcp"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
@@ -62,7 +62,7 @@ configmap:
   mountPath: /config
 
 serviceAccount:
-  create: true
+  create: false
 
 serviceMonitor:
   enabled: false
@@ -367,9 +367,13 @@ flink_jobs:
       cloudstorage.write_base_path={{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_write_base_path "context" $) }}
       cloudstorage.metadata.list={{ .Values.cloudstorage_metadatalist }}
 
-      cloud_storage_type="{{ .Values.global.checkpoint_store_type }}"
+      cloud_storage_type="{{ .Values.global.sunbird_cloud_storage_provider }}"
       cloud_storage_key="{{ .Values.global.cloud_storage_access_key }}"
+       {{- if eq .Values.global.sunbird_cloud_storage_provider "azure" }}
       cloud_storage_secret="{{ .Values.global.cloud_storage_secret_key }}"
+      {{- else if eq .Values.global.sunbird_cloud_storage_provider "gcloud" }}
+      cloud_storage_secret="""{{ .Values.global.service_account_private_key_multiline }}"""
+      {{- end }}
       cloud_storage_container="{{ .Values.global.public_container_name }}"
       cloud_storage_endpoint=""
 
@@ -445,9 +449,13 @@ flink_jobs:
       cloudstorage.write_base_path={{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_write_base_path "context" $) }}
       cloudstorage.metadata.list={{ .Values.cloudstorage_metadatalist }}
 
-      cloud_storage_type="{{ .Values.global.checkpoint_store_type }}"
+      cloud_storage_type="{{ .Values.global.cloud_storage_provider }}"
       cloud_storage_key="{{ .Values.global.cloud_storage_access_key }}"
+      {{- if eq .Values.global.cloud_storage_provider "azure" }}
       cloud_storage_secret="{{ .Values.global.cloud_storage_secret_key }}"
+      {{- else if eq .Values.global.cloud_storage_provider "gcp" }}
+      cloud_storage_secret="""{{ .Values.global.service_account_private_key_multiline  | trimSuffix "\n" }}"""
+      {{- end }}
       cloud_storage_container="{{ .Values.global.public_container_name }}"
       cloud_storage_endpoint=""
 
@@ -570,9 +578,13 @@ flink_jobs:
       cloudstorage.write_base_path=["{{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_read_base_path "context" $) }}"]
       cloudstorage.metadata.list={{ .Values.cloudstorage_metadatalist }}
 
-      cloud_storage_type="{{ .Values.global.checkpoint_store_type }}"
+      cloud_storage_type="{{ .Values.global.sunbird_cloud_storage_provider }}"
       cloud_storage_key="{{ .Values.global.cloud_storage_access_key }}"
+      {{- if eq .Values.global.sunbird_cloud_storage_provider "azure" }}
       cloud_storage_secret="{{ .Values.global.cloud_storage_secret_key }}"
+      {{- else if eq .Values.global.sunbird_cloud_storage_provider "gcloud" }}
+      cloud_storage_secret="""{{ .Values.global.service_account_private_key_multiline }}"""
+      {{- end }}
       cloud_storage_container="{{ .Values.global.public_container_name }}"
       cloud_storage_endpoint=""
 
@@ -925,9 +937,13 @@ flink_jobs:
       cloudstorage.write_base_path={{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_write_base_path "context" $) }}
       cloudstorage.metadata.list={{ .Values.cloudstorage_metadatalist }}
 
-      cloud_storage_type="{{ .Values.global.checkpoint_store_type }}"
+      cloud_storage_type="{{ .Values.global.sunbird_cloud_storage_provider }}"
       cloud_storage_key="{{ .Values.global.cloud_storage_access_key }}"
+      {{- if eq .Values.global.sunbird_cloud_storage_provider "azure" }}
       cloud_storage_secret="{{ .Values.global.cloud_storage_secret_key }}"
+      {{- else if eq .Values.global.sunbird_cloud_storage_provider "gcloud" }}
+      cloud_storage_secret="""{{ .Values.global.service_account_private_key_multiline }}"""
+      {{- end }}
       cloud_storage_container="{{ .Values.global.public_container_name }}"
       cloud_storage_endpoint=""
     flink-conf: |+

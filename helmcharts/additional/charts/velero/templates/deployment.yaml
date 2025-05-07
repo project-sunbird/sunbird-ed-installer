@@ -232,8 +232,10 @@ spec:
               name: {{ .Values.credentials.extraSecretRef }}
         {{- end }}
           env:
-            - name: AZURE_STORAGE_ACCOUNT_KEY
+            {{- if .Values.credentials.useSecret }}
+              - name: AZURE_STORAGE_ACCOUNT_KEY
               value: {{ .Values.global.cloud_storage_secret_key }}
+          {{- end }}    
             - name: VELERO_SCRATCH_DIR
               value: /scratch
             - name: VELERO_NAMESPACE

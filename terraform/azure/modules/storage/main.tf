@@ -60,7 +60,7 @@ resource "azurerm_storage_container" "storage_container_public" {
 }
 
 resource "azurerm_storage_container" "dial_state_container_public" {
-  name                  = "dial"
+  name                  = "${local.environment_name}-dial"
   storage_account_name  = azurerm_storage_account.storage_account.name
   container_access_type = "blob"
 }
