@@ -155,10 +155,10 @@ resource "google_container_node_pool" "node_pool" {
 
   name     = "${var.building_block}-${var.environment}-pool"
   project  = var.project
-  location = var.location  # ✅ Fixed: should match cluster's region
+  location = var.location  # Fixed: should match cluster's region
   cluster  = google_container_cluster.cluster.name
 
-  node_locations = [var.zone]  # ✅ Optional: specify zone(s) within region
+  node_locations = [var.zone]  # Optional: specify zone(s) within region
 
   initial_node_count = var.gke_node_pool_scaling_config["desired_size"]
 

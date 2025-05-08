@@ -15,28 +15,3 @@ output "service_account_private_key" {
   sensitive   = true
 }
 
-output "service_account_private_key_multiline" {
-  value = <<EOT
-${join("\n", [
-  for line in split("\n", jsondecode(base64decode(google_service_account_key.service_account.private_key)).private_key) :
-  "    ${line}"
-])}
-EOT
-  description = "The private key of the service account in its original multiline format."
-  sensitive   = true
-}
-
- 
-# output "service_account_private_key_multiline" {
-#   value = <<EOT
-#   ${join("\n", [
-#     for line in split("\n", google_service_account_key.service_account.private_key) :
-#     "    ${line}"
-#   ])}
-#   EOT
-#     description = "The private key of the service account in its original multiline format."
-#     sensitive   = true
-#   }
-
-
-

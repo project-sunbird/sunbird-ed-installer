@@ -17,7 +17,6 @@ content  = templatefile("${path.module}/global-cloud-values.yaml.tfpl", {
     encryption_string                             = var.encryption_string,
     gcp_project_id                                = var.gcp_project_id
     storage_class                                 = var.storage_class
-    service_account_private_key_multiline         = var.service_account_private_key_multiline
     cloud_storage_provider                        = var.cloud_storage_provider
     cloud_storage_region                          = var.cloud_storage_region
   })

@@ -11,8 +11,7 @@ global:
   storage_class: ${storage_class}
   cloud_storage_provider:  ${cloud_storage_provider}
   cloud_storage_region: ${cloud_storage_region}
-  service_account_private_key_multiline: | 
-${service_account_private_key_multiline}
+  
   serviceAccount: 
     create: true
     name: sunbird-sa

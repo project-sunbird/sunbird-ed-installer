@@ -42,7 +42,6 @@ dependency "keys" {
    mock_outputs = {
      service_account_key_local_path = "service_account_key_local_path" 
      service_account_email         = "dummy-service_account_email"
-     service_account_private_key_multiline = "dummy-service_account_private_key_multiline"
 
   }
 
@@ -62,7 +61,6 @@ inputs = {
   gcp_project_id                     = local.project
   gcp_storage_bucket_key             = dependency.service-account.outputs.service_account_private_key
   gcp_storage_account_mail           = dependency.service-account.outputs.service_account_key_email
-  service_account_private_key_multiline = dependency.service-account.outputs.service_account_private_key_multiline
   storage_class                      = dependency.gke.outputs.storage_class
   cloud_storage_provider             = local.cloud_storage_provider
   cloud_storage_region               = local.region

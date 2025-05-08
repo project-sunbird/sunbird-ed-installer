@@ -84,12 +84,6 @@ variable "storage_class" {
   
 }
 
-variable "service_account_private_key_multiline" {
-  description = "The private key for the service account, formatted as a multiline string."
-  type        = string
-  default     = ""
-}
-
 variable "cloud_storage_provider" {
   description = "The cloud storage provider to use."
   type        = string
