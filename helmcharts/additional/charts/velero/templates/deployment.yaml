@@ -213,11 +213,9 @@ spec:
           volumeMounts:
             - name: plugins
               mountPath: /plugins
-            {{- if eq .Values.global.cloud_storage_provider "azure" }}
             {{- if .Values.credentials.useSecret }}
             - name: cloud-credentials
               mountPath: /credentials
-            {{- end }}
             {{- end }}
             - name: scratch
               mountPath: /scratch
@@ -235,10 +233,8 @@ spec:
         {{- end }}
           env:
             {{- if eq .Values.global.cloud_storage_provider "azure" }}
-            {{- if .Values.credentials.useSecret }}
               - name: AZURE_STORAGE_ACCOUNT_KEY
                 value: {{ .Values.global.cloud_storage_secret_key }}
-          {{- end }}
           {{- end }}    
             - name: VELERO_SCRATCH_DIR
               value: /scratch
@@ -249,7 +245,6 @@ spec:
                   fieldPath: metadata.namespace
             - name: LD_LIBRARY_PATH
               value: /plugins
-          {{- if eq .Values.global.cloud_storage_provider "azure" }}
           {{- if .Values.credentials.useSecret }}
             - name: AWS_SHARED_CREDENTIALS_FILE
               value: /credentials/cloud
@@ -259,7 +254,6 @@ spec:
               value: /credentials/cloud
             - name: ALIBABA_CLOUD_CREDENTIALS_FILE
               value: /credentials/cloud
-          {{- end }}
           {{- end }}
           {{- with .Values.configuration.extraEnvVars }}
           {{- range $key, $value := . }}
@@ -289,12 +283,10 @@ spec:
         {{- end }}
 {{- end }}
       volumes:
-        {{- if eq .Values.global.cloud_storage_provider "azure" }}
         {{- if .Values.credentials.useSecret }}
         - name: cloud-credentials
           secret:
             secretName: {{ include "velero.secretName" . }}
-        {{- end }}
         {{- end }}
         - name: plugins
           emptyDir: {}
