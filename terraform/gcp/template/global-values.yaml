@@ -1,7 +1,7 @@
 global:
-  building_block: "ed" 
-  env: "dummy" 
-  environment: "test" # environment name
+  building_block: "" 
+  env: "" 
+  environment: "" # environment name
   release_version: "release-7.0.0"
   # Cluster-level variables for GKE setup and networking
   gke_node_pool_instance_type: "n2d-standard-16"
@@ -14,7 +14,7 @@ global:
   sunbird_cloud_storage_provider: "gcloud"
   cloud_storage_region: "asia-south1"
   zone: "asia-south1-a"
-  cloud_storage_project: "sunbird-morocco-sandbox-434709"
+  cloud_storage_project: ""
   # Provide your domain name
   # Example: sunbird.com
   domain: "REPLACE_ME"
