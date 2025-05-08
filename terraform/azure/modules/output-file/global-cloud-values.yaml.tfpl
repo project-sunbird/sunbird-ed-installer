@@ -45,8 +45,4 @@ velero:
 nginx-public-ingress:
   commonAnnotations:
     reloader.stakater.com/auto: "true"
-    service.beta.kubernetes.io/azure-load-balancer-external: "true"    
-
-
-    
-                    
+    service.beta.kubernetes.io/azure-load-balancer-external: "true" 
