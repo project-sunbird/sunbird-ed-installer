@@ -12,8 +12,8 @@ global:
   cloud_storage_provider: "gcp"
   cloud_service_provider: "google"
   sunbird_cloud_storage_provider: "gcloud"
-  cloud_storage_region: "asia-south1"
-  zone: "asia-south1-a"
+  cloud_storage_region: ""
+  zone: ""
   cloud_storage_project: ""
   # Provide your domain name
   # Example: sunbird.com
