@@ -26,5 +26,4 @@ variable "region" {
 variable "domain" {
   description = "Domain name for the storage account."
   type        = string
-  
 }

@@ -14,4 +14,3 @@ output "service_account_private_key" {
   description = "The private key of the service account in a single line."
   sensitive   = true
 }
-

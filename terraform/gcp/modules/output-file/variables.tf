@@ -55,7 +55,6 @@ variable "encryption_string" {
 variable "dial_state_container_public" {
     type        = string
     description = "Public storage container name with blob access."
-  
 }
 
 variable "gcp_storage_bucket_key" {
@@ -63,7 +62,6 @@ variable "gcp_storage_bucket_key" {
   type        = string
   default     = ""
 }
-
 
 variable "gcp_storage_account_mail" {
   description = "The name of the GCP storage account"
@@ -80,20 +78,17 @@ variable "gcp_project_id" {
 variable "storage_class" {
   description = "The storage class for the GKE cluster."
   type        = string
-  default     = ""
-  
+  default     = ""  
 }
 
 variable "cloud_storage_provider" {
   description = "The cloud storage provider to use."
   type        = string
   default     = ""
-  
 }
 
 variable "cloud_storage_region" {
   description = "The region for the cloud storage provider."
   type        = string
   default     = ""
-  
 }

@@ -40,4 +40,3 @@ output "public_services_secondary_cidr_block" {
 output "public_services_secondary_range_name" {
   value = google_compute_subnetwork.vpc_subnetwork_public.secondary_ip_range[1].range_name
 }
-

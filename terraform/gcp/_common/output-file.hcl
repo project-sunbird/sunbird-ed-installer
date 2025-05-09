@@ -42,9 +42,7 @@ dependency "keys" {
    mock_outputs = {
      service_account_key_local_path = "service_account_key_local_path" 
      service_account_email         = "dummy-service_account_email"
-
   }
-
 }
 
 inputs = {
@@ -64,8 +62,4 @@ inputs = {
   storage_class                      = dependency.gke.outputs.storage_class
   cloud_storage_provider             = local.cloud_storage_provider
   cloud_storage_region               = local.region
-
 }
-
-
-  

@@ -15,11 +15,8 @@ dependency "storage" {
     config_path = "../storage"
     mock_outputs = {
       gcp_private_container_name = "dummy" 
-      
-
     }
 }
-
 
 inputs = {
   environment         = local.environment

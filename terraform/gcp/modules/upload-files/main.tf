@@ -7,10 +7,6 @@ content  = templatefile("${path.module}/config.tfpl", {
   filename = pathexpand("~/.config/rclone/rclone.conf")
 }
 
-
-
-
-
 resource "null_resource" "copy_from_sunbird_container" {
   triggers = {
     command = "${timestamp()}"

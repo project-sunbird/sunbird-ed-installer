@@ -29,5 +29,3 @@ variable "rsa_keys_count" {
     description = "Number of rsa keys to generate"
     default     = 2
 }
-
- 

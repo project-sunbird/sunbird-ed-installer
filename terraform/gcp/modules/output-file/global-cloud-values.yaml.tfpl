@@ -54,5 +54,4 @@ velero:
 nginx-public-ingress:
   commonAnnotations:
   reloader.stakater.com/auto: "true"
-  cloud.google.com/load-balancer-type: "External"           
-
+  cloud.google.com/load-balancer-type: "External"

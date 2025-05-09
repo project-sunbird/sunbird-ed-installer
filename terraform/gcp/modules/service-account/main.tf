@@ -16,10 +16,6 @@ resource "google_service_account" "service_account" {
   display_name = var.cluster_service_account_description
 }
 
-# Local variables for conditional resource creation
-
-
-
 # Assign roles to the service account
 resource "google_project_iam_member" "service_account-roles" {
   for_each = toset(local.all_service_account_roles)
@@ -34,6 +30,7 @@ resource "google_project_iam_member" "storage_admin_role" {
   role    = "roles/storage.admin"
   member  = "serviceAccount:${google_service_account.service_account.email}"
 }
+
 # Assign Workload Identity User role to service account (optional)
 resource "google_service_account_iam_member" "workload_identity-role" {
   count = local.create_sa_binding == true ? 1 : 0
@@ -55,7 +52,6 @@ resource "local_file" "service_account" {
   content  = base64decode(google_service_account_key.service_account.private_key)
   filename = "${path.module}/sa-keys/${local.environment_name}.json"
 }
-
 
 # Upload the key to GCS
 # Upload the key to GCS

@@ -7,6 +7,7 @@ locals {
   global_values_jwt_file_location = "${var.base_location}/../../../../scripts/global-values-jwt-tokens.yaml"
   global_values_rsa_file_location = "${var.base_location}/../../../../scripts/global-values-rsa-keys.yaml"
 }
+
 resource "random_password" "generated_string" {
   length  = 16          # Length of the string (can be between 12 and 24)
   special = false        # Do not include special characters
@@ -14,6 +15,7 @@ resource "random_password" "generated_string" {
   lower   = true         # Include lowercase letters
   numeric = true         # Include numbers
 }
+
 resource "random_password" "encryption_string" {
   length  = 32          # Length of the string (can be between 32)
   special = false        # Do not include special characters
@@ -21,7 +23,6 @@ resource "random_password" "encryption_string" {
   lower   = true         # Include lowercase letters
   numeric = true         # Include numbers
 }
-
 
 resource "null_resource" "generate_jwt_keys" {
   triggers = {
@@ -37,7 +38,6 @@ resource "null_resource" "generate_jwt_keys" {
     EOT
   }
 }
-
 
 resource "null_resource" "generate_rsa_keys" {
    triggers = {
@@ -86,5 +86,3 @@ resource "null_resource" "upload_global_rsa_values_yaml" {
 #       command = "terrahelp encrypt -simple-key=${random_password.generated_string.result} } -file=${local.global_values_keys_file}"
 #   }
 # }
-
-

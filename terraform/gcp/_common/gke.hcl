@@ -30,7 +30,6 @@ dependency "network" {
     }
 }
 
-
 inputs = {
   environment                        = local.environment
   building_block                     = local.building_block

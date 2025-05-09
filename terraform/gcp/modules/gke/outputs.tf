@@ -37,8 +37,8 @@ output "cluster_ca_certificate" {
 output "private_ingressgateway_ip" {
   value = var.private_ingressgateway_ip
 }
+
 output "storage_class" {
   description = "The default storage class for the GKE cluster."
   value       = var.kubernetes_storage_class_raw
 }
-
