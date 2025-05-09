@@ -5,7 +5,7 @@ replicaCount: 1
 
 image:
   repository: sunbirded.azurecr.io/data-pipeline
-  tag: release-8.0.0_RC1_gcp
+  tag: release-8.0.0_RC1_b4f909c
   pullPolicy: IfNotPresent
   pullSecrets: []  
 
