@@ -955,4 +955,3 @@ assessment_aggregator_job_classname: org.sunbird.dp.assessment.task.AssessmentAg
 
 commonAnnotations:
   reloader.stakater.com/auto: "true"
-
