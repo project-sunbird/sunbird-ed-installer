@@ -4,7 +4,7 @@ replicaCount: 1
 
 image:
   repository: sunbirded.azurecr.io/content-service
-  tag: "release-6.1.0_RC7"
+  tag: "release-6-1.0-CSS-1.4.7.1_v1"
   pullPolicy: IfNotPresent
   pullSecrets: []
 

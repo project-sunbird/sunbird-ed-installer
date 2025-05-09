@@ -1,0 +1,100 @@
+global:
+  building_block: "" 
+  env: "" 
+  environment: "" # environment name
+  release_version: "release-7.0.0"
+  # Cluster-level variables for GKE setup and networking
+  gke_node_pool_instance_type: "n2d-standard-16"
+  create_network: "true"
+  gke_node_default_disk_size_gb: 100
+  object_storage_endpoint: storage.googleapis.com
+  checkpoint_store_type: "gcs"
+  cloud_storage_provider: "gcp"
+  cloud_service_provider: "google"
+  sunbird_cloud_storage_provider: "gcloud"
+  cloud_storage_region: ""
+  zone: ""
+  cloud_storage_project: ""
+  # Provide your domain name
+  # Example: sunbird.com
+  domain: "REPLACE_ME"
+  # cloud_private_storage_accountname: "service-terraform-account@sunbird-morocco-sandbox-434709.iam.gserviceaccount.com"
+# cloud_private_storage_secret: "{{ .Values.global.gcp_storage_account_key | default "gcp-credentials"}}"
+  # Provide values for the following variables
+  sunbird_google_captcha_site_key: 
+  google_captcha_private_key: 
+  sunbird_google_oauth_clientId: 
+  sunbird_google_oauth_clientSecret: 
+  mail_server_from_email: ""
+  mail_server_password: ""
+  mail_server_host: smtp.sendgrid.net
+  mail_server_port: "587"
+  mail_server_username: apikey
+  sunbird_msg_91_auth: ""
+  sunbird_msg_sender: ""
+  youtube_apikey: ""
+
+  # The merge domain is optional and is required only if user merge workflow is required.
+  # For most audience, this workflow is not required. If you need this workflow, then
+  # set the value of merge_domain_status to "true" and provide a subdomain / another domain
+  merge_domain_status: "false"
+  merge_domain: ""
+  # Add the domain SSL key and certificate
+  # Example below:
+  # proxy_private_key: |
+  #   -----BEGIN PRIVATE KEY-----
+  #   MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDI+v/838oEg1ES
+  #   3XiRbKPMyzjr8IOF5s8+0LzQLioxsJIo32HIAGQIfW2C98ArSj/rwb/P7+vtPvNV
+  #   DRzvh5qBZ6d6NRoUHR7Wt9LRGQmstksULEUzDGqpsYTXSxZSUHjs9mZ1wgPwb+7I
+  #   Uy4+3R/toG9gAOE9m7LFsUNq1W3/ParhWfTaJiXcKaQaDyr+D4v6o/kBYA9JfVd+
+  #   Pgesx+xSHGP7gkeNahGXUqU5c8uA8XJEG4JEFBHeEVOeUw2TKUC7aI+KGUG5WmLC
+  #   DXAzaXJQCe+CsTHbtAd15niXlC31pFiLREi8gS39JGRlHMe7iNmLyXNapJz5oQP9
+  #   /mEE9CgzAgMBAAECggEAP0z7Cojrxm8bvm7d9iO7FZoeZAWdTzPKq5SwG3um036z
+  #   EkeFMyqYVyo2L01cC+Z3aohcIyCEdPViS7P1HKZfrglZMP7/pz0ixOsh7bTOnMTP
+  #   sdtdsj3jbG4aknq2XZe19qCG1ekVN4nxscutIaSg1UW2Po0YZEChVm3F96SgYAbb
+  #   DR4MEhAxHAQoqtWun5a/x9uFn1REfsAVxq6isFUR3KNQVbdc2FHr2yRf2JoO/I4x
+  #   tFZGGGry+ereofd5un2Pqog84ZBtgS5BmmZ03otyFZXw9qdb94lBqbazzVv5PVpF
+  #   HT2npsDfyf8DDDB7sY5UK/c3ceayKHXXnLaZqBabOQKBgQD8y14m1hAJS6RiMv7I
+  #   VgBNNTB9KNGr4CbwBJjP+LKfcLWEzLjHIjNFqZ+FTQUeXO0bUOlNQIGOZskoqXB8
+  #   bYeZdw07PEvHJ6RiCHNXZvQh1w56Lg9lmBiQV7p8ZgUBwhNZHur7/gWZ4RSwABPy
+  #   WuMPmrNjkkNqwbezPKmAaJpkWwKBgQDLh253ik5Q8udjNwkGcu+yFFTgGde+SdKR
+  #   iK8kFWTTtvDT+IZpQvpe8xkW63wYK5YUtAgwdCpGPOmxhCqSXOLIFpmbp/5qwUnr
+  #   m7sCS3vfnk5trWDPExGJuLYKPpjFTwmCpQLaAZplwgx0alk1GONhrDyb2gnldygJ
+  #   5pdhLQGzCQKBgGrrfTQB4CB+XNWn6flD3rbJI2wcgqomkXF9EEEOWEZ1fmDf0dtv
+  #   zK3PM4hG7j5MYYDnNPYWrXVUZgqLt+b40JyJLRB7zTU7wBwypM433lQdyKLGrn5y
+  #   2Rjb8iVBZSa8NkDAgfT5GNdfyscyET21UUo9TVh0+YzCyHbH1o1YMMz3AoGBALPS
+  #   OZCWevFcW4G2S1wOSqbs/bxuOMZgVRHOUOexmz7PIGI37xGrYqhnYmB0uFRmlhg+
+  #   pAmjaQJbqSH1IuPj+15LUXZMbCWIFzZ6hjTV2mFNbf/LMoBiWZlzwCq2+aVCWqW6
+  #   AxX4WqDTXMuydpTKI4PVeEs+zoWVzKNKv67U4+55AoGAFX6Rb1A/3I2em9NZonNK
+  #   F0EkVK3mQ8ESys64zD1F6aIyqBGlCri4HHSxzTmq5Y/LalbiWGlKR/G7MFfkQUDi
+  #   ZiFUt1PZJDRLQBcRDvWq5IWidr2FuqTseFE0b20LiMV6uw6FAUDnkL2P1/xzh5cG
+  #   H/iXAWvLC4SMgpWpZhJPGSI=
+  #   -----END PRIVATE KEY-----
+  # proxy_certificate: |
+  #   -----BEGIN CERTIFICATE-----
+  #   MIIDlzCCAn+gAwIBAgIUQCBDQj9V/xxpbVOPEuZSo92oZBYwDQYJKoZIhvcNAQEL
+  #   BQAwWzELMAkGA1UEBhMCQVUxEzARBgNVBAgMClNvbWUtU3RhdGUxITAfBgNVBAoM
+  #   GEludGVybmV0IFdpZGdpdHMgUHR5IEx0ZDEUMBIGA1UEAwwLZXhhbXBsZS5jb20w
+  #   HhcNMjQwMTA2MTQ1NzI0WhcNMjUwMTA1MTQ1NzI0WjBbMQswCQYDVQQGEwJBVTET
+  #   MBEGA1UECAwKU29tZS1TdGF0ZTEhMB8GA1UECgwYSW50ZXJuZXQgV2lkZ2l0cyBQ
+  #   dHkgTHRkMRQwEgYDVQQDDAtleGFtcGxlLmNvbTCCASIwDQYJKoZIhvcNAQEBBQAD
+  #   ggEPADCCAQoCggEBAMj6//zfygSDURLdeJFso8zLOOvwg4Xmzz7QvNAuKjGwkijf
+  #   YcgAZAh9bYL3wCtKP+vBv8/v6+0+81UNHO+HmoFnp3o1GhQdHta30tEZCay2SxQs
+  #   RTMMaqmxhNdLFlJQeOz2ZnXCA/Bv7shTLj7dH+2gb2AA4T2bssWxQ2rVbf89quFZ
+  #   9NomJdwppBoPKv4Pi/qj+QFgD0l9V34+B6zH7FIcY/uCR41qEZdSpTlzy4DxckQb
+  #   gkQUEd4RU55TDZMpQLtoj4oZQblaYsINcDNpclAJ74KxMdu0B3XmeJeULfWkWItE
+  #   SLyBLf0kZGUcx7uI2YvJc1qknPmhA/3+YQT0KDMCAwEAAaNTMFEwHQYDVR0OBBYE
+  #   FGKMHMcHXqgQ+cS6uoaS6iZaooKHMB8GA1UdIwQYMBaAFGKMHMcHXqgQ+cS6uoaS
+  #   6iZaooKHMA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAHGKDZ1t
+  #   MmqbRUsP3KSlgqVYQF4Iu0A0HlPvwcWVhRNozlm/luQ4It5O0kYXjiIeetD3LqyQ
+  #   QgVLPkS3im9jQuLRtHT0lJaB6cewDSdI6QbpGIU/PBYKblKLlTRKc69I7B2ezTLR
+  #   XPv1VNUAe6HaxZBNVL8JGEIJunDdZeZLoBtLymmKqEE8B11/pP5jw+/4DkQmyOiX
+  #   Q0SiDIO6iak05GhU3PhKPmOTBAYxvzpvEgV3+OAhcYcpnEb+2WuqQumvibdcjxYS
+  #   Xt0PGTeyUkz7dtwiwjYWsG9yYu9m6o790NYWHbr7VqTB7X8jmqQ7FT+OFLUbzWlK
+  #   mIyfDj9AwvHHxzA=
+  #   -----END CERTIFICATE-----
+  proxy_private_key: |
+    REPLACE_ME
+  proxy_certificate: |
+    REPLACE_ME
+  # CERTIFICATE-KEYS 

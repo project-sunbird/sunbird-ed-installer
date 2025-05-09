@@ -11,7 +11,7 @@ global:
   encryption__string: ${encryption_string}
   random_string: ${random_string}
   object_storage_endpoint: ${azure_storage_account_name}.blob.core.windows.net
-
+  storage_class: managed-premium
 
 
 velero:
@@ -21,16 +21,28 @@ velero:
     secretContents:
       cloud: |
         AZURE_STORAGE_ACCOUNT_NAME: ${azure_storage_account_name}
-        AZURE_STORAGE_ACCOUNT_KEY: ${azure_storage_account_key}
+        AZURE_STORAGE_ACCOUNT_KEY: ${azure_storage_account_key}                  
   configuration:
-    backupStorageLocation:
-      - name: default
-        provider: "azure"
-        bucket: ${azure_public_container_name}/backups
-        config:
-          storageAccount: ${azure_storage_account_name}
-          storageAccountKeyEnvVar: AZURE_STORAGE_ACCOUNT_KEY
+      backupStorageLocation:
+        - name: default
+          provider: "{{ .Values.global.cloud_storage_provider }}"
+          bucket: "{{ .Values.global.public_container_name }}"
+          config:
+            prefix: backups
+            storageAccount: 
+            storageAccountKeyEnvVar: AZURE_STORAGE_ACCOUNT_KEY
+      volumeSnapshotLocation:
+        - name: default
+          provider: "{{ .Values.global.cloud_storage_provider }}" 
+  initContainers:
+  - name: velero-plugin-for-azure
+    image: velero/velero-plugin-for-microsoft-azure:v1.2.0
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+      - mountPath: /target
+        name: plugins   
+
 nginx-public-ingress:
   commonAnnotations:
     reloader.stakater.com/auto: "true"
-    service.beta.kubernetes.io/azure-load-balancer-external: "true"                     
+    service.beta.kubernetes.io/azure-load-balancer-external: "true" 
