@@ -59,7 +59,7 @@ cassandra: &cassandra
       memory: 4Gi
     limits:
       cpu: 750m
-      memory: 10Gi # testes with below thrwed oom issues
+      memory: 10Gi #tested with memory less than 10Gi, but the application encountered Out Of Memory (OOM) issues during execution
 
 postgresql: &postgresql
   enabled: true
