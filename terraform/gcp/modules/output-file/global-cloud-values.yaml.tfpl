@@ -50,7 +50,11 @@ velero:
         - mountPath: /target
           name: plugins  
 
-      
+spark: 
+  serviceAccount:
+    create: false 
+    name: "sunbird-sa"            
+
 nginx-public-ingress:
   commonAnnotations:
   reloader.stakater.com/auto: "true"

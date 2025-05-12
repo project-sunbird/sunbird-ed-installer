@@ -71,6 +71,7 @@ get_report_job_model_name(){
 if [ ! -z "$1" ]; then job_id=$(get_report_job_model_name $1); fi
 
 if [ ! -z "$1" ]; then job_config=$(config $1 $2); else job_config="$2"; fi
+echo "Job config: $job_config" >> "$DP_LOGS/$today-config.log"
 
 if [ ! -z "$2" ]; then batchIds=";$2"; else batchIds=""; fi
 
@@ -86,7 +87,7 @@ if [[ "{{ .Values.global.sunbird_cloud_storage_provider }}" == "gcloud" ]]; then
     --conf spark.driver.extraJavaOptions='-Dconfig.file=/data/analytics/scripts/common.conf' \
     --conf spark.hadoop.fs.gs.impl=com.google.cloud.hadoop.fs.gcs.GoogleHadoopFileSystem \
     --conf spark.hadoop.fs.AbstractFileSystem.gs.impl=com.google.cloud.hadoop.fs.gcs.GoogleHadoopFS \
-    --conf spark.hadoop.google.cloud.auth.service.account.json.keyfile=/data/analytics/spark-conf/gcp-credentials.json \
+	--conf spark.hadoop.google.cloud.auth.service.account.enable=true \
     --master 'local[*]' \
     --jars $(echo ${libs_path}/lib/*.jar | tr ' ' ','),$MODELS_HOME/analytics-framework-2.0.jar,$MODELS_HOME/scruid_2.12-2.5.0.jar,$MODELS_HOME/batch-models-2.0.jar,/data/analytics/models-2.0/data-products-1.0/lib/google-cloud-storage-2.0.1.jar,/data/analytics/models-2.0/data-products-1.0/lib/gcs-connector-hadoop2-2.0.1-shaded.jar \
     --class org.ekstep.analytics.job.JobExecutor \
