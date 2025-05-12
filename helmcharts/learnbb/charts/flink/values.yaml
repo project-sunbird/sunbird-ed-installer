@@ -68,8 +68,8 @@ configmap:
   enabled: false
   mountPath: /config
 
-  serviceAccount:
-    create: false
+serviceAccount:
+  create: false
 
 serviceMonitor:
   enabled: false

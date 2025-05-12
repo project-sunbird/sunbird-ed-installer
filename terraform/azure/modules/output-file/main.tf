@@ -15,6 +15,7 @@ content  = templatefile("${path.module}/global-cloud-values.yaml.tfpl", {
     private_ingressgateway_ip = var.private_ingressgateway_ip,
     encryption_string = var.encryption_string,
     random_string = var.random_string
+    cloud_storage_provider = var.cloud_storage_provider
   })
   filename = local.global_values_cloud_file
 }

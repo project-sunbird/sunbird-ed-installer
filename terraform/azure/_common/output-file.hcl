@@ -6,6 +6,7 @@ locals {
   environment  = local.global_vars.global.environment
   building_block = local.global_vars.global.building_block
   subscription_id = local.global_vars.global.subscription_id
+  cloud_storage_provider = local.global_vars.global.cloud_storage_provider
   # random_string  = local.environment_vars.locals.random_string
 }
 
@@ -49,5 +50,6 @@ inputs = {
   encryption_string                  = dependency.keys.outputs.encryption_string
   random_string                      = dependency.keys.outputs.random_string
   dial_state_container_public        = dependency.storage.outputs.azurerm_dial_state_container_public
+   cloud_storage_provider            = local.cloud_storage_provider
 
 }

@@ -12,6 +12,9 @@ global:
   random_string: ${random_string}
   object_storage_endpoint: ${azure_storage_account_name}.blob.core.windows.net
   storage_class: managed-premium
+  cloud_storage_provider:  ${cloud_storage_provider}
+  serviceAccount: 
+    create: false
 
 
 velero:
@@ -25,15 +28,15 @@ velero:
   configuration:
       backupStorageLocation:
         - name: default
-          provider: "{{ .Values.global.cloud_storage_provider }}"
+          provider: "${cloud_storage_provider}"
           bucket: "{{ .Values.global.public_container_name }}"
+          prefix: backups
           config:
-            prefix: backups
-            storageAccount: 
+            storageAccount: ${azure_storage_account_name} 
             storageAccountKeyEnvVar: AZURE_STORAGE_ACCOUNT_KEY
       volumeSnapshotLocation:
         - name: default
-          provider: "{{ .Values.global.cloud_storage_provider }}" 
+          provider: "${cloud_storage_provider}" 
   initContainers:
   - name: velero-plugin-for-azure
     image: velero/velero-plugin-for-microsoft-azure:v1.2.0
