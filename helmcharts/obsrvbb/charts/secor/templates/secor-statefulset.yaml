@@ -26,6 +26,9 @@ spec:
         app: secor
         release: {{ $jobName }}
     spec:
+      {{- if .Values.global.serviceAccount.create }}
+      serviceAccountName: {{ .Values.global.serviceAccount.name }}
+      {{- end }}
       {{- with .Values.image.pullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -71,7 +74,7 @@ spec:
         labels:
           app: secor
       spec:
-        storageClassName: "{{ .Values.storageClass }}"
+        storageClassName: "{{ .Values.global.storage_class }}"
         accessModes:
           - ReadWriteOnce
         resources:

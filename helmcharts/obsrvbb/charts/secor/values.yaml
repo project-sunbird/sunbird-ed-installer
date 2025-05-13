@@ -10,8 +10,8 @@ s3_endpoint: "cloud_private_storage_endpoint"
 s3_path_style_access: "s3_path_style_access"
 s3_bucket_name: "{{ .Values.global.public_container_name }}"
 
-storage_type: "Azure"
-storageClass: "default"
+storage_type: ""
+storageClass: ""
 
 image:
   pullSecrets: []
@@ -30,6 +30,9 @@ global:
   env: "dev"
 
 gcp_bucket_name: "{{ .Values.global.public_container_name }}"
+
+serviceAccount:
+  create: false
 
 base_config: &base_config
   enabled: true
