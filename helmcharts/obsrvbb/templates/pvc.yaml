@@ -8,7 +8,7 @@ spec:
   resources:
     requests:
       storage: 25Gi
-  storageClassName: managed-premium
+  storageClassName: {{ .Values.global.storage_class }}
 
 
 ---
@@ -22,4 +22,4 @@ spec:
   resources:
     requests:
       storage: 25Gi
-  storageClassName: managed-premium
+  storageClassName: {{ .Values.global.storage_class }}

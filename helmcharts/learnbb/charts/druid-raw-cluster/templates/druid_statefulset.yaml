@@ -7,7 +7,9 @@ metadata:
   name: "{{ .Values.druid_cluster_type }}"
 spec:
   image: "{{ .Values.druid_image }}"
-  serviceAccount: "{{ include "druid-raw-cluster.serviceAccount.name" . }}"
+  {{- if .Values.global.serviceAccount.create }}
+  serviceAccount: {{ .Values.global.serviceAccount.name }}
+  {{- end }}
   startScript: /druid.sh
   # podLabels:
   #   release: alpha
@@ -65,7 +67,7 @@ spec:
     druid.metadata.storage.connector.password={{ .Values.global.postgresql.postgresqlPassword }}
 
     # Deep storage
-    druid.storage.type={{ .Values.druid_deepstorage_type }}
+    druid.storage.type={{ .Values.global.cloud_service_provider }}
     # AWS
     # Azure
     druid.azure.account = {{ .Values.global.cloud_storage_access_key }}
@@ -74,20 +76,23 @@ spec:
     #druid.storage.storageDirectory = {{ .Values.druid_storage_directory }}
     druid.storage.disableAcl=true
 
+    druid.google.bucket = {{ .Values.global.public_container_name }}
+    druid.google.prefix = druid/segments
+
 
     # # Indexing service logs
     # # For local disk (only viable in a cluster if this is a network mount):
-    druid.indexer.logs.type={{ .Values.druid_indexer_logs_type }}
+    druid.indexer.logs.type={{ .Values.global.cloud_service_provider }}
     druid.indexer.logs.prefix={{ .Values.druid_indexer_logs_prefix }}
     druid.indexer.logs.disableAcl=true
 
-    {{- if eq .Values.druid_deepstorage_type "azure" }}
-    druid.indexer.logs.container={{ .Values.druid_indexer_logs_container }}
+    {{- if eq .Values.global.cloud_service_provider "azure" }}
+    druid.indexer.logs.container={{ .Values.global.public_container_name }}/reports
     druid.indexer.logs.s3Bucket={{ .Values.global.public_container_name }}/reports
     druid.indexer.logs.s3Prefix= {{ .Values.druid_indexer_logs_prefix }}
     {{- end }}
 
-    {{- if eq .Values.druid_deepstorage_type "google" }}
+    {{- if eq .Values.global.cloud_service_provider "google" }}
     druid.indexer.logs.bucket={{ .Values.global.public_container_name }}/reports
     {{- end }}
 
@@ -280,7 +285,7 @@ spec:
             labels:
               system.querying: "true"
           spec:
-            storageClassName: "{{- .Values.storageClass }}"
+            storageClassName: "{{ .Values.global.storage_class }}"
             accessModes:
               - ReadWriteOnce
             resources:
@@ -337,7 +342,7 @@ spec:
     #   - metadata:
     #       name: middlemanager-volume
     #     spec:
-    #       storageClassName: "{{- .Values.storageClass }}"
+    #       storageClassName: "{{ .Values.global.storage_class }}"
     #       accessModes:
     #         - ReadWriteOnce
     #       resources:

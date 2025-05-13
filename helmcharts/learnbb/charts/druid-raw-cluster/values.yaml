@@ -16,7 +16,7 @@ resources:
       memory: 1024Mi
     limits:
      cpu: 200m
-     memory: 1500Mi
+     memory: 2048Mi
   druid_coordinator:
     requests:
       cpu: 250m
@@ -81,7 +81,7 @@ druid_image: "apache/druid:25.0.0"
 druid_namespace: ""
 druid_monitoring: True
 mount_path: /druid/data
-storageClass: "managed-premium"
+storageClass: "premium-rwo"
 
 ######################### Druid common variables ########################
 druid_directory: "/opt/druid"
@@ -107,7 +107,7 @@ azure_storage_container: "reports"
 
 # Indexing service logs
 # For local disk (only viable in a cluster_type if this is a network mount):
-druid_indexer_logs_type: "{{ .Values.global.deep_store_type}}"
+druid_indexer_logs_type: "azure"
 druid_indexer_logs_container: "reports"
 druid_indexer_logs_prefix: "backups/druid/druid-task-logs"
 druid_indexer_logs_directory: "backups/druid/druid-task-logs"
@@ -317,5 +317,5 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: obsrv-sa
 
-# commonAnnotations:
-#   reloader.stakater.com/auto: "true"
+commonAnnotations:
+  reloader.stakater.com/auto: "true"

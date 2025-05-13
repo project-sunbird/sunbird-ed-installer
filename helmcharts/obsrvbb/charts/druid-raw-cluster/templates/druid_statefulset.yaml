@@ -7,7 +7,9 @@ metadata:
   name: "{{ .Values.druid_cluster_type }}"
 spec:
   image: "{{ .Values.druid_image }}"
-  serviceAccount: "{{ include "druid-raw-cluster.serviceAccount.name" . }}"
+  {{- if .Values.global.serviceAccount.create }}
+  serviceAccount: {{ .Values.global.serviceAccount.name }}
+  {{- end }}
   startScript: /druid.sh
   # podLabels:
   #   release: alpha
@@ -73,6 +75,9 @@ spec:
     druid.azure.container = {{ .Values.global.public_container_name }}/reports
     #druid.storage.storageDirectory = {{ .Values.druid_storage_directory }}
     druid.storage.disableAcl=true
+
+    druid.google.bucket = {{ .Values.global.public_container_name }}
+    druid.google.prefix = druid/segments
 
 
     # # Indexing service logs
@@ -280,7 +285,7 @@ spec:
             labels:
               system.querying: "true"
           spec:
-            storageClassName: "{{- .Values.storageClass }}"
+            storageClassName: "{{ .Values.global.storage_class }}"
             accessModes:
               - ReadWriteOnce
             resources:
@@ -337,7 +342,7 @@ spec:
     #   - metadata:
     #       name: middlemanager-volume
     #     spec:
-    #       storageClassName: "{{- .Values.storageClass }}"
+    #       storageClassName: "{{ .Values.global.storage_class }}"
     #       accessModes:
     #         - ReadWriteOnce
     #       resources:
@@ -401,7 +406,7 @@ spec:
             labels:
               system.ingestion: "true"
           spec:
-            storageClassName: "{{- .Values.storageClass }}"
+            storageClassName: "{{ .Values.global.storage_class }}"
             accessModes:
               - ReadWriteOnce
             resources:
