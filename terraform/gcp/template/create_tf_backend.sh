@@ -30,7 +30,7 @@ region=$(echo "$zone" | sed 's/-[a-z]$//')
 BUCKET_NAME="${environment_name}tfstate"
 
 # Validate location
-VALID_LOCATIONS=("asia" "asia-east1" "asia-east2" "asia-northeast1" "asia-northeast2" "asia-northeast3" "asia-south1" "asia-south2" "asia-southeast1" "asia-southeast2" "australia-southeast1" "australia-southeast2" "europe" "europe-central2" "europe-north1" "europe-west1" "europe-west2" "europe-west3" "europe-west4" "europe-west6" "northamerica-northeast1" "northamerica-northeast2" "southamerica-east1" "us" "us-central1" "us-east1" "us-east4" "us-west1" "us-west2" "us-west3" "us-west4")
+VALID_LOCATIONS=("africa-south1" "asia-east1" "asia-east2" "asia-northeast1" "asia-northeast2" "asia-northeast3" "asia-south1" "asia-south2" "asia-southeast1" "asia-southeast2" "australia-southeast1" "australia-southeast2" "europe-central2" "europe-north1" "europe-north2" "europe-southwest1" "europe-west1" "europe-west10" "europe-west12" "europe-west2" "europe-west3" "europe-west4" "europe-west6" "europe-west8" "europe-west9" "me-central1" "me-central2" "me-west1" "northamerica-northeast1" "northamerica-northeast2" "northamerica-south1" "southamerica-east1" "southamerica-west1" "us-central1" "us-east1" "us-east4" "us-east5" "us-south1" "us-west1" "us-west2" "us-west3" "us-west4")
 if [[ ! " ${VALID_LOCATIONS[@]} " =~ " $region " ]]; then
   echo "Error: The specified location '$region' is not valid. Please provide a valid GCP location."
   exit 1
