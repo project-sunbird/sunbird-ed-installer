@@ -1,0 +1,361 @@
+#edbb
+bot:
+  resources:
+  requests:
+    cpu: 100m
+    memory: 100Mi
+  limits:
+    cpu: 1000m
+    memory: 1024Mi
+
+discussionmw:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100M
+    limits:
+      cpu: 1
+      memory: 1G
+
+echo:
+  resources:
+  requests:
+    cpu: 100m
+    memory: 100Mi
+  limits:
+    cpu: 1
+    memory: 1024Mi  
+
+knowledgemw:
+  resources:
+  requests:
+    cpu: 100m
+    memory: 100Mi
+  limits:
+    cpu: 1
+    memory: 1G    
+
+kong:
+ resources:
+  requests:
+    cpu: 100m
+    memory: 100M
+  limits:
+    cpu: 1
+    memory: 1G    
+
+nginx-private-ingress:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 500m
+      memory: 500Mi
+
+nginx-public-ingress:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1
+      memory: 1G  
+
+nodebb:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100M
+    limits:
+      cpu: 1
+      memory: 2G      
+
+player:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1
+      memory: 1G      
+
+report:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1
+      memory: 1G
+router: 
+  resources:
+  requests:
+    cpu: 100m
+    memory: 100Mi
+  limits:
+    cpu: 1000m
+    memory: 1024Mi
+    
+#inquirybb
+assessment:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100M
+    limits:
+      cpu: 1
+      memory: 1G
+flink:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 500M
+    limits:
+      cpu: 1
+      memory: 2048Mi  
+
+#knowledgebb
+content:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1
+      memory: 1024Mi
+dial:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1
+      memory: 1024Mi 
+flink:
+ resources:
+    requests:
+      cpu: 100m
+      memory: 500Mi
+    limits:
+      cpu: 1
+      memory: 2048Mi   
+
+learning:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 1024Mi
+    limits:
+      cpu: 1
+      memory: 4096Mi  
+
+search:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1
+      memory: 1024Mi  
+
+taxonomy:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1
+      memory: 1024Mi
+
+#learnbb
+adminutil:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100M
+    limits:
+      cpu: 1
+      memory: 1G
+cert:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1
+      memory: 1024Mi
+certificateapi:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1
+      memory: 1024Mi  
+certificatesign:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1
+      memory: 1024Mi   
+certregistry:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1
+      memory: 1024Mi      
+
+cassandra: 
+  persistence:
+    size: 25Gi
+  resources:
+    requests:
+      cpu: 520m
+      memory: 4Gi
+    limits:
+      cpu: 750m
+      memory: 10Gi 
+
+druid-raw-cluster:
+  druid_indexer_persistent_volume_size: 25Gi 
+  druid_historical_persistent_volume_size: 25Gi
+  resources:
+    druid_broker:
+      requests:
+        cpu: 100m
+        memory: 1024Mi
+      limits:
+      cpu: 200m
+      memory: 2048Mi
+    druid_coordinator:
+      requests:
+        cpu: 250m
+        memory: 750Mi
+      limits:
+      cpu: 250m
+      memory: 1024Mi
+    druid_overlord:
+      requests:
+        cpu: 250m
+        memory: 750Mi
+      limits:
+      cpu: 250m
+      memory: 1024Mi
+    druid_historical:
+      requests:
+        cpu: 750m
+        memory: 512Mi
+      limits:
+      cpu: 1
+      memory: 2048Mi
+    druid_indexer:
+      requests:
+        cpu: 200m
+        memory: 8Gi
+      limits:
+      cpu: 200m
+      memory: 16Gi
+    druid_router:
+      requests:
+        cpu: 250m
+        memory: 500Mi
+      limits:
+      cpu: 512m
+      memory: 1024Mi
+
+elasticsearch:
+  master:
+    resources:
+      requests:
+        cpu: "1"
+        memory: "2Gi"
+      limits:
+        cpu: "2"
+        memory: "4Gi"
+    heapSize: 2G
+    persistence:
+      size: 25Gi  
+
+kafka: 
+  persistence:
+    size: 25Gi
+  resources:
+    limits:
+      cpu: 1
+      memory: 2048Mi
+    requests:
+      cpu: 750m
+      memory: 1024Mi
+
+kube-prometheus-stack:
+  prometheus:
+    prometheusSpec:
+      retention: "30d"
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 25Gi
+
+neo4j: 
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "1Gi"
+    limits:
+      cpu: "1"
+      memory: "2Gi"     
+
+postgresql: 
+  persistence:
+    size: 25Gi
+  primary:
+    resources:
+      limits:
+        cpu: 512m
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 256Mi
+
+redis: 
+  master:
+    persistence:
+      size: 25Gi
+    primary:
+    resources:
+      limits:
+        cpu: 0.5
+        memory: 2Gi
+      requests:
+        cpu: 0.5
+        memory: 1Gi 
+
+spark:
+  resources:
+    limits:
+      cpu: 0.5
+      memory: 2Gi
+    requests:
+      cpu: 0.5
+      memory: 1Gi       
+
+zookeeper: 
+  persistence:
+    size: 2Gi
+  resources:
+    limits:
+      cpu: 256m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi 
+
+
