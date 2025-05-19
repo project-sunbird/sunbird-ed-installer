@@ -342,47 +342,47 @@ base_config: |
       }
 
 flink_jobs:
-  ingest-router:
-    enabled: true
-    config: |+
-      include file("/data/flink/conf/base-config.conf")
-      kafka {
-        producer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
-        consumer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
-        ingest {
-          input.topic = {{ .Values.global.env }}.telemetry.ingestion
-          output.success.topic = {{ .Values.global.env }}.telemetry.ingest
-        }
-        raw {
-          input.topic = "{{ .Values.global.env }}.telemetry.raw"
-          output.success.topic = "{{ .Values.global.env }}.telemetry.raw"
-        }
-        groupId = {{ .Values.global.env }}-ingest-router-group
-        producer {
-          max-request-size = {{ .Values.extractor_max_request_size }}
-        }
-      }
-      task {
-        consumer.parallelism = {{ .Values.ingest_router_consumer_parallelism }}
-        downstream.operators.parallelism = {{ .Values.ingest_router_operators_parallelism }}
-        raw {
-        consumer.parallelism = {{ .Values.raw_router_consumer_parallelism }}
-        downstream.operators.parallelism = {{ .Values.raw_router_downstream_parallelism }}
-        }
-      }
-    flink-conf: |+
-      jobmanager.memory.flink.size: 1024m
-      taskmanager.memory.flink.size: 1024m
-      taskmanager.numberOfTaskSlots: 1
-      parallelism.default: 1
-      jobmanager.execution.failover-strategy: region
-      taskmanager.memory.network.fraction: 0.1
-      scheduler-mode: reactive
-      heartbeat.timeout: 8000
-      heartbeat.interval: 5000
-      taskmanager.memory.process.size: 1700m
-      jobmanager.memory.process.size: 1600m
-    job_classname: org.sunbird.dp.ingestrouter.task.IngestRouterStreamTask
+  # ingest-router:
+  #   enabled: false
+  #   config: |+
+  #     include file("/data/flink/conf/base-config.conf")
+  #     kafka {
+  #       producer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
+  #       consumer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
+  #       ingest {
+  #         input.topic = {{ .Values.global.env }}.telemetry.ingestion
+  #         output.success.topic = {{ .Values.global.env }}.telemetry.ingest
+  #       }
+  #       raw {
+  #         input.topic = "{{ .Values.global.env }}.telemetry.raw"
+  #         output.success.topic = "{{ .Values.global.env }}.telemetry.raw"
+  #       }
+  #       groupId = {{ .Values.global.env }}-ingest-router-group
+  #       producer {
+  #         max-request-size = {{ .Values.extractor_max_request_size }}
+  #       }
+  #     }
+  #     task {
+  #       consumer.parallelism = {{ .Values.ingest_router_consumer_parallelism }}
+  #       downstream.operators.parallelism = {{ .Values.ingest_router_operators_parallelism }}
+  #       raw {
+  #       consumer.parallelism = {{ .Values.raw_router_consumer_parallelism }}
+  #       downstream.operators.parallelism = {{ .Values.raw_router_downstream_parallelism }}
+  #       }
+  #     }
+  #   flink-conf: |+
+  #     jobmanager.memory.flink.size: 1024m
+  #     taskmanager.memory.flink.size: 1024m
+  #     taskmanager.numberOfTaskSlots: 1
+  #     parallelism.default: 1
+  #     jobmanager.execution.failover-strategy: region
+  #     taskmanager.memory.network.fraction: 0.1
+  #     scheduler-mode: reactive
+  #     heartbeat.timeout: 8000
+  #     heartbeat.interval: 5000
+  #     taskmanager.memory.process.size: 1700m
+  #     jobmanager.memory.process.size: 1600m
+  #   job_classname: org.sunbird.dp.ingestrouter.task.IngestRouterStreamTask
 
   telemetry-extractor:
     enabled: true
