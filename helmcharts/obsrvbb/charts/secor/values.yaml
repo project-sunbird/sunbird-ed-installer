@@ -40,7 +40,6 @@ base_config: &base_config
   service_name: "raw_telemetry_backup"
   timestamp_key: "syncts"
   fallback_timestamp_key: "@timestamp"
-  topic: "{{.Values.global.env}}.telemetry.raw"
   kafka_broker_host: "{{.Values.global.kafka.host}}"
   zookeeper_quorum: "{{.Values.global.zookeeper.host}}:{{.Values.global.zookeeper.port}}"
   max_file_size: "100000000"
@@ -60,94 +59,71 @@ base_config: &base_config
   lag_threshold_critical: 100000
 
 secor_jobs:
-  raw-telemetry-backup:
+  telemetry-ingest-backup:
     <<: *base_config
-    consumer_group: "{{.Values.global.env}}.telemetry.raw.backup"
-    base_path: "telemetry-data-store//raw"
-  failed-telemetry-backup:
+    base_path: "telemetry-data-store/telemetry/ingest"
+    topic: "sunbird.telemetry.ingest"
+    consumer_group: "sunbird-telemetry-ingest-backup"
+
+  telemetry-failed-backup:
     <<: *base_config
-    consumer_group: "{{ .Values.global.env }}.telemetry.failed.backup"
-    base_path: "telemetry-data-store/failed"
-  unique-telemetry-backup:
+    base_path: "telemetry-data-store/telemetry/failed"
+    topic: "{{ .Values.global.env }}.telemetry.failed"
+    consumer_group: "{{ .Values.global.env }}-telemetry-failed-backup"
+
+  telemetry-raw-backup:
     <<: *base_config
-    consumer_group: "{{ .Values.global.env }}.telemetry.unique.backup"
-    base_path: "telemetry-data-store/unique/raw"
-  denorm-events-backup:
+    base_path: "telemetry-data-store/telemetry/raw"
+    topic: "{{ .Values.global.env }}.telemetry.raw"
+    consumer_group: "{{ .Values.global.env }}-telemetry-raw-backup"
+
+  telemetry-unique-backup:
     <<: *base_config
-    consumer_group: "{{ .Values.global.env }}.telemetry.denorm.backup"
-    base_path: "telemetry-data-store/telemetry-denormalized"
-  derived-denorm-events-backup:
+    base_path: "telemetry-data-store/telemetry/unique"
+    topic: "{{ .Values.global.env }}.telemetry.unique"
+    consumer_group: "{{ .Values.global.env }}-telemetry-unique-backup"  
+   
+  telemetry-denorm-backup:
     <<: *base_config
-    consumer_group: "{{ .Values.global.env }}.summary.backup"
-    base_path: "telemetry-data-store/telemetry-denormalized/summary"
-  channel-telemetry-backup:
+    base_path: "telemetry-data-store/telemetry/denorm"
+    topic: "{{ .Values.global.env }}.telemetry.denorm"
+    consumer_group: "{{ .Values.global.env }}-telemetry-denorm-backup"
+
+  telemetry-assess-backup:
     <<: *base_config
-    consumer_group: "{{ .Values.global.env }}.telemetry.channel.backup"
-    base_path: "telemetry-data-store/data-exhaust/raw"
-  channel-summary-backup:
+    base_path: "telemetry-data-store/telemetry/assess"
+    topic: "{{ .Values.global.env }}.telemetry.assess"
+    consumer_group: "{{ .Values.global.env }}-telemetry-assess-backup" 
+
+  telemetry-assess-failed-backup:
     <<: *base_config
-    consumer_group: "{{ .Values.global.env }}.summary.channel.backup"
-    base_path: "telemetry-data-store/data-exhaust/summary"
-  extractor-failed-backup:
+    base_path: "telemetry-data-store/telemetry/assess/failed"
+    topic: "{{ .Values.global.env }}.telemetry.assess.failed"
+    consumer_group: "{{ .Values.global.env }}-telemetry-assess-failed-backup" 
+
+  telemetry-derived-backup:
     <<: *base_config
-    consumer_group: "{{ .Values.global.env }}.extractor.failed.backup"
-    base_path: "telemetry-data-store/extractor-failed"
-  assess-raw-events-backup:
+    base_path: "telemetry-data-store/telemetry/derived"
+    topic: "sunbirddev.telemetry.derived"
+    consumer_group: "sunbirddev-telemetry-derived-backup"   
+
+  deviceprofile-backup:
     <<: *base_config
-    consumer_group: "{{ .Values.global.env }}.telemetry.assess.raw"
-    base_path: "telemetry-data-store/telemetry-raw-assess"
-  telemetry-duplicate-backup:
+    base_path: "telemetry-data-store/deviceprofile"
+    topic: "dev.events.deviceprofile"
+    consumer_group: "dev.events.deviceprofile-backup" 
+
+  druid-events-telemetry-backup:
     <<: *base_config
-    consumer_group: "{{ .Values.global.env }}.telemetry.duplicate.backup"
-    base_path: "telemetry-data-store/telemetry-duplicate"
-  extractor-duplicate-backup:
+    base_path: "telemetry-data-store/druid/events/telemetry"
+    topic: "{{ .Values.global.env }}.druid.events.telemetry"
+    consumer_group: "{{ .Values.global.env }}-druid-events-telemetry-backup"   
+  
+  druid-events-summary-backup:
     <<: *base_config
-    consumer_group: "{{ .Values.global.env }}.extractor.duplicate.backup"
-    base_path: "telemetry-data-store/extractor-duplicate"
-  derived-telemetry-backup:
-    <<: *base_config
-    consumer_group: "{{ .Values.global.env }}.telemetry.derived.unique.backup"
-    base_path: "telemetry-data-store/unique/summary"
-  device-profile-backup:
-    <<: *base_config
-    consumer_group: "{{ .Values.global.env }}.events.device.profile.backup"
-    base_path: "telemetry-data-store/evice-profile-events"
-  learning-events-backup:
-    <<: *base_config
-    consumer_group: "{{ .Values.global.env }}.learning.graph.events.backup"
-    base_path: "telemetry-data-store/learning-events"
-  learning-failed-backup:
-    <<: *base_config
-    consumer_group: "{{ .Values.global.env }}.failed.learning.events.backup"
-    base_path: "telemetry-data-store/learning-failed-events"
-  assess-events-backup:
-    <<: *base_config
-    consumer_group: "{{ .Values.global.env }}.telemetry.assess.events.backup"
-    base_path: "telemetry-data-store/telemetry-batch-assess"
-  batch-assess-failed-events-backup:
-    <<: *base_config
-    consumer_group: "{{ .Values.global.env }}.telemetry.assess.failed.events.backup"
-    base_path: "telemetry-data-store/telemetry-batch-assess-failed"
-  ingestion-telemetry-backup:
-    <<: *base_config
-    consumer_group: "{{ .Values.global.env }}.telemetry.ingestion.events.backup"
-    base_path: "telemetry-data-store/ingestion-telemetry"
-  content-consumption-events-backup:
-    <<: *base_config
-    consumer_group: "{{ .Values.global.env }}.coursebatch.job.request.backup"
-    base_path: "telemetry-data-store/content-consumption-events"
-  issue-certificate-events-backup:
-    <<: *base_config
-    consumer_group: "{{ .Values.global.env }}.issue.certificate.request.backup"
-    base_path: "telemetry-data-store/issue-certificate-events"
-  content-auto-creation-events-backup:
-    <<: *base_config
-    consumer_group: "{{ .Values.global.env }}.auto.creation.job.request.backup"
-    base_path: "telemetry-data-store/content-auto-creation-events"
-  error-telemetry-backup:
-    <<: *base_config
-    consumer_group: '{{ .Values.global.env }}.druid.events.error.backup'
-    base_path: "telemetry-data-store/error_events"
+    base_path: "telemetry-data-store/druid/events"
+    topic: "{{ .Values.global.env }}.druid.events.summary"
+    consumer_group: "{{ .Values.global.env }}-druid-events-summary-backup"
 
 image:
   repository: sunbirded.azurecr.io/secor

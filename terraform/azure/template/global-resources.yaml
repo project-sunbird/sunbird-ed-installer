@@ -1,12 +1,12 @@
 #edbb
 bot:
   resources:
-  requests:
-    cpu: 100m
-    memory: 100Mi
-  limits:
-    cpu: 1000m
-    memory: 1024Mi
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1000m
+      memory: 1024Mi
 
 discussionmw:
   resources:
@@ -19,30 +19,30 @@ discussionmw:
 
 echo:
   resources:
-  requests:
-    cpu: 100m
-    memory: 100Mi
-  limits:
-    cpu: 1
-    memory: 1024Mi  
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1
+      memory: 1024Mi  
 
 knowledgemw:
   resources:
-  requests:
-    cpu: 100m
-    memory: 100Mi
-  limits:
-    cpu: 1
-    memory: 1G    
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1
+      memory: 1G    
 
 kong:
- resources:
-  requests:
-    cpu: 100m
-    memory: 100M
-  limits:
-    cpu: 1
-    memory: 1G    
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100M
+    limits:
+      cpu: 1
+      memory: 1G    
 
 nginx-private-ingress:
   resources:
@@ -90,12 +90,12 @@ report:
       memory: 1G
 router: 
   resources:
-  requests:
-    cpu: 100m
-    memory: 100Mi
-  limits:
-    cpu: 1000m
-    memory: 1024Mi
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1000m
+      memory: 1024Mi
     
 #inquirybb
 assessment:
@@ -157,7 +157,7 @@ search:
       memory: 100Mi
     limits:
       cpu: 1
-      memory: 1024Mi  
+      memory: 1024Mi 
 
 taxonomy:
   resources:
@@ -177,6 +177,7 @@ adminutil:
     limits:
       cpu: 1
       memory: 1G
+      
 cert:
   resources:
     requests:
@@ -185,6 +186,7 @@ cert:
     limits:
       cpu: 1
       memory: 1024Mi
+
 certificateapi:
   resources:
     requests:
@@ -192,7 +194,8 @@ certificateapi:
       memory: 100Mi
     limits:
       cpu: 1
-      memory: 1024Mi  
+      memory: 1024Mi
+
 certificatesign:
   resources:
     requests:
@@ -200,7 +203,8 @@ certificatesign:
       memory: 100Mi
     limits:
       cpu: 1
-      memory: 1024Mi   
+      memory: 1024Mi
+
 certregistry:
   resources:
     requests:
@@ -209,6 +213,15 @@ certregistry:
     limits:
       cpu: 1
       memory: 1024Mi      
+
+druid-operator:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1
+      memory: 1024Mi   
 
 cassandra: 
   persistence:
@@ -230,42 +243,96 @@ druid-raw-cluster:
         cpu: 100m
         memory: 1024Mi
       limits:
-      cpu: 200m
-      memory: 2048Mi
+        cpu: 200m
+        memory: 2048Mi
     druid_coordinator:
       requests:
         cpu: 250m
         memory: 750Mi
       limits:
-      cpu: 250m
-      memory: 1024Mi
+        cpu: 250m
+        memory: 1024Mi
     druid_overlord:
       requests:
         cpu: 250m
         memory: 750Mi
       limits:
-      cpu: 250m
-      memory: 1024Mi
+        cpu: 250m
+        memory: 1024Mi
     druid_historical:
       requests:
         cpu: 750m
         memory: 512Mi
       limits:
-      cpu: 1
-      memory: 2048Mi
+        cpu: 1
+        memory: 2048Mi
     druid_indexer:
       requests:
         cpu: 200m
         memory: 8Gi
       limits:
-      cpu: 200m
-      memory: 16Gi
+        cpu: 200m
+        memory: 16Gi
     druid_router:
       requests:
         cpu: 250m
         memory: 500Mi
       limits:
-      cpu: 512m
+        cpu: 512m
+        memory: 1024Mi
+
+groups:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100M
+    limits:
+      cpu: 1
+      memory: 1G
+
+lms:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1
+      memory: 1024Mi
+
+notification:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1
+      memory: 1024Mi
+
+print:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1
+      memory: 1024Mi
+
+registry:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1
+      memory: 2G
+
+userorg:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1
       memory: 1024Mi
 
 elasticsearch:
@@ -358,4 +425,40 @@ zookeeper:
       cpu: 100m
       memory: 128Mi 
 
+#Obsrvbb
+analytics:
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1G
+    limits:
+      cpu: 1
+      memory: 2G
 
+druid-operator:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1
+      memory: 1024Mi
+
+
+submit-ingestion:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1
+      memory: 1024Mi
+
+telemetry:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1
+      memory: 1024Mi
