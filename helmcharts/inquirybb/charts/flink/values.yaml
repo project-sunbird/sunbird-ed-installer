@@ -284,7 +284,8 @@ flink_jobs:
         read_base_path="{{- include "common.tplvalues.render" (dict "value" .Values.cloudstorage_base_path "context" $) }}"
         write_base_path= {{- include "common.tplvalues.render" (dict "value" .Values.valid_cloudstorage_base_urls "context" $) }}
       }
-     
+      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
+
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
       taskmanager.memory.flink.size: 1024m
@@ -332,6 +333,8 @@ flink_jobs:
         read_base_path="{{- include "common.tplvalues.render" (dict "value" .Values.cloudstorage_base_path "context" $) }}"
         write_base_path= {{- include "common.tplvalues.render" (dict "value" .Values.valid_cloudstorage_base_urls "context" $) }}
       }
+      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
+
      
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
@@ -365,6 +368,8 @@ flink_jobs:
           regards: "{{ .Values.email_notification_regards }}"
         }
       }
+      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
+ 
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
       taskmanager.memory.flink.size: 1024m
