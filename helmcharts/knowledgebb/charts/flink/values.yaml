@@ -258,6 +258,7 @@ flink_jobs:
       cloudstorage.write_base_path=["https://{{ .Values.global.object_storage_endpoint }}"] 
       cloudstorage.mecloudstorage.metadata.list={{ .Values.cloudstorage_metadatalist }}
       cloud_storage_container="{{ .Values.global.public_container_name }}"
+      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
 
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
@@ -303,6 +304,7 @@ flink_jobs:
       }
 
       channel.default = "org.sunbird"
+      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
 
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
@@ -372,6 +374,7 @@ flink_jobs:
       cloud_storage_secret="{{ .Values.global.cloud_storage_secret_key }}"
       cloud_storage_container="{{ .Values.global.public_container_name }}"
       cloud_storage_endpoint=""
+      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
 
 
     flink-conf: |+
@@ -450,6 +453,7 @@ flink_jobs:
       cloud_storage_secret="{{ .Values.global.cloud_storage_secret_key }}"
       cloud_storage_container="{{ .Values.global.public_container_name }}"
       cloud_storage_endpoint=""
+      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
 
 
     flink-conf: |+
@@ -505,6 +509,7 @@ flink_jobs:
       }
 
       es_sync_wait_time = 5000
+      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
 
 
     flink-conf: |+
@@ -575,6 +580,7 @@ flink_jobs:
       cloud_storage_secret="{{ .Values.global.cloud_storage_secret_key }}"
       cloud_storage_container="{{ .Values.global.public_container_name }}"
       cloud_storage_endpoint=""
+      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
 
 
     flink-conf: |+
@@ -695,6 +701,7 @@ flink_jobs:
       }
 
       media_service_job_success_status=["FINISHED", "COMPLETE"]
+      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
 
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
@@ -734,6 +741,7 @@ flink_jobs:
       }
 
       timezone = "IST"
+      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
 
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
@@ -930,6 +938,7 @@ flink_jobs:
       cloud_storage_secret="{{ .Values.global.cloud_storage_secret_key }}"
       cloud_storage_container="{{ .Values.global.public_container_name }}"
       cloud_storage_endpoint=""
+      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
       taskmanager.memory.flink.size: 1024m
