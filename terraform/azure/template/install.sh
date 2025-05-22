@@ -92,7 +92,7 @@ function install_component() {
       fi
     helm upgrade --install "$component" "$component" --namespace sunbird -f "$component/values.yaml" \
         $ed_values_flag \
-        -f "../terraform/azure/$environment/global-resources.yaml" \
+        -f "global-resources.yaml" \
         -f "../terraform/azure/$environment/global-values.yaml" \
         -f "../terraform/azure/$environment/global-cloud-values.yaml" --timeout 30m --debug
 }
