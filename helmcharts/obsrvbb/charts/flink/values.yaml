@@ -134,7 +134,7 @@ azure_secret: "azure-secret"
 
 # Azure Container Details
 checkpoint_store_type: "azure"
-cloud_storage_flink_bucketname: "{{ .Values.global.public_container_name }}"
+cloud_storage_flink_bucketname: "{{ .Values.global.private_container_name }}"
 cloud_storage_content_bucketname: sunbird-content-dev
 cert_container_name: dev-e-credentials
 cloud_storage_endpoint: https://{{ .Values.global.object_storage_endpoint }}
@@ -291,7 +291,7 @@ base_config: |
 
       {{- else if eq "azure" .Values.global.checkpoint_store_type }}
       statebackend {
-        base.url = "wasbs://{{ .Values.global.public_container_name }}@{{ .Values.global.object_storage_endpoint }}/checkpoint"
+        base.url = "wasbs://{{ .Values.global.private_container_name }}@{{ .Values.global.object_storage_endpoint }}/checkpoint"
       }
 
       {{- else if eq "gcs" .Values.global.checkpoint_store_type }}
