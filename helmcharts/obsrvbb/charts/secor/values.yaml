@@ -1,14 +1,14 @@
 # Azure Container Details
 azure_account: "{{.Values.global.cloud_storage_access_key}}"
 azure_secret: "{{ .Values.global.cloud_storage_secret_key }}"
-azure_container_name: "{{ .Values.global.public_container_name }}"
+azure_container_name: "{{ .Values.global.private_container_name }}"
 
 s3_access_key: "cloud_private_storage_accountname"
 s3_secret_id: "cloud_private_storage_secret"
 s3_region: "cloud_private_storage_region"
 s3_endpoint: "cloud_private_storage_endpoint"
 s3_path_style_access: "s3_path_style_access"
-s3_bucket_name: "{{ .Values.global.public_container_name }}"
+s3_bucket_name: "{{ .Values.global.private_container_name }}"
 
 storage_type: ""
 storageClass: ""
@@ -29,7 +29,7 @@ global:
   zookeeper: *zookeeper
   env: "dev"
 
-gcp_bucket_name: "{{ .Values.global.public_container_name }}"
+gcp_bucket_name: "{{ .Values.global.private_container_name }}"
 
 serviceAccount:
   create: false

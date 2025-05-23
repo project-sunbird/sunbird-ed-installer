@@ -30,7 +30,7 @@ PGPASSWORD: "postgres"
 AZURE_STORAGE_ACCOUNT: ""
 AZURE_KEY: ""
 CLOUD_SERVICE: "azure"
-azure_backups_container_name: "{{ .Values.global.public_container_name }}/backups"
+azure_backups_container_name: "{{ .Values.global.private_container_name }}/backups"
 
 postgresql: &postgresql
   enabled: true

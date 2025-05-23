@@ -29,7 +29,7 @@ velero:
       backupStorageLocation:
         - name: default
           provider: "${cloud_storage_provider}"
-          bucket: "{{ .Values.global.public_container_name }}"
+          bucket: "${azure_private_container_name}"
           prefix: backups
           config:
             storageAccount: ${azure_storage_account_name} 
