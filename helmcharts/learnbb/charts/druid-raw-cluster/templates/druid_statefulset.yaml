@@ -406,7 +406,7 @@ spec:
             labels:
               system.ingestion: "true"
           spec:
-            storageClassName: "{{- .Values.storageClass }}"
+            storageClassName: "{{ .Values.global.storage_class }}"
             accessModes:
               - ReadWriteOnce
             resources:

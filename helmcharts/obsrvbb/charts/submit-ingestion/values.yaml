@@ -25,7 +25,7 @@ resources:
   limits:
     cpu: 1
     memory: 1024Mi
-container_name: "{{ .Values.global.public_container_name }}/telemetry-data-store"
+container_name: "{{ .Values.global.private_container_name }}/telemetry-data-store"
 ingestion_spec:
   druid_events_summary:
     topic: druid.events.summary
