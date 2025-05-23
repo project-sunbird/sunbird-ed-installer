@@ -595,4 +595,4 @@ elasticsearch:
         cpu: "2"
         memory: "4Gi"
     persistence:
-      size: 26Gie
+      size: 25Gi
