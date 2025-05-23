@@ -584,3 +584,15 @@ velero:
       limits:
         cpu: 1000m
         memory: 1024Mi
+
+elasticsearch:
+  master:
+    resources:
+      requests:
+        cpu: "1"
+        memory: "2Gi"
+      limits:
+        cpu: "2"
+        memory: "4Gi"
+    persistence:
+      size: 26Gie
