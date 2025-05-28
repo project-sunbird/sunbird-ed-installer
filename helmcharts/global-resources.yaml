@@ -283,14 +283,14 @@ groups:
       cpu: 1
       memory: 1G
 
-keycloak:
-  resources:
-    requests:
-      cpu: 500m
-      memory: 1024Mi
-    limits:
-        cpu: 1
-        memory: 2048Mi
+# keycloak:
+#   resources:
+#     requests:
+#       cpu: 250m
+#       memory: 512Mi
+#     limits:
+#         cpu: 750m
+#         memory: 750Mi
 
 lms:
   resources:
@@ -371,16 +371,13 @@ neo4j:
         requests:
           storage: 25Gi
 
-postgresql: 
-  persistence:
-    size: 25Gi
-  resources:
-    limits:
-      cpu: 500m
-      memory: 512Mi
-    requests:
-      cpu: 250m
-      memory: 256Mi
+# postgresql: 
+#   persistence:
+#     size: 25Gi
+#   resources:
+#     requests:
+#       cpu: 250m
+#       memory: 256Mi
 
 redis: 
   master:
