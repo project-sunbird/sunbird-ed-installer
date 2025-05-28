@@ -288,31 +288,46 @@ confVolume: &confVolume
           mountPath: /data/analytics/content-snapshot/conf
 
       command:
-          - /bin/sh
-          - -c
-          - |
-            data_path="/data/analytics" # persistent path
-            python -m venv /data/analytics/venv  # run dataproducts.tar.gz
-            . /data/analytics/venv/bin/activate && pip install /data/analytics/dataproducts.tar.gz 
-            deactivate
-            pip install kafka-python
-            
-            curl -o /data/analytics/content-snapshot/jars/etl-jobs-1.0/lib/guava-18.0.jar "https://repo1.maven.org/maven2/com/google/guava/guava/18.0/guava-18.0.jar"
-            curl -o /data/analytics/spark-3.1.3-bin-hadoop2.7/jars/jetty-util-6.1.26.jar "https://repo1.maven.org/maven2/org/mortbay/jetty/jetty-util/6.1.26/jetty-util-6.1.26.jar"
-            curl -o /data/analytics/spark-3.1.3-bin-hadoop2.7/jars/config-1.3.3.jar "https://repo1.maven.org/maven2/com/typesafe/config/1.3.3/config-1.3.3.jar"
-            curl -o /data/analytics/spark-3.1.3-bin-hadoop2.7/jars/spark-sql_2.12-3.1.0-tests.jar "https://repo1.maven.org/maven2/org/apache/spark/spark-sql_2.12/3.1.0/spark-sql_2.12-3.1.0-tests.jar"
-            curl -o /data/analytics/content-snapshot/jars/etl-jobs-1.0/lib/spark-sql_2.12-3.1.0-tests.jar "https://repo1.maven.org/maven2/org/apache/spark/spark-sql_2.12/3.1.0/spark-sql_2.12-3.1.0-tests.jar"
+           command:
+            - "/bin/sh"
+            - "-c"
+            - |
+              data_path="/data/analytics" # persistent path
+              jar_location="$data_path/content-snapshot.zip"
+              [[ -d $data_path ]] || mkdir -p $data_path
+              # Download the ZIP file
+              [[ -f $jar_location ]] || curl -o $data_path/content-snapshot.zip "https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/artifacts-{{.Values.global.release_version}}/content-snapshot.zip"
+              curl -o /data/analytics/spark-3.1.3-bin-hadoop2.7.tgz "https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/artifacts-{{.Values.global.release_version}}/spark-3.1.3-bin-hadoop2.7.tgz"
+              unzip -o $jar_location -d $data_path
 
-            # Download google-cloud-storage
-            curl -o /data/analytics/models-2.0/data-products-1.0/lib/google-cloud-storage-2.0.1.jar "https://repo1.maven.org/maven2/com/google/cloud/google-cloud-storage/2.0.1/google-cloud-storage-2.0.1.jar"
-            # Download gcs-connector with shaded classifier
-            curl -o /data/analytics/models-2.0/data-products-1.0/lib/gcs-connector-hadoop2-2.0.1-shaded.jar "https://repo1.maven.org/maven2/com/google/cloud/bigdataoss/gcs-connector/hadoop2-2.0.1/gcs-connector-hadoop2-2.0.1-shaded.jar"
-            
-            cp "$data_path/models-2.0/data-products-1.0/lib/guava-19.0.jar" /data/analytics/spark-3.1.3-bin-hadoop2.7/jars/
-            rm /data/analytics/spark-3.1.3-bin-hadoop2.7/jars/guava-14.0.1.jar
-            cp /data/analytics/spark-conf/spark-defaults.conf /data/analytics/spark-3.1.3-bin-hadoop2.7/conf/
-            cp /data/analytics/spark-conf/spark-env.sh /data/analytics/spark-3.1.3-bin-hadoop2.7/conf/
-            /opt/bitnami/scripts/spark/entrypoint.sh /opt/bitnami/scripts/spark/run.sh
+              tar -xvf /data/analytics/spark-3.1.3-bin-hadoop2.7.tgz -C "/data/analytics"
+
+              #  dataproducts
+              jar_location_sbob="$data_path/sunbird-obsrv-1.0-bkp-v3.zip"
+              extracted_location="$data_path/sunbird-obsrv-1.0-bkp"
+              # Create the target directory if it doesn't exist
+              [[ -d $data_path ]] || mkdir -p $data_path
+
+              # Download the ZIP file if it doesn't exist
+              [[ -f $jar_location_sbob ]] || curl -o $jar_location_sbob "https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/artifacts-{{.Values.global.release_version}}/sunbird-obsrv-1.0-v3.zip"
+
+              # Extract the ZIP file if not already extracted
+              [[ -d $extracted_location ]] || unzip -o $jar_location_sbob -d $data_path
+
+              # Copy all files from the extracted directory to /data/analytics
+              cp -R "$extracted_location"/* "$data_path"
+              rm "$jar_location_sbob"
+              ls $data_path
+
+              # adhoc-dataproducts
+              adhoc_loc="$data_path/dataproducts.zip"
+              adhoc_extracted_loc="$data_path/dataproducts.tar.gz"
+
+              # dowload the tar.gz adhoc dataproducts
+              curl -o $data_path/dataproducts.zip https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/artifacts-{{.Values.global.release_version}}/dataproducts_artifacts_release-3.6.zip
+
+              # Extract the ZIP file if not already extracted
+              [[ -d $adhoc_extracted_loc ]] || unzip -o $adhoc_loc -d $data_path
 
       initContainers:
         - name: analytics
@@ -360,6 +375,11 @@ confVolume: &confVolume
 
               # Extract the ZIP file if not already extracted
               [[ -d $adhoc_extracted_loc ]] || unzip -o $adhoc_loc -d $data_path
+
+               # download data-products-1.0.jar from same location above 
+              curl -o /data/analytics/models-2.0/data-products-1.0/lib/data-products-1.0.jar "https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/artifacts-{{.Values.global.release_version}}/data-products-1.0.jar"
+              curl -o /data/analytics/models-2.0/data-products-1.0/data-products-1.0.jar "https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/artifacts-{{.Values.global.release_version}}/data-products-1.0.jar"
+
 
 spark: &spark
   enabled: true
