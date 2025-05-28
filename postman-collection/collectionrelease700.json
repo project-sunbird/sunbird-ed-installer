@@ -1074,7 +1074,7 @@
 			"name": "2 - Knowlg",
 			"item": [
 				{
-					"name": "0 - Domain Definitions",
+					"name": "1 - Domain Definitions",
 					"item": [
 						{
 							"name": "1 - Domain definition",
@@ -1415,53 +1415,6 @@
 									"raw": "{\n    \"definitionNodes\": [\n        {\n            \"objectType\": \"CollectionImage\",\n            \"properties\": [\n                {\n                    \"propertyName\": \"name\",\n                    \"title\": \"Name\",\n                    \"description\": \"Name of the content\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Text\",\n                    \"required\": true,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{inputType: text, order: 1}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"code\",\n                    \"title\": \"Code\",\n                    \"description\": \"Unique code for the content\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Text\",\n                    \"required\": true,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{inputType: text, order: 2}\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Multi-Select\",\n                    \"propertyName\": \"os\",\n                    \"title\": \"OS\",\n                    \"description\": \"Supported Operating Systems\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": [\n                        \"All\",\n                        \"Android\",\n                        \"iOS\",\n                        \"Windows\"\n                    ],\n                    \"defaultValue\": \"All\",\n                    \"renderingHints\": \"{ inputType: multiselect,  order: 14 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"minOsVersion\",\n                    \"title\": \"Min Supported OS Version\",\n                    \"description\": \"E.g. 4.4\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"compatibilityLevel\",\n                    \"title\": \"Compatibility Level\",\n                    \"description\": \"It is the integer value being used by Client (Genie) for the Compatibility information of Content.\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"1\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"minGenieVersion\",\n                    \"title\": \"Min Supported Genie Version\",\n                    \"description\": \"E.g. 5.0\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"minSupportedVersion\",\n                    \"title\": \"Min Supported Version\",\n                    \"description\": \"Minimum Supported Version of this content\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 10 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"JSON\",\n                    \"propertyName\": \"filter\",\n                    \"title\": \"Filter Criteria (JSON)\",\n                    \"description\": \"E.g.: {\\\"tags\\\": [\\\"Delhi Curriculum\\\"]}\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: textarea, order: 7 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"JSON\",\n                    \"propertyName\": \"variants\",\n                    \"title\": \"Image Resolution variants\",\n                    \"description\": \"Image Resolution variants\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: textarea, order: 7 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"JSON\",\n                    \"propertyName\": \"config\",\n                    \"title\": \"Configuration for Renderers\",\n                    \"description\": \"Configuration for Renderers\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: textarea, order: 7 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Select\",\n                    \"propertyName\": \"visibility\",\n                    \"title\": \"Visibility\",\n                    \"description\": \"Visibility (set as Parent to hide this from any other list view)\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": [\n                        \"Default\",\n                        \"Parent\",\n                        \"Private\",\n                        \"Protected\"\n                    ],\n                    \"defaultValue\": \"Default\",\n                    \"renderingHints\": \"{ inputType: textarea, order: 7 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"audience\",\n                    \"title\": \"Audience\",\n                    \"description\": \"The target audience of the Content\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": [\n                        \"Student\",\n                        \"Teacher\",\n                        \"Administrator\",\n                        \"Parent\",\n                        \"Others\",\n                        \"Other\"\n                    ],\n                    \"defaultValue\": \"Student\",\n                    \"renderingHints\": \"{ inputType: textarea, order: 7 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"URL\",\n                    \"propertyName\": \"posterImage\",\n                    \"title\": \"Poster Image\",\n                    \"description\": \"Poster Image of the Content\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: table,  order: 8 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"JSON\",\n                    \"propertyName\": \"badgeAssertions\",\n                    \"title\": \"List of Badges\",\n                    \"description\": \"List of Badges\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: textarea, order: 7 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"JSON\",\n                    \"propertyName\": \"targets\",\n                    \"title\": \"List of Target\",\n                    \"description\": \"List of Target\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: textarea, order: 9 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"JSON\",\n                    \"propertyName\": \"contentCredits\",\n                    \"title\": \"List of Content Credits\",\n                    \"description\": \"List of Content Credits\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: textarea, order: 9 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": true,\n                    \"dataType\": \"Select\",\n                    \"propertyName\": \"mimeType\",\n                    \"title\": \"Mime Type\",\n                    \"description\": \"Mime Type of the Content. E.g: application/pdf\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": [\n                        \"application/vnd.ekstep.ecml-archive\",\n                        \"application/vnd.ekstep.html-archive\",\n                        \"application/vnd.android.package-archive\",\n                        \"application/vnd.ekstep.content-archive\",\n                        \"application/vnd.ekstep.content-collection\",\n                        \"application/vnd.ekstep.plugin-archive\",\n                        \"application/vnd.ekstep.h5p-archive\",\n                        \"application/epub\",\n                        \"text/x-url\",\n                        \"video/x-youtube\",\n                        \"application/octet-stream\",\n                        \"application/msword\",\n                        \"application/pdf\",\n                        \"image/jpeg\",\n                        \"image/jpg\",\n                        \"image/png\",\n                        \"image/tiff\",\n                        \"image/bmp\",\n                        \"image/gif\",\n                        \"image/svg+xml\",\n                        \"video/avi\",\n                        \"video/mpeg\",\n                        \"video/quicktime\",\n                        \"video/3gpp\",\n                        \"video/mpeg\",\n                        \"video/mp4\",\n                        \"video/ogg\",\n                        \"video/webm\",\n                        \"audio/mp3\",\n                        \"audio/mp4\",\n                        \"audio/mpeg\",\n                        \"audio/ogg\",\n                        \"audio/webm\",\n                        \"audio/x-wav\",\n                        \"audio/wav\"\n                    ],\n                    \"defaultValue\": \"application/vnd.ekstep.ecml-archive\",\n                    \"renderingHints\": \"{ inputType: select,  order: 9 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": true,\n                    \"dataType\": \"Select\",\n                    \"propertyName\": \"contentEncoding\",\n                    \"title\": \"Content-Encoding\",\n                    \"description\": \"Content Encoding\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": [\n                        \"gzip\",\n                        \"identity\"\n                    ],\n                    \"defaultValue\": \"gzip\",\n                    \"renderingHints\": \"{ inputType: text,  order: 5 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": true,\n                    \"dataType\": \"Select\",\n                    \"propertyName\": \"contentDisposition\",\n                    \"title\": \"Content-Disposition\",\n                    \"description\": \"Content Disposition\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": [\n                        \"inline\",\n                        \"online\",\n                        \"attachment\",\n                        \"online-only\"\n                    ],\n                    \"defaultValue\": \"inline\",\n                    \"renderingHints\": \"{ inputType: text,  order: 5 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": true,\n                    \"dataType\": \"Select\",\n                    \"propertyName\": \"mediaType\",\n                    \"title\": \"Media Type\",\n                    \"description\": \"Media Type. e.g: image, pdf, etc\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": [\n                        \"content\",\n                        \"collection\",\n                        \"image\",\n                        \"video\",\n                        \"audio\",\n                        \"voice\",\n                        \"ecml\",\n                        \"document\",\n                        \"pdf\",\n                        \"text\",\n                        \"other\"\n                    ],\n                    \"defaultValue\": \"content\",\n                    \"renderingHints\": \"{ inputType: text,  order: 5 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"URL\",\n                    \"propertyName\": \"appIcon\",\n                    \"title\": \"Icon\",\n                    \"description\": \"App Icon of the content\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: table, order: 7 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"URL\",\n                    \"propertyName\": \"grayScaleAppIcon\",\n                    \"title\": \"GrayScale App Icon\",\n                    \"description\": \"GrayScale App Icon\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: table, order: 7 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"URL\",\n                    \"propertyName\": \"thumbnail\",\n                    \"title\": \"Thumbnail\",\n                    \"description\": \"Thumbnail\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: table, order: 7 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"external\",\n                    \"propertyName\": \"screenshots\",\n                    \"title\": \"Screenshots\",\n                    \"description\": \"Screenshots of the content\",\n                    \"category\": \"Authoring\",\n                    \"displayProperty\": \"Hidden\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: table, order: 7 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"format\",\n                    \"title\": \"Format\",\n                    \"description\": \"Format of the content\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"duration\",\n                    \"title\": \"Duration\",\n                    \"description\": \"Duration of the content\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"size\",\n                    \"title\": \"Download File Size (in bytes)\",\n                    \"description\": \"Download File Size (in bytes)\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"dimensionse\",\n                    \"title\": \"Dimensions of the content\",\n                    \"description\": \"Dimensions of the content\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Select\",\n                    \"propertyName\": \"idealScreenSize\",\n                    \"title\": \"Ideal Screen Size\",\n                    \"description\": \"Ideal Screen Size\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": [\n                        \"small\",\n                        \"normal\",\n                        \"large\",\n                        \"xlarge\",\n                        \"other\"\n                    ],\n                    \"defaultValue\": \"normal\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Select\",\n                    \"propertyName\": \"idealScreenDensity\",\n                    \"title\": \"Ideal Screen Density (dots per inch)\",\n                    \"description\": \"Ideal Screen Density (dots per inch)\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": [\n                        \"ldpi\",\n                        \"mdpi\",\n                        \"hdpi\",\n                        \"xhdpi\",\n                        \"xxhdpi\",\n                        \"xxxhdpi\"\n                    ],\n                    \"defaultValue\": \"hdpi\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"releaseNotes\",\n                    \"title\": \"Release Notes\",\n                    \"description\": \"Release Notes\",\n                    \"category\": \"Lifecycle\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: table,  order: 10 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"pkgVersion\",\n                    \"title\": \"Package Version\",\n                    \"description\": \"Version number of the package file\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"semanticVersion\",\n                    \"title\": \"Semantic Version\",\n                    \"description\": \"Semantic version number of the package file\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"versionKey\",\n                    \"title\": \"Data Version Key\",\n                    \"description\": \"Version number data in Content Node\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Multi-Select\",\n                    \"propertyName\": \"resources\",\n                    \"title\": \"Resources\",\n                    \"description\": \"Resources. e.g: Speaker, GPS \",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": [\n                        \"Speaker\",\n                        \"Touch\",\n                        \"Microphone\",\n                        \"GPS\",\n                        \"Motion Sensor\",\n                        \"Compass\"\n                    ],\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: select,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"URL\",\n                    \"propertyName\": \"downloadUrl\",\n                    \"title\": \"Download Url\",\n                    \"description\": \"URL to download the content\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 5 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"URL\",\n                    \"propertyName\": \"artifactUrl\",\n                    \"title\": \"Artifact Url\",\n                    \"description\": \"URL to download the content\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 5 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"URL\",\n                    \"propertyName\": \"previewUrl\",\n                    \"title\": \"Preview Url\",\n                    \"description\": \"URL to preview the content\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 6 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"URL\",\n                    \"propertyName\": \"streamingUrl\",\n                    \"title\": \"Streaming Url\",\n                    \"description\": \"Stream url of the video content\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 6 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"propertyName\": \"objects\",\n                    \"title\": \"Objects Used in the Content\",\n                    \"description\": \"List of Objects Used in the Content\",\n                    \"category\": \"General\",\n                    \"dataType\": \"List\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{inputType: table, order: 7}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"organization\",\n                    \"title\": \"Array of org names (partner names)\",\n                    \"description\": \"Array of organization names (partner names)\",\n                    \"category\": \"General\",\n                    \"dataType\": \"List\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{inputType: table, order: 7}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"createdFor\",\n                    \"title\": \"Array of partner IDs\",\n                    \"description\": \"Array of partner IDs\",\n                    \"category\": \"General\",\n                    \"dataType\": \"List\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{inputType: table, order: 7}\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"developer\",\n                    \"title\": \"Developer\",\n                    \"description\": \"Content Developer\",\n                    \"category\": \"Ownership\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"source\",\n                    \"title\": \"Source\",\n                    \"description\": \"Source of the content (e.g. MangoSense)\",\n                    \"category\": \"Ownership\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Term\",\n                    \"propertyName\": \"board\",\n                    \"title\": \"Curriculum (Board)\",\n                    \"description\": \"Education Board (Like MP Board, NCERT, etc)\",\n                    \"category\": \"Pedagogy\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"TermList\",\n                    \"propertyName\": \"subject\",\n                    \"title\": \"Subject\",\n                    \"description\": \"Subject of the Content to use to teach\",\n                    \"category\": \"Pedagogy\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"TermList\",\n                    \"propertyName\": \"medium\",\n                    \"title\": \"Medium\",\n                    \"description\": \"Medium of instruction. e.g: English, Hindi etc\",\n                    \"category\": \"Pedagogy\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"notes\",\n                    \"title\": \"Teacher Notes\",\n                    \"description\": \"Notes for the instructor.\",\n                    \"category\": \"Pedagogy\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"pageNumber\",\n                    \"title\": \"Page Number\",\n                    \"description\": \"Page number of Textbook which the Content belongs to.\",\n                    \"category\": \"Ownership\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"publication\",\n                    \"title\": \"Publication House\",\n                    \"description\": \"Name of the Publication House.\",\n                    \"category\": \"Ownership\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"edition\",\n                    \"title\": \"Edition\",\n                    \"description\": \"Edition Information of the Content.\",\n                    \"category\": \"Ownership\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"publisher\",\n                    \"title\": \"Publisher\",\n                    \"description\": \"Publisher of the content (e.g. Pratham Books)\",\n                    \"category\": \"Ownership\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"author\",\n                    \"title\": \"Author\",\n                    \"description\": \"Content Author\",\n                    \"category\": \"Ownership\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"owner\",\n                    \"title\": \"Owner\",\n                    \"description\": \"Content Owner\",\n                    \"category\": \"Ownership\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"attributions\",\n                    \"title\": \"Owner\",\n                    \"description\": \"Attributions/Credits\",\n                    \"category\": \"Ownership\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"collaborators\",\n                    \"title\": \"Collaborators\",\n                    \"description\": \"List of Collaborators\",\n                    \"category\": \"Ownership\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"creators\",\n                    \"title\": \"Creators\",\n                    \"description\": \"List of primary contributors\",\n                    \"category\": \"Ownership\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"contributors\",\n                    \"title\": \"Contributors\",\n                    \"description\": \"List of secondary contributors\",\n                    \"category\": \"Ownership\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"voiceCredits\",\n                    \"title\": \"Voice Credits\",\n                    \"description\": \"Voice Credits\",\n                    \"category\": \"Ownership\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"soundCredits\",\n                    \"title\": \"Audio/Sound Credits\",\n                    \"description\": \"Audio and background scores by\",\n                    \"category\": \"Ownership\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"imageCredits\",\n                    \"title\": \"Image Credits\",\n                    \"description\": \"Images created by\",\n                    \"category\": \"Ownership\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"copyright\",\n                    \"title\": \"Copyright\",\n                    \"description\": \"Copyright\",\n                    \"category\": \"Ownership\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"copyrightYear\",\n                    \"title\": \"Copyright Year\",\n                    \"description\": \"Copyright Year\",\n                    \"category\": \"Ownership\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Select\",\n                    \"propertyName\": \"license\",\n                    \"title\": \"License\",\n                    \"description\": \"License\",\n                    \"range\": [\n                        \"CC BY-NC-SA 4.0\",\n                        \"CC BY-NC 4.0\",\n                        \"CC BY-SA 4.0\",\n                        \"CC BY 4.0\",\n                        \"CC BY-ND 4.0\",\n                        \"Standard YouTube License\",\n                        \"CC BY-NC-ND 4.0\"\n                    ],\n                    \"category\": \"Ownership\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"CC BY 4.0\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"propertyName\": \"language\",\n                    \"title\": \"Language\",\n                    \"description\": \"Language\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Multi-Select\",\n                    \"required\": false,\n                    \"range\": [\n                        \"English\",\n                        \"Hindi\",\n                        \"Assamese\",\n                        \"Bengali\",\n                        \"Gujarati\",\n                        \"Kannada\",\n                        \"Malayalam\",\n                        \"Marathi\",\n                        \"Nepali\",\n                        \"Odia\",\n                        \"Punjabi\",\n                        \"Tamil\",\n                        \"Telugu\",\n                        \"Urdu\",\n                        \"Sanskrit\",\n                        \"Maithili\",\n                        \"Munda\",\n                        \"Santali\",\n                        \"Juang\",\n                        \"Ho\",\n                        \"Other\"\n                    ],\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"English\",\n                    \"renderingHints\": \"{inputType: text, order: 5}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"words\",\n                    \"title\": \"Dictionary Words\",\n                    \"description\": \"Dictionary words in this content\",\n                    \"category\": \"Authoring\",\n                    \"dataType\": \"List\",\n                    \"required\": false,\n                    \"displayProperty\": \"Hidden\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{inputType: text, order: 5}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"text\",\n                    \"title\": \"Story Text\",\n                    \"description\": \"Text of the story\",\n                    \"category\": \"Authoring\",\n                    \"dataType\": \"List\",\n                    \"required\": false,\n                    \"displayProperty\": \"Hidden\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{inputType: text, order: 5}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"forkable\",\n                    \"title\": \"Forkable\",\n                    \"description\": \"Forkable\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Boolean\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{inputType: checkbox, order: 5}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"translatable\",\n                    \"title\": \"Translatable\",\n                    \"description\": \"Translatable\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Boolean\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{inputType: checkbox, order: 5}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"ageGroup\",\n                    \"title\": \"Age Group\",\n                    \"description\": \"Suggested Age Group\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Multi-Select\",\n                    \"required\": false,\n                    \"range\": [\n                        \"<5\",\n                        \"5-6\",\n                        \"6-7\",\n                        \"7-8\",\n                        \"8-10\",\n                        \">10\",\n                        \"Other\"\n                    ],\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{inputType: text, order: 5}\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"TermList\",\n                    \"propertyName\": \"gradeLevel\",\n                    \"title\": \"Grade Level\",\n                    \"description\": \"Grade Level for which content is created\",\n                    \"category\": \"Pedagogy\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"TermList\",\n                    \"propertyName\": \"topic\",\n                    \"title\": \"Topic\",\n                    \"description\": \"List of Topic\",\n                    \"category\": \"Pedagogy\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Select\",\n                    \"propertyName\": \"interactivityLevel\",\n                    \"title\": \"Interactivity Level\",\n                    \"description\": \"Interactivity Level\",\n                    \"category\": \"Pedagogy\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": [\n                        \"High\",\n                        \"Medium\",\n                        \"Low\"\n                    ],\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: select,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": true,\n                    \"dataType\": \"Select\",\n                    \"propertyName\": \"contentType\",\n                    \"title\": \"Content Type\",\n                    \"description\": \"Content Type. e.g: TextBook, Resource, etc\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": [\n                        \"Resource\",\n                        \"Collection\",\n                        \"TextBook\",\n                        \"LessonPlan\",\n                        \"Course\",\n                        \"Template\",\n                        \"Asset\",\n                        \"Plugin\",\n                        \"LessonPlanUnit\",\n                        \"CourseUnit\",\n                        \"TextBookUnit\",\n                        \"TeachingMethod\",\n                        \"PedagogyFlow\",\n                        \"FocusSpot\",\n                        \"LearningOutcomeDefinition\",\n                        \"PracticeQuestionSet\",\n                        \"CuriosityQuestionSet\",\n                        \"MarkingSchemeRubric\",\n                        \"ExplanationResource\",\n                        \"ExperientialResource\",\n                        \"ConceptMap\",\n                        \"SelfAssess\",\n                        \"PracticeResource\",\n                        \"eTextBook\",\n                        \"OnboardingResource\",\n                        \"ExplanationVideo\",\n                        \"ClassroomTeachingVideo\",\n                        \"ExplanationReadingMaterial\",\n                        \"LearningActivity\",\n                        \"PreviousBoardExamPapers\",\n                        \"LessonPlanResource\",\n                        \"TVLesson\"\n                    ],\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Select\",\n                    \"propertyName\": \"resourceType\",\n                    \"title\": \"Resource Type\",\n                    \"description\": \"Resource Type. e.g: Learn, Teach, Play\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: table, order: 6 }\",\n                    \"range\": [\n                        \"Read\",\n                        \"Learn\",\n                        \"Teach\",\n                        \"Play\",\n                        \"Test\",\n                        \"Practice\",\n                        \"Experiment\",\n                        \"Collection\",\n                        \"Book\",\n                        \"Lesson Plan\",\n                        \"Course\",\n                        \"Theory\",\n                        \"Worksheet\",\n                        \"Practical\"\n                    ],\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Multi-Select\",\n                    \"propertyName\": \"category\",\n                    \"title\": \"Category\",\n                    \"description\": \"Category. e.g: learning, game, literacy\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": [\n                        \"core\",\n                        \"learning\",\n                        \"literacy\",\n                        \"math\",\n                        \"science\",\n                        \"time\",\n                        \"wordnet\",\n                        \"game\",\n                        \"mcq\",\n                        \"mtf\",\n                        \"ftb\",\n                        \"library\"\n                    ],\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: multiselect,  order: 14 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Select\",\n                    \"propertyName\": \"templateType\",\n                    \"title\": \"Template Type\",\n                    \"description\": \"Template Type.\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": [\n                        \"story\",\n                        \"worksheet\",\n                        \"mcq\",\n                        \"ftb\",\n                        \"mtf\",\n                        \"recognition\",\n                        \"activity\",\n                        \"widget\",\n                        \"other\"\n                    ],\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Multi-Select\",\n                    \"propertyName\": \"genre\",\n                    \"title\": \"Genre\",\n                    \"description\": \"Genre. e.g: Picture Books, Fiction, etc\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": [\n                        \"Picture Books\",\n                        \"Chapter Books\",\n                        \"Flash Cards\",\n                        \"Serial Books\",\n                        \"Alphabet Books\",\n                        \"Folktales\",\n                        \"Fiction\",\n                        \"Non-Fiction\",\n                        \"Poems/Rhymes\",\n                        \"Plays\",\n                        \"Comics\",\n                        \"Words\"\n                    ],\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: multiselect,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Multi-Select\",\n                    \"propertyName\": \"theme\",\n                    \"title\": \"Theme\",\n                    \"description\": \"Theme. e.g: Nature, Art, Music, etc\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": [\n                        \"History\",\n                        \"Adventure\",\n                        \"Mystery\",\n                        \"Science\",\n                        \"Nature\",\n                        \"Art\",\n                        \"Music\",\n                        \"Funny\",\n                        \"Family\",\n                        \"Life Skills\",\n                        \"Scary\",\n                        \"School Stories\",\n                        \"Holidays\",\n                        \"Hobby\",\n                        \"Geography\",\n                        \"Rural\",\n                        \"Urban\"\n                    ],\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: multiselect,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"propertyName\": \"themes\",\n                    \"title\": \"Themes\",\n                    \"description\": \"List of Themes\",\n                    \"category\": \"General\",\n                    \"dataType\": \"List\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{inputType: table, order: 20}\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"rating\",\n                    \"title\": \"User Rating\",\n                    \"description\": \"User Rating\",\n                    \"category\": \"Analytics\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ order: 20 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"rating_a\",\n                    \"title\": \"Analytical Rating\",\n                    \"description\": \"Analytical Rating\",\n                    \"category\": \"Analytics\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ order: 20 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"quality\",\n                    \"title\": \"Quality\",\n                    \"description\": \"Quality\",\n                    \"category\": \"Analytics\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ order: 20 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"genieScore\",\n                    \"title\": \"Genie Score\",\n                    \"description\": \"Genie Score\",\n                    \"category\": \"Analytics\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ order: 20 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"authoringScore\",\n                    \"title\": \"Authoring Score\",\n                    \"description\": \"Authoring Score\",\n                    \"category\": \"Analytics\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ order: 20 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"popularity\",\n                    \"title\": \"Popularity\",\n                    \"description\": \"Popularity\",\n                    \"category\": \"Analytics\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ order: 19 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"downloads\",\n                    \"title\": \"No of downloads\",\n                    \"description\": \"No of downloads\",\n                    \"category\": \"Analytics\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ order: 19 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"launchUrl\",\n                    \"title\": \"Launch Url\",\n                    \"description\": \"URL to launch the game\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: table, order: 6 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"osId\",\n                    \"title\": \"Operating System Id\",\n                    \"description\": \"Operating System specific Id\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"org.ekstep.launcher\",\n                    \"renderingHints\": \"{ inputType: table, order: 6 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"activity_class\",\n                    \"title\": \"Activity Class Name\",\n                    \"description\": \"Activity Class Name\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"draftImage\",\n                    \"title\": \"Draft Image Copy Identifier\",\n                    \"description\": \"The Identifier of the draftImage Copy which is of Object Type ContentImage, Technically it is Shadow Copy of Content Object to Edit without making the Live Content to Draft.\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Hidden\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: table, order: 6 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Multi-Select\",\n                    \"propertyName\": \"scaffolding\",\n                    \"title\": \"Scaffolding\",\n                    \"description\": \"Scaffolding. e.g: Tutorial, Practice\",\n                    \"category\": \"Pedagogy\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": [\n                        \"Tutorial\",\n                        \"Help\",\n                        \"Practice\"\n                    ],\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ order: 20 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Multi-Select\",\n                    \"propertyName\": \"feedback\",\n                    \"title\": \"Feedback\",\n                    \"description\": \"Feedback\",\n                    \"category\": \"Pedagogy\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": [\n                        \"Right/Wrong\",\n                        \"Reflection\",\n                        \"Guidance\",\n                        \"Learn from Mistakes\",\n                        \"Adaptive Feedback\",\n                        \"Interrupts\",\n                        \"Rich Feedback\"\n                    ],\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ order: 20 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Multi-Select\",\n                    \"propertyName\": \"feedbackType\",\n                    \"title\": \"Feedback\",\n                    \"description\": \"Type of Feedback. e.g: Audio, Textual, etc\",\n                    \"category\": \"Pedagogy\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": [\n                        \"Audio\",\n                        \"Visual\",\n                        \"Textual\",\n                        \"Tactile\"\n                    ],\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ order: 20 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Select\",\n                    \"propertyName\": \"teachingMode\",\n                    \"title\": \"Teaching Mode\",\n                    \"description\": \"Teaching Mode. e.g: Concrete, Pictorial, etc\",\n                    \"category\": \"Pedagogy\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": [\n                        \"Abstract\",\n                        \"Concrete\",\n                        \"Pictorial\"\n                    ],\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ order: 20 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Multi-Select\",\n                    \"propertyName\": \"skills\",\n                    \"title\": \"Skills Required\",\n                    \"description\": \"Skills Required. e.g: Listening, Reading, Writing, etc\",\n                    \"category\": \"Pedagogy\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": [\n                        \"Listening\",\n                        \"Speaking\",\n                        \"Reading\",\n                        \"Writing\",\n                        \"Touch\",\n                        \"Gestures\",\n                        \"Draw\"\n                    ],\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ order: 20 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"propertyName\": \"keywords\",\n                    \"title\": \"Keywords\",\n                    \"description\": \"Keywords\",\n                    \"category\": \"General\",\n                    \"dataType\": \"List\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{inputType: table, order: 7}\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Term\",\n                    \"propertyName\": \"difficultyLevel\",\n                    \"title\": \"Difficulty Level\",\n                    \"description\": \"Difficulty Level\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"TermList\",\n                    \"propertyName\": \"subDomains\",\n                    \"title\": \"Sub-Domain\",\n                    \"description\": \"Sub-Domain\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"TermList\",\n                    \"propertyName\": \"subjectCodes\",\n                    \"title\": \"Subject Codes\",\n                    \"description\": \"Subject Codes\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"propertyName\": \"domain\",\n                    \"title\": \"Domain\",\n                    \"description\": \"Domain\",\n                    \"category\": \"General\",\n                    \"dataType\": \"List\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{inputType: select, order: 9}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"status\",\n                    \"title\": \"Status\",\n                    \"description\": \"Status of the content. e.g: Draft, Live\",\n                    \"category\": \"Lifecycle\",\n                    \"dataType\": \"Select\",\n                    \"range\": [\n                        \"Draft\",\n                        \"Review\",\n                        \"Redraft\",\n                        \"Flagged\",\n                        \"Live\",\n                        \"Unlisted\",\n                        \"Retired\",\n                        \"Mock\",\n                        \"Processing\",\n                        \"FlagDraft\",\n                        \"FlagReview\",\n                        \"Failed\"\n                    ],\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"Draft\",\n                    \"renderingHints\": \"{inputType: select, order: 9}\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"dialcodes\",\n                    \"title\": \"Dial Codes for Content\",\n                    \"description\": \"Array of DialCodes Linked to Content\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: textarea, order: 7 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"propertyName\": \"optStatus\",\n                    \"title\": \"Optimization Status\",\n                    \"description\": \"Optimization Status. e.g: Pending, Processing, etc\",\n                    \"category\": \"Lifecycle\",\n                    \"dataType\": \"Select\",\n                    \"range\": [\n                        \"Pending\",\n                        \"Processing\",\n                        \"Error\",\n                        \"Complete\"\n                    ],\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{inputType: select, order: 9}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"description\",\n                    \"title\": \"Description\",\n                    \"description\": \"Description\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{inputType: textarea, order: 4}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"instructions\",\n                    \"title\": \"Instructions\",\n                    \"description\": \"Instructions\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{inputType: textarea, order: 4}\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"external\",\n                    \"propertyName\": \"body\",\n                    \"title\": \"Body\",\n                    \"description\": \"Body of the content\",\n                    \"category\": \"Authoring\",\n                    \"displayProperty\": \"Hidden\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: textarea, order: 4 }\",\n                    \"indexed\": false,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"external\",\n                    \"propertyName\": \"oldBody\",\n                    \"title\": \"Old Body\",\n                    \"description\": \"Old Body of the content\",\n                    \"category\": \"Authoring\",\n                    \"displayProperty\": \"Hidden\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: textarea, order: 4 }\",\n                    \"indexed\": false,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"external\",\n                    \"propertyName\": \"stageIcons\",\n                    \"title\": \"Stage Thumbnail\",\n                    \"description\": \"Stage Thumbnail\",\n                    \"category\": \"Authoring\",\n                    \"displayProperty\": \"Hidden\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: textarea, order: 4 }\",\n                    \"indexed\": false,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"editorState\",\n                    \"title\": \"Editor State\",\n                    \"description\": \"Editor State\",\n                    \"category\": \"Authoring\",\n                    \"displayProperty\": \"Hidden\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: textarea, order: 4 }\",\n                    \"indexed\": false,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"data\",\n                    \"title\": \"Data\",\n                    \"description\": \"Data\",\n                    \"category\": \"Authoring\",\n                    \"displayProperty\": \"Hidden\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: textarea, order: 4 }\",\n                    \"indexed\": false,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"loadingMessage\",\n                    \"title\": \"Loading Message\",\n                    \"description\": \"Loading Message\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: table, order: 6 }\",\n                    \"indexed\": false,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"checksum\",\n                    \"title\": \"Checksum\",\n                    \"description\": \"Checksum value of the story package file\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Hidden\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": false,\n                    \"draft\": false\n                },\n                {\n                    \"propertyName\": \"learningObjective\",\n                    \"title\": \"Learning Objective\",\n                    \"description\": \"Learning Objective\",\n                    \"category\": \"Pedagogy\",\n                    \"dataType\": \"List\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{inputType: table, order: 6}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"createdBy\",\n                    \"title\": \"Created By\",\n                    \"description\": \"ID of the user who created Content\",\n                    \"category\": \"Lifecycle\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{order: 21}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"creator\",\n                    \"title\": \"Name of the user who created Content\",\n                    \"description\": \"\",\n                    \"category\": \"Lifecycle\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{order: 21}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"reviewer\",\n                    \"title\": \"Name of the user who did the final review and published the content\",\n                    \"description\": \"\",\n                    \"category\": \"Lifecycle\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{order: 21}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"createdOn\",\n                    \"title\": \"Created On\",\n                    \"description\": \"The date on which content got created\",\n                    \"category\": \"Lifecycle\",\n                    \"dataType\": \"Date\",\n                    \"required\": false,\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{order: 22}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"lastUpdatedBy\",\n                    \"title\": \"Last Updated By\",\n                    \"description\": \"Name of User who modified the content at last\",\n                    \"category\": \"Lifecycle\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{order: 21}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"lastUpdatedOn\",\n                    \"title\": \"Last Updated On\",\n                    \"description\": \"date on which content got modified at last\",\n                    \"category\": \"Lifecycle\",\n                    \"dataType\": \"Date\",\n                    \"required\": false,\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{order: 22}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"lastSubmittedBy\",\n                    \"title\": \"Submitted for Review By\",\n                    \"description\": \"Name of the User Who submitted the content for Review\",\n                    \"category\": \"Lifecycle\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{order: 21}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"lastSubmittedOn\",\n                    \"title\": \"Submitted for Review On\",\n                    \"description\": \"Date on which content submitted for Review\",\n                    \"category\": \"Lifecycle\",\n                    \"dataType\": \"Date\",\n                    \"required\": false,\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{order: 22}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"lastPublishedBy\",\n                    \"title\": \"Published By\",\n                    \"description\": \"Name of the User who Published Content\",\n                    \"category\": \"Lifecycle\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{order: 21}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"lastPublishedOn\",\n                    \"title\": \"Published On\",\n                    \"description\": \"Date on which content got Published\",\n                    \"category\": \"Lifecycle\",\n                    \"dataType\": \"Date\",\n                    \"required\": false,\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{order: 22}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"versionDate\",\n                    \"title\": \"Version Date\",\n                    \"description\": \"Version Date\",\n                    \"category\": \"Lifecycle\",\n                    \"dataType\": \"Date\",\n                    \"required\": false,\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{order: 24}\",\n                    \"indexed\": false\n                },\n                {\n                    \"propertyName\": \"origin\",\n                    \"title\": \"Origin\",\n                    \"description\": \"Origin\",\n                    \"category\": \"Lifecycle\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{order: 24}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"originData\",\n                    \"title\": \"Origin Data\",\n                    \"description\": \"Origin Content metadata\",\n                    \"category\": \"Lifecycle\",\n                    \"dataType\": \"JSON\",\n                    \"required\": false,\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{order: 24}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"versionCreatedBy\",\n                    \"title\": \"Version Created By\",\n                    \"description\": \"Version Created By\",\n                    \"category\": \"Lifecycle\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{order: 25}\",\n                    \"indexed\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"me_totalSessionsCount\",\n                    \"title\": \"Total Sessions\",\n                    \"description\": \"Total sessions count of this content by learners\",\n                    \"category\": \"Measured\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"me_creationSessions\",\n                    \"title\": \"Creation Sessions\",\n                    \"description\": \"Creation sessions count of this content by learners\",\n                    \"category\": \"Measured\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"me_creationTimespent\",\n                    \"title\": \"Creation Timespent\",\n                    \"description\": \"Creation timespent of this content by learners\",\n                    \"category\": \"Measured\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"me_totalTimespent\",\n                    \"title\": \"Total Time Spent\",\n                    \"description\": \"Total time spent by learners on this content\",\n                    \"category\": \"Measured\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"me_totalInteractions\",\n                    \"title\": \"Total Interactions\",\n                    \"description\": \"Total number of interactions by learners while using this content\",\n                    \"category\": \"Measured\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"me_averageInteractionsPerMin\",\n                    \"title\": \"Average Interactions/min\",\n                    \"description\": \"Average number of interactions per minute\",\n                    \"category\": \"Measured\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"me_averageSessionsPerDevice\",\n                    \"title\": \"Average Sessions/device\",\n                    \"description\": \"Average Number of sessions per device\",\n                    \"category\": \"Measured\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"me_totalDevices\",\n                    \"title\": \"Total Devices\",\n                    \"description\": \"Total number of devices on which the content is played\",\n                    \"category\": \"Measured\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"me_averageTimespentPerSession\",\n                    \"title\": \"Average Time/session\",\n                    \"description\": \"Average time spent per session\",\n                    \"category\": \"Measured\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"me_averageRating\",\n                    \"title\": \"Average Rating\",\n                    \"description\": \"Overall average rating of the content\",\n                    \"category\": \"Measured\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"me_totalDownloads\",\n                    \"title\": \"Total Downloads\",\n                    \"description\": \"Total number of downloads of this content on device\",\n                    \"category\": \"Measured\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"me_totalSideloads\",\n                    \"title\": \"Total Sideloads\",\n                    \"description\": \"Total number of sideloads of this content on device\",\n                    \"category\": \"Measured\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"me_totalRatings\",\n                    \"title\": \"Total Ratings\",\n                    \"description\": \"Total number of ratings given for this content\",\n                    \"category\": \"Measured\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"me_totalRatingsCount\",\n                    \"title\": \"Total Ratings Count\",\n                    \"description\": \"Total number of ratings count given for this content\",\n                    \"category\": \"Measured\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"me_totalComments\",\n                    \"title\": \"Total Comments\",\n                    \"description\": \"Total number of comments given for this content\",\n                    \"category\": \"Measured\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"me_totalUsage\",\n                    \"title\": \"Total Usage Count\",\n                    \"description\": \"Total number of usages of this content in other content\",\n                    \"category\": \"Measured\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"me_totalLiveContentUsage\",\n                    \"title\": \"Total Live Content Usage\",\n                    \"description\": \"Total number of usages of this content in other Live content\",\n                    \"category\": \"Measured\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"me_usageLastWeek\",\n                    \"title\": \"Total Usages in last week\",\n                    \"description\": \"Total number of usages of this content in the last one week\",\n                    \"category\": \"Measured\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"me_deletionsLastWeek\",\n                    \"title\": \"Total Deletions in last week\",\n                    \"description\": \"Total number of times this content is removed from a content\",\n                    \"category\": \"Measured\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Date\",\n                    \"propertyName\": \"me_lastUsedOn\",\n                    \"title\": \"Last used timestamp\",\n                    \"description\": \"Date/time when this content was last used\",\n                    \"category\": \"Measured\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Date\",\n                    \"propertyName\": \"me_lastRemovedOn\",\n                    \"title\": \"Last time when content is removed\",\n                    \"description\": \"Date/time when this content was last removed from a content\",\n                    \"category\": \"Measured\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"me_hierarchyLevel\",\n                    \"title\": \"Hierarchy Level\",\n                    \"description\": \"Hierarchy Level of the content\",\n                    \"category\": \"Measured\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"me_totalDialcodeAttached\",\n                    \"title\": \"Total DialCode Attached\",\n                    \"description\": \"Total Number of DialCode Attached with the content\",\n                    \"category\": \"Measured\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"me_totalDialcodeLinkedToContent\",\n                    \"title\": \"Total DialCode Linked\",\n                    \"description\": \"Total Number of DialCode Linked with the content\",\n                    \"category\": \"Measured\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"me_totalDialcode\",\n                    \"title\": \"Total DialCode\",\n                    \"description\": \"Total Number of DialCode\",\n                    \"category\": \"Measured\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"propertyName\": \"flagReasons\",\n                    \"title\": \"Flag Reasons\",\n                    \"description\": \"Reason for Flagging the Content\",\n                    \"category\": \"Flagging\",\n                    \"dataType\": \"Multi-Select\",\n                    \"range\": [\n                        \"Inappropriate Content\",\n                        \"Copyright Violation\",\n                        \"Privacy Violation\",\n                        \"Other\"\n                    ],\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"flaggedBy\",\n                    \"title\": \"Flagged By\",\n                    \"description\": \"Name of User who flagged the content\",\n                    \"category\": \"Flagging\",\n                    \"dataType\": \"List\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"flags\",\n                    \"title\": \"flags list\",\n                    \"description\": \"flag list\",\n                    \"category\": \"Flagging\",\n                    \"dataType\": \"List\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"lastFlaggedOn\",\n                    \"title\": \"Last Flagged On\",\n                    \"description\": \"Date/time when the content was Flagged\",\n                    \"category\": \"Flagging\",\n                    \"dataType\": \"Date\",\n                    \"range\": [],\n                    \"required\": false,\n                    \"indexed\": true,\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\"\n                },\n                {\n                    \"propertyName\": \"tempData\",\n                    \"title\": \"Property to store temporary values\",\n                    \"description\": \"Property to store temporary values\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Text\",\n                    \"range\": [],\n                    \"required\": false,\n                    \"indexed\": true,\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\"\n                },\n                {\n                    \"propertyName\": \"copyType\",\n                    \"title\": \"Type of Copy i.e. the purpose of Copy from the original Content e.g. Copied for Translation, Improvisation, etc\",\n                    \"description\": \"Type of Copy i.e. the purpose of Copy from the original Content e.g. Copied for Translation, Improvisation, etc\",\n                    \"category\": \"Authoring\",\n                    \"dataType\": \"Text\",\n                    \"range\": [],\n                    \"required\": false,\n                    \"indexed\": true,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{}\"\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Multi-Select\",\n                    \"propertyName\": \"pragma\",\n                    \"title\": \"Pragma\",\n                    \"description\": \"Content pragma\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": [\n                        \"external\",\n                        \"ads\"\n                    ],\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: multiselect,  order: 14 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"publishChecklist\",\n                    \"title\": \"Publish Checklist\",\n                    \"description\": \"Publish checklist.\",\n                    \"category\": \"General\",\n                    \"dataType\": \"List\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{inputType: text,  order: 15}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"publishComment\",\n                    \"title\": \"Publish Comment\",\n                    \"description\": \"Publish Comments.\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{inputType: text, order: 16}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"rejectReasons\",\n                    \"title\": \"Reject Reasons\",\n                    \"description\": \"List of Reasons for Content Rejection\",\n                    \"category\": \"General\",\n                    \"dataType\": \"List\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{inputType: text,  order: 17}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"rejectComment\",\n                    \"title\": \"Reject Comment\",\n                    \"description\": \"Comment for Content Rejection\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{inputType: text, order: 18}\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"totalQuestions\",\n                    \"title\": \"Total Questions\",\n                    \"description\": \"Total No of Questions\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"General\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ order: 20 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"totalScore\",\n                    \"title\": \"Total Score\",\n                    \"description\": \"Total Score\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Readonly\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ order: 20 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Multi-Select\",\n                    \"propertyName\": \"ownershipType\",\n                    \"title\": \"Ownership Type\",\n                    \"description\": \"Ownership Type of the Content\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": [\n                        \"createdBy\",\n                        \"createdFor\"\n                    ],\n                    \"defaultValue\": \"createdBy\",\n                    \"renderingHints\": \"{ inputType: textarea, order: 21 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"propertyName\": \"reservedDialcodes\",\n                    \"title\": \"Reserved Dialcodes\",\n                    \"description\": \"List of reserved dialcodes for the content\",\n                    \"category\": \"General\",\n                    \"dataType\": \"JSON\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{inputType: text,  order: 22}\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Select\",\n                    \"propertyName\": \"dialcodeRequired\",\n                    \"title\": \"Dialcode Required\",\n                    \"description\": \"Is dialcode generation required or not\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": [\n                        \"Yes\",\n                        \"No\"\n                    ],\n                    \"defaultValue\": \"No\",\n                    \"renderingHints\": \"{ inputType: textarea, order: 23 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"lockKey\",\n                    \"title\": \"Collaborator lock key\",\n                    \"description\": \"lock key id given by collaborator\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: textarea, order: 23 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"JSON\",\n                    \"propertyName\": \"badgeAssociations\",\n                    \"title\": \"List of Badge Associations\",\n                    \"description\": \"List of Badge Associations\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: textarea, order: 7 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"propertyName\": \"channel\",\n                    \"title\": \"Channel\",\n                    \"description\": \"Channel Id of Content\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{inputType: text, order: 3}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"framework\",\n                    \"title\": \"Framework\",\n                    \"description\": \"Framework Id of Content\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{inputType: text, order: 4}\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"lastStatusChangedOn\",\n                    \"title\": \"lastStatusChangedOn\",\n                    \"description\": \"Timestamp of last status update\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"uploadError\",\n                    \"title\": \"uploadError\",\n                    \"description\": \"R1.15\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"appId\",\n                    \"title\": \"appId\",\n                    \"description\": \"R1.15\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"s3Key\",\n                    \"title\": \"s3Key\",\n                    \"description\": \"R1.15\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"consumerId\",\n                    \"title\": \"consumerId\",\n                    \"description\": \"R1.15\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"organisation\",\n                    \"title\": \"Array of org names (partner names)\",\n                    \"description\": \"R1.15\",\n                    \"category\": \"General\",\n                    \"dataType\": \"List\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"nodeType\",\n                    \"title\": \"Node Type\",\n                    \"description\": \"R1.15\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"prevState\",\n                    \"title\": \"Previous State\",\n                    \"description\": \"R1.15\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"publishError\",\n                    \"title\": \"Publish Error\",\n                    \"description\": \"R1.15\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"publish_type\",\n                    \"title\": \"publish_type\",\n                    \"description\": \"R1.15\",\n                    \"category\": \"Technical\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"ownedBy\",\n                    \"title\": \"Owned By\",\n                    \"description\": \"R1.15\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"purpose\",\n                    \"title\": \"Purpose\",\n                    \"description\": \"R1.15\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"toc_url\",\n                    \"title\": \"toc_url\",\n                    \"description\": \"R1.15\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"reviewError\",\n                    \"title\": \"reviewError\",\n                    \"description\": \"R1.15\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"mimeTypesCount\",\n                    \"title\": \"mimeTypesCount\",\n                    \"description\": \"R1.15\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"contentTypesCount\",\n                    \"title\": \"contentTypesCount\",\n                    \"description\": \"R1.15\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"childNodes\",\n                    \"title\": \"childNodes\",\n                    \"description\": \"R1.15\",\n                    \"category\": \"General\",\n                    \"dataType\": \"List\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"leafNodesCount\",\n                    \"title\": \"leafNodesCount\",\n                    \"description\": \"R1.15\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Number\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"depth\",\n                    \"title\": \"Depth\",\n                    \"description\": \"R1.15-Depth for Collection Units\",\n                    \"category\": \"General\",\n                    \"dataType\": \"Number\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"\",\n                    \"indexed\": true\n                },\n                {\n                    \"propertyName\": \"SYS_INTERNAL_LAST_UPDATED_ON\",\n                    \"title\": \"SYS_INTERNAL_LAST_UPDATED_ON\",\n                    \"description\": \"R1.15\",\n                    \"category\": \"Technical\",\n                    \"dataType\": \"Text\",\n                    \"required\": false,\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"\",\n                    \"indexed\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"assets\",\n                    \"title\": \"Assets\",\n                    \"description\": \"R1.15-List of Asset ids used in ecml content\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"\",\n                    \"indexed\": true,\n                    \"draft\": false,\n                    \"rangeValidation\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"version\",\n                    \"title\": \"Schema Version\",\n                    \"description\": \"Schema version of the content with which it is created or updated\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"1\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"qrCodeProcessId\",\n                    \"title\": \"QR Code Process Id\",\n                    \"description\": \"R-1.15\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"migratedUrl\",\n                    \"title\": \"Drive Url\",\n                    \"description\": \"This Url has to be migrated\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"totalCompressedSize\",\n                    \"title\": \"Download File Size (in bytes)\",\n                    \"description\": \"Download File Size (in bytes)\",\n                    \"category\": \"Technical\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"programId\",\n                    \"title\": \"ProgramId\",\n                    \"description\": \"Id of the Program\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 4 }\",\n                    \"indexed\": true,\n                    \"draft\": false,\n                    \"rangeValidation\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"leafNodes\",\n                    \"title\": \"leafNodes\",\n                    \"description\": \"Unique leafNodes attached to collection mimeTypes\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 4 }\",\n                    \"indexed\": true,\n                    \"draft\": false,\n                    \"rangeValidation\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"editorVersion\",\n                    \"title\": \"Editor Version\",\n                    \"description\": \"Version of the Editor\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 4 }\",\n                    \"indexed\": true,\n                    \"draft\": false,\n                    \"rangeValidation\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"unitIdentifiers\",\n                    \"title\": \"Collection Unit Identifier\",\n                    \"description\": \"Collection Unit Identifier for which this resource going to link.\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 4 }\",\n                    \"indexed\": true,\n                    \"draft\": false,\n                    \"rangeValidation\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"questionCategories\",\n                    \"title\": \"Question - Categories\",\n                    \"description\": \"The categories of questions included in content.\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 4 }\",\n                    \"indexed\": true,\n                    \"draft\": false,\n                    \"rangeValidation\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"JSON\",\n                    \"propertyName\": \"certTemplate\",\n                    \"title\": \"Cert Template\",\n                    \"description\": \"Certification Template\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 4 }\",\n                    \"indexed\": true,\n                    \"draft\": false,\n                    \"rangeValidation\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"JSON\",\n                    \"propertyName\": \"plugins\",\n                    \"title\": \"Plugin\",\n                    \"description\": \"Plugins associated with the content\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: textarea, order: 7 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"artifactBasePath\",\n                    \"title\": \"ArtifactBasePath\",\n                    \"description\": \"ArtifactBasePath for Program Context\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 8 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Multi-Select\",\n                    \"propertyName\": \"monitorable\",\n                    \"title\": \"Monitorable\",\n                    \"description\": \"Monitorable\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": [\n                        \"progress-report\",\n                        \"score-report\"\n                    ],\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ order: 20 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Select\",\n                    \"propertyName\": \"userConsent\",\n                    \"title\": \"User Consent\",\n                    \"description\": \"User Consent\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": [\n                        \"Yes\",\n                        \"No\"\n                    ],\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ order: 20 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"JSON\",\n                    \"propertyName\": \"trackable\",\n                    \"title\": \"Trackable\",\n                    \"description\": \"Trackable\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: textarea, order: 9 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"JSON\",\n                    \"propertyName\": \"credentials\",\n                    \"title\": \"Credentials\",\n                    \"description\": \"Credentials\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: textarea, order: 10 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"JSON\",\n                    \"propertyName\": \"discussionForum\",\n                    \"title\": \"DiscussionForum\",\n                    \"description\": \"DiscussionForum\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: textarea, order: 10 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": true,\n                    \"dataType\": \"Text\",\n                    \"propertyName\": \"primaryCategory\",\n                    \"title\": \"Primary Category\",\n                    \"description\": \"Primary Category\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text,  order: 14 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"additionalCategories\",\n                    \"title\": \"Additional Categories\",\n                    \"description\": \"Additional Categories\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: multiselect,  order: 14 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"Number\",\n                    \"propertyName\": \"maxAttempts\",\n                    \"title\": \"Maximum Attempts\",\n                    \"description\": \"Maximum attempts for content\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 8 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"relatedBoards\",\n                    \"title\": \"Related Boards\",\n                    \"description\": \"Related Boards\",\n                    \"category\": \"General\",\n                    \"displayProperty\": \"Editable\",\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: table,  order: 15 }\",\n                    \"indexed\": true,\n                    \"draft\": false\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"boardIds\",\n                    \"title\": \"Organisation Board Level Ids\",\n                    \"description\": \"Organisation Board Level Ids\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 8 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"gradeLevelIds\",\n                    \"title\": \"Organisation Grade Level Ids\",\n                    \"description\": \"Organisation Board Level Ids\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 8 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"subjectIds\",\n                    \"title\": \"Organisation Board Level Ids\",\n                    \"description\": \"Organisation Subject Level Ids\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 8 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"mediumIds\",\n                    \"title\": \"Organisation Medium Level Ids\",\n                    \"description\": \"Organisation Board Level Ids\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 8 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"topicsIds\",\n                    \"title\": \"Organisation Topic Level Ids\",\n                    \"description\": \"Organisation Board Level Ids\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 8 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"targetFWIds\",\n                    \"title\": \"Target Framework Ids\",\n                    \"description\": \"Target Framework Ids\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 8 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"targetBoardIds\",\n                    \"title\": \"Target Framework Ids\",\n                    \"description\": \"Target Framework Ids\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 8 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"targetGradeLevelIds\",\n                    \"title\": \"Target Framework Ids\",\n                    \"description\": \"Target Framework Ids\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 8 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"targetSubjectIds\",\n                    \"title\": \"Target Framework Ids\",\n                    \"description\": \"Target Framework Ids\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 8 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"targetMediumIds\",\n                    \"title\": \"Target Framework Ids\",\n                    \"description\": \"Target Framework Ids\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 8 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"targetTopicIds\",\n                    \"title\": \"Target Framework Ids\",\n                    \"description\": \"Target Framework Ids\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 8 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"se_FWIds\",\n                    \"title\": \"Target Framework Ids\",\n                    \"description\": \"Target Framework Ids\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 8 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"se_boardIds\",\n                    \"title\": \"Target Framework Ids\",\n                    \"description\": \"Target Framework Ids\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 8 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"se_subjectIds\",\n                    \"title\": \"Target Framework Ids\",\n                    \"description\": \"Target Framework Ids\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 8 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"se_mediumIds\",\n                    \"title\": \"Target Framework Ids\",\n                    \"description\": \"Target Framework Ids\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 8 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"se_topicIds\",\n                    \"title\": \"Target Framework Ids\",\n                    \"description\": \"Target Framework Ids\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 8 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"se_gradeLevelIds\",\n                    \"title\": \"Target Framework Ids\",\n                    \"description\": \"Target Framework Idt\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 8 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"se_boards\",\n                    \"title\": \"Target Framework Idss\",\n                    \"description\": \"Target Framework Ids\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 8 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"se_subjects\",\n                    \"title\": \"Target Framework Ids\",\n                    \"description\": \"Target Framework Ids\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 8 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"se_mediums\",\n                    \"title\": \"Target Framework Ids\",\n                    \"description\": \"Target Framework Ids\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 8 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"se_topics\",\n                    \"title\": \"Target Framework Ids\",\n                    \"description\": \"Target Framework Ids\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 8 }\",\n                    \"indexed\": true\n                },\n                {\n                    \"required\": false,\n                    \"dataType\": \"List\",\n                    \"propertyName\": \"se_gradeLevels\",\n                    \"title\": \"Target Framework Ids\",\n                    \"description\": \"Target Framework Ids\",\n                    \"category\": \"general\",\n                    \"displayProperty\": \"Editable\",\n                    \"range\": null,\n                    \"defaultValue\": \"\",\n                    \"renderingHints\": \"{ inputType: text, order: 8 }\",\n                    \"indexed\": true\n                }\n            ],\n            \"inRelations\": [\n                {\n                    \"relationName\": \"hasSequenceMember\",\n                    \"objectTypes\": [\n                        \"Content\",\n                        \"ContentImage\",\n                        \"Collection\",\n                        \"CollectionImage\"\n                    ],\n                    \"title\": \"collections\",\n                    \"description\": \"Which all collections is this content part of\",\n                    \"required\": false\n                },\n                {\n                    \"relationName\": \"associatedTo\",\n                    \"objectTypes\": [\n                        \"Content\",\n                        \"Collection\"\n                    ],\n                    \"title\": \"usedByContent\",\n                    \"description\": \"Other content using this content\",\n                    \"required\": false,\n                    \"renderingHints\": \"{ order: 26 }\"\n                }\n            ],\n            \"outRelations\": [\n                {\n                    \"relationName\": \"associatedTo\",\n                    \"objectTypes\": [\n                        \"Concept\"\n                    ],\n                    \"title\": \"concepts\",\n                    \"description\": \"Micro-concepts associated with this content\",\n                    \"required\": false,\n                    \"renderingHints\": \"{ order: 26 }\"\n                },\n                {\n                    \"relationName\": \"associatedTo\",\n                    \"objectTypes\": [\n                        \"AssessmentItem\"\n                    ],\n                    \"title\": \"questions\",\n                    \"description\": \"Assessment items associated with this content\",\n                    \"required\": false,\n                    \"renderingHints\": \"{ order: 26 }\"\n                },\n                {\n                    \"relationName\": \"associatedTo\",\n                    \"objectTypes\": [\n                        \"ItemSet\"\n                    ],\n                    \"title\": \"itemSets\",\n                    \"description\": \"Item Sets associated with this content\",\n                    \"required\": false,\n                    \"renderingHints\": \"{ order: 26 }\"\n                },\n                {\n                    \"relationName\": \"associatedTo\",\n                    \"objectTypes\": [\n                        \"Method\"\n                    ],\n                    \"title\": \"methods\",\n                    \"description\": \"Teaching methods used in this content\",\n                    \"required\": false,\n                    \"renderingHints\": \"{ order: 26 }\"\n                },\n                {\n                    \"relationName\": \"associatedTo\",\n                    \"objectTypes\": [\n                        \"Content\",\n                        \"Collection\"\n                    ],\n                    \"title\": \"usesContent\",\n                    \"description\": \"Screenshots and other media (assets) used by this content\",\n                    \"required\": false,\n                    \"renderingHints\": \"{ order: 26 }\"\n                },\n                {\n                    \"relationName\": \"hasSequenceMember\",\n                    \"objectTypes\": [\n                        \"Content\",\n                        \"ContentImage\",\n                        \"Collection\",\n                        \"CollectionImage\"\n                    ],\n                    \"title\": \"children\",\n                    \"description\": \"Child content items (in sorted order) in case of collections like Textbooks\",\n                    \"required\": false,\n                    \"renderingHints\": \"{ order: 26 }\"\n                },\n                {\n                    \"relationName\": \"preRequisite\",\n                    \"objectTypes\": [\n                        \"Library\"\n                    ],\n                    \"title\": \"libraries\",\n                    \"description\": \"Pre-requisite libraries for this content\",\n                    \"required\": false,\n                    \"renderingHints\": \"{ order: 26 }\"\n                }\n            ],\n            \"systemTags\": [\n                {\n                    \"name\": \"Mandatory\",\n                    \"description\": \"Is the content mandatory?\"\n                },\n                {\n                    \"name\": \"Online Content\",\n                    \"description\": \"Content Connectivity\"\n                },\n                {\n                    \"name\": \"Offline Content\",\n                    \"description\": \"Content Connectivity\"\n                },\n                {\n                    \"name\": \"No Intervention\",\n                    \"description\": \"Intervention Type\"\n                },\n                {\n                    \"name\": \"Optional Intervention\",\n                    \"description\": \"Intervention Type\"\n                },\n                {\n                    \"name\": \"Mandatory Intervention\",\n                    \"description\": \"Intervention Type\"\n                },\n                {\n                    \"name\": \"Multi-Player\",\n                    \"description\": \"Collaboration\"\n                },\n                {\n                    \"name\": \"Single-Player\",\n                    \"description\": \"Collaboration\"\n                },\n                {\n                    \"name\": \"Group Activity\",\n                    \"description\": \"Collaboration\"\n                },\n                {\n                    \"name\": \"Goals\",\n                    \"description\": \"Narrative\"\n                },\n                {\n                    \"name\": \"Decision Making\",\n                    \"description\": \"Narrative\"\n                },\n                {\n                    \"name\": \"Strategy\",\n                    \"description\": \"Narrative\"\n                },\n                {\n                    \"name\": \"Reward\",\n                    \"description\": \"Narrative\"\n                },\n                {\n                    \"name\": \"Adaptive\",\n                    \"description\": \"Narrative\"\n                },\n                {\n                    \"name\": \"Template\",\n                    \"description\": \"Usage\"\n                },\n                {\n                    \"name\": \"Asset\",\n                    \"description\": \"Usage\"\n                },\n                {\n                    \"name\": \"Character\",\n                    \"description\": \"Usage\"\n                },\n                {\n                    \"name\": \"Numeracy\",\n                    \"description\": \"Domain\"\n                },\n                {\n                    \"name\": \"Literacy\",\n                    \"description\": \"Domain\"\n                },\n                {\n                    \"name\": \"Non-Cog\",\n                    \"description\": \"Domain\"\n                }\n            ],\n            \"metadata\": {\n                \"limit\": 50,\n                \"status\": [\n                    \"Live\"\n                ],\n                \"ttl\": 0.08,\n                \"variants\": {\n                    \"high\": {\n                        \"dimensions\": [\n                            1024,\n                            1024\n                        ],\n                        \"dpi\": 240\n                    },\n                    \"medium\": {\n                        \"dimensions\": [\n                            512,\n                            512\n                        ],\n                        \"dpi\": 240\n                    },\n                    \"low\": {\n                        \"dimensions\": [\n                            128,\n                            128\n                        ],\n                        \"dpi\": 240\n                    }\n                },\n                \"softConstraints\": {\n                    \"medium\": 15,\n                    \"subject\": 15,\n                    \"ageGroup\": 1,\n                    \"gradeLevel\": 7,\n                    \"board\": 4,\n                    \"relatedBoards\": 4\n                },\n                \"versionCheckMode\": \"STRICT\",\n                \"allowupdate_status\": false,\n                \"allowupdate_framework\": true,\n                \"allowupdate_mimeType\": false,\n                \"fields\": [\n                    \"identifier\",\n                    \"name\",\n                    \"description\",\n                    \"code\",\n                    \"keywords\",\n                    \"appIcon\",\n                    \"grayScaleAppIcon\",\n                    \"size\",\n                    \"downloadUrl\",\n                    \"artifactUrl\",\n                    \"pkgVersion\",\n                    \"loadingMessage\",\n                    \"launchUrl\",\n                    \"osId\",\n                    \"posterImage\",\n                    \"activity_class\",\n                    \"filter\",\n                    \"mimeType\",\n                    \"minSupportedVersion\",\n                    \"checksum\",\n                    \"lastUpdatedOn\",\n                    \"createdOn\",\n                    \"status\",\n                    \"contentType\",\n                    \"filter\",\n                    \"visibility\",\n                    \"thumbnail\",\n                    \"language\",\n                    \"owner\",\n                    \"collaborators\",\n                    \"imageCredits\",\n                    \"audioCredits\",\n                    \"voiceCredits\",\n                    \"developer\",\n                    \"attributions\",\n                    \"forkable\",\n                    \"translatable\",\n                    \"mediaType\",\n                    \"soundCredits\",\n                    \"optStatus\",\n                    \"domain\",\n                    \"lastPublishedOn\",\n                    \"me_totalSessionsCount\",\n                    \"me_totalTimespent\",\n                    \"me_totalInteractions\",\n                    \"me_creationSessions\",\n                    \"me_creationTimespent\",\n                    \"me_averageInteractionsPerMin\",\n                    \"me_averageSessionsPerDevice\",\n                    \"me_totalDevices\",\n                    \"me_averageTimespentPerSession\",\n                    \"me_averageRating\",\n                    \"me_totalDownloads\",\n                    \"me_totalSideloads\",\n                    \"me_totalRatings\",\n                    \"me_totalRatingsCount\",\n                    \"me_totalComments\",\n                    \"me_totalDialcode\",\n                    \"me_totalDialcodeLinkedToContent\",\n                    \"me_totalDialcodeAttached\",\n                    \"me_hierarchyLevel\",\n                    \"popularity\",\n                    \"versionKey\",\n                    \"variants\",\n                    \"flagReasons\",\n                    \"flaggedBy\",\n                    \"lastFlaggedOn\",\n                    \"flags\",\n                    \"author\",\n                    \"createdBy\",\n                    \"createdFor\",\n                    \"contentEncoding\",\n                    \"contentDisposition\",\n                    \"config\",\n                    \"ownershipType\",\n                    \"channel\",\n                    \"framework\",\n                    \"lastStatusChangedOn\",\n                    \"uploadError\",\n                    \"appId\",\n                    \"s3Key\",\n                    \"consumerId\",\n                    \"organisation\",\n                    \"migratedUrl\",\n                    \"totalCompressedSize\",\n                    \"programId\",\n                    \"leafNodes\",\n                    \"origin\",\n                    \"originData\",\n                    \"plugins\",\n                    \"maxAttempts\"\n                ]\n            }\n        }\n    ]\n}"
 								},
 								"url": "{{host}}/api/learning/taxonomy/domain/definition"
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "1-Create Channel",
-					"item": [
-						{
-							"name": "1 - Create Channel",
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									},
-									{
-										"key": "Authorization",
-										"value": "Bearer {{apikey}}"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"request\": {\n        \"channel\": {\n            \"name\": \"Sunbird Org\",\n            \"description\": \"Default Organisation for Sunbird\",\n            \"code\": \"{{channel_name}}\"\n        }\n    }\n}"
-								},
-								"url": "{{host}}/api/channel/v1/create"
-							},
-							"response": []
-						},
-						{
-							"name": "2 - Read Channel",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Accept",
-										"value": "application/json",
-										"type": "text"
-									},
-									{
-										"key": "Authorization",
-										"value": "Bearer {{apikey}}",
-										"type": "text"
-									}
-								],
-								"url": "{{host}}/api/channel/v1/read/{{channel_name}}"
 							},
 							"response": []
 						}
@@ -2982,7 +2935,8 @@
 										"exec": [
 											" pm.environment.set(\"framework_default\", \"NCF\");"
 										],
-										"type": "text/javascript"
+										"type": "text/javascript",
+										"packages": {}
 									}
 								}
 							],
@@ -2999,7 +2953,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "{{channel_name}}"
+										"value": "{{channel_id}}"
 									},
 									{
 										"key": "Authorization",
@@ -3025,7 +2979,8 @@
 										"exec": [
 											" pm.environment.set(\"default_Course_Framework\", \"TPD\");"
 										],
-										"type": "text/javascript"
+										"type": "text/javascript",
+										"packages": {}
 									}
 								}
 							],
@@ -3042,7 +2997,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "{{channel_name}}"
+										"value": "{{channel_id}}"
 									},
 									{
 										"key": "Authorization",
@@ -3079,7 +3034,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird"
+										"value": "{{channel_id}}"
 									}
 								],
 								"body": {
@@ -3107,7 +3062,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird",
+										"value": "{{channel_id}}",
 										"type": "text"
 									}
 								],
@@ -3136,7 +3091,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird",
+										"value": "{{channel_id}}",
 										"type": "text"
 									}
 								],
@@ -3165,7 +3120,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird",
+										"value": "{{channel_id}}",
 										"type": "text"
 									}
 								],
@@ -3198,7 +3153,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird"
+										"value": "{{channel_id}}"
 									},
 									{
 										"key": "Authorization",
@@ -3252,7 +3207,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird"
+										"value": "{{channel_id}}"
 									},
 									{
 										"key": "Authorization",
@@ -3297,7 +3252,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird"
+										"value": "{{channel_id}}"
 									},
 									{
 										"key": "Authorization",
@@ -3342,7 +3297,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird"
+										"value": "{{channel_id}}"
 									},
 									{
 										"key": "Authorization",
@@ -3387,7 +3342,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird"
+										"value": "{{channel_id}}"
 									},
 									{
 										"key": "Authorization",
@@ -3438,7 +3393,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird"
+										"value": "{{channel_id}}"
 									},
 									{
 										"key": "Authorization",
@@ -3492,7 +3447,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird"
+										"value": "{{channel_id}}"
 									},
 									{
 										"key": "Authorization",
@@ -3537,7 +3492,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird"
+										"value": "{{channel_id}}"
 									},
 									{
 										"key": "Authorization",
@@ -3582,7 +3537,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird"
+										"value": "{{channel_id}}"
 									},
 									{
 										"key": "Authorization",
@@ -3627,7 +3582,7 @@
 									},
 									{
 										"key": "X-Channel-Id",
-										"value": "sunbird"
+										"value": "{{channel_id}}"
 									},
 									{
 										"key": "Authorization",
@@ -3675,7 +3630,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -3692,7 +3648,7 @@
 											},
 											{
 												"key": "X-Channel-Id",
-												"value": "sunbird"
+												"value": "{{channel_id}}"
 											},
 											{
 												"key": "Authorization",
@@ -3803,7 +3759,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -3833,7 +3790,7 @@
 											"raw": "{\n    \"request\": {\n        \"term\": {\n            \"code\": \"ka\",\n            \"name\": \"State (Karnataka)\"\n        }\n    }\n}"
 										},
 										"url": {
-											"raw": "{{host}}/api/framework/v1/term/create?framework={{framework_default}}&category=board",
+											"raw": "{{host}}/api/framework/v1/term/create?framework={{framework_default}}&category=board&X-Channel-Id={{channel_id}}",
 											"host": [
 												"{{host}}"
 											],
@@ -3852,6 +3809,10 @@
 												{
 													"key": "category",
 													"value": "board"
+												},
+												{
+													"key": "X-Channel-Id",
+													"value": "{{channel_id}}"
 												}
 											]
 										}
@@ -3867,7 +3828,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -3897,7 +3859,7 @@
 											"raw": "{\n    \"request\": {\n        \"term\": {\n            \"code\": \"statetelangana\",\n            \"name\": \"State (Telangana)\"\n        }\n    }\n}"
 										},
 										"url": {
-											"raw": "{{host}}/api/framework/v1/term/create?framework={{framework_default}}&category=board",
+											"raw": "{{host}}/api/framework/v1/term/create?framework={{framework_default}}&category=board&X-Channel-Id={{channel_id}}",
 											"host": [
 												"{{host}}"
 											],
@@ -3916,6 +3878,10 @@
 												{
 													"key": "category",
 													"value": "board"
+												},
+												{
+													"key": "X-Channel-Id",
+													"value": "{{channel_id}}"
 												}
 											]
 										}
@@ -3950,7 +3916,7 @@
 											},
 											{
 												"key": "X-Channel-Id",
-												"value": "sunbird"
+												"value": "{{channel_id}}"
 											},
 											{
 												"key": "Authorization",
@@ -3997,7 +3963,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -4010,7 +3977,7 @@
 											},
 											{
 												"key": "X-Channel-Id",
-												"value": "{{channel_name}}"
+												"value": "{{channel_id}}"
 											},
 											{
 												"key": "Authorization",
@@ -4057,7 +4024,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -4070,7 +4038,7 @@
 											},
 											{
 												"key": "X-Channel-Id",
-												"value": "{{channel_name}}"
+												"value": "{{channel_id}}"
 											},
 											{
 												"key": "Authorization",
@@ -4117,7 +4085,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -4130,7 +4099,7 @@
 											},
 											{
 												"key": "X-Channel-Id",
-												"value": "{{channel_name}}"
+												"value": "{{channel_id}}"
 											},
 											{
 												"key": "Authorization",
@@ -4182,7 +4151,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -4199,7 +4169,7 @@
 											},
 											{
 												"key": "X-Channel-Id",
-												"value": "{{channel_name}}"
+												"value": "{{channel_id}}"
 											},
 											{
 												"key": "Authorization",
@@ -4212,7 +4182,7 @@
 											"raw": "{\n    \"request\": {\n        \"term\": \n            {\n                \"name\": \"Class 1\",\n                \"code\": \"class1\"\n            }\n        }\n    }"
 										},
 										"url": {
-											"raw": "{{host}}/api/framework/v1/term/create?framework={{framework_default}}&category=gradeLevel",
+											"raw": "{{host}}/api/framework/v1/term/create?framework={{framework_default}}&category=gradeLevel&X-Channel-Id={{channel_id}}",
 											"host": [
 												"{{host}}"
 											],
@@ -4231,6 +4201,10 @@
 												{
 													"key": "category",
 													"value": "gradeLevel"
+												},
+												{
+													"key": "X-Channel-Id",
+													"value": "{{channel_id}}"
 												}
 											]
 										}
@@ -4246,7 +4220,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -4276,7 +4251,7 @@
 											"raw": "{\n    \"request\": {\n        \"term\": {\n            \"code\": \"class2\",\n            \"name\": \"Class 2\"\n        }\n    }\n}"
 										},
 										"url": {
-											"raw": "{{host}}/api/framework/v1/term/create?framework={{framework_default}}&category=gradeLevel",
+											"raw": "{{host}}/api/framework/v1/term/create?framework={{framework_default}}&category=gradeLevel&X-Channel-Id={{channel_id}}",
 											"host": [
 												"{{host}}"
 											],
@@ -4295,6 +4270,10 @@
 												{
 													"key": "category",
 													"value": "gradeLevel"
+												},
+												{
+													"key": "X-Channel-Id",
+													"value": "{{channel_id}}"
 												}
 											]
 										}
@@ -4310,7 +4289,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -4340,7 +4320,7 @@
 											"raw": "{\n    \"request\": {\n        \"term\": {\n            \"code\": \"class3\",\n            \"name\": \"Class 3\"\n        }\n    }\n}"
 										},
 										"url": {
-											"raw": "{{host}}/api/framework/v1/term/create?framework={{framework_default}}&category=gradeLevel",
+											"raw": "{{host}}/api/framework/v1/term/create?framework={{framework_default}}&category=gradeLevel&X-Channel-Id={{channel_id}}",
 											"host": [
 												"{{host}}"
 											],
@@ -4359,6 +4339,10 @@
 												{
 													"key": "category",
 													"value": "gradeLevel"
+												},
+												{
+													"key": "X-Channel-Id",
+													"value": "{{channel_id}}"
 												}
 											]
 										}
@@ -4374,7 +4358,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -4404,7 +4389,7 @@
 											"raw": "{\n    \"request\": {\n        \"term\": {\n            \"code\": \"class4\",\n            \"name\": \"Class 4\"\n        }\n    }\n}"
 										},
 										"url": {
-											"raw": "{{host}}/api/framework/v1/term/create?framework={{framework_default}}&category=gradeLevel",
+											"raw": "{{host}}/api/framework/v1/term/create?framework={{framework_default}}&category=gradeLevel&X-Channel-Id={{channel_id}}",
 											"host": [
 												"{{host}}"
 											],
@@ -4423,6 +4408,10 @@
 												{
 													"key": "category",
 													"value": "gradeLevel"
+												},
+												{
+													"key": "X-Channel-Id",
+													"value": "{{channel_id}}"
 												}
 											]
 										}
@@ -4443,7 +4432,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -4469,7 +4459,7 @@
 											"raw": "{\n    \"request\": {\n        \"term\": {\n            \"name\": \"English\",\n            \"code\": \"english\"\n        }\n    }\n}"
 										},
 										"url": {
-											"raw": "{{host}}/api/framework/v1/term/create?framework={{framework_default}}&category=subject",
+											"raw": "{{host}}/api/framework/v1/term/create?framework={{framework_default}}&category=subject&X-Channel-Id={{channel_id}}",
 											"host": [
 												"{{host}}"
 											],
@@ -4488,6 +4478,10 @@
 												{
 													"key": "category",
 													"value": "subject"
+												},
+												{
+													"key": "X-Channel-Id",
+													"value": "{{channel_id}}"
 												}
 											]
 										}
@@ -4503,7 +4497,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -4529,7 +4524,7 @@
 											"raw": "{\n    \"request\": {\n        \"term\": \n            {\n                \"code\": \"hindi\",\n                \"name\": \"Hindi\"\n            }\n    }\n}"
 										},
 										"url": {
-											"raw": "{{host}}/api/framework/v1/term/create?framework={{framework_default}}&category=subject",
+											"raw": "{{host}}/api/framework/v1/term/create?framework={{framework_default}}&category=subject&X-Channel-Id={{channel_id}}",
 											"host": [
 												"{{host}}"
 											],
@@ -4548,6 +4543,10 @@
 												{
 													"key": "category",
 													"value": "subject"
+												},
+												{
+													"key": "X-Channel-Id",
+													"value": "{{channel_id}}"
 												}
 											]
 										}
@@ -4563,7 +4562,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -4576,7 +4576,7 @@
 											},
 											{
 												"key": "X-Channel-Id",
-												"value": "{{channel_name}}"
+												"value": "{{channel_id}}"
 											},
 											{
 												"key": "Authorization",
@@ -4623,7 +4623,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -4636,7 +4637,7 @@
 											},
 											{
 												"key": "X-Channel-Id",
-												"value": "{{channel_name}}"
+												"value": "{{channel_id}}"
 											},
 											{
 												"key": "Authorization",
@@ -4693,7 +4694,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -4710,7 +4712,7 @@
 											},
 											{
 												"key": "X-Channel-Id",
-												"value": "sunbird"
+												"value": "{{channel_id}}"
 											},
 											{
 												"key": "Authorization",
@@ -4954,7 +4956,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -4980,7 +4983,7 @@
 											"raw": "{\n    \"request\": {\n        \"term\": {\n            \"name\": \"English\",\n            \"code\": \"english\"\n        }\n    }\n}"
 										},
 										"url": {
-											"raw": "{{host}}/api/framework/v1/term/create?framework={{default_Course_Framework}}&category=medium",
+											"raw": "{{host}}/api/framework/v1/term/create?framework={{default_Course_Framework}}&category=medium&X-Channel-Id={{channel_id}}",
 											"host": [
 												"{{host}}"
 											],
@@ -4999,6 +5002,10 @@
 												{
 													"key": "category",
 													"value": "medium"
+												},
+												{
+													"key": "X-Channel-Id",
+													"value": "{{channel_id}}"
 												}
 											]
 										}
@@ -5014,7 +5021,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -5027,7 +5035,7 @@
 											},
 											{
 												"key": "X-Channel-Id",
-												"value": "{{channel_name}}"
+												"value": "{{channel_id}}"
 											},
 											{
 												"key": "Authorization",
@@ -5074,7 +5082,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -5100,7 +5109,7 @@
 											"raw": "{\n    \"request\": {\n        \"term\": {\n            \"code\": \"telugu\",\n            \"name\": \"Telugu\"\n        }\n    }\n}"
 										},
 										"url": {
-											"raw": "{{host}}/api/framework/v1/term/create?framework={{default_Course_Framework}}&category=medium",
+											"raw": "{{host}}/api/framework/v1/term/create?framework={{default_Course_Framework}}&category=medium&X-Channel-Id={{channel_id}}",
 											"host": [
 												"{{host}}"
 											],
@@ -5119,6 +5128,10 @@
 												{
 													"key": "category",
 													"value": "medium"
+												},
+												{
+													"key": "X-Channel-Id",
+													"value": "{{channel_id}}"
 												}
 											]
 										}
@@ -5134,7 +5147,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -5160,7 +5174,7 @@
 											"raw": "{\n    \"request\": {\n        \"term\": {\n            \"code\": \"hindi\",\n            \"name\": \"Hindi\"\n        }\n    }\n}"
 										},
 										"url": {
-											"raw": "{{host}}/api/framework/v1/term/create?framework={{default_Course_Framework}}&category=medium",
+											"raw": "{{host}}/api/framework/v1/term/create?framework={{default_Course_Framework}}&category=medium&X-Channel-Id={{channel_id}}",
 											"host": [
 												"{{host}}"
 											],
@@ -5179,6 +5193,10 @@
 												{
 													"key": "category",
 													"value": "medium"
+												},
+												{
+													"key": "X-Channel-Id",
+													"value": "{{channel_id}}"
 												}
 											]
 										}
@@ -5199,7 +5217,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -5229,7 +5248,7 @@
 											"raw": "{\n    \"request\": {\n        \"term\": \n            {\n                \"name\": \"Class 1\",\n                \"code\": \"class1\"\n            }\n        }\n    }"
 										},
 										"url": {
-											"raw": "{{host}}/api/framework/v1/term/create?framework={{default_Course_Framework}}&category=gradeLevel",
+											"raw": "{{host}}/api/framework/v1/term/create?framework={{default_Course_Framework}}&category=gradeLevel&X-Channel-Id={{channel_id}}",
 											"host": [
 												"{{host}}"
 											],
@@ -5248,6 +5267,10 @@
 												{
 													"key": "category",
 													"value": "gradeLevel"
+												},
+												{
+													"key": "X-Channel-Id",
+													"value": "{{channel_id}}"
 												}
 											]
 										}
@@ -5263,7 +5286,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -5293,7 +5317,7 @@
 											"raw": "{\n    \"request\": {\n        \"term\": {\n            \"code\": \"class2\",\n            \"name\": \"Class 2\"\n        }\n    }\n}"
 										},
 										"url": {
-											"raw": "{{host}}/api/framework/v1/term/create?framework={{default_Course_Framework}}&category=gradeLevel",
+											"raw": "{{host}}/api/framework/v1/term/create?framework={{default_Course_Framework}}&category=gradeLevel&X-Channel-Id={{channel_id}}",
 											"host": [
 												"{{host}}"
 											],
@@ -5312,6 +5336,10 @@
 												{
 													"key": "category",
 													"value": "gradeLevel"
+												},
+												{
+													"key": "X-Channel-Id",
+													"value": "{{channel_id}}"
 												}
 											]
 										}
@@ -5327,7 +5355,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -5357,7 +5386,7 @@
 											"raw": "{\n    \"request\": {\n        \"term\": {\n            \"code\": \"class3\",\n            \"name\": \"Class 3\"\n        }\n    }\n}"
 										},
 										"url": {
-											"raw": "{{host}}/api/framework/v1/term/create?framework={{default_Course_Framework}}&category=gradeLevel",
+											"raw": "{{host}}/api/framework/v1/term/create?framework={{default_Course_Framework}}&category=gradeLevel&X-Channel-Id={{channel_id}}",
 											"host": [
 												"{{host}}"
 											],
@@ -5376,6 +5405,10 @@
 												{
 													"key": "category",
 													"value": "gradeLevel"
+												},
+												{
+													"key": "X-Channel-Id",
+													"value": "{{channel_id}}"
 												}
 											]
 										}
@@ -5391,7 +5424,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -5421,7 +5455,7 @@
 											"raw": "{\n    \"request\": {\n        \"term\": {\n            \"code\": \"class4\",\n            \"name\": \"Class 4\"\n        }\n    }\n}"
 										},
 										"url": {
-											"raw": "{{host}}/api/framework/v1/term/create?framework={{default_Course_Framework}}&category=gradeLevel",
+											"raw": "{{host}}/api/framework/v1/term/create?framework={{default_Course_Framework}}&category=gradeLevel&X-Channel-Id={{channel_id}}",
 											"host": [
 												"{{host}}"
 											],
@@ -5440,6 +5474,10 @@
 												{
 													"key": "category",
 													"value": "gradeLevel"
+												},
+												{
+													"key": "X-Channel-Id",
+													"value": "{{channel_id}}"
 												}
 											]
 										}
@@ -5460,7 +5498,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -5473,7 +5512,7 @@
 											},
 											{
 												"key": "X-Channel-Id",
-												"value": "{{channel_name}}"
+												"value": "{{channel_id}}"
 											},
 											{
 												"key": "Authorization",
@@ -5520,7 +5559,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -5546,7 +5586,7 @@
 											"raw": "{\n    \"request\": {\n        \"term\": \n            {\n                \"code\": \"hindi\",\n                \"name\": \"Hindi\"\n            }\n    }\n}"
 										},
 										"url": {
-											"raw": "{{host}}/api/framework/v1/term/create?framework={{default_Course_Framework}}&category=subject",
+											"raw": "{{host}}/api/framework/v1/term/create?framework={{default_Course_Framework}}&category=subject&X-Channel-Id={{channel_id}}",
 											"host": [
 												"{{host}}"
 											],
@@ -5565,6 +5605,10 @@
 												{
 													"key": "category",
 													"value": "subject"
+												},
+												{
+													"key": "X-Channel-Id",
+													"value": "{{channel_id}}"
 												}
 											]
 										}
@@ -5580,7 +5624,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -5606,7 +5651,7 @@
 											"raw": "{\n    \"request\": {\n        \"term\": {\n            \"code\": \"tamil\",\n            \"name\": \"Tamil\"\n        }\n    }\n}"
 										},
 										"url": {
-											"raw": "{{host}}/api/framework/v1/term/create?framework={{default_Course_Framework}}&category=subject",
+											"raw": "{{host}}/api/framework/v1/term/create?framework={{default_Course_Framework}}&category=subject&X-Channel-Id={{channel_id}}",
 											"host": [
 												"{{host}}"
 											],
@@ -5625,6 +5670,10 @@
 												{
 													"key": "category",
 													"value": "subject"
+												},
+												{
+													"key": "X-Channel-Id",
+													"value": "{{channel_id}}"
 												}
 											]
 										}
@@ -5640,7 +5689,8 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -5666,7 +5716,7 @@
 											"raw": "{\n    \"request\": {\n        \"term\": {\n            \"code\": \"telugu\",\n            \"name\": \"Telugu\"\n        }\n    }\n}"
 										},
 										"url": {
-											"raw": "{{host}}/api/framework/v1/term/create?framework={{default_Course_Framework}}&category=subject",
+											"raw": "{{host}}/api/framework/v1/term/create?framework={{default_Course_Framework}}&category=subject&X-Channel-Id={{channel_id}}",
 											"host": [
 												"{{host}}"
 											],
@@ -5685,6 +5735,10 @@
 												{
 													"key": "category",
 													"value": "subject"
+												},
+												{
+													"key": "X-Channel-Id",
+													"value": "{{channel_id}}"
 												}
 											]
 										}
@@ -6271,6 +6325,55 @@
 							"response": []
 						},
 						{
+							"name": "Create certificate template layout for default org",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Your do id\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    var cert_layout_content_id = jsonData.result.identifier;",
+											"    console.log(jsonData);",
+											"    if(cert_layout_content_id) {",
+											"        pm.environment.set(\"cert_layout_content_id\", cert_layout_content_id);",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "X-Channel-Id",
+										"value": "{{channel_id}}"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{apikey}}"
+									},
+									{
+										"key": "x-authenticated-user-token",
+										"value": "{{creator_access_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"request\": {\n        \"asset\": {\n            \"certType\": \"cert template layout\",\n            \"code\": \"1 logo 1 signature\",\n            \"data\": {\n                \"title\": \"1 logo 1 signature\"\n            },\n            \"channel\": \"{{channel_id}}\",\n            \"mimeType\": \"image/svg+xml\",\n            \"issuer\": {\n                \"name\": \"cbse\",\n                \"url\": \"{{host}}/\"\n            },\n            \"primaryCategory\": \"Certificate Template\",\n            \"mediaType\": \"image\",\n            \"signatoryList\": [\n                {\n                    \"image\": \"{{host}}/assets/images/sunbird_logo.png\",\n                    \"name\": \"CBSE\",\n                    \"id\": \"cbse\",\n                    \"designation\": \"XBSE\"\n                }\n            ],\n            \"license\": \"CC BY 4.0\",\n            \"name\": \"1 logo 1 signature\"\n        }\n    }\n}"
+								},
+								"url": "{{host}}/api/asset/v1/create"
+							},
+							"response": []
+						},
+						{
 							"name": "Upload Certificate Template for Default org",
 							"request": {
 								"method": "POST",
@@ -6304,6 +6407,43 @@
 									]
 								},
 								"url": "{{host}}/api/asset/v1/upload/{{cert_content_id}}"
+							},
+							"response": []
+						},
+						{
+							"name": "Upload Certificate Template Layout for Default org",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{apikey}}"
+									},
+									{
+										"key": "x-authenticated-user-token",
+										"value": "{{creator_access_token}}"
+									},
+									{
+										"key": "X-Channel-Id",
+										"value": "{{channel_id}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "fileUrl",
+											"value": "https://downloadableartifacts.blob.core.windows.net/release600/certificate_template.svg",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{host}}/api/asset/v1/upload/{{cert_layout_content_id}}"
 							},
 							"response": []
 						}
@@ -7445,15 +7585,13 @@
 							{
 								"key": "x-authenticated-user-token",
 								"value": "{{access_token}}",
-								"type": "text",
-								"disabled": true
+								"type": "text"
 							},
 							{
 								"key": "Authorization",
 								"value": "Bearer {{apikey}}",
 								"type": "text"
 							}
-							
 						],
 						"body": {
 							"mode": "raw",
@@ -7553,6 +7691,39 @@
 							}
 						},
 						"url": "{{host}}/api/data/v1/page/create"
+					},
+					"response": []
+				},
+				{
+					"name": "5 - Error Log Sync Settings",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-authenticated-user-token",
+								"value": "{{access_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{apikey}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"request\": {\n            \"id\": \"errorLogSyncSettings\",\n            \"field\": \"errorLogSyncSettings\",\n            \"value\": \"{\\\"bandwidth\\\":10,\\\"frequency\\\":86400000}\"\n        }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{host}}/api/data/v1/system/settings/set"
 					},
 					"response": []
 				}
