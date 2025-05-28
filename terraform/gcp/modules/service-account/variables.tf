@@ -62,3 +62,11 @@ variable "sa_key_store_bucket" {
   type        = string
   default     = ""
 }
+variable "service_account_bindings" {
+  description = "Map of Kubernetes namespace/serviceAccountName pairs to bind to the GCP service account"
+  type        = map(bool)
+  default     = {
+    "sunbird/sunbird-sa" = true
+    "velero/velero-sa"   = true
+  }
+}

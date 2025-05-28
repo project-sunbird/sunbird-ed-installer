@@ -32,13 +32,17 @@ resource "google_project_iam_member" "storage_admin_role" {
 }
 
 # Assign Workload Identity User role to service account (optional)
-resource "google_service_account_iam_member" "workload_identity-role" {
-  count = local.create_sa_binding == true ? 1 : 0
+resource "google_service_account_iam_member" "workload_identity_role" {
+  for_each = {
+    for k, v in var.service_account_bindings : k => v
+    if v == true
+  }
 
   service_account_id = google_service_account.service_account.name
-  role    = "roles/iam.workloadIdentityUser"
-  member  = "serviceAccount:${var.project}.svc.id.goog[${var.sa_namespace}/${var.cluster_service_account_name}]"
+  role               = "roles/iam.workloadIdentityUser"
+  member             = "serviceAccount:${var.project}.svc.id.goog[${each.key}]"
 }
+
 
 # Create a service account key
 # Generate a service account key

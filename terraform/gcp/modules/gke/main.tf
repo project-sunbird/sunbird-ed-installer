@@ -3,7 +3,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 locals {
-  workload_identity_config = !var.enable_workload_identity ? [] : var.identity_namespace == null ? [{
+  workload_identity_config = !var.enable_workload_identity ? [] : var.identity_namespace == "" ? [{
     identity_namespace = "${var.project}.svc.id.goog"
   }] : [{
     identity_namespace = var.identity_namespace
@@ -143,7 +143,7 @@ resource "google_container_cluster" "cluster" {
   dynamic "workload_identity_config" {
     for_each = local.workload_identity_config
     content {
-      workload_pool = workload_identity_config.value.identity_namespace
+      workload_pool = "${var.project}.svc.id.goog"
     }
   }
 
@@ -194,6 +194,9 @@ resource "google_container_node_pool" "node_pool" {
     shielded_instance_config {
       enable_secure_boot          = true
       enable_integrity_monitoring = true
+    }
+    workload_metadata_config {
+      mode = "GKE_METADATA"
     }
   }
 
