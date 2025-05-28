@@ -102,13 +102,13 @@ druid_postgresql_db: "druid_raw"
 # Azure Container Details
 azure_storage_account_name: ""
 azure_storage_account_key: ""
-azure_storage_container: "reports"
+azure_storage_container: ""
 
 
 # Indexing service logs
 # For local disk (only viable in a cluster_type if this is a network mount):
-druid_indexer_logs_type: "azure"
-druid_indexer_logs_container: "reports"
+druid_indexer_logs_type: ""
+druid_indexer_logs_container: ""
 druid_indexer_logs_prefix: "backups/druid/druid-task-logs"
 druid_indexer_logs_directory: "backups/druid/druid-task-logs"
 
