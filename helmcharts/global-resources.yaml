@@ -371,13 +371,13 @@ neo4j:
         requests:
           storage: 25Gi
 
-# postgresql: 
-#   persistence:
-#     size: 25Gi
-#   resources:
-#     requests:
-#       cpu: 250m
-#       memory: 256Mi
+postgresql: 
+  persistence:
+    size: 25Gi
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
 
 redis: 
   master:
