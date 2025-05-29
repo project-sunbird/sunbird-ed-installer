@@ -1,0 +1,45 @@
+global:
+  region: us-ashburn-1
+  oci_bucket_namespace: idnlppwjcf2n
+  oci_storage_account_name: f4666083c44062e8548ffddbb25104287e0fef3d 
+  oci_storage_account_key: f4nJfeA40LBjdStQnfMGQ/TmcCo8KnBvdtZvpxO/4xQ= 
+  cloud_storage_secret_key: "rxIH9O+zG0CMnzUrQx16qvu/hRTen5CQgKqsj8TLuYs="
+  cloud_storage_access_key: "d5886c2c69507044654c9d826931e2b1482d9c60"
+  public_container_name: storage_container_public
+  private_container_name: storage_container_private
+  dial_state_container_name: dial_state_container_public
+  oci_public_container_name: storage_container_public
+  oci_private_container_name: storage_container_private
+  oci_reports_container_name: reports_container_private
+  oci_flink_state_container_name: flink_state_container_private
+  oci_dial_state_container_name: dial_state_container_public
+  oci_backups_container_name: backups_container_private
+  oci_telemetry_container_name: telemetry_container_private
+  private_ingressgateway_ip: 129.80.212.49
+  encryption__string: A7d9XkL2mQpR5TgYwVzN3BfJ6C8HsM4W
+  random_string: my-secret-for-jwt-token
+  cloud_private_storage_endpoint: "idnlppwjcf2n.compat.objectstorage.us-ashburn-1.oraclecloud.com"
+  serviceAccount:
+    name: "oci"
+  storage_class: "oci-bv"
+
+  cluster-issuer: letsencrypt-sunbird-ed
+
+  # OCI S3 Compartible API Details
+  s3_access_key: "d5886c2c69507044654c9d826931e2b1482d9c60"
+  s3_secret_key: "rxIH9O+zG0CMnzUrQx16qvu/hRTen5CQgKqsj8TLuYs="
+  s3_secret_id: "rxIH9O+zG0CMnzUrQx16qvu/hRTen5CQgKqsj8TLuYs="
+  s3_endpoint: "https://idnlppwjcf2n.compat.objectstorage.us-ashburn-1.oraclecloud.com"
+  s3_path_style_access: "true"
+  s3_region: "us-ashburn-1"
+
+  # OCI Ally user details:
+  username: API_USER_sunbird-ed-app1
+  user_ocid: ocid1.user.oc1..aaaaaaaadrqekt4nnclvwgnmerckzh2jfjidvctybs6eq55noh6piisbdriq
+  user_tenancy: ocid1.tenancy.oc1..aaaaaaaat7ehvdi6ptuxglqa2r5gd7cndhs7q57gmn7gj6xguct2fjkflbwa
+  user_fingerprint: 4a:05:71:50:77:42:15:01:50:83:13:5e:c9:e2:4f:b4
+  user_region: us-ashburn-1
+  user_key_file: /root/.oci/bastion.key
+  user_key_file_pem: "-----BEGIN RSA PRIVATE KEY-----\\nMIIEpAIBAAKCAQEAvXjR59DubhI3qHW1OFFWVh7LE8Z+VkZSx4iJFL4v8J+xaEYQRLiBi1LNEAq8QLDCxWPuwb597u8/YAs2KMnn2puV53j2UPt+YCG2Z7zEqBTGRBHiP6bzvTz/R0nbnvubnHBj/sBlS5rL+5cKOhcIcGURvWsKibmNqyfoZRXFfhRSoJIJWwVVS9nQM2lWyE8I05GdxILW3p1h6yluCnKryOnZ703O/g/W5vGI3Ucw0+kimZ4edhE2JHc+0SyY8Czw3eZypXKFJn5aI9CAZGgcHRfYCShgL3gsgeY+LP5XuBfD3e0QuSxbnDecc7BPAxsNLPEnSpVUD4keR4JXcPM3pQIDAQABAoIBAGI/RyDcjvYWjjPVLW4RhyJK/2S2tYYJGx2KKALQh81PEVAPnJn1zn6vJdQerPUicyyloAVowKZn+sXTqnbGE2qg6L9JUvg1IJe6g3oRQSwi8ZgUaew1pwfGnFyb6LzsnQkmokNUAnKMxx8jd9MdZGvbjLJa0fEOfW512CSqgGjaPUfYFX13vNXYaC/RbmczTiPboyQfGWUSIIJcXYgxVGVVXof8HjR79UgzBmx2yvnNdtMbYn7gfIgU4NGbwHkYFNabpKBMamwb0ZbnH5bRoWktfc9BYNPUT48EBQW+ebavwAYzGVeT2AO4NmiwuuZparWkgzWBwFbYMy/h1S4DFQECgYEA9E+FO7HncK3fev/ypwHEyGtKEopLeRt5v7PqBI5hrJ6ATLLHGkaH/RaEvVtbN54QRXrVSpAp+er3qVwMmrZbUzDus8VsKkaU48sRZ6Ja7tYa3ZvqElV2BcHTXFLGKLuE+zeOA+2ACzkF2krPeyZx670+6zmc1LbdPJNhGqYZUMECgYEAxomZTVny6fnw6oWhgOgprmP43/hOgwcRyH7pagH8GGOooMZbGjq/950+BEn2tHcxsqLoRjJu1kBQFJGWq47TmP/44435Hwy7iOcp0rUZrDSMNtRkzjkRi9fUPGz0WfJ12d0TiIfOJ/e9SXirKhAj2F0xbQoSEuESE5Z03OGRu+UCgYEAq6ERoBYi2O3NCcO0285KR+HXb57n1nSO2zWxOPIte+79guQ1KyhRcGLZbY04T6IjHCxmmrMcSg3fXoLj9+wTzCWcC36ttiVPg5es6nkMGK0gwn49uhN/jhvUOA+OVh8mFLW6dtfqE/hDPE9B4unnLg0MnoMiweyVD3EZznbRYgECgYAQjXhSkqVGDKihZPLKJJEVERC226TwF67L4IjlZbT285gjj2YZEbzfkCSThvcipK1oD1z+PUYwZrxGerztIMNThkPh9PxIMm+QQnWiM6coTFlEWQDukKN93Ui8oPjeZvCccWonf+sYOfd2ILFkmGPkriBozuYi3ND9ARZNNCFKYQKBgQCPw9qSrI6PMoC+Q+Li/h/qbvyNjISN7e9VG7NTsNVMBvEgJqVaht3iH7eInpPkIHUG4uRmbkY5wyZueA8cfxAU5VZpN5psSlfmfh2Gag0Po3HWEuZzgQkhdKg4iItscVaggvNZ7M+ALJ/kOVQpg+HuTu2SfVe0JL3iGfZTNgvbrQ==\\n-----END RSA PRIVATE KEY-----\\nOCI_API_KEY"
+  private_subnet_ocid: ocid1.subnet.oc1.iad.aaaaaaaad3fvctgh7r7fpke3ktvfrhf5erokq3ktyd5vmw42wqr6gh5lei3a
+
