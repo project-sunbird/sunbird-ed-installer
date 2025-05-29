@@ -1,20 +1,20 @@
 global:
-  building_block: "ed" # building block name
-  env: "dv" 
-  environment: "dev" # use lowercase alphanumeric string between 1-9 characters
+  building_block: "" # building block name
+  env: "" 
+  environment: "" # use lowercase alphanumeric string between 1-9 characters
   release_version: release-7.0.0
-  domain: "dev.sunbirded.org"
-  subscription_id: "da72f12a-e323-42b4-92d8-b3ec660b6208"
-  cloud_storage_region: "Central India"
+  domain: ""
+  subscription_id: ""
+  cloud_storage_region: ""
   sunbird_cloud_storage_provider: "azure" # Provide the cloud storage provider
   checkpoint_store_type: "azure"
   cloud_service_provider: "azure"
   cloud_storage_provider: "azure"
   sunbird_cloud_storage_provider: "azure" 
-  sunbird_google_captcha_site_key: 6LfFpTMrAAAAACwFrfMdxQgccC3sO8QKKHeL71QM
-  google_captcha_private_key: 6LfFpTMrAAAAAN2nGcqYUne1iWz4IRfV3PNzCuJ6
-  sunbird_google_oauth_clientId: 15192686475-5vl9oltkvnta58ptq7ff4uka11hnteje.apps.googleusercontent.com
-  sunbird_google_oauth_clientSecret: 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
+  sunbird_google_captcha_site_key: 
+  google_captcha_private_key: 
+  sunbird_google_oauth_clientId: 
+  sunbird_google_oauth_clientSecret: 
   mail_server_from_email: ""
   mail_server_password: ""
   mail_server_host: smtp.sendgrid.net
@@ -22,7 +22,7 @@ global:
   mail_server_username: apikey
   sunbird_msg_91_auth: ""
   sunbird_msg_sender: ""
-  youtube_apikey: "AIzaSyDaHolOSGiMmj6D5dSdnrv40n47fsBraT0"
+  youtube_apikey: ""
   # The merge domain is optional and is required  `only if user merge workflow is required.
   # For most audience, this workflow is not required. If you need this workflow, then
   # set the value of merge_domain_status to "true" and provide a subdomain / another domain
@@ -83,58 +83,7 @@ global:
   #   mIyfDj9AwvHHxzA=
   #   -----END CERTIFICATE-----
   proxy_private_key: |
-    -----BEGIN PRIVATE KEY-----
-    MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgcRfqIX0UORqaBnDE
-    Y5WmKPSIIqoy6IkIUgGYlZmMtwChRANCAAR2BT7ukQI75VZuynkeG+3N7Qvhkp7l
-    294mib4/P3vcTOJnVTsrN2Plj+KYW6Z2eS0ePGHQVEVflIJTpDPSahEE
-    -----END PRIVATE KEY-----
+    REPLACE_ME
   proxy_certificate: |
-    -----BEGIN CERTIFICATE-----
-    MIIDjTCCAxSgAwIBAgISBUURtMVzZVKihlS71waDX1YtMAoGCCqGSM49BAMDMDIx
-    CzAJBgNVBAYTAlVTMRYwFAYDVQQKEw1MZXQncyBFbmNyeXB0MQswCQYDVQQDEwJF
-    NjAeFw0yNTA1MDkxMDI4NDVaFw0yNTA4MDcxMDI4NDRaMBwxGjAYBgNVBAMTEWRl
-    di5zdW5iaXJkZWQub3JnMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEdgU+7pEC
-    O+VWbsp5Hhvtze0L4ZKe5dveJom+Pz973EziZ1U7Kzdj5Y/imFumdnktHjxh0FRF
-    X5SCU6Qz0moRBKOCAh4wggIaMA4GA1UdDwEB/wQEAwIHgDAdBgNVHSUEFjAUBggr
-    BgEFBQcDAQYIKwYBBQUHAwIwDAYDVR0TAQH/BAIwADAdBgNVHQ4EFgQUKYsQZQNi
-    IEeSbdnWoHYM2kt7PgcwHwYDVR0jBBgwFoAUkydGmAOpUWiOmNbEQkjbI79YlNIw
-    MgYIKwYBBQUHAQEEJjAkMCIGCCsGAQUFBzAChhZodHRwOi8vZTYuaS5sZW5jci5v
-    cmcvMBwGA1UdEQQVMBOCEWRldi5zdW5iaXJkZWQub3JnMBMGA1UdIAQMMAowCAYG
-    Z4EMAQIBMC0GA1UdHwQmMCQwIqAgoB6GHGh0dHA6Ly9lNi5jLmxlbmNyLm9yZy80
-    Ni5jcmwwggEDBgorBgEEAdZ5AgQCBIH0BIHxAO8AdgDtPEvW6AbCpKIAV9vLJOI4
-    Ad9RL+3EhsVwDyDdtz4/4AAAAZa0zK7ZAAAEAwBHMEUCIQChgqhDi9KYjV+EY3XW
-    86CuKkBvjLFjAqK4D2bLNw1UsAIgH8LnSLH6Fy+HODC5hzE/fAGLfZ+0OKaRRHkZ
-    9OZqVakAdQDM+w9qhXEJZf6Vm1PO6bJ8IumFXA2XjbapflTA/kwNsAAAAZa0zK7x
-    AAAEAwBGMEQCIACjbejilxGissCDaL4ULlHBIUFVYcdwiTTXyCOUEdpKAiA3/Wpg
-    Vri9QYvqf+D6FXda4bj6KnCZ9Gg7hTisl3jTTzAKBggqhkjOPQQDAwNnADBkAjBX
-    NFrTGTMqtp381JNj2lnpdu9alWBGTetiklZeyvKBqG8GU3UnI0nHePr+ffIFWpoC
-    MBMMheqeLmyU9MFTVQEp5m5YHrkinCgANdS0WcFtLxPDVEvSg3gYvxqgzqmu65If
-    Dw==
-    -----END CERTIFICATE-----
-    -----BEGIN CERTIFICATE-----
-    MIIEVzCCAj+gAwIBAgIRALBXPpFzlydw27SHyzpFKzgwDQYJKoZIhvcNAQELBQAw
-    TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh
-    cmNoIEdyb3VwMRUwEwYDVQQDEwxJU1JHIFJvb3QgWDEwHhcNMjQwMzEzMDAwMDAw
-    WhcNMjcwMzEyMjM1OTU5WjAyMQswCQYDVQQGEwJVUzEWMBQGA1UEChMNTGV0J3Mg
-    RW5jcnlwdDELMAkGA1UEAxMCRTYwdjAQBgcqhkjOPQIBBgUrgQQAIgNiAATZ8Z5G
-    h/ghcWCoJuuj+rnq2h25EqfUJtlRFLFhfHWWvyILOR/VvtEKRqotPEoJhC6+QJVV
-    6RlAN2Z17TJOdwRJ+HB7wxjnzvdxEP6sdNgA1O1tHHMWMxCcOrLqbGL0vbijgfgw
-    gfUwDgYDVR0PAQH/BAQDAgGGMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcD
-    ATASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdDgQWBBSTJ0aYA6lRaI6Y1sRCSNsj
-    v1iU0jAfBgNVHSMEGDAWgBR5tFnme7bl5AFzgAiIyBpY9umbbjAyBggrBgEFBQcB
-    AQQmMCQwIgYIKwYBBQUHMAKGFmh0dHA6Ly94MS5pLmxlbmNyLm9yZy8wEwYDVR0g
-    BAwwCjAIBgZngQwBAgEwJwYDVR0fBCAwHjAcoBqgGIYWaHR0cDovL3gxLmMubGVu
-    Y3Iub3JnLzANBgkqhkiG9w0BAQsFAAOCAgEAfYt7SiA1sgWGCIpunk46r4AExIRc
-    MxkKgUhNlrrv1B21hOaXN/5miE+LOTbrcmU/M9yvC6MVY730GNFoL8IhJ8j8vrOL
-    pMY22OP6baS1k9YMrtDTlwJHoGby04ThTUeBDksS9RiuHvicZqBedQdIF65pZuhp
-    eDcGBcLiYasQr/EO5gxxtLyTmgsHSOVSBcFOn9lgv7LECPq9i7mfH3mpxgrRKSxH
-    pOoZ0KXMcB+hHuvlklHntvcI0mMMQ0mhYj6qtMFStkF1RpCG3IPdIwpVCQqu8GV7
-    s8ubknRzs+3C/Bm19RFOoiPpDkwvyNfvmQ14XkyqqKK5oZ8zhD32kFRQkxa8uZSu
-    h4aTImFxknu39waBxIRXE4jKxlAmQc4QjFZoq1KmQqQg0J/1JF8RlFvJas1VcjLv
-    YlvUB2t6npO6oQjB3l+PNf0DpQH7iUx3Wz5AjQCi6L25FjyE06q6BZ/QlmtYdl/8
-    ZYao4SRqPEs/6cAiF+Qf5zg2UkaWtDphl1LKMuTNLotvsX99HP69V2faNyegodQ0
-    LyTApr/vT01YPE46vNsDLgK+4cL6TrzC/a4WcmF5SRJ938zrv/duJHLXQIku5v0+
-    EwOy59Hdm0PT/Er/84dDV0CSjdR/2XuZM3kpysSKLgD1cKiDA+IRguODCxfO9cyY
-    Ig46v9mFmBvyH04=
-    -----END CERTIFICATE-----
+    REPLACE_ME
   # CERTIFICATE-KEYS 
