@@ -16,7 +16,7 @@ loki:
       retention_delete_delay: 1h
       retention_delete_worker_count: 150
     limits_config:
-      retention_period: 2d
+      retention_period: 7d
     storage_config:
       boltdb_shipper:
         active_index_directory: /var/loki/boltdb-shipper-active
