@@ -12,7 +12,7 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.service.type }}
-  loadBalancerIP: {{ .Values.global.private_ingressgateway_ip }}
+  #loadBalancerIP: {{ .Values.global.private_ingressgateway_ip }}
   ports:
   {{- range .Values.service.ports }}
   - name: {{ .name }}

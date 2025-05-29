@@ -28,7 +28,7 @@ configmap:
   mountPath: /config
 
 geo_location_db: analytics
-maxmind_custom_data_mapping_url: "https://{{ .Values.global.object_storage_endpoint }}/public/maxmind_custom_data_mapping.csv"
+maxmind_custom_data_mapping_url: "https://objectstorage.{{ .Values.global.region }}.oraclecloud.com/n/{{ .Values.global.oci_bucket_namespace }}/b/{{ .Values.global.oci_public_container_name }}/o/artifacts-release-7.0.0%2Fmaxmind_custom_data_mapping.csv"
 maxmind_db_zip_filename: "GeoLite2-City-CSV_20240105.zip"
 maxmind_db_dir_name: "GeoLite2-City-CSV_20240105"
 maxmind_geoip2_csv_converter_url: "https://github.com/maxmind/geoip2-csv-converter/releases/download/v1.0.0/geoip2-csv-converter-v1.0.0-linux-amd64.tar.gz"

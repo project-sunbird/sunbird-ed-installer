@@ -110,14 +110,14 @@ taskmanager:
   cpu_requests: 0.3
 
 # Azure Container Details
-checkpoint_store_type: "azure"
-cloud_storage_flink_bucketname: "{{ .Values.global.public_container_name }}"
+checkpoint_store_type:  "s3" #"azure"
+cloud_storage_flink_bucketname: "{{ .Values.global.oci_flink_state_container_name }}/o"
 
 # AWS S3 Details
-s3_access_key: ""
-s3_secret_key: ""
-s3_endpoint: ""
-s3_path_style_access: ""
+#s3_access_key: ""
+#s3_secret_key: ""
+#s3_endpoint: ""
+#s3_path_style_access: ""
 
 # Azure Container Details
 azure_account: ""
@@ -142,7 +142,7 @@ core_vault_sunbird_fcm_account_key: "your-fcm-account-key"
 sunbird_msg_91_auth: "your-msg-91-auth-key"
 
 cassandra_isMultiDCEnabled: false
-kp_schema_base_path: "https://{{ .Values.global.object_storage_endpoint }}./{{ .Values.global.public_container_name }}/schemas/local"
+kp_schema_base_path: "https://objectstorage.{{ .Values.global.region }}.oraclecloud.com/n/{{ .Values.global.oci_bucket_namespace }}/b/{{ .Values.global.oci_public_container_name }}/o/schemas/local"
 lms_service_base_url: "http://lms-service:9000"
 kp_search_service_base_url: "http://search-service:9000"
 content_read_api_host: "http://content-service:9000"
@@ -164,8 +164,8 @@ cert_cloud_storage_type: "azure"
 cert_cloud_storage_secret: "{{ .Values.global.cloud_storage_secret_key }}"
 cert_cloud_storage_key: "{{ .Values.global.cloud_storage_access_key }}"
 cert_cloud_storage_endpoint: ""
-cloud_storage_base_url: "https://{{ .Values.global.object_storage_endpoint }}"
-cloud_storage_cname_url: "https://{{ .Values.global.object_storage_endpoint }}"
+cloud_storage_base_url: "https://objectstorage.{{ .Values.global.region }}.oraclecloud.com/n/{{ .Values.global.oci_bucket_namespace }}/b"
+cloud_storage_cname_url: "https://objectstorage.{{ .Values.global.region }}.oraclecloud.com/n/{{ .Values.global.oci_bucket_namespace }}/b"
 kafka_topic_course_batch_job_request: "{{ .Values.global.env }}.coursebatch.job.request"
 kafka_topic_telemetry_raw: "{{ .Values.global.env }}.telemetry.raw"
 kafka_topic_activity_agg_failed: "{{ .Values.global.env }}.activity.agg.failed"
@@ -359,6 +359,11 @@ base_config: |
       {{- if eq "oci" .Values.global.checkpoint_store_type }}
       statebackend {
         base.url = "s3://{{ .Values.global.public_container_name }}/checkpoint"
+      }
+
+      {{- else if eq "s3" .Values.global.checkpoint_store_type }}
+      statebackend {
+        base.url = "s3://{{ .Values.global.public_container_name }}/checkpoint" # Assuming a different variable for S3 container name
       }
 
       {{- else if eq "azure" .Values.global.checkpoint_store_type }}

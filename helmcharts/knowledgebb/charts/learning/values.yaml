@@ -23,8 +23,8 @@ cloud_storage:
   type: "azure"
 cloudstorage_relative_path_prefix_content: contents
 cloudstorage_metadata_list: '["appIcon", "artifactUrl", "posterImage", "previewUrl", "thumbnail", "assetsMap", "certTemplate", "itemSetPreviewUrl", "grayScaleAppIcon", "sourceURL", "variants", "downloadUrl", "streamingUrl", "toc_url", "data", "question", "solutions", "editorState", "media", "pdfUrl", "transcripts"]'
-cloudstorage_read_base_path: ""
-cloudstorage_write_base_path: ""
+cloudstorage_read_base_path: "https://objectstorage.{{ .Values.global.region }}.oraclecloud.com/n/{{ .Values.global.oci_bucket_namespace }}/b"
+cloudstorage_write_base_path: '["https://objectstorage.{{ .Values.global.region }}.oraclecloud.com/n/{{ .Values.global.oci_bucket_namespace }}/b"]'
 
 cloud_storage_content_folder: "content"
 cloud_storage_asset_folder: "assets"

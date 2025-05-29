@@ -1,0 +1,19 @@
+apiVersion: v1
+data:
+  fingerprint: {{ .Values.global.user_fingerprint | b64enc }} 
+  region: {{ .Values.global.user_region | b64enc  }}
+  tenancy: {{ .Values.global.user_tenancy | b64enc  }}
+  user: {{ .Values.global.user_ocid | b64enc  }}
+  key_file: {{ .Values.global.user_key_file | b64enc | quote  }}
+kind: Secret
+metadata:
+  name: oci-config
+
+---
+apiVersion: v1
+data:
+  oci_api_key.pem: {{ .Values.global.user_key_file_pem | b64enc | quote  }}
+kind: Secret
+metadata:
+  name: oci-key-file
+

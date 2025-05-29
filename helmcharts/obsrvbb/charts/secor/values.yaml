@@ -3,15 +3,15 @@ azure_account: "{{.Values.global.cloud_storage_access_key}}"
 azure_secret: "{{ .Values.global.cloud_storage_secret_key }}"
 azure_container_name: "{{ .Values.global.public_container_name }}"
 
-s3_access_key: "cloud_private_storage_accountname"
-s3_secret_id: "cloud_private_storage_secret"
-s3_region: "cloud_private_storage_region"
-s3_endpoint: "cloud_private_storage_endpoint"
-s3_path_style_access: "s3_path_style_access"
-s3_bucket_name: "{{ .Values.global.public_container_name }}"
+s3_access_key: "{{ .Values.global.s3_secret_key  }}"
+s3_secret_id: "{{ .Values.global.s3_secret_id  }}"
+s3_region: "{{ .Values.global.s3_region  }}"
+s3_endpoint: "{{ .Values.global.s3_endpoint  }}"
+s3_path_style_access: "{{ .Values.global.s3_path_style_access  }}"
+s3_bucket_name: "{{ .Values.global.oci_telemetry_container_name }}"
 
 storage_type: ""
-storageClass: ""
+storageClass: "oci-bv"
 
 image:
   pullSecrets: []

@@ -105,7 +105,7 @@ cloud_storage:
   type: "azure"
 
 content:
-  h5p_library_path: "https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}installation/h5p-standalone-1.3.4.zip"
+  h5p_library_path: "https://objectstorage.{{ .Values.global.region }}.oraclecloud.com/n/{{ .Values.global.oci_bucket_namespace }}/b/{{ .Values.global.oci_public_container_name }}/o/installation/h5p-standalone-1.3.4.zip"
   media_base_url: "https://{{ .Values.global.domain }}"
   telemetry_env: staging
 
@@ -138,8 +138,8 @@ cloud_storage_metadata_replace_absolute_path: true
 cloud_storage_upload_url_ttl: "54000"
 cloudstorage_relative_path_prefix_content: CONTENT_STORAGE_BASE_PATH
 cloudstorage_metadata_list: '["appIcon", "artifactUrl", "posterImage", "previewUrl", "thumbnail", "assetsMap", "certTemplate", "itemSetPreviewUrl", "grayScaleAppIcon", "sourceURL", "variants", "downloadUrl", "streamingUrl", "toc_url", "data", "question", "solutions", "editorState", "media", "pdfUrl", "transcripts"]'
-cloudstorage_write_base_path: '["https://{{ .Values.global.object_storage_endpoint }}"]'
-cloudstorage_read_base_path: "https://{{ .Values.global.object_storage_endpoint }}"
+cloudstorage_write_base_path: '["https://objectstorage.{{ .Values.global.region }}.oraclecloud.com/n/{{ .Values.global.oci_bucket_namespace }}/b"]'
+cloudstorage_read_base_path: "https://objectstorage.{{ .Values.global.region }}.oraclecloud.com/n/{{ .Values.global.oci_bucket_namespace }}/b"
 
 envoy_probes:
   failureThreshold: 2

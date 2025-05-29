@@ -109,8 +109,8 @@ dialcode:
   cloudstorage:
     metadata_replace_absolute_path: "true"
     relative_path_prefix: "DIAL_STORAGE_BASE_PATH"
-    read_base_path: "https://{{ .Values.global.object_storage_endpoint }}"
-dial_storage_container: "{{ .Values.global.public_container_name }}/dial"
+    read_base_path: "https://objectstorage.{{ .Values.global.region }}.oraclecloud.com/n/{{ .Values.global.oci_bucket_namespace }}/b"
+dial_storage_container: "{{ .Values.global.oci_dial_state_container_name }}/o"
 
 search:
   fields_query: '["name^100","title^100","lemma^100","code^100","tags^100","question^100","domain","subject","description^10","keywords^25","ageGroup^10","filter^10","theme^10","genre^10","objects^25","contentType^100","language^200","teachingMode^25","skills^10","learningObjective^10","curriculum^100","gradeLevel^100","developer^100","attributions^10","owner^50","text","words","releaseNotes","body"]'
@@ -119,7 +119,7 @@ search:
   connection_timeout: 30
 
 jsonld:
-  basePath: "{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/sunbird-dial-staging/jsonld-schema/local" # we have to move this to sandbox url
+  basePath: "https://objectstorage.{{ .Values.global.region }}.oraclecloud.com/n/{{ .Values.global.oci_bucket_namespace }}/b/{{ .Values.global.oci_dial_state_container_name }}/o/jsonld-schema/local"
   type: "sbed"
   localPath: "/tmp"
   ttl: 43200

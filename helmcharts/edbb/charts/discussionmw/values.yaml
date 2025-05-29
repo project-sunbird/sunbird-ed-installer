@@ -16,11 +16,11 @@ podSecurityContext:
   runAsUser: 0
   fsGroup: 0
 
-securityContext:
-  readOnlyRootFilesystem: false
-  capabilities:
-    drop:
-    - ALL
+securityContext: {}
+#readOnlyRootFilesystem: false
+#  capabilities:
+#    drop:
+#    - ALL
 
 service:
   type: ClusterIP

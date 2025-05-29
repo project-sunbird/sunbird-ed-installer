@@ -100,8 +100,8 @@ serviceAccount:
   create: true
   name: ""
 
-## Can be one of - azure, aws, gcloud
-cloud_service_provider: "azure"
+## Can be one of - azure, aws, gcloud, oci
+cloud_service_provider: "oci"
 cassandra_keyspace_prefix: "{{ .Values.global.env }}_"
 postgres_db: "analytics"
 # postgres_user: "postgres"

@@ -1,0 +1,50 @@
+global:
+  access_v1_public_keys:
+%{ for key, value in access_v1_public_keys ~}
+    access_v1_key${key}: '${replace(chomp(value.public_key_pem), "\n", "\\n")}'
+%{ endfor ~}
+  access_v1_private_keys:
+%{ for index, key in access_v1_private_keys ~}
+    access_v1_key${index}: |+
+      ${indent(6, chomp(key))}
+%{ endfor ~}
+  mobile_devicev2_public_keys:
+%{ for key, value in mobile_devicev2_public_keys ~}
+    mobile_devicev2_key${key}: |+
+      ${indent(6, chomp(value.public_key_pem))}
+%{ endfor ~}
+  mobile_devicev2_private_keys:
+%{ for index, key in mobile_devicev2_private_keys ~}
+    mobile_devicev2_key${index}: |+
+      ${indent(6, chomp(key))}
+%{ endfor ~}
+  desktop_devicev2_public_keys:
+%{ for key, value in desktop_devicev2_public_keys ~}
+    desktop_devicev2_key${key}: |+
+      ${indent(6, chomp(value.public_key_pem))}
+%{ endfor ~}
+  desktop_devicev2_private_keys:
+%{ for index, key in desktop_devicev2_private_keys ~}
+    desktop_devicev2_key${index}: |+
+      ${indent(6, chomp(key))}
+%{ endfor ~}
+  portal_anonymous_public_keys:
+%{ for key, value in portal_anonymous_public_keys ~}
+    portal_anonymous_key${key}: |+
+      ${indent(6, chomp(value.public_key_pem))}
+%{ endfor ~}
+  portal_anonymous_private_keys:
+%{ for index, key in portal_anonymous_private_keys ~}
+    portal_anonymous_key${index}: |+
+      ${indent(6, chomp(key))}
+%{ endfor ~}
+  portal_loggedin_public_keys:
+%{ for key, value in portal_loggedin_public_keys ~}
+    portal_loggedin_key${key}: |+
+      ${indent(6, chomp(value.public_key_pem))}
+%{ endfor ~}
+  portal_loggedin_private_keys:
+%{ for index, key in portal_loggedin_private_keys ~}
+    portal_loggedin_key${index}: |+
+      ${indent(6, chomp(key))}
+%{ endfor ~}

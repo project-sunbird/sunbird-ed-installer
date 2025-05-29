@@ -18,3 +18,10 @@ terragrunt
 **/charts/common
 # Ignoring test directories
 **/kitchen
+
+terraform/oci/dev/global-values.yaml
+terraform/oci/dev/global-cloud-values.yaml
+terraform/oci/dev/global-values-jwt-tokens.yaml
+terraform/oci/dev/global-values-rsa-keys.yaml
+terraform/oci/dev/*.pem
+terraform/oci/dev/env*.json

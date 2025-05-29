@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 image:
-  repository: "sunbirded.azurecr.io/redis-backup"
+  repository: "simhead00/redis-backup" #"sunbirded.azurecr.io/redis-backup"
   pullPolicy: IfNotPresent
   imagePullSecrets: ""
   tag: "0.0.1"

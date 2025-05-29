@@ -15,8 +15,8 @@ export reports_azure_storage_key="{{ .Values.global.cloud_storage_access_key }}"
 export reports_azure_storage_secret="{{ .Values.global.cloud_storage_secret_key }}"
 export druid_storage_account_key="{{ .Values.global.cloud_storage_access_key }}"
 export druid_storage_account_secret="{{ .Values.global.cloud_storage_secret_key }}"
-export gcloud_storage_key="{{ .Values.global.cloud_storage_access_key }}"
-export gcloud_storage_secret="{{ .Values.global.cloud_storage_secret_key }}"
+export oci_storage_key="{{ .Values.global.cloud_storage_access_key }}"
+export oci_storage_secret="{{ .Values.global.cloud_storage_secret_key }}"
 
 export heap_conf_str="-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -Xms250m -Xmx5120m -XX:+UseStringDeduplication"
 today=$(date "+%Y-%m-%d")

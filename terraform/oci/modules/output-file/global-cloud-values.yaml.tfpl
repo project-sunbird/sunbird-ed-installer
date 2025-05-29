@@ -1,0 +1,63 @@
+global:
+  cloud_storage_access_key: ${gcp_storage_account_email}      
+  cloud_storage_secret_key: ${gcp_storage_account_key}
+  public_container_name: ${gcp_public_container_name}
+  private_container_name: ${gcp_private_container_name}
+  dial_state_container_public: ${gcp_dial_state_container_public}
+  private_ingressgateway_ip: ${private_ingressgateway_ip}
+  encryption__string: ${encryption_string}
+  random_string: ${random_string}
+  gcp_project_id: ${gcp_project_id}
+  storage_class: ${storage_class}
+  cloud_storage_provider:  ${cloud_storage_provider}
+  cloud_storage_region: ${cloud_storage_region}
+  
+  serviceAccount: 
+    create: true
+    name: sunbird-sa
+    annotations:
+      iam.gke.io/gcp-service-account: ${gcp_storage_account_email}
+
+velero:                                                       
+  enabled: true
+  serviceAccount:
+    server:
+      create: true
+      name: velero-sa
+      annotations:
+        iam.gke.io/gcp-service-account: ${gcp_storage_account_email}
+  credentials:
+    useSecret: false
+  configuration:
+    backupStorageLocation:
+      - name: default
+        provider: ${cloud_storage_provider}
+        bucket: "${gcp_public_container_name}"
+        config:
+          prefix: backups
+          serviceAccount: ${gcp_storage_account_email}
+    backupSyncPeriod: 15m
+    volumeSnapshotLocation:
+    - name: default
+      provider: ${cloud_storage_provider}
+      config:
+        project: ${gcp_project_id}
+        region:  ${cloud_storage_region}     
+  initContainers:
+    - image: velero/velero-plugin-for-gcp
+      name: velero-plugin-for-gcp
+      volumeMounts:
+        - mountPath: /target
+          name: plugins  
+
+spark: 
+  serviceAccount:
+    create: false 
+    name: "sunbird-sa"            
+
+nginx-public-ingress:
+  commonAnnotations:
+    reloader.stakater.com/auto: "true"
+    cloud.google.com/load-balancer-type: "External"
+
+    

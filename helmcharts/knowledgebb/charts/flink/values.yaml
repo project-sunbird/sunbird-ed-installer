@@ -107,16 +107,16 @@ taskmanager:
 
 
 # S3 Details
-s3_access_key: ""
-s3_secret_key: ""
-s3_endpoint: ""
-s3_path_style_access: ""
+#s3_access_key: ""
+#s3_secret_key: ""
+#s3_endpoint: ""
+#s3_path_style_access: ""
 
 cloud_storage:
-  type: "azure" # not required
+  type: "s3" #"azure"
 cloudstorage_metadatalist: '["appIcon","posterImage","artifactUrl","downloadUrl","variants","previewUrl","pdfUrl", "streamingUrl", "toc_url"]'
-cloudstorage_write_base_path: '["https://{{ .Values.global.object_storage_endpoint }}"]'
-cloudstorage_read_base_path: "https://{{ .Values.global.object_storage_endpoint }}"
+cloudstorage_write_base_path: '["https://objectstorage.{{ .Values.global.region }}.oraclecloud.com/n/{{ .Values.global.oci_bucket_namespace }}/b"]'
+cloudstorage_read_base_path: "https://objectstorage.{{ .Values.global.region }}.oraclecloud.com/n/{{ .Values.global.oci_bucket_namespace }}/b"
 cloudstorage_relative_path_prefix: "CONTENT_STORAGE_BASE_PATH"
 
 log4j_console_properties: |
@@ -166,11 +166,25 @@ base_config: |
   }
   job {
     env = "{{ .Values.global.env }}"
-    enable.distributed.checkpointing = true
+    enable.distributed.checkpointing = false #true
 
     {{- if eq "oci" .Values.global.checkpoint_store_type }}
     statebackend {
       base.url = "s3://{{ .Values.global.public_container_name }}/checkpoint"
+    }
+
+    {{- else if eq "s3" .Values.global.checkpoint_store_type }}
+    statebackend {
+      blob {
+        storage {
+          account = "https://objectstorage.{{ .Values.global.region }}.oraclecloud.com/n/{{ .Values.global.oci_bucket_namespace }}/b"
+          container = "{{ .Values.global.oci_public_container_name }}/o"
+          bucket = "{{ .Values.global.oci_public_container_name }}"
+          endpoint = "{{ .Values.global.s3_endpoint }}"
+          checkpointing.dir = "checkpoint"
+        }
+      }
+      base.url = "s3://"${job.statebackend.blob.storage.bucket}"/"${job.statebackend.blob.storage.checkpointing.dir}
     }
 
     {{- else if eq "azure" .Values.global.checkpoint_store_type }}
@@ -255,10 +269,10 @@ flink_jobs:
       cloudstorage.metadata.replace_absolute_path=true
       cloudstorage.relative_path_prefix= "CONTENT_STORAGE_BASE_PATH"
       cloudstorage.read_base_path="{{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_read_base_path "context" $) }}"
-      cloudstorage.write_base_path=["https://{{ .Values.global.object_storage_endpoint }}"] 
+      cloudstorage_write_base_path=["https://objectstorage.{{ .Values.global.region }}.oraclecloud.com/n/{{ .Values.global.oci_bucket_namespace }}/b"]
       cloudstorage.mecloudstorage.metadata.list={{ .Values.cloudstorage_metadatalist }}
-      cloud_storage_container="{{ .Values.global.public_container_name }}"
-      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
+      cloud_storage_container="{{ .Values.global.oci_public_container_name }}/o"
+      schema.basePath="https://objectstorage.{{ .Values.global.region }}.oraclecloud.com/n/{{ .Values.global.oci_bucket_namespace }}/b/{{ .Values.global.oci_public_container_name }}/o/schemas/local"
 
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
@@ -300,11 +314,13 @@ flink_jobs:
       }
 
       schema {
-        basePath = "{{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_read_base_path "context" $) }}/{{ .Values.global.public_container_name }}/schemas/local/content/"
+        basePath = "{{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_read_base_path "context" $) }}/{{ .Values.global.oci_public_container_name }}/o/schemas/local/content/"
+
       }
 
+
       channel.default = "org.sunbird"
-      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
+      schema.basePath="https://objectstorage.{{ .Values.global.region }}.oraclecloud.com/n/{{ .Values.global.oci_bucket_namespace }}/b/{{ .Values.global.oci_public_container_name }}/o/schemas/local"
 
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
@@ -372,10 +388,9 @@ flink_jobs:
       cloud_storage_type="{{ .Values.global.sunbird_cloud_storage_provider }}"
       cloud_storage_key="{{ .Values.global.cloud_storage_access_key }}"
       cloud_storage_secret="{{ .Values.global.cloud_storage_secret_key }}"
-      cloud_storage_container="{{ .Values.global.public_container_name }}"
+      cloud_storage_container="{{ .Values.global.public_container_name }}/o"
       cloud_storage_endpoint=""
-      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
-
+      schema.basePath="https://objectstorage.{{ .Values.global.region }}.oraclecloud.com/n/{{ .Values.global.oci_bucket_namespace }}/b/{{ .Values.global.oci_public_container_name }}/o/schemas/local"
 
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
@@ -451,10 +466,9 @@ flink_jobs:
       cloud_storage_type="{{ .Values.global.cloud_storage_provider }}"
       cloud_storage_key="{{ .Values.global.cloud_storage_access_key }}"
       cloud_storage_secret="{{ .Values.global.cloud_storage_secret_key }}"
-      cloud_storage_container="{{ .Values.global.public_container_name }}"
+      cloud_storage_container="{{ .Values.global.public_container_name }}/o"
       cloud_storage_endpoint=""
-      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
-
+      schema.basePath="https://objectstorage.{{ .Values.global.region }}.oraclecloud.com/n/{{ .Values.global.oci_bucket_namespace }}/b/{{ .Values.global.oci_public_container_name }}/o/schemas/local"
 
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
@@ -509,8 +523,7 @@ flink_jobs:
       }
 
       es_sync_wait_time = 5000
-      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
-
+      schema.basePath="https://objectstorage.{{ .Values.global.region }}.oraclecloud.com/n/{{ .Values.global.oci_bucket_namespace }}/b/{{ .Values.global.oci_public_container_name }}/o/schemas/local"
 
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
@@ -578,10 +591,9 @@ flink_jobs:
       cloud_storage_type="{{ .Values.global.sunbird_cloud_storage_provider }}"
       cloud_storage_key="{{ .Values.global.cloud_storage_access_key }}"
       cloud_storage_secret="{{ .Values.global.cloud_storage_secret_key }}"
-      cloud_storage_container="{{ .Values.global.public_container_name }}"
+      cloud_storage_container="{{ .Values.global.public_container_name }}/o"
       cloud_storage_endpoint=""
-      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
-
+      schema.basePath="https://objectstorage.{{ .Values.global.region }}.oraclecloud.com/n/{{ .Values.global.oci_bucket_namespace }}/b/{{ .Values.global.oci_public_container_name }}/o/schemas/local"
 
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
@@ -701,7 +713,7 @@ flink_jobs:
       }
 
       media_service_job_success_status=["FINISHED", "COMPLETE"]
-      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
+      schema.basePath="https://objectstorage.{{ .Values.global.region }}.oraclecloud.com/n/{{ .Values.global.oci_bucket_namespace }}/b/{{ .Values.global.oci_public_container_name }}/o/schemas/local"
 
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
@@ -741,7 +753,7 @@ flink_jobs:
       }
 
       timezone = "IST"
-      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
+      schema.basePath="https://objectstorage.{{ .Values.global.region }}.oraclecloud.com/n/{{ .Values.global.oci_bucket_namespace }}/b/{{ .Values.global.oci_public_container_name }}/o/schemas/local"
 
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
@@ -936,9 +948,9 @@ flink_jobs:
       cloud_storage_type="{{ .Values.global.sunbird_cloud_storage_provider }}"
       cloud_storage_key="{{ .Values.global.cloud_storage_access_key }}"
       cloud_storage_secret="{{ .Values.global.cloud_storage_secret_key }}"
-      cloud_storage_container="{{ .Values.global.public_container_name }}"
+      cloud_storage_container="{{ .Values.global.public_container_name }}/o"
       cloud_storage_endpoint=""
-      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
+      schema.basePath="https://objectstorage.{{ .Values.global.region }}.oraclecloud.com/n/{{ .Values.global.oci_bucket_namespace }}/b/{{ .Values.global.oci_public_container_name }}/o/schemas/local"
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
       taskmanager.memory.flink.size: 1024m

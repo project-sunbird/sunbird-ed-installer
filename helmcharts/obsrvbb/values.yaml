@@ -328,7 +328,7 @@ confVolume: &confVolume
               jar_location="$data_path/content-snapshot.zip"
               [[ -d $data_path ]] || mkdir -p $data_path
               # Download the ZIP file
-              [[ -f $jar_location ]] || curl -o $data_path/content-snapshot.zip "https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/artifacts-{{.Values.global.release_version}}/content-snapshot.zip"
+              #[[ -f $jar_location ]] || curl -o $data_path/content-snapshot.zip "https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/artifacts-{{.Values.global.release_version}}/content-snapshot.zip"
               curl -o /data/analytics/spark-3.1.3-bin-hadoop2.7.tgz "https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/artifacts-{{.Values.global.release_version}}/spark-3.1.3-bin-hadoop2.7.tgz"
               unzip -o $jar_location -d $data_path
 
@@ -339,16 +339,17 @@ confVolume: &confVolume
               extracted_location="$data_path/sunbird-obsrv-1.0-bkp"
               # Create the target directory if it doesn't exist
               [[ -d $data_path ]] || mkdir -p $data_path
+              mkdir -p /data/analytics/content-snapshot/logs
 
               # Download the ZIP file if it doesn't exist
-              [[ -f $jar_location_sbob ]] || curl -o $jar_location_sbob "https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/artifacts-{{.Values.global.release_version}}/sunbird-obsrv-1.0-v3.zip"
+              # [[ -f $jar_location_sbob ]] || curl -o $jar_location_sbob "https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/artifacts-{{.Values.global.release_version}}/sunbird-obsrv-1.0-v3.zip"
 
               # Extract the ZIP file if not already extracted
-              [[ -d $extracted_location ]] || unzip -o $jar_location_sbob -d $data_path
+              # [[ -d $extracted_location ]] || unzip -o $jar_location_sbob -d $data_path
 
               # Copy all files from the extracted directory to /data/analytics
-              cp -R "$extracted_location"/* "$data_path"
-              rm "$jar_location_sbob"
+              # cp -R "$extracted_location"/* "$data_path"
+              # rm "$jar_location_sbob"
               ls $data_path
 
               # adhoc-dataproducts
@@ -356,10 +357,10 @@ confVolume: &confVolume
               adhoc_extracted_loc="$data_path/dataproducts.tar.gz"
 
               # dowload the tar.gz adhoc dataproducts
-              curl -o $data_path/dataproducts.zip https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/artifacts-{{.Values.global.release_version}}/dataproducts_artifacts_release-3.6.zip
+              # curl -o $data_path/dataproducts.zip https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/artifacts-{{.Values.global.release_version}}/dataproducts_artifacts_release-3.6.zip
 
               # Extract the ZIP file if not already extracted
-              [[ -d $adhoc_extracted_loc ]] || unzip -o $adhoc_loc -d $data_path
+              #[[ -d $adhoc_extracted_loc ]] || unzip -o $adhoc_loc -d $data_path
 
 spark: &spark
   enabled: true

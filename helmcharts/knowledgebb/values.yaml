@@ -170,7 +170,7 @@ kafka: &kafka
 play_http: &play_http
   secret_key: "secretKey"
 schema: &schema
-  base_path: "https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
+  base_path: "https://objectstorage.{{ .Values.global.region }}.oraclecloud.com/n/{{ .Values.global.oci_bucket_namespace }}/b/{{ .Values.global.oci_public_container_name }}/o/schemas/local"
 graph_passport: &graph_passport
   key_base: "secretKey"
 installation: &installation

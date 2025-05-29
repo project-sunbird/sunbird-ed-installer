@@ -19,6 +19,6 @@ data:
     export aws_storage_secret=
     export cloud_storage_key={{ .Values.global.cloud_storage_access_key }}
     export cloud_storage_secret={{ .Values.global.cloud_storage_secret_key }}
-    export gcloud_storage_secret="{{ .Values.global.cloud_storage_secret_key }}"
-    export gcloud_client_key="{{ .Values.global.cloud_storage_access_key }}"
-    export gcloud_private_secret="{{ .Values.global.cloud_storage_secret_key }}"
+    export oci_storage_secret="{{ .Values.global.cloud_storage_secret_key }}"
+    export oci_client_key="{{ .Values.global.cloud_storage_access_key }}"
+    export oci_private_secret="{{ .Values.global.cloud_storage_secret_key }}"

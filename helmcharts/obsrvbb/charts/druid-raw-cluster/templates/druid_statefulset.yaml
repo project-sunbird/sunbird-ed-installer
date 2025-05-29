@@ -67,33 +67,46 @@ spec:
     druid.metadata.storage.connector.password={{ .Values.global.postgresql.postgresqlPassword }}
 
     # Deep storage
-    druid.storage.type={{ .Values.global.cloud_service_provider }}
-    # AWS
-    # Azure
-    druid.azure.account = {{ .Values.global.cloud_storage_access_key }}
-    druid.azure.key = {{ .Values.global.cloud_storage_secret_key }}
-    druid.azure.container = {{ .Values.global.public_container_name }}/reports
-    #druid.storage.storageDirectory = {{ .Values.druid_storage_directory }}
-    druid.storage.disableAcl=true
+    druid.storage.type={{ .Values.global.druid_storage_provider }}
+    # AWS or Oracle
+    druid.storage.baseKey=druid/segments
+    druid.storage.bucket={{ .Values.global.public_container_name }}
+    druid.s3.accessKey={{ .Values.global.s3_secret_key }}
+    druid.s3.secretKey={{ .Values.global.s3_access_key }}
+    druid.s3.endpoint.url={{ .Values.global.s3_endpoint }}
+    druid.s3.enablePathStyleAccess=true
 
-    druid.google.bucket = {{ .Values.global.public_container_name }}
-    druid.google.prefix = druid/segments
+    # Azure
+    #druid.azure.account = {{ .Values.global.cloud_storage_access_key }}
+    #druid.azure.key = {{ .Values.global.cloud_storage_secret_key }}
+    #druid.azure.container = {{ .Values.public_container_name }}
+    #druid.storage.storageDirectory = {{ .Values.druid_storage_directory }}
+    #druid.storage.disableAcl=true
+
+    #druid.google.bucket = {{ .Values.global.public_container_name }}
+    #druid.google.prefix = druid/segments
 
 
     # # Indexing service logs
     # # For local disk (only viable in a cluster if this is a network mount):
-    druid.indexer.logs.type={{ .Values.global.cloud_service_provider }}
+    druid.indexer.logs.type={{ .Values.global.druid_storage_provider }}
     druid.indexer.logs.prefix={{ .Values.druid_indexer_logs_prefix }}
-    druid.indexer.logs.disableAcl=true
+    #druid.indexer.logs.disableAcl=true
 
     {{- if eq .Values.global.cloud_service_provider "azure" }}
-    druid.indexer.logs.container={{ .Values.global.public_container_name }}/reports
-    druid.indexer.logs.s3Bucket={{ .Values.global.public_container_name }}/reports
+    druid.indexer.logs.container={{ .Values.druid_indexer_logs_container }}
+    druid.indexer.logs.s3Bucket={{ .Values.public_container_name }}
     druid.indexer.logs.s3Prefix= {{ .Values.druid_indexer_logs_prefix }}
     {{- end }}
 
     {{- if eq .Values.global.cloud_service_provider "google" }}
     druid.indexer.logs.bucket={{ .Values.global.public_container_name }}/reports
+    {{- end }}
+
+    {{- if eq .Values.global.cloud_service_provider "oracle" }}
+    druid.indexer.logs.container={{ .Values.druid_indexer_logs_container }}
+    druid.indexer.logs.s3Bucket={{ .Values.global.public_container_name }}
+    druid.indexer.logs.s3Prefix= {{ .Values.druid_indexer_logs_prefix }}
     {{- end }}
 
     # Service discovery

@@ -22,6 +22,9 @@ def generate_jwt_token(key, secret, random_string):
 def replace_placeholders(template_content, token_dict):
     for key, token in token_dict.items():
         placeholder = f"{{{{{key}}}}}"
+        # Ensure the token is a string
+        if isinstance(token, bytes):
+            token = token.decode('utf-8')  # Or the appropriate encoding
         template_content = template_content.replace(placeholder, token)
 
     return template_content

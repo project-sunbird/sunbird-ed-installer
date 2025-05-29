@@ -289,6 +289,11 @@ base_config: |
         base.url = "s3://{{ .Values.global.public_container_name }}/checkpoint"
       }
 
+      {{- else if eq "s3" .Values.global.checkpoint_store_type }}
+      statebackend {
+        base.url = "s3://{{ .Values.global.public_container_name }}/checkpoint" # Assuming a different variable for S3 container name
+      }
+
       {{- else if eq "azure" .Values.global.checkpoint_store_type }}
       statebackend {
         base.url = "wasbs://{{ .Values.global.public_container_name }}@{{ .Values.global.object_storage_endpoint }}/checkpoint"
