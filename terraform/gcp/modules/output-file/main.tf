@@ -19,6 +19,7 @@ content  = templatefile("${path.module}/global-cloud-values.yaml.tfpl", {
     storage_class                                 = var.storage_class
     cloud_storage_provider                        = var.cloud_storage_provider
     cloud_storage_region                          = var.cloud_storage_region
+    cloud_storage_private_key_id                  = var.cloud_storage_private_key_id
   })
   filename = local.global_values_cloud_file
 }
