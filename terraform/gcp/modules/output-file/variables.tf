@@ -98,3 +98,10 @@ variable "cloud_storage_private_key_id" {
   type        = string
   default     = ""
 }
+
+variable "velero_storage_container_private" {
+  description = "The name of the private storage container for Velero backups."
+  type        = string
+  default     = ""
+  
+}

@@ -21,6 +21,8 @@ dependency "storage" {
     mock_outputs = {
       gcp_public_container_name = "dummy"
       gcp_private_container_name = "dummy"
+      gcp_dial_state_container_public = "dummy"
+      gcp_velero_storage_container_private = "dummy"
     }
 }
 
@@ -58,6 +60,7 @@ inputs = {
   random_string                      = dependency.keys.outputs.random_string
   cloud_storage_region               = local.region
   dial_state_container_public        = dependency.storage.outputs.gcp_dial_state_container_public
+  velero_storage_container_private   = dependency.storage.outputs.gcp_velero_storage_container_private
   gcp_project_id                     = local.project
   gcp_storage_bucket_key             = dependency.service-account.outputs.service_account_private_key
   gcp_storage_account_mail           = dependency.service-account.outputs.service_account_key_email

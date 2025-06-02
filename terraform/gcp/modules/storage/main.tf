@@ -39,11 +39,12 @@ resource "google_storage_bucket" "storage_container_public" {
   }
 }
 
-resource "google_storage_bucket_iam_member" "full_access_public" {
+resource "google_storage_bucket_iam_member" "read_write_public" {
   bucket = google_storage_bucket.storage_container_public.name
-  role   = "roles/storage.admin"
+  role   = "roles/storage.objectAdmin"
   member = "allUsers"
 }
+
 
 resource "google_storage_bucket" "storage_container_private" {
   project       = var.project
@@ -80,6 +81,21 @@ resource "google_storage_bucket" "dial_state_container_public" {
 
 resource "google_storage_bucket_iam_member" "full_access_dial" {
   bucket = google_storage_bucket.dial_state_container_public.name
-  role   = "roles/storage.admin"
+  role   = "roles/storage.objectAdmin"
   member = "allUsers"
 }
+
+
+resource "google_storage_bucket" "velero_storage_container_private" {
+  project       = var.project
+  name          = "${local.environment_name}-velero-private-${local.unique_uuid}"
+  location      = var.region
+  force_destroy = true
+
+  versioning {
+    enabled = true
+  }
+
+  uniform_bucket_level_access = true
+}
+

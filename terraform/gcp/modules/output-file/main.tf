@@ -12,6 +12,7 @@ content  = templatefile("${path.module}/global-cloud-values.yaml.tfpl", {
     gcp_public_container_name                     = var.storage_container_public,
     gcp_private_container_name                    = var.storage_container_private,
     gcp_dial_state_container_public               = var.dial_state_container_public,
+    gcp_velero_storage_container_private = var.velero_storage_container_private,
     random_string                                 = var.random_string,
     private_ingressgateway_ip                     = var.private_ingressgateway_ip,
     encryption_string                             = var.encryption_string,

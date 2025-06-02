@@ -9,6 +9,7 @@ metadata:
   {{- end }}
 data:
   telemetry_kafka_broker_list: {{ quote (printf "%s:%s" .Values.global.kafka.host (toString .Values.global.kafka.port)) | nindent 4 }}
+  telemetry_kafka_topic: "{{ .Values.global.env }}.telemetry.ingest"
 {{- range $key, $value := .Values.sunbird_telemetry_service }}
   {{ $key }}: {{ quote $value | nindent 4 }}
 {{- end }}

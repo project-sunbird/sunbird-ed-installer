@@ -4,6 +4,7 @@ global:
   public_container_name: ${gcp_public_container_name}
   private_container_name: ${gcp_private_container_name}
   dial_state_container_public: ${gcp_dial_state_container_public}
+  velero_container_name: ${gcp_velero_storage_container_private}
   private_ingressgateway_ip: ${private_ingressgateway_ip}
   encryption__string: ${encryption_string}
   random_string: ${random_string}

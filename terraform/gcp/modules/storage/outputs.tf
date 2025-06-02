@@ -8,3 +8,8 @@ output "gcp_private_container_name" {
 output "gcp_dial_state_container_public" {
   value = google_storage_bucket.dial_state_container_public.name
 }
+
+
+output "gcp_velero_storage_container_private" {
+  value = google_storage_bucket.velero_storage_container_private.name
+}
