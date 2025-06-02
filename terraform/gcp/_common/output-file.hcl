@@ -8,6 +8,7 @@ locals {
   region = local.global_vars.global.cloud_storage_region
   project = local.global_vars.global.cloud_storage_project
   cloud_storage_provider = local.global_vars.global.cloud_storage_provider
+  
 }
 
 # For local development
@@ -42,6 +43,7 @@ dependency "keys" {
    mock_outputs = {
      service_account_key_local_path = "service_account_key_local_path" 
      service_account_email         = "dummy-service_account_email"
+     cloud_storage_private_key_id = "dummy-cloud_storage_private_key_id"
   }
 }
 
@@ -62,4 +64,5 @@ inputs = {
   storage_class                      = dependency.gke.outputs.storage_class
   cloud_storage_provider             = local.cloud_storage_provider
   cloud_storage_region               = local.region
+  cloud_storage_private_key_id       = dependency.service-account.outputs.cloud_storage_private_key_id
 }

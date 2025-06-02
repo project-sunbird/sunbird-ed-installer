@@ -14,3 +14,9 @@ output "service_account_private_key" {
   description = "The private key of the service account in a single line."
   sensitive   = true
 }
+
+output "cloud_storage_private_key_id" {
+  value       = jsondecode(base64decode(google_service_account_key.service_account.private_key)).private_key_id
+  description = "The private key ID of the service account used for cloud storage."
+  sensitive   = true
+}

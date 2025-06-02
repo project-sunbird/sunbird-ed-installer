@@ -92,3 +92,9 @@ variable "cloud_storage_region" {
   type        = string
   default     = ""
 }
+
+variable "cloud_storage_private_key_id" {
+  description = "The private key ID for the cloud storage provider."
+  type        = string
+  default     = ""
+}
