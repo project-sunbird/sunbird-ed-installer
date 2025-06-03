@@ -23,6 +23,7 @@ dependency "storage" {
       azurerm_storage_container_private = "dummy-container-private"
       azurerm_storage_account_key = "dummy-key"
       azurerm_dial_state_container_public = "dummy-container-dail"
+      azure_velero_container_name = "dummy-velero-container"
     }
 }
 
@@ -50,6 +51,7 @@ inputs = {
   encryption_string                  = dependency.keys.outputs.encryption_string
   random_string                      = dependency.keys.outputs.random_string
   dial_state_container_public        = dependency.storage.outputs.azurerm_dial_state_container_public
+  velero_storage_container_private = dependency.storage.outputs.azure_velero_container_name
    cloud_storage_provider            = local.cloud_storage_provider
 
 }

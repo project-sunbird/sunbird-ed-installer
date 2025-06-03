@@ -60,6 +60,11 @@ resource "azurerm_storage_container" "storage_container_private" {
   container_access_type = "private"
 }
 
+resource "azurerm_storage_container" "velero_storage_container_private" {
+  name                  = "${local.environment_name}-velero-private-${local.unique_uuid}"
+  storage_account_name  = azurerm_storage_account.storage_account.name
+  container_access_type = "private"
+}
 resource "azurerm_storage_container" "storage_container_public" {
   name                  = "${local.environment_name}-public-${local.unique_uuid}"
   storage_account_name  = azurerm_storage_account.storage_account.name

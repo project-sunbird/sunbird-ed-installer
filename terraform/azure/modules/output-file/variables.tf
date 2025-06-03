@@ -69,3 +69,10 @@ variable "cloud_storage_provider" {
   type        = string
   default     = ""
 }
+
+
+variable "azure_velero_container_name" {
+  description = "The name of the Velero storage container."
+  type        = string
+  default     = ""
+}
