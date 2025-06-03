@@ -568,10 +568,10 @@ kube-prometheus-stack:
 velero:
   resources: 
     limits:
-      cpu: 1000m
+      cpu: 0.1
       memory: 1024Mi
     requests:
-      cpu: 500m
+      cpu: 0.1
       memory: 512Mi
   nodeAgent:
     resources:
