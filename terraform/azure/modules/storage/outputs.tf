@@ -20,5 +20,5 @@ output "azurerm_dial_state_container_public" {
 }
 
 output "azure_velero_container_name" {
-  value = azurerm_storage_container.azure_velero_container.name
+  value = azurerm_storage_container.velero_storage_container_private.name
 }
