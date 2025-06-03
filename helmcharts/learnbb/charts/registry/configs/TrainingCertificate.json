@@ -71,6 +71,6 @@
 		],
 		"systemFields": ["osCreatedAt", "osUpdatedAt", "osCreatedBy", "osUpdatedBy"],
 		"enableLogin": false,
-		"credentialTemplate": "https:///{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/credential_template.json"
+		"credentialTemplate": "https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/credential_template.json"
 	}
 }

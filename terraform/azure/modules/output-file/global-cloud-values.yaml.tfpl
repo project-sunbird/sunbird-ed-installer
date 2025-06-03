@@ -7,11 +7,15 @@ global:
   public_container_name: ${azure_public_container_name}
   private_container_name: ${azure_private_container_name}
   dial_state_container_public: ${azure_dial_state_container_name}
+  velero_storage_container_private: ${azure_velero_container_name}
   private_ingressgateway_ip: ${private_ingressgateway_ip}
   encryption__string: ${encryption_string}
   random_string: ${random_string}
   object_storage_endpoint: ${azure_storage_account_name}.blob.core.windows.net
-
+  storage_class: managed-premium
+  cloud_storage_provider:  ${cloud_storage_provider}
+  serviceAccount: 
+    create: false
 
 
 velero:
@@ -21,16 +25,28 @@ velero:
     secretContents:
       cloud: |
         AZURE_STORAGE_ACCOUNT_NAME: ${azure_storage_account_name}
-        AZURE_STORAGE_ACCOUNT_KEY: ${azure_storage_account_key}
+        AZURE_STORAGE_ACCOUNT_KEY: ${azure_storage_account_key}                  
   configuration:
-    backupStorageLocation:
-      - name: default
-        provider: "azure"
-        bucket: ${azure_public_container_name}/backups
-        config:
-          storageAccount: ${azure_storage_account_name}
-          storageAccountKeyEnvVar: AZURE_STORAGE_ACCOUNT_KEY
+      backupStorageLocation:
+        - name: default
+          provider: "${cloud_storage_provider}"
+          bucket: "${azure_private_container_name}"
+          prefix: backups
+          config:
+            storageAccount: ${azure_storage_account_name} 
+            storageAccountKeyEnvVar: AZURE_STORAGE_ACCOUNT_KEY
+      volumeSnapshotLocation:
+        - name: default
+          provider: "${cloud_storage_provider}" 
+  initContainers:
+  - name: velero-plugin-for-azure
+    image: velero/velero-plugin-for-microsoft-azure:v1.2.0
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+      - mountPath: /target
+        name: plugins   
+
 nginx-public-ingress:
   commonAnnotations:
     reloader.stakater.com/auto: "true"
-    service.beta.kubernetes.io/azure-load-balancer-external: "true"                     
+    service.beta.kubernetes.io/azure-load-balancer-external: "true" 

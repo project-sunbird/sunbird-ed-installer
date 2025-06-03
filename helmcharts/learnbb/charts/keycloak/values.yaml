@@ -4,7 +4,7 @@ fullnameOverride: "keycloak"
 replicaCount: 1
 
 image:
-  repository: keshavprasad/keycloak
+  repository: sunbirded.azurecr.io/keycloak
   tag: "7.0.1"
   pullPolicy: IfNotPresent
   pullSecrets: []

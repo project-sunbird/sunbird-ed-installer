@@ -7,8 +7,8 @@ replicaCount: 1
 #   tag: "release-5.2.0_RC1_2c615f8_12"
 # docker pull sunbirded.azurecr.io/sunbird-datapipeline:release-4.9.0_RC4_1
 image:
-  repository: sunbirded.azurecr.io/sunbird-datapipeline
-  tag: "release-5.2.0_RC8_9610bc7_13"
+  repository:  sunbirded.azurecr.io/sunbird-datapipeline
+  tag: "release-5.2.0_RC8_9610bc7_13_be0895d"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
@@ -77,8 +77,7 @@ configmap:
   mountPath: /config
 
 serviceAccount:
-  create: true
-  name: ""
+  create: false
 
 serviceMonitor:
   enabled: false
@@ -135,7 +134,7 @@ azure_secret: "azure-secret"
 
 # Azure Container Details
 checkpoint_store_type: "azure"
-cloud_storage_flink_bucketname: "{{ .Values.global.public_container_name }}"
+cloud_storage_flink_bucketname: "{{ .Values.global.private_container_name }}"
 cloud_storage_content_bucketname: sunbird-content-dev
 cert_container_name: dev-e-credentials
 cloud_storage_endpoint: https://{{ .Values.global.object_storage_endpoint }}
@@ -287,17 +286,17 @@ base_config: |
 
       {{- if eq "oci" .Values.global.checkpoint_store_type }}
       statebackend {
-        base.url = "s3://{{ .Values.global.public_container_name }}/checkpoint"
+        base.url = "s3://{{ .Values.global.private_container_name }}/checkpoint"
       }
 
       {{- else if eq "azure" .Values.global.checkpoint_store_type }}
       statebackend {
-        base.url = "wasbs://{{ .Values.global.public_container_name }}@{{ .Values.global.object_storage_endpoint }}/checkpoint"
+        base.url = "wasbs://{{ .Values.global.private_container_name }}@{{ .Values.global.object_storage_endpoint }}/checkpoint"
       }
 
       {{- else if eq "gcs" .Values.global.checkpoint_store_type }}
       statebackend {
-        base.url = "gs://{{ .Values.global.public_container_name }}/checkpoint"
+        base.url = "gs://{{ .Values.global.private_container_name }}/checkpoint"
       }
       {{- else }}
       # No valid checkpoint_store_type configured, skipping statebackend.
@@ -343,47 +342,47 @@ base_config: |
       }
 
 flink_jobs:
-  ingest-router:
-    enabled: true
-    config: |+
-      include file("/data/flink/conf/base-config.conf")
-      kafka {
-        producer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
-        consumer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
-        ingest {
-          input.topic = {{ .Values.global.env }}.telemetry.ingestion
-          output.success.topic = {{ .Values.global.env }}.telemetry.ingest
-        }
-        raw {
-          input.topic = "{{ .Values.global.env }}.telemetry.raw"
-          output.success.topic = "{{ .Values.global.env }}.telemetry.raw"
-        }
-        groupId = {{ .Values.global.env }}-ingest-router-group
-        producer {
-          max-request-size = {{ .Values.extractor_max_request_size }}
-        }
-      }
-      task {
-        consumer.parallelism = {{ .Values.ingest_router_consumer_parallelism }}
-        downstream.operators.parallelism = {{ .Values.ingest_router_operators_parallelism }}
-        raw {
-        consumer.parallelism = {{ .Values.raw_router_consumer_parallelism }}
-        downstream.operators.parallelism = {{ .Values.raw_router_downstream_parallelism }}
-        }
-      }
-    flink-conf: |+
-      jobmanager.memory.flink.size: 1024m
-      taskmanager.memory.flink.size: 1024m
-      taskmanager.numberOfTaskSlots: 1
-      parallelism.default: 1
-      jobmanager.execution.failover-strategy: region
-      taskmanager.memory.network.fraction: 0.1
-      scheduler-mode: reactive
-      heartbeat.timeout: 8000
-      heartbeat.interval: 5000
-      taskmanager.memory.process.size: 1700m
-      jobmanager.memory.process.size: 1600m
-    job_classname: org.sunbird.dp.ingestrouter.task.IngestRouterStreamTask
+  # ingest-router:
+  #   enabled: false
+  #   config: |+
+  #     include file("/data/flink/conf/base-config.conf")
+  #     kafka {
+  #       producer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
+  #       consumer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
+  #       ingest {
+  #         input.topic = {{ .Values.global.env }}.telemetry.ingestion
+  #         output.success.topic = {{ .Values.global.env }}.telemetry.ingest
+  #       }
+  #       raw {
+  #         input.topic = "{{ .Values.global.env }}.telemetry.raw"
+  #         output.success.topic = "{{ .Values.global.env }}.telemetry.raw"
+  #       }
+  #       groupId = {{ .Values.global.env }}-ingest-router-group
+  #       producer {
+  #         max-request-size = {{ .Values.extractor_max_request_size }}
+  #       }
+  #     }
+  #     task {
+  #       consumer.parallelism = {{ .Values.ingest_router_consumer_parallelism }}
+  #       downstream.operators.parallelism = {{ .Values.ingest_router_operators_parallelism }}
+  #       raw {
+  #       consumer.parallelism = {{ .Values.raw_router_consumer_parallelism }}
+  #       downstream.operators.parallelism = {{ .Values.raw_router_downstream_parallelism }}
+  #       }
+  #     }
+  #   flink-conf: |+
+  #     jobmanager.memory.flink.size: 1024m
+  #     taskmanager.memory.flink.size: 1024m
+  #     taskmanager.numberOfTaskSlots: 1
+  #     parallelism.default: 1
+  #     jobmanager.execution.failover-strategy: region
+  #     taskmanager.memory.network.fraction: 0.1
+  #     scheduler-mode: reactive
+  #     heartbeat.timeout: 8000
+  #     heartbeat.interval: 5000
+  #     taskmanager.memory.process.size: 1700m
+  #     jobmanager.memory.process.size: 1600m
+  #   job_classname: org.sunbird.dp.ingestrouter.task.IngestRouterStreamTask
 
   telemetry-extractor:
     enabled: true
@@ -956,4 +955,3 @@ assessment_aggregator_job_classname: org.sunbird.dp.assessment.task.AssessmentAg
 
 commonAnnotations:
   reloader.stakater.com/auto: "true"
-

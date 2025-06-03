@@ -5,7 +5,7 @@ replicaCount: 1
 
 image:
   repository: sunbirded.azurecr.io/knowledge-platform-jobs
-  tag: "release-5.7.0_RC3_18c0d23_90"
+  tag: "release-5.7.0_RC3_7041b60"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
@@ -62,7 +62,7 @@ configmap:
   mountPath: /config
 
 serviceAccount:
-  create: true
+  create: false
 
 serviceMonitor:
   enabled: false
@@ -170,17 +170,17 @@ base_config: |
 
     {{- if eq "oci" .Values.global.checkpoint_store_type }}
     statebackend {
-      base.url = "s3://{{ .Values.global.public_container_name }}/checkpoint"
+      base.url = "s3://{{ .Values.global.private_container_name }}/checkpoint"
     }
 
     {{- else if eq "azure" .Values.global.checkpoint_store_type }}
     statebackend {
-      base.url = "wasbs://{{ .Values.global.public_container_name }}@{{ .Values.global.object_storage_endpoint }}/checkpoint"
+      base.url = "wasbs://{{ .Values.global.private_container_name }}@{{ .Values.global.object_storage_endpoint }}/checkpoint"
     }
 
     {{- else if eq "gcs" .Values.global.checkpoint_store_type }}
     statebackend {
-      base.url = "gs://{{ .Values.global.public_container_name }}/checkpoint"
+      base.url = "gs://{{ .Values.global.private_container_name }}/checkpoint"
     }
     {{- else }}
     # No valid checkpoint_store_type configured, skipping statebackend.
@@ -258,6 +258,7 @@ flink_jobs:
       cloudstorage.write_base_path=["https://{{ .Values.global.object_storage_endpoint }}"] 
       cloudstorage.mecloudstorage.metadata.list={{ .Values.cloudstorage_metadatalist }}
       cloud_storage_container="{{ .Values.global.public_container_name }}"
+      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
 
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
@@ -303,6 +304,7 @@ flink_jobs:
       }
 
       channel.default = "org.sunbird"
+      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
 
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
@@ -367,11 +369,12 @@ flink_jobs:
       cloudstorage.write_base_path={{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_write_base_path "context" $) }}
       cloudstorage.metadata.list={{ .Values.cloudstorage_metadatalist }}
 
-      cloud_storage_type="{{ .Values.global.checkpoint_store_type }}"
+      cloud_storage_type="{{ .Values.global.sunbird_cloud_storage_provider }}"
       cloud_storage_key="{{ .Values.global.cloud_storage_access_key }}"
       cloud_storage_secret="{{ .Values.global.cloud_storage_secret_key }}"
       cloud_storage_container="{{ .Values.global.public_container_name }}"
       cloud_storage_endpoint=""
+      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
 
 
     flink-conf: |+
@@ -445,11 +448,12 @@ flink_jobs:
       cloudstorage.write_base_path={{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_write_base_path "context" $) }}
       cloudstorage.metadata.list={{ .Values.cloudstorage_metadatalist }}
 
-      cloud_storage_type="{{ .Values.global.checkpoint_store_type }}"
+      cloud_storage_type="{{ .Values.global.cloud_storage_provider }}"
       cloud_storage_key="{{ .Values.global.cloud_storage_access_key }}"
       cloud_storage_secret="{{ .Values.global.cloud_storage_secret_key }}"
       cloud_storage_container="{{ .Values.global.public_container_name }}"
       cloud_storage_endpoint=""
+      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
 
 
     flink-conf: |+
@@ -505,6 +509,7 @@ flink_jobs:
       }
 
       es_sync_wait_time = 5000
+      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
 
 
     flink-conf: |+
@@ -570,11 +575,12 @@ flink_jobs:
       cloudstorage.write_base_path=["{{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_read_base_path "context" $) }}"]
       cloudstorage.metadata.list={{ .Values.cloudstorage_metadatalist }}
 
-      cloud_storage_type="{{ .Values.global.checkpoint_store_type }}"
+      cloud_storage_type="{{ .Values.global.sunbird_cloud_storage_provider }}"
       cloud_storage_key="{{ .Values.global.cloud_storage_access_key }}"
       cloud_storage_secret="{{ .Values.global.cloud_storage_secret_key }}"
       cloud_storage_container="{{ .Values.global.public_container_name }}"
       cloud_storage_endpoint=""
+      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
 
 
     flink-conf: |+
@@ -695,6 +701,7 @@ flink_jobs:
       }
 
       media_service_job_success_status=["FINISHED", "COMPLETE"]
+      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
 
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
@@ -734,6 +741,7 @@ flink_jobs:
       }
 
       timezone = "IST"
+      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
 
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
@@ -925,11 +933,12 @@ flink_jobs:
       cloudstorage.write_base_path={{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_write_base_path "context" $) }}
       cloudstorage.metadata.list={{ .Values.cloudstorage_metadatalist }}
 
-      cloud_storage_type="{{ .Values.global.checkpoint_store_type }}"
+      cloud_storage_type="{{ .Values.global.sunbird_cloud_storage_provider }}"
       cloud_storage_key="{{ .Values.global.cloud_storage_access_key }}"
       cloud_storage_secret="{{ .Values.global.cloud_storage_secret_key }}"
       cloud_storage_container="{{ .Values.global.public_container_name }}"
       cloud_storage_endpoint=""
+      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
       taskmanager.memory.flink.size: 1024m

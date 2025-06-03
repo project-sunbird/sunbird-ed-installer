@@ -7,7 +7,9 @@ metadata:
   name: "{{ .Values.druid_cluster_type }}"
 spec:
   image: "{{ .Values.druid_image }}"
-  serviceAccount: "{{ include "druid-raw-cluster.serviceAccount.name" . }}"
+  {{- if .Values.global.serviceAccount.create }}
+  serviceAccount: {{ .Values.global.serviceAccount.name }}
+  {{- end }}
   startScript: /druid.sh
   # podLabels:
   #   release: alpha
@@ -65,14 +67,29 @@ spec:
     druid.metadata.storage.connector.password={{ .Values.global.postgresql.postgresqlPassword }}
 
     # Deep storage
-    druid.storage.type={{ .Values.global.cloud_service_provider }}
-    # AWS
-    # Azure
-    druid.azure.account = {{ .Values.global.cloud_storage_access_key }}
-    druid.azure.key = {{ .Values.global.cloud_storage_secret_key }}
-    druid.azure.container = {{ .Values.global.public_container_name }}/reports
-    #druid.storage.storageDirectory = {{ .Values.druid_storage_directory }}
-    druid.storage.disableAcl=true
+      druid.storage.type={{ .Values.global.cloud_service_provider }}
+      {{- if eq .Values.global.cloud_service_provider "s3" }}
+      druid.s3.accessKey = {{ .Values.global.cloud_storage_access_key }}
+      druid.s3.secretKey = {{ .Values.global.cloud_storage_secret_key }}
+      druid.storage.bucket= {{ .Values.global.private_container_name }}
+      druid.storage.baseKey={{ .Values.druid_storage_baseKey }}
+      druid.s3.endpoint.url={{ .Values.druid_s3_endpoint_url }}
+      druid.s3.endpoint.signingRegion={{ .Values.druid_s3_endpoint_signingRegion }}
+      druid.s3.protocol={{ .Values.druid_s3_protocol }}
+      druid.s3.enablePathStyleAccess={{ .Values.druid_s3_path_style_access }}
+      {{- end }}
+      {{- if eq .Values.global.cloud_service_provider "azure" }}
+      druid.azure.account = {{ .Values.global.cloud_storage_access_key }}
+      druid.azure.key = {{ .Values.global.cloud_storage_secret_key }}
+      druid.azure.container = {{ .Values.global.private_container_name }}
+      #druid.storage.storageDirectory = {{ .Values.druid_storage_directory }}
+      druid.azure.prefix = druid/segments
+      druid.storage.disableAcl=true
+      {{- end }}
+      {{- if eq .Values.global.cloud_service_provider "google" }}
+      druid.google.bucket = {{ .Values.global.private_container_name }}
+      druid.google.prefix = druid/segments
+      {{- end }}
 
 
     # # Indexing service logs
@@ -82,13 +99,17 @@ spec:
     druid.indexer.logs.disableAcl=true
 
     {{- if eq .Values.global.cloud_service_provider "azure" }}
-    druid.indexer.logs.container={{ .Values.global.public_container_name }}/reports
-    druid.indexer.logs.s3Bucket={{ .Values.global.public_container_name }}/reports
+    druid.indexer.logs.container={{ .Values.global.private_container_name }}
+    {{- end }}
+
+    {{- if eq .Values.global.cloud_service_provider "s3" }}
+    druid.indexer.logs.container={{ .Values.druid_indexer_logs_container }}
+    druid.indexer.logs.s3Bucket={{ .Values.s3_bucket }}
     druid.indexer.logs.s3Prefix= {{ .Values.druid_indexer_logs_prefix }}
     {{- end }}
 
     {{- if eq .Values.global.cloud_service_provider "google" }}
-    druid.indexer.logs.bucket={{ .Values.global.public_container_name }}/reports
+    druid.indexer.logs.bucket={{ .Values.global.private_container_name }}
     {{- end }}
 
     # Service discovery
@@ -280,7 +301,7 @@ spec:
             labels:
               system.querying: "true"
           spec:
-            storageClassName: "{{- .Values.storageClass }}"
+            storageClassName: "{{ .Values.global.storage_class }}"
             accessModes:
               - ReadWriteOnce
             resources:
@@ -337,7 +358,7 @@ spec:
     #   - metadata:
     #       name: middlemanager-volume
     #     spec:
-    #       storageClassName: "{{- .Values.storageClass }}"
+    #       storageClassName: "{{ .Values.global.storage_class }}"
     #       accessModes:
     #         - ReadWriteOnce
     #       resources:
@@ -401,7 +422,7 @@ spec:
             labels:
               system.ingestion: "true"
           spec:
-            storageClassName: "{{- .Values.storageClass }}"
+            storageClassName: "{{ .Values.global.storage_class }}"
             accessModes:
               - ReadWriteOnce
             resources:
@@ -476,3 +497,7 @@ spec:
 
       resources:
       {{- toYaml .Values.resources.druid_router| nindent 8 }}
+
+
+
+

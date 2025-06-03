@@ -63,3 +63,16 @@ variable "dial_state_container_public" {
     type        = string
     description = "dial_state storage container name."
 }
+
+variable "cloud_storage_provider" {
+  description = "The cloud storage provider to use."
+  type        = string
+  default     = ""
+}
+
+
+variable "azure_velero_container_name" {
+  description = "The name of the Velero storage container."
+  type        = string
+  default     = ""
+}

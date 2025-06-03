@@ -5,7 +5,7 @@ replicaCount: 1
 
 image:
   repository: sunbirded.azurecr.io/data-pipeline
-  tag: release-8.0.0_RC1_c30fd96_5
+  tag: release-8.0.0_RC1_b4f909c
   pullPolicy: IfNotPresent
   pullSecrets: []  
 
@@ -67,8 +67,7 @@ configmap:
   mountPath: /config
 
 serviceAccount:
-  create: true
-  name: ""
+  create: false
 
 serviceMonitor:
   enabled: false
@@ -199,17 +198,17 @@ base_config: |
 
     {{- if eq "oci" .Values.global.checkpoint_store_type }}
     statebackend {
-      base.url = "s3://{{ .Values.global.public_container_name }}/checkpoint"
+      base.url = "s3://{{ .Values.global.private_container_name }}/checkpoint"
     }
 
     {{- else if eq "azure" .Values.global.checkpoint_store_type }}
     statebackend {
-      base.url = "wasbs://{{ .Values.global.public_container_name }}@{{ .Values.global.object_storage_endpoint }}/checkpoint"
+      base.url = "wasbs://{{ .Values.global.private_container_name }}@{{ .Values.global.object_storage_endpoint }}/checkpoint"
     }
 
     {{- else if eq "gcs" .Values.global.checkpoint_store_type }}
     statebackend {
-      base.url = "gs://{{ .Values.global.public_container_name }}/checkpoint"
+      base.url = "gs://{{ .Values.global.private_container_name }}/checkpoint"
     }
     {{- else }}
     # No valid checkpoint_store_type configured, skipping statebackend.
@@ -285,7 +284,8 @@ flink_jobs:
         read_base_path="{{- include "common.tplvalues.render" (dict "value" .Values.cloudstorage_base_path "context" $) }}"
         write_base_path= {{- include "common.tplvalues.render" (dict "value" .Values.valid_cloudstorage_base_urls "context" $) }}
       }
-     
+      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
+
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
       taskmanager.memory.flink.size: 1024m
@@ -333,6 +333,8 @@ flink_jobs:
         read_base_path="{{- include "common.tplvalues.render" (dict "value" .Values.cloudstorage_base_path "context" $) }}"
         write_base_path= {{- include "common.tplvalues.render" (dict "value" .Values.valid_cloudstorage_base_urls "context" $) }}
       }
+      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
+
      
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
@@ -366,6 +368,8 @@ flink_jobs:
           regards: "{{ .Values.email_notification_regards }}"
         }
       }
+      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
+ 
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
       taskmanager.memory.flink.size: 1024m

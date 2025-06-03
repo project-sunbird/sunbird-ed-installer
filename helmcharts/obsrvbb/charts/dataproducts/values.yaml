@@ -57,10 +57,10 @@ user_table_keyspace: "sunbird"
 course_keyspace: "sunbird_courses"
 report_user_table_keyspace: "sunbird_courses"
 exhaust_batches_limit_per_channel: 30
-exhaust_file_size_limit_bytes_per_channel: 1073741824
+exhaust_file_size_limit_bytes_per_channel: "1073741824"
 exhaust_parallel_batch_load_limit: 10
 exhaust_user_parallelism: 200
-data_exhaust_batch_limit_per_request: 20s
+data_exhaust_batch_limit_per_request: 20
 uci_encryption_secret_key: ""
 uci_encryption_key_base64: ""
 

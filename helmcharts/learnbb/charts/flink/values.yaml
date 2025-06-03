@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: sunbirded.azurecr.io/data-pipeline
-  tag: release-7.0.0_RC5_4a07143_21
+  tag: release-7.0.0_RC5_b06135e
   pullPolicy: IfNotPresent
   pullSecrets: []
 
@@ -69,7 +69,7 @@ configmap:
   mountPath: /config
 
 serviceAccount:
-  create: true
+  create: false
 
 serviceMonitor:
   enabled: false
@@ -358,17 +358,17 @@ base_config: |
 
       {{- if eq "oci" .Values.global.checkpoint_store_type }}
       statebackend {
-        base.url = "s3://{{ .Values.global.public_container_name }}/checkpoint"
+        base.url = "s3://{{ .Values.global.private_container_name }}/checkpoint"
       }
 
       {{- else if eq "azure" .Values.global.checkpoint_store_type }}
       statebackend {
-        base.url = "wasbs://{{ .Values.global.public_container_name }}@{{ .Values.global.object_storage_endpoint }}/checkpoint"
+        base.url = "wasbs://{{ .Values.global.private_container_name }}@{{ .Values.global.object_storage_endpoint }}/checkpoint"
       }
 
       {{- else if eq "gcs" .Values.global.checkpoint_store_type }}
       statebackend {
-        base.url = "gs://{{ .Values.global.public_container_name }}/checkpoint"
+        base.url = "gs://{{ .Values.global.private_container_name }}/checkpoint"
       }
       {{- else }}
       # No valid checkpoint_store_type configured, skipping statebackend.

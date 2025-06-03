@@ -30,7 +30,9 @@ spec:
         checksum/config: {{ .Files.Glob "configs/*" | toYaml | sha256sum }}
         checksum/job-config: {{ $jobData | toYaml | sha256sum }}
     spec:
-      serviceAccountName: {{ include "common.names.fullname" . }}
+      {{- if .Values.global.serviceAccount.create }}
+      serviceAccountName: {{ .Values.global.serviceAccount.name }}
+      {{- end }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       {{- with .Values.image.pullSecrets }}
@@ -53,6 +55,9 @@ spec:
   {{- end }}
   {{- if eq .Values.global.checkpoint_store_type "gcs" }}
             "-Dgoogle.cloud.auth.service.account.enable=true",
+            "-Dfs.gs.impl=com.google.cloud.hadoop.fs.gcs.GoogleHadoopFileSystem",
+            "-Dfs.AbstractFileSystem.gs.impl=com.google.cloud.hadoop.fs.gcs.GoogleHadoopFS",
+            "-DHADOOP_CONF_DIR=/opt/flink/conf",
   {{- end }}
   {{- if eq .Values.global.checkpoint_store_type "s3" }}
             "-Ds3.access-key={{ .Values.s3_access_key }}",
@@ -119,7 +124,9 @@ spec:
         checksum/config: {{ .Files.Glob "configs/*" | toYaml | sha256sum }}
         checksum/job-config: {{ $jobData | toYaml | sha256sum }}
     spec:
-      serviceAccountName: {{ include "common.names.fullname" . }}
+      {{- if .Values.global.serviceAccount.create }}
+      serviceAccountName: {{ .Values.global.serviceAccount.name }}
+      {{- end }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       {{- with .Values.image.pullSecrets }}
@@ -142,6 +149,9 @@ spec:
   {{- end }}
   {{- if eq .Values.global.checkpoint_store_type "gcs" }}
             "-Dgoogle.cloud.auth.service.account.enable=true",
+            "-Dfs.gs.impl=com.google.cloud.hadoop.fs.gcs.GoogleHadoopFileSystem",
+            "-Dfs.AbstractFileSystem.gs.impl=com.google.cloud.hadoop.fs.gcs.GoogleHadoopFS",
+            "-DHADOOP_CONF_DIR=/opt/flink/conf",
   {{- end }}
   {{- if eq .Values.global.checkpoint_store_type "s3" }}
             "-Ds3.access-key={{ .Values.s3_access_key }}",

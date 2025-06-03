@@ -109,7 +109,7 @@ sunbird_telemetry_service:
   telemetry_service_threads: 2
   telemetry_local_storage_enabled: "true"
   telemetry_local_storage_type: kafka
-  telemetry_kafka_topic: sunbird.telemetry.ingest
+  # telemetry_kafka_topic: "{{ .Values.global.env }}.telemetry.ingest"
   telemetry_kafka_compression: snappy
   telemetry_proxy_enabled: "false"
   # telemetry_proxy_url: {{telemetry_proxy_url}}

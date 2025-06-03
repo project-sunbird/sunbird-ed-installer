@@ -5,12 +5,12 @@ global:
   release_version: release-7.0.0
   domain: ""
   subscription_id: ""
-  cloud_storage_region: "Central India"
+  cloud_storage_region: ""
   sunbird_cloud_storage_provider: "azure" # Provide the cloud storage provider
   checkpoint_store_type: "azure"
   cloud_service_provider: "azure"
   cloud_storage_provider: "azure"
-  sunbird_cloud_storage_provider: azure 
+  sunbird_cloud_storage_provider: "azure" 
   sunbird_google_captcha_site_key: 
   google_captcha_private_key: 
   sunbird_google_oauth_clientId: 
