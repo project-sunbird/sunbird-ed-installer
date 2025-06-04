@@ -26,3 +26,24 @@ velero:
         ttl: "240h"
         includedNamespaces:
           - "sunbird"
+        snapshotVolumes: true  
+
+
+    database-backup:
+      disabled: true
+      schedule: "0 0 * * *"
+      useOwnerReferencesInBackup: false
+      template:
+        ttl: "240h"
+        includedNamespaces:
+          - "sunbird"
+        labelSelector:
+          matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+                - cassandra
+                - neo4j
+                - redis
+                - postgresql
+        snapshotVolumes: true
