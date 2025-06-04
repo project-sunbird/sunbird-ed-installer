@@ -34,7 +34,7 @@ velero:
     backupStorageLocation:
       - name: default
         provider: ${cloud_storage_provider}
-        bucket: "${gcp_private_container_name}"
+        bucket: "${gcp_velero_storage_container_private}"
         config:
           prefix: backups
           serviceAccount: ${gcp_storage_account_email}
