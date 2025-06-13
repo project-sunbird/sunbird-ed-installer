@@ -28,7 +28,7 @@ velero:
           - "sunbird"
         snapshotVolumes: true  
 
-
+# This section is for the Velero configuration for database backup. To enable DB backup, set disabled to false
     database-backup:
       disabled: true
       schedule: "0 0 * * *"
