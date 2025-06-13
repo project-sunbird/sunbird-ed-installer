@@ -1,0 +1,29 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  annotations:
+{{- with .Values.service.annotations }}
+{{ toYaml . | indent 4 }}
+{{- end }}
+  # include labels for this service to identify it
+{{- include "labels" . | indent 2 }}
+{{- if .Values.serviceMonitorLabels }}
+{{ toYaml .Values.serviceMonitorLabels | indent 4 }}
+{{- end }}
+  name: {{ include "volume-autoscaler.fullname" . }}
+  namespace: {{ (include "base.namespace" $) }}
+spec:
+  endpoints:
+  - interval: 30s
+    port: default-service
+    scrapeTimeout: 10s
+  namespaceSelector:
+    matchNames:
+    - volume-autoscaler
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/name: "volume-autoscaler"
+      {{- with .Values.serviceMonitorLabels }}
+      {{- toYaml . | nindent 6 }}
+    {{- end }}

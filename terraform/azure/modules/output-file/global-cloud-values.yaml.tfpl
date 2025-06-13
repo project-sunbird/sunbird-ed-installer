@@ -30,11 +30,19 @@ velero:
       backupStorageLocation:
         - name: default
           provider: "${cloud_storage_provider}"
-          bucket: "${azure_private_container_name}"
-          prefix: backups
+          bucket: "${azure_velero_container_name}"
+          prefix: 
           config:
             storageAccount: ${azure_storage_account_name} 
             storageAccountKeyEnvVar: AZURE_STORAGE_ACCOUNT_KEY
+      dbbackupStorageLocation:
+        - name: dbbackup
+          provider: "${cloud_storage_provider}"
+          bucket: "${azure_velero_container_name}"
+          prefix: 
+          config:
+            storageAccount: ${azure_storage_account_name} 
+            storageAccountKeyEnvVar: AZURE_STORAGE_ACCOUNT_KEY      
       volumeSnapshotLocation:
         - name: default
           provider: "${cloud_storage_provider}" 
