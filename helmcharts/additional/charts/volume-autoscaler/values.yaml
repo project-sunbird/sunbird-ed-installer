@@ -1,0 +1,269 @@
+# The name of the service and pods/deployment/etc being deployed
+registry: "docker.io"
+repository: devopsnirvana/kubernetes-volume-autoscaler
+tag: 1.0.5
+global:
+  image:
+    registry: "docker.io"
+    repository: devopsnirvana/kubernetes-volume-autoscaler
+    tag: 1.0.5
+name: volume-autoscaler
+namespace: volume-autoscaler
+
+# The typical config variables for the volume-autoscaler service, and their respective defaults
+
+# This is how we we can deploy this chart to a different namespace (or cluster) than Prometheus, by telling it where to access Prometheus
+#   Eg: http://prometheus-server.namespace.svc.cluster.local.  This can be auto-detected if run in the same namespace as prometheus
+# This is also how you can run this script remotely (eg: on your local machine to develop this tool against an remote Prometheus server)
+prometheus_url: "http://monitoring-kube-prometheus-prometheus.sunbird.svc.cluster.local:9090"
+# This is how we confiure the Slack integration, set the two values below
+slack_webhook_url: "REPLACEME"
+slack_channel: "REPLACEME"
+# Our scan interval
+interval_time: "60"
+# How many scan intervals in alert before scaling
+scale_after_intervals: "1"
+# How much full the disk must be before considering scaling
+scale_above_percent: "80"
+# How much to scale disks up by, as a percentage of their current size
+scale_up_percent: "20"
+# An minimum amount of bytes to scale up by (typically because providers like AWS only support 1GB increments in disk size)
+scale_up_min_increment: "1000000000"
+# An maximum amount of bytes to scale up by (helps prevent large disks from growing too fast/exponentially).  Set to 16TB by default, which basically means this is disabled
+scale_up_max_increment: "16000000000000"
+# The maximum size of disks to scale up to.  By default on AWS using EBS volumes this is set to 16TB as that is the EBS Max disk size.
+scale_up_max_size: "16000000000000"
+# How long to wait inbetween scaling activities.  AWS restricts you to one resize per-disk per 6 hour period, so this is 6 hours plus 10 minutes (as a buffer)
+scale_cooldown_time: "22200"
+# Set this to "true" to only print what it would have done, it will not send Slack messages either if you enable this
+dry_run: ""
+# What label selector to query on prometheus to limit the volumes you wish to use.  For example set this to "namespace=\"production\"" to limit to PVCs in production namespace
+prometheus_label_match: ""
+http_timeout: "15"
+# For debugging
+verbose: "false"
+
+# Pretty much ignore anything below here I'd say, unless you really know what you're doing.  :)
+
+# Number of pods in deployment, we only support 1 running
+replicaCount: 1
+
+# Can only have 1 running at a time, this service is not highly-available
+deploymentStrategy:
+  type: Recreate
+
+# Our image is on DockerHub, replace tag during builds automatically
+image:
+  repository: devopsnirvana/kubernetes-volume-autoscaler
+  tag: 1.0.5  # This should be replaced with an semver tag release automatically during CI for releases
+
+globalEnvs:
+  ####################################
+  # !!! Note: You don't need to do anything in here, please set the values at the top of this file instead
+  ####################################
+
+  # This is how we we can deploy this chart to a different namespace (or cluster) than Prometheus, by telling it where to access Prometheus
+  - name: PROMETHEUS_URL
+    value: "{{ .Values.prometheus_url }}"
+
+  # This is how we confiure the Slack integration, set the two values below
+  - name: SLACK_WEBHOOK_URL
+    value: "{{ .Values.slack_webhook_url }}"
+  - name: SLACK_CHANNEL
+    value: "{{ .Values.slack_channel }}"
+
+  # Our scan interval
+  - name: INTERVAL_TIME
+    value: "{{ .Values.interval_time }}"
+  # How many scan intervals in alert before scaling
+  - name: SCALE_AFTER_INTERVALS
+    value: "{{  .Values.scale_after_intervals }}"
+
+  # How much full the disk must be before considering scaling
+  - name: SCALE_ABOVE_PERCENT
+    value: "{{ .Values.scale_above_percent }}"
+
+  # How much to scale disks up by, as a percentage of their current size
+  - name: SCALE_UP_PERCENT
+    value: "{{ .Values.scale_up_percent }}"
+
+  # An minimum amount of bytes to scale up by (typically because providers like AWS only support 1GB increments in disk size)
+  - name: SCALE_UP_MIN_INCREMENT
+    value: "{{ .Values.scale_up_min_increment }}"
+  # An maximum amount of bytes to scale up by (helps prevent large disks from growing too fast/exponentially).  Set to 16TB by default, which basically means this is disabled
+  - name: SCALE_UP_MAX_INCREMENT
+    value: "{{ .Values.scale_up_max_increment }}"
+  # The maximum size of disks to scale up to.  By default on AWS using EBS volumes this is set to 16TB as that is the EBS Max disk size.
+  - name: SCALE_UP_MAX_SIZE
+    value: "{{ .Values.scale_up_max_size }}"
+  # How long to wait inbetween scaling activities.  AWS restricts you to one resize per-disk per 6 hour period, so this is 6 hours plus 10 minutes (as a buffer)
+  - name: SCALE_COOLDOWN_TIME
+    value: "{{ .Values.scale_cooldown_time }}"
+  # Set this to "true" to only print what it would have done, it will not send Slack messages either if you enable this
+  - name: DRY_RUN
+    value: "{{ .Values.dry_run }}"
+  # What label selector to query on prometheus to limit the volumes you wish to use.  For example set this to "namespace=\"production\"" to limit to PVCs in production namespace
+  - name: PROMETHEUS_LABEL_MATCH
+    value: "{{ .Values.prometheus_label_match }}"
+  # How long to wait for Prometheus and Kubernetes to get back to us for all API calls
+  - name: HTTP_TIMEOUT
+    value: "{{ .Values.http_timeout }}"
+
+  # How verbose to be during runtime.  Off by default, when enabled it prints every volume and their specifications on every iteration.  Recommended for testing/development and/or dry-runs
+  - name: VERBOSE
+    value: "{{ .Values.verbose }}"
+
+
+# Additional pod annotations
+podAnnotations: 
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "8000"
+  prometheus.io/path: "/metrics"
+  # tick: "1528451892"
+
+# Additional labels put onto anything that can be labelled (pods, services)
+labels: 
+  system.storage: "true"
+  release: monitoring
+
+# This adds lifecycle events for the deployment
+lifecycle: {}
+
+# Lower the ndots value, to reduce the search path expansion of DNS queries
+# https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-config
+dnsConfig:
+  enabled: false
+  ndots: 2
+
+# container resource requests/limits
+# The suggested values below have been tested against 100+ pvcs.  Your usage may vary, so
+#    adjust this upwards if you need.
+# Note: Limits are HARD Limits
+#       Requests are "soft" limits and are what affects HPA (autoscaling) aggressiveness and are what resources are is guaranteed
+# To use below, remove the {} and uncomment the following 6 lines and customize them as desired
+resources:
+  limits:
+    cpu: 0.05
+    memory: 100Mi
+  requests:
+    cpu: 0.05
+    memory: 100Mi
+  # NOTE: Above resources have been used successfully on numerous clients and customers, but, just incase and what the default for most
+  #       helm charts is to keep this disabled, and let the user specify it.  So, feel free if you'd like
+
+# Assign pods to nodes based on nodeSelector labels, define a default here if desired
+# To use below, remove the {} and uncomment the following 1 lines and/or add your own lines
+nodeSelector: []
+# purpose: node-feature-name
+
+# Assign pods to nodes based on tolerations and taints
+tolerations: []
+
+# Init container(s)
+initContainers: []
+  # - name: volume-mount-hack
+  #   image: busybox
+  #   command: ["sh", "-c", "chown -R 1000:1000 /var/data"]
+  #   volumeMounts:
+  #    - name: data
+  #      mountPath: /var/data
+
+# Additional containers to be added to the pod (eg: add the cloudsql proxy)
+extraContainers: []
+
+# Volumes added to the pod if needed
+volumes: []
+volumeMounts: []
+
+# We use a service so we can have prometheus metrics
+service:
+  enabled: true
+  type: ClusterIP
+  port: 80
+  targetPort: 8000
+  name: default-service
+  additionalPorts: []
+  annotations:
+    prometheus.io/scrape: 'true'
+
+# Probes to detect failure
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 120
+  periodSeconds: 10
+  timeoutSeconds: 9
+  successThreshold: 1
+  failureThreshold: 3
+  probeType: httpGet
+  path: /alive
+  port: default-service
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 4
+  successThreshold: 2
+  failureThreshold: 2
+  probeType: httpGet
+  path: /ready
+  port: default-service
+
+# For AWS Security Groups, if you wish to use this specify the sg-123123123 in an list here
+securityGroupIDs: []
+
+serviceAccount:
+  enabled: true
+  # Add annotations if desited to your service account
+  annotations: {}
+    # Here's an example of assigning an IAM role to a pod, remove the {} above and uncomment this if needed
+    # eks.amazonaws.com/role-arn: arn:aws:iam::123123123:role/role-name-goes-here
+
+# This is absolutely necessary, this is how this service reads and updates PVCs and talks to Kubernetes
+# Do not change any of this, or the volume autoscaler will not function any more
+rbac:
+  create: true
+  clusterWideAccess: true
+  rules:
+    # This is how we listen and update PVCs
+    - apiGroups: ['*']
+      resources: ['persistentvolumeclaims']
+      verbs:
+        - list
+        - patch
+        - get
+        - list
+        - watch
+    # This is so we can send events into Kubernetes viewable in the event viewer
+    - apiGroups: [""]
+      resources:
+        - events
+      verbs:
+        - create
+        - patch
+    # So we can to check StorageClasses for if they have AllowVolumeExpansion set to true
+    - apiGroups: ["storage.k8s.io"]
+      resources:
+        - storageclasses
+      verbs:
+        - list
+
+# This is to use new kubernetes standard labeling, should be true on both always
+usingNewRecommendedLabels: true
+labelsEnableDefault: true
+
+# We don't use a lot of features from the upstream chart, so disable them
+podDistuptionBudget:
+  enabled: false
+ingress:
+  enabled: false
+ingress_secondary:
+  enabled: false
+autoscaling:
+  enabled: false
+security:
+  runAsNonRoot: false
+sidecar:
+  enabled: false
+
+serviceMonitorLabels:
+  release: monitoring

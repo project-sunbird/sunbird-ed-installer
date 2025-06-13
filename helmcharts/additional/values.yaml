@@ -47,3 +47,20 @@ velero:
                 - redis
                 - postgresql
         snapshotVolumes: true
+
+
+volume-autoscaler:
+  enabled: false
+  registry: "docker.io"
+  repository: devopsnirvana/kubernetes-volume-autoscaler
+  tag: 1.0.5
+  # How much full the disk must be before considering scaling
+  scale_above_percent: "80"
+  # How much to scale disks up by, as a percentage of their current size
+  scale_up_percent: "40"
+  # An minimum amount of bytes to scale up by (typically because providers like AWS only support 100GB increments in disk size)
+  scale_up_min_increment: "5368709120"  # 5 GB in bytes
+  # An maximum amount of bytes to scale up by (helps prevent large disks from growing too fast/exponentially).  Set to 16TB by default, which basically means this is disabled
+  scale_up_max_increment: ""
+  # The maximum size of disks to scale up to.  By default on AWS using EBS volumes this is set to 16TB as that is the EBS Max disk size.
+  scale_up_max_size: ""     
