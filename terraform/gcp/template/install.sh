@@ -82,6 +82,8 @@ function install_component() {
     local component="$1"
     kubectl create namespace sunbird 2>/dev/null || true
     kubectl create namespace velero 2>/dev/null || true
+    kubectl create namespace volume-autoscaler 2>/dev/null || true
+
     echo -e "\nInstalling $component"
     local ed_values_flag=""
     if [ -f "$component/ed-values.yaml" ]; then
