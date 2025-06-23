@@ -9,3 +9,8 @@ dependencies:
   - name: velero
     version: 8.1.0
     condition: velero.enabled
+
+dependencies:
+  - name: volume-autoscaler
+    version: 1.0.5
+    condition: volume-autoscaler.enabled    
