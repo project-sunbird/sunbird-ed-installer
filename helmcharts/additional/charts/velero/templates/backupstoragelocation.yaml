@@ -54,3 +54,31 @@ spec:
 {{- end }}
 {{- end }}
 {{- end }}
+
+{{- range .Values.configuration.dbbackupStorageLocation }}
+---
+apiVersion: velero.io/v1
+kind: BackupStorageLocation
+metadata:
+  name: dbbackup
+  namespace: {{ (include "base.namespace" $) }}
+  labels:
+    app.kubernetes.io/name: {{ include "velero.name" $ }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/managed-by: {{ $.Release.Service }}
+    helm.sh/chart: {{ include "velero.chart" $ }}
+spec:
+  provider: {{ .provider }}
+  accessMode: {{ .accessMode | default "ReadWrite" }}
+  objectStorage:
+    bucket: {{ .bucket | quote }}
+    {{- with .prefix }}
+    prefix: {{ . | quote }}
+    {{- end }}
+  {{- with .config }}
+  config:
+{{- range $key, $value := . }}
+{{- $key | nindent 4 }}: {{ $value | quote }}
+{{- end }}
+  {{- end }}
+{{- end }}

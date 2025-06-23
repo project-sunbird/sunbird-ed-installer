@@ -43,7 +43,7 @@ image:
   # - registrySecretName
 
 nameOverride: ""
-fullnameOverride: ""
+fullnameOverride: "velero"
 
 # Annotations to add to the Velero deployment's. Optional.
 #
