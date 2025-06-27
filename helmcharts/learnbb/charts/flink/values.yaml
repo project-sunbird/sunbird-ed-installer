@@ -802,7 +802,7 @@ flink_jobs:
       parallelism.default: 1
       jobmanager.execution.failover-strategy: region
       taskmanager.memory.network.fraction: 0.1
-    job_classname: org.sunbird.dp.assessment.task.AssessmentAggregatorStreamTask
+    job_classname: org.sunbird.job.assessment.task.AssessmentAggregatorStreamTask
 
   notification-job:
     enabled: true
@@ -865,7 +865,7 @@ flink_jobs:
       parallelism.default: 1
       jobmanager.execution.failover-strategy: region
       taskmanager.memory.network.fraction: 0.1
-    job_classname: org.sunbird.dp.userinfo.task.ProgramUserInfoStreamTask
+    job_classname: org.sunbird.job.userinfo.task.ProgramUserInfoStreamTask
   
   user-deletion-cleanup:
     enabled: true
