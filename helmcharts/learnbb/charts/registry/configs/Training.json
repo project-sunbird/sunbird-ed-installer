@@ -31,8 +31,11 @@
 				},
 				"name":{
 					"type":"string"
-				}
-			}
+				},																																			
+				"group": {
+                    "type": "string"
+                }																																																																																																																																								
+			}																																			
 		}
 	}
 
