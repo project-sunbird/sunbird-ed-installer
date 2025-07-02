@@ -3,8 +3,8 @@ fullnameOverride: "dial"
 replicaCount: 1
 
 image:
-  repository: sunbirded.azurecr.io/sunbird-dial-service
-  tag: "release-6.1.0_RC2_213843a_30"
+  repository: ghcr.io/sunbird-knowlg/sunbird-dial-service
+  tag: "release-7.7.0_rc1_de9e151"
   pullPolicy: IfNotPresent
   pullSecrets: []
 

@@ -3,8 +3,8 @@ fullnameOverride: "content"
 replicaCount: 1
 
 image:
-  repository: sunbirded.azurecr.io/content-service
-  tag: "release-6-1.0-CSS-1.4.7.1_v1"
+  repository:  ghcr.io/sunbird-knowlg/knowledge-platform/content-service
+  tag: "release-7.7.0_rc1_91dfa01"
   pullPolicy: IfNotPresent
   pullSecrets: []
 

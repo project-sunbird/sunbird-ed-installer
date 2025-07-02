@@ -232,8 +232,6 @@ ALTER TABLE report DROP CONSTRAINT IF EXISTS report_type_check;
 ALTER TABLE report ADD CONSTRAINT report_type_check CHECK (type IN ('public', 'private', 'protected'));
 ALTER TABLE report ALTER COLUMN type TYPE varchar(10);
 
-
-
 -- superset
 CREATE DATABASE superset;
 

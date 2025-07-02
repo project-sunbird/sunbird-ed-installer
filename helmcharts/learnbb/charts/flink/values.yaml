@@ -1,8 +1,8 @@
 replicaCount: 1
 
 image:
-  repository: sunbirded.azurecr.io/data-pipeline
-  tag: release-7.0.0_RC5_b06135e
+  repository:  ghcr.io/sunbird-lern/data-pipeline
+  tag: release-7.7.0_rc1_e2e23b1
   pullPolicy: IfNotPresent
   pullSecrets: []
 
@@ -802,7 +802,7 @@ flink_jobs:
       parallelism.default: 1
       jobmanager.execution.failover-strategy: region
       taskmanager.memory.network.fraction: 0.1
-    job_classname: org.sunbird.dp.assessment.task.AssessmentAggregatorStreamTask
+    job_classname: org.sunbird.job.assessment.task.AssessmentAggregatorStreamTask
 
   notification-job:
     enabled: true
@@ -865,7 +865,7 @@ flink_jobs:
       parallelism.default: 1
       jobmanager.execution.failover-strategy: region
       taskmanager.memory.network.fraction: 0.1
-    job_classname: org.sunbird.dp.userinfo.task.ProgramUserInfoStreamTask
+    job_classname: org.sunbird.job.userinfo.task.ProgramUserInfoStreamTask
   
   user-deletion-cleanup:
     enabled: true
