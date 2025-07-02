@@ -232,24 +232,6 @@ ALTER TABLE report DROP CONSTRAINT IF EXISTS report_type_check;
 ALTER TABLE report ADD CONSTRAINT report_type_check CHECK (type IN ('public', 'private', 'protected'));
 ALTER TABLE report ALTER COLUMN type TYPE varchar(10);
 
-
-CREATE TABLE IF NOT EXISTS user_summary_report (
-    userid TEXT PRIMARY KEY,
-    firstname TEXT,
-    lastname TEXT,
-    username TEXT,
-    email TEXT,
-    usertype TEXT,
-    cin TEXT,
-    fmpsid TEXT,
-    province TEXT,
-    orgname TEXT,
-    createddate TEXT,
-    num_courses_enrolled INTEGER,
-    num_courses_started INTEGER,
-    num_courses_completed INTEGER,
-    updated_date TIMESTAMP
-);
 -- superset
 CREATE DATABASE superset;
 
