@@ -33,7 +33,7 @@ elasticsearch: &es
   image:
     registry: docker.io
     repository: bitnami/elasticsearch
-    tag: 6.8.23
+    tag: 7.17.13
   master:
     masterOnly: false
     replicaCount: 1
