@@ -5,7 +5,7 @@ replicaCount: 1
 
 image:
   repository: sunbirded.azurecr.io/keycloak
-  tag: "21.1.2"
+  tag: "21.1.2_v2"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
@@ -89,7 +89,7 @@ affinity: {}
 
 configmap:
   enabled: true
-  mountPath: /config
+  mountPath: /opt/keycloak/data/import
 
 serviceAccount:
   create: true

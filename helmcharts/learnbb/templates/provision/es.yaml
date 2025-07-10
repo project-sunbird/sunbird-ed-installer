@@ -63,6 +63,11 @@ spec:
 
           # Remove autocreated indexes.
           # automatically gets created by search-indexer
+          # /cs mapping has conflict with _doc map created below
+
+          echo "Applying compositesearch-mapping.json"
+          curl  -X PUT http://{{.Values.global.elasticsearch.host}}:{{.Values.global.elasticsearch.port}}/compositesearch/_mapping/cs -H 'Content-Type: application/json' -d @compositesearch-mapping.json
+          rm -rf compositesearch-mapping.json
 
           #mapping_files=$(ls -l | awk 'NR>1{print $9}' | awk -F"-" '{print $1}' | tr "\n" " ")
           mapping_files=$(ls -l | awk 'NR>1{print $9}' | awk -F"." '{print $1}' | tr "\n" " " | sed 's/-mapping//g')
@@ -70,7 +75,7 @@ spec:
           for file in ${mapping_files[@]}
           do
                   echo "Applying ${file}-mapping.json"
-                  curl  -X PUT http://{{.Values.global.elasticsearch.host}}:{{.Values.global.elasticsearch.port}}/${file}/_mapping -H 'Content-Type: application/json' -d @${file}-mapping.json
+                  curl  -X PUT http://{{.Values.global.elasticsearch.host}}:{{.Values.global.elasticsearch.port}}/${file}/_mapping/_doc -H 'Content-Type: application/json' -d @${file}-mapping.json
           done
 
           #### Adding ingest pipeline for newly created indices:

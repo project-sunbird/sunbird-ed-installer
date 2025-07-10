@@ -3,8 +3,8 @@ fullnameOverride: "userorg"
 replicaCount: 1
 
 image:
-  repository: ghcr.io/sunbird-lern/userorg-service
-  tag: "release-7.7.0_rc1_64b85d2_4"
+  repository: sunbirded.azurecr.io/userorg-service
+  tag: "release-7.0.0_RC5_0d513be_31"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
