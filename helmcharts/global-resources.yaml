@@ -1,4 +1,4 @@
-#edbb
+edbb
 bot:
   resources:
     requests:
@@ -107,7 +107,8 @@ assessment:
     limits:
       cpu: 1
       memory: 1G
-flink:
+      
+flink: &flink
   resources:
     requests:
       cpu: 100m
@@ -115,6 +116,15 @@ flink:
     limits:
       cpu: 1
       memory: 2048Mi  
+
+inquirybb:
+  flink: *flink
+
+knowledgebb:
+  flink: *flink
+
+learnbb:
+  flink: *flink
 
 #knowledgebb
 content:
@@ -345,8 +355,8 @@ kafka:
     requests:
       cpu: 750m
       memory: 1024Mi
-    persistence:
-      size: 10Gi
+  persistence:
+    size: 10Gi
   metrics:
     kafka:
       resources:
@@ -374,10 +384,14 @@ neo4j:
 postgresql: 
   persistence:
     size: 25Gi
-  resources:
-    requests:
-      cpu: 250m
-      memory: 256Mi
+  primary:
+    resources:
+      limits:
+        cpu: 250m
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 256Mi
 
 redis: 
   master:
@@ -428,7 +442,7 @@ analytics:
       memory: 2G
 
 # secor:
-#   resources:
+#   baseconfig:
 #     storage:
 #       size: 10Gi
 #     requests:
