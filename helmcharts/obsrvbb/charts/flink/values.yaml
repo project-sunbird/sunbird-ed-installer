@@ -7,8 +7,8 @@ replicaCount: 1
 #   tag: "release-5.2.0_RC1_2c615f8_12"
 # docker pull sunbirded.azurecr.io/sunbird-datapipeline:release-4.9.0_RC4_1
 image:
-  repository:  sunbirded.azurecr.io/sunbird-datapipeline
-  tag: "release-5.2.0_RC8_9610bc7_13_be0895d"
+  repository: aimansharief/sunbird-data-pipeline
+  tag: "release-5.2.1_v3"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
@@ -134,7 +134,7 @@ azure_secret: "azure-secret"
 
 # Azure Container Details
 checkpoint_store_type: "azure"
-cloud_storage_flink_bucketname: "{{ .Values.global.private_container_name }}"
+cloud_storage_flink_bucketname: "{{ .Values.global.public_container_name }}"
 cloud_storage_content_bucketname: sunbird-content-dev
 cert_container_name: dev-e-credentials
 cloud_storage_endpoint: https://{{ .Values.global.object_storage_endpoint }}

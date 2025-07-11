@@ -4,8 +4,8 @@ fullnameOverride: "keycloak"
 replicaCount: 1
 
 image:
-  repository: sunbirded.azurecr.io/keycloak
-  tag: "7.0.1"
+  repository: asia-south1-docker.pkg.dev/sunbird-morocco-sandbox-434709/sunbird-morocco-artifact-dev/keycloak
+  tag: "7.0.6"
   pullPolicy: IfNotPresent
   pullSecrets: []
 

@@ -233,7 +233,7 @@
         "type": "static-azure-blobstore",
         "blobs": [
           {
-            "container": "{{ .Values.global.public_container_name }}",
+            "container": "{{ .Values.global.public_container_name }}/reports",
             "path": "/collection-summary-reports-v2/collection-summary-report-latest.json"
           }
         ],

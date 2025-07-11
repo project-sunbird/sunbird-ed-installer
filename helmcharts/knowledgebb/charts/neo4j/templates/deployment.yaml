@@ -58,11 +58,6 @@ spec:
         - name: {{ .Values.logstash.name }}
           image: {{ .Values.logstash.image }}
           imagePullPolicy: {{ .Values.logstash.imagePullPolicy }}
-          env:
-            - name: PIPELINE_WORKERS
-              value: "{{ .Values.logstash.pipeline_workers}}"
-            - name: PIPELINE_BATCH_SIZE
-              value: "{{ .Values.logstash.pipeline_bacth_size }}"
           volumeMounts:
             - name: config
               mountPath: {{ .Values.logstash.mountPath.config }}

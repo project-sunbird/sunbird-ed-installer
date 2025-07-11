@@ -102,7 +102,7 @@ druid_postgresql_db: "druid_raw"
 # Azure Container Details
 azure_storage_account_name: ""
 azure_storage_account_key: ""
-azure_storage_container: ""
+azure_storage_container: "reports"
 
 
 # Indexing service logs
@@ -191,7 +191,7 @@ druid_indexer_tasklock_forceTimeChunkLock: false
 druid_historical_service: druid/historical
 druid_historical_port: 8084
 druid_historical_min_heap_size: 512M
-druid_historical_max_heap_size: 750M
+druid_historical_max_heap_size: 2048M
 druid_historical_max_direct_size: 512M
 
 

@@ -4,8 +4,8 @@ fullnameOverride: "player"
 replicaCount: 1
 
 image:
-  repository: sunbirded.azurecr.io/player
-  tag: "release-7.0.0_RC16_25baa89_2461"
+  repository: asia-south1-docker.pkg.dev/sunbird-morocco-sandbox-434709/sunbird-morocco-artifact-dev/player
+  tag: "v5.86"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
@@ -114,6 +114,7 @@ sidecars: {}
 
 opa_enabled: false
 sunbird_google_keycloak_client_id: "google-auth"
+sunbird_default_file_size: "2048"
 google_auth_client_secret: "google-auth"
 sunbird_google_android_keycloak_client_id: google-auth-android
 sunbird_google_android_keycloak_secret: google_android_keycloak
@@ -137,3 +138,4 @@ global:
     port: 9042
   redis:
     host: redis-master
+    port: 6379

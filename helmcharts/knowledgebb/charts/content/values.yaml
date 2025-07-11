@@ -116,6 +116,7 @@ content_base_url: "http://content-service:9000"
 
 kafka_topics_instruction: "{{ .Values.global.env }}.knowlg.learning.job.request"
 kafka_publish_request_topic: "{{ .Values.global.env }}.knowlg.publish.job.request"
+kafka_topics_graph_event: "{{ .Values.global.env }}.learning.graph.events"
 import_output_topic_name: "{{ .Values.global.env }}.knowlg.auto.creation.job.request"
 import_required_props: '["name","code","mimeType","primaryCategory","artifactUrl","framework"]'
 import_remove_props: '["downloadUrl","variants","previewUrl","streamingUrl","itemSets","level1Name","level1Concept","level2Name","level2Concept","level3Name","level3Concept","me_totalPlaySessionCount","me_totalTimeSpentInSec","me_totalSessionsCount","me_totalTimespent","me_totalInteractions","me_creationSessions","me_creationTimespent","me_averageInteractionsPerMin","me_averageSessionsPerDevice","me_totalDevices","me_averageTimespentPerSession","me_averageRating","me_totalDownloads","me_totalSideloads","me_totalRatings","me_totalComments","me_totalDialcode","me_totalDialcodeLinkedToContent","me_totalDialcodeAttached","me_hierarchyLevel","origin","originData","contentPolicyCheck","questions"]'

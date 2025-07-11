@@ -1,0 +1,768 @@
+apiVersion: v1
+data:
+  apple-app-site-association.json: |2-
+
+    {"applinks":{"apps":[],"details":[{"appID":"123456.dev.sunbird.app","paths":["/explore","/dial/*","/get/dial","/play/content","/play/collection","/learn/course","/explore-course/course","/explore-course","/search","/search/Library","/faq","/profile","/play/quiz","/explore","/learn","/resources"]}]}}
+  compression.conf: |-
+    # Compression
+    gzip on;
+    gzip_comp_level    5;
+    gzip_min_length    256; # 256Bytes
+    gzip_proxied       any;
+    gzip_vary          on;
+    # Content types for compression
+    gzip_types
+    application/atom+xml
+    application/javascript
+    application/json
+    application/ld+json
+    application/manifest+json
+    application/rss+xml
+    application/vnd.geo+json
+    application/vnd.ms-fontobject
+    application/x-font-ttf
+    application/x-web-app-manifest+json
+    application/xhtml+xml
+    application/xml
+    font/opentype
+    image/bmp
+    image/svg+xml
+    image/x-icon
+    text/cache-manifest
+    text/css
+    text/plain;
+  keycloak.conf: |2-
+
+    server {
+      listen 80;
+      listen [::]:80;
+      server_name merge.example.com;
+      # Limitting open connection per ip
+      limit_conn limitbyaddr 400;
+      return 301 https://merge.example.com$request_uri;
+    }
+    server {
+      listen                443 ssl;
+      ssl_certificate       /etc/secrets-merge/tls.crt;
+      ssl_certificate_key   /etc/secrets-merge/tls.key;
+      server_name           merge.example.com;
+      # Limitting open connection per ip
+      limit_conn limitbyaddr 400;
+      proxy_set_header    Host              $host;
+      proxy_set_header    X-Real-IP         $remote_addr;
+      proxy_set_header    X-Forwarded-For   $proxy_add_x_forwarded_for;
+      proxy_set_header    X-Forwarded-SSL   on;
+      proxy_set_header    X-Forwarded-Proto $scheme;
+      ignore_invalid_headers off;  #pass through headers from Jenkins which are considered invalid by Nginx server.
+      resolver 34.118.224.10 valid=30s;
+      # Refresh token endpoint being routed to kong
+      location ~* ^/auth/v1/refresh/token  {
+        rewrite ^/auth/(.*) /auth/$1 break;
+        proxy_set_header Connection "";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Scheme $scheme;
+        proxy_set_header X-Forwarded-For  $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_connect_timeout 5;
+        proxy_send_timeout 60;
+        proxy_read_timeout 70;
+        proxy_http_version 1.1;
+        proxy_set_header X-Request-ID $sb_request_id;
+        proxy_pass http://kong;
+      }
+      # Admin API Endpoints for sunbird realm fpr forgot password flow
+      location ~ /auth/admin/realms/sunbird/users/ {
+        rewrite ^/auth/(.*) /auth/$1 break;
+        proxy_set_header X-Request-ID $sb_request_id;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Scheme $scheme;
+        proxy_set_header X-Forwarded-For   $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Connection "";
+        proxy_http_version 1.1;
+        proxy_pass http://keycloak;
+      }
+      # Sunbird realm keycloak API endpoints
+      location ~ /auth/realms/sunbird/(get-required-action-link|login-actions/(action-token|authenticate|required-action)|protocol/openid-connect/(auth|certs|logout|token|userinfo)|.well-known/openid-configuration) {
+        rewrite ^/auth/(.*) /auth/$1 break;
+        proxy_set_header X-Request-ID $sb_request_id;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Scheme $scheme;
+        proxy_set_header X-Forwarded-For   $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Connection "";
+        proxy_http_version 1.1;
+        proxy_pass http://keycloak;
+      }
+      # Static Assets for keycloak endpoints with caching
+      location ~ /auth/(resources/(.+\.(png|svg|ico|js|eot|ttf|woff|woff2|css))|welcome-content/(.+\.(png|svg|ico|js|eot|ttf|woff|woff2|css))) {
+        # Enabling compression
+        include /etc/nginx/defaults.d/compression.conf;
+        # Enabling caching
+        # caching include Accept-Encoding header also, to provide gziped or plain content as per request
+        proxy_cache_key "$http_accept_encoding|$request_uri|$request_body";
+        proxy_cache small_cache;
+        add_header X-Proxy-Cache $upstream_cache_status;
+        add_header X-Proxy-Cache-Date $upstream_http_date;
+        proxy_cache_use_stale error timeout updating http_500 http_502 http_503 http_504;
+        proxy_cache_revalidate on;
+        proxy_cache_background_update on;
+        proxy_cache_lock on;
+        proxy_cache_valid 200 5m;
+        rewrite ^/auth/(.*) /auth/$1 break;
+        proxy_set_header Connection "";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Scheme $scheme;
+        proxy_set_header X-Forwarded-For   $remote_addr;
+        proxy_connect_timeout 5;
+        proxy_send_timeout 60;
+        proxy_read_timeout 70;
+        proxy_http_version 1.1;
+        proxy_pass http://keycloak;
+      }
+      location / {
+        rewrite ^/(.*) /$1 break;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Scheme $scheme;
+        proxy_connect_timeout 5;
+        proxy_send_timeout 60;
+        proxy_read_timeout 70;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Connection "";
+        proxy_http_version 1.1;
+        proxy_set_header X-Request-ID $sb_request_id;
+        proxy_pass http://player;
+      }
+    }
+  nginx.conf: |-
+    user  nginx;
+    worker_processes  auto;
+    error_log  /var/log/nginx/error.log warn;
+    pid        /var/run/nginx.pid;
+    events {
+        worker_connections  10000;
+    }
+    http {
+        include       /etc/nginx/mime.types;
+        default_type  application/octet-stream;
+        resolver 34.118.224.10 valid=30s;
+        lua_load_resty_core off;
+        log_format  main  '$remote_addr - $remote_user [$time_local] '
+                          '"$request" $status $request_length $body_bytes_sent'
+                          ' $request_time $upstream_response_time $pipe'
+                          ' "$http_referer" "$http_user_agent" "$sb_request_id"'
+                          ' "$http_x_device_id" "$http_x_channel_id" "$http_x_app_id"'
+                          ' "$http_x_app_ver" "$http_x_session_id" ';
+        access_log  /var/log/nginx/access.log  main;
+        # Shared dictionary to store metrics
+        lua_shared_dict prometheus_metrics 100M;
+        lua_package_path "/etc/nginx/lua_modules/?.lua";
+        # Defining request_id
+        # If the client send request_id it should be preffered over the default one
+        map $http_x_request_id $sb_request_id {
+          default  $http_x_request_id;
+          ''  $request_id;
+        }
+        # Defining upstream cache status for nginx metrics
+        map $upstream_cache_status $cache_status {
+          default  $upstream_cache_status;
+          ''       "NONE";
+        }
+        map $http_accept $dial_upstream_host {
+          default                player;
+          application/ld+json    kong;
+        }
+        # Defining metrics
+        init_worker_by_lua_block {
+          prometheus = require("prometheus").init("prometheus_metrics")
+          metric_requests = prometheus:counter(
+            "nginx_http_requests_total", "Number of HTTP requests", {"host", "status", "request_method", "cache_status"})
+          metric_latency = prometheus:histogram(
+            "nginx_http_request_duration_seconds", "HTTP request latency", {"host"})
+          metric_connections = prometheus:gauge(
+            "nginx_http_connections", "Number of HTTP connections", {"state"})
+        }
+        log_by_lua_block {
+          metric_requests:inc(1, {ngx.var.server_name, ngx.var.status, ngx.var.request_method, ngx.var.cache_status })
+          metric_latency:observe(tonumber(ngx.var.request_time), {ngx.var.server_name})
+        }
+        header_filter_by_lua_block {
+         ngx.header["server"] = nil
+        }
+        sendfile        on;
+        #tcp_nopush     on;
+        client_max_body_size 60M;
+        keepalive_timeout  65s;
+        keepalive_requests 200;
+        # Nginx connection limit per ip
+        limit_conn_zone $binary_remote_addr zone=limitbyaddr:10m;
+        limit_conn_status 429;
+        upstream kong {
+            server kong:8000;
+            keepalive 1000;
+        }
+        upstream keycloak {
+            server keycloak:8080;
+            keepalive 1000;
+        }
+        upstream player {
+            server player:3000;
+            keepalive 1000;
+        }
+        include /etc/nginx/defaults.d/*.conf;
+        include /etc/nginx/conf.d/*.conf;
+        #################
+        # Caching Block #
+        #################
+        #
+        # Keywords
+        #
+        # proxy_cache_path: path to store the cache content
+        # level: how many directories we need, 1:2 means 1 parent directory, and another child directory before the cache content.
+        # keys_zone: name of the cache and size of the keys store in RAM; 1‑MB zone can store data for about 8,000 keys
+        # max_size: size of the cache content in disk
+        # inactive: specifies how long an item can remain in the cache without being accessed. This doesn't value expiry time of cache. So keep it more than the expiry.
+        # use_temp_path: do we have to write the cache to a temp path first? This will reduce the performance.
+        #
+        # caching for images and files
+        proxy_cache_path /tmp/large_cache levels=1:2 keys_zone=large_cache:10m max_size=100m inactive=10m use_temp_path=off;
+        proxy_cache_path /tmp/medium_cache levels=1:2 keys_zone=medium_cache:5m max_size=50m inactive=10m use_temp_path=off;
+        proxy_cache_path /tmp/small_cache levels=1:2 keys_zone=small_cache:2m max_size=10m inactive=10m use_temp_path=off;
+
+       server {
+         listen 9145;
+         location /metrics {
+           content_by_lua_block {
+              metric_connections:set(ngx.var.connections_reading, {"reading"})
+              metric_connections:set(ngx.var.connections_waiting, {"waiting"})
+              metric_connections:set(ngx.var.connections_writing, {"writing"})
+              prometheus:collect()
+            }
+         }
+       }
+    }
+  proxy-default.conf: "server {\n  listen 80;\n  listen [::]:80;\n  server_name maharat.fmps.ma;\n
+    \ # Limitting open connection per ip\n  limit_conn limitbyaddr 400;\n  return
+    301 https://maharat.fmps.ma$request_uri;\n}\nserver {\n  listen                443
+    ssl;\n  ssl_certificate       /etc/secrets/tls.crt;\n  ssl_certificate_key   /etc/secrets/tls.key;\n
+    \ ssl_protocols TLSv1.2 TLSv1.3;\n  ssl_ciphers \"EECDH+ECDSA+AESGCM EECDH+aRSA+AESGCM
+    EECDH+ECDSA+SHA384 EECDH+ECDSA+SHA256 EECDH+aRSA+SHA384 EECDH+aRSA+SHA256 EECDH+aRSA+RC4
+    EECDH EDH+aRSA HIGH !RC4 !aNULL !eNULL !LOW !3DES !MD5 !EXP !PSK !SRP !DSS\";\n
+    \ server_name *.maharat.fmps.ma maharat.fmps.ma;\n  # Limitting open connection
+    per ip\n  limit_conn limitbyaddr 400;\n  proxy_set_header    Host              $host;\n
+    \ proxy_set_header    X-Real-IP         $remote_addr;\n  proxy_set_header    X-Forwarded-SSL
+    \  on;\n  proxy_set_header    X-Forwarded-Proto $scheme;\n  ignore_invalid_headers
+    off;  #pass through headers from Jenkins which are considered invalid by Nginx
+    server.\n  resolver 34.118.224.10 valid=30s;\n  # Mobile Devices Refresh token
+    Endpoints\n  location ~* ^/auth/v1/refresh/token  {\n    rewrite ^/auth/(.*) /auth/$1
+    break;\n    proxy_set_header Connection \"\";\n    proxy_set_header Host $host;\n
+    \   proxy_set_header X-Real-IP $remote_addr;\n    proxy_set_header X-Scheme $scheme;\n
+    \   proxy_set_header X-Forwarded-For   $remote_addr;\n    proxy_set_header X-Forwarded-Proto
+    $scheme;\n    proxy_connect_timeout 5;\n    proxy_send_timeout 60;\n    proxy_read_timeout
+    70;\n    proxy_http_version 1.1;\n    proxy_set_header X-Request-ID $sb_request_id;\n
+    \   proxy_pass http://kong;\n  }\n  # Admin API Endpoints for sunbird realm fpr
+    forgot password flow\n  location ~ /auth/admin/realms/sunbird/users/ {\n    rewrite
+    ^/auth/(.*) /auth/$1 break;\n    proxy_set_header X-Request-ID $sb_request_id;\n
+    \   proxy_set_header Host $host;\n    proxy_set_header X-Real-IP $remote_addr;\n
+    \   proxy_set_header X-Scheme $scheme;\n    proxy_set_header X-Forwarded-For   $remote_addr;\n
+    \   proxy_set_header X-Forwarded-Proto $scheme;\n    proxy_set_header Connection
+    \"\";\n    proxy_http_version 1.1;\n    proxy_pass http://keycloak;\n  }\n  #
+    Sunbird realm player API endpoints\n  location ~ /auth/realms/sunbird/(get-required-action-link|login-actions/(action-token|authenticate|required-action)|protocol/openid-connect/(auth|certs|logout|token|userinfo)|.well-known/openid-configuration)
+    {\n    rewrite ^/auth/(.*) /auth/$1 break;\n    proxy_set_header X-Request-ID
+    $sb_request_id;\n    proxy_set_header Host $host;\n    proxy_set_header X-Real-IP
+    $remote_addr;\n    proxy_set_header X-Scheme $scheme;\n    proxy_set_header X-Forwarded-For
+    \  $remote_addr;\n    proxy_set_header X-Forwarded-Proto $scheme;\n    proxy_set_header
+    Connection \"\";\n    proxy_http_version 1.1;\n    proxy_pass http://keycloak;\n
+    \ }\n  # Static Assets for player endpoints with caching\n  location ~ /auth/(resources/(.+\\.(png|svg|ico|js|eot|ttf|woff|woff2|css))|welcome-content/(.+\\.(png|svg|ico|js|eot|ttf|woff|woff2|css)))
+    {\n    # Enabling caching\n    proxy_cache_key $proxy_host$request_uri;\n    proxy_cache
+    small_cache;\n    add_header X-Proxy-Cache $upstream_cache_status;\n    add_header
+    X-Proxy-Cache-Date $upstream_http_date;\n    proxy_cache_use_stale error timeout
+    updating http_500 http_502 http_503 http_504;\n    proxy_cache_revalidate on;\n
+    \   proxy_cache_background_update on;\n    proxy_cache_lock on;\n    proxy_cache_valid
+    200 5m;\n    rewrite ^/auth/(.*) /auth/$1 break;\n    proxy_set_header Connection
+    \"\";\n    proxy_set_header Host $host;\n    proxy_set_header X-Real-IP $remote_addr;\n
+    \   proxy_set_header X-Scheme $scheme;\n    proxy_set_header X-Forwarded-For   $remote_addr;\n
+    \   proxy_connect_timeout 5;\n    proxy_send_timeout 60;\n    proxy_read_timeout
+    70;\n    proxy_http_version 1.1;\n    proxy_pass http://keycloak;\n  }\n  # This
+    is Caching mechanism for POST requests location search\n  location ~ /userorg/data/v1/location/search
+    {\n    # Enabling compression\n    include /etc/nginx/defaults.d/compression.conf;\n
+    \   # Enabling caching\n    # caching include Accept-Encoding header also, to
+    provide gziped or plain content as per request\n    proxy_cache_key \"$http_accept_encoding|$request_uri|$request_body\";\n
+    \   proxy_cache medium_cache;\n    add_header X-Proxy-Cache $upstream_cache_status;\n
+    \   add_header X-Proxy-Cache-Date $upstream_http_date;\n    proxy_cache_use_stale
+    error timeout updating http_500 http_502 http_503 http_504;\n    proxy_cache_methods
+    GET HEAD POST;\n    proxy_cache_revalidate on;\n    proxy_cache_background_update
+    on;\n    proxy_cache_lock on;\n    proxy_cache_valid 200 5m;\n    proxy_set_header
+    Connection \"\";\n    proxy_set_header Host $host;\n    proxy_set_header X-Real-IP
+    $remote_addr;\n    proxy_set_header X-Scheme $scheme;\n    proxy_set_header X-Real-IP
+    $remote_addr;\n    proxy_connect_timeout 5;\n    proxy_send_timeout 60;\n    proxy_read_timeout
+    70;\n    proxy_http_version 1.1;\n    proxy_set_header X-Request-ID $sb_request_id;\n
+    \   proxy_pass http://player;\n  }\n  # Caching for content consumption\n  location
+    ~ /api/(content/v1/read|course/v1/hierarchy|course/v1/batch/read) {\n    # Enabling
+    compression\n    include /etc/nginx/defaults.d/compression.conf;\n    # Enabling
+    caching\n    # caching include Accept-Encoding header also, to provide gziped
+    or plain content as per request\n    proxy_cache_key \"$http_accept_encoding|$request_uri|$request_body\";\n
+    \   proxy_cache large_cache;\n    add_header X-Proxy-Cache $upstream_cache_status;\n
+    \   add_header X-Proxy-Cache-Date $upstream_http_date;\n    proxy_cache_use_stale
+    error timeout updating http_500 http_502 http_503 http_504;\n    proxy_cache_methods
+    GET HEAD POST;\n    proxy_cache_revalidate on;\n    proxy_cache_background_update
+    on;\n    proxy_cache_lock on;\n    proxy_cache_valid 200 4m;\n    # Increasing
+    the proxy buffer size\n    proxy_buffer_size 16k;\n    proxy_busy_buffers_size
+    16k;\n    rewrite ^/api/(.*) /$1 break;\n    proxy_set_header Connection \"\";\n
+    \   proxy_set_header Host $host;\n    proxy_set_header X-Scheme $scheme;\n    proxy_set_header
+    X-Real-IP $remote_addr;\n    proxy_connect_timeout 5;\n    proxy_send_timeout
+    60;\n    proxy_read_timeout 70;\n    proxy_http_version 1.1;\n    proxy_pass http://kong;\n
+    \ }\n  # This is Caching mechanism for Content search\n  location ~ /api/content/v1/search
+    {\n    # Enabling compression\n    include /etc/nginx/defaults.d/compression.conf;\n
+    \   # Enabling caching\n    # caching include Accept-Encoding header also, to
+    provide gziped or plain content as per request\n    proxy_cache_key \"$http_accept_encoding|$request_uri|$request_body\";\n
+    \   proxy_cache large_cache;\n    add_header X-Proxy-Cache $upstream_cache_status;\n
+    \   add_header X-Proxy-Cache-Date $upstream_http_date;\n    proxy_cache_use_stale
+    error timeout updating http_500 http_502 http_503 http_504;\n    proxy_cache_methods
+    GET HEAD POST;\n    proxy_cache_revalidate on;\n    proxy_cache_background_update
+    on;\n    proxy_cache_lock on;\n    proxy_cache_valid 200 4m;\n    # Increasing
+    the proxy buffer size\n    proxy_buffer_size 16k;\n    proxy_busy_buffers_size
+    16k;\n    rewrite ^/api/(.*) /$1 break;\n    proxy_set_header Connection \"\";\n
+    \   proxy_set_header Host $host;\n    proxy_set_header X-Scheme $scheme;\n    proxy_set_header
+    X-Real-IP $remote_addr;\n    proxy_connect_timeout 5;\n    proxy_send_timeout
+    60;\n    proxy_read_timeout 70;\n    proxy_http_version 1.1;\n    proxy_pass http://kong;\n
+    \ }\n  # This is Caching mechanism for POST requests\n  location ~ /api/data/v1/form/read
+    {\n    # Enabling compression\n    include /etc/nginx/defaults.d/compression.conf;\n
+    \   # Enabling caching\n    # caching include Accept-Encoding header also, to
+    provide gziped or plain content as per request\n    proxy_cache_key \"$http_accept_encoding|$request_uri|$request_body\";\n
+    \   proxy_cache small_cache;\n    add_header X-Proxy-Cache $upstream_cache_status;\n
+    \   add_header X-Proxy-Cache-Date $upstream_http_date;\n    proxy_cache_use_stale
+    error timeout updating http_500 http_502 http_503 http_504;\n    proxy_cache_methods
+    GET HEAD POST;\n    proxy_cache_revalidate on;\n    proxy_cache_background_update
+    on;\n    proxy_cache_lock on;\n    proxy_cache_valid 200 5m;\n    rewrite ^/api/(.*)
+    /$1 break;\n    proxy_set_header Connection \"\";\n    proxy_set_header Host $host;\n
+    \   proxy_set_header X-Real-IP $remote_addr;\n    proxy_set_header X-Scheme $scheme;\n
+    \   proxy_set_header X-Real-IP $remote_addr;\n    proxy_connect_timeout 5;\n    proxy_send_timeout
+    60;\n    proxy_read_timeout 70;\n    proxy_http_version 1.1;\n    proxy_set_header
+    X-Request-ID $sb_request_id;\n    proxy_pass http://kong;\n  }\n  location ~ /api/(framework/v1/read|data/v1/system/settings/get|org/v1/search|org/v2/search|data/v1/location/search)
+    {\n    # Enabling compression\n    include /etc/nginx/defaults.d/compression.conf;\n
+    \   # Enabling caching\n    # caching include Accept-Encoding header also, to
+    provide gziped or plain content as per request\n    proxy_cache_key \"$http_accept_encoding|$request_uri|$request_body\";\n
+    \   proxy_cache medium_cache;\n    add_header X-Proxy-Cache $upstream_cache_status;\n
+    \   add_header X-Proxy-Cache-Date $upstream_http_date;\n    proxy_cache_use_stale
+    error timeout updating http_500 http_502 http_503 http_504;\n    proxy_cache_methods
+    GET HEAD POST;\n    proxy_cache_revalidate on;\n    proxy_cache_background_update
+    on;\n    proxy_cache_lock on;\n    proxy_cache_valid 200 5m;\n    rewrite ^/api/(.*)
+    /$1 break;\n    proxy_set_header Connection \"\";\n    proxy_set_header Host $host;\n
+    \   proxy_set_header X-Real-IP $remote_addr;\n    proxy_set_header X-Scheme $scheme;\n
+    \   proxy_set_header    X-Forwarded-For   $remote_addr;\n    proxy_connect_timeout
+    5;\n    proxy_send_timeout 60;\n    proxy_read_timeout 70;\n    proxy_http_version
+    1.1;\n    proxy_set_header X-Request-ID $sb_request_id;\n    proxy_buffer_size
+    16k;\n    proxy_busy_buffers_size 16k;\n    proxy_pass http://kong;\n  }\n  location
+    /api/ {\n    if ($request_method = OPTIONS ) {\n        add_header Access-Control-Allow-Origin
+    \"*\" ;\n        add_header Access-Control-Allow-Methods \"GET, OPTIONS, PATCH,
+    POST\";\n        add_header Access-Control-Allow-Headers \"Access-Control-Allow-Origin,
+    Authorization, Content-Type, user-id, Content-Encoding\";\n        add_header
+    Content-Length 0;\n        add_header Content-Type text/plain;\n        return
+    200;\n    }\n    include /etc/nginx/defaults.d/compression.conf;\n    rewrite
+    ^/api/(.*) /$1 break;\n    proxy_set_header Connection \"\";\n    proxy_set_header
+    Host $host;\n    proxy_set_header X-Real-IP $remote_addr;\n    proxy_set_header
+    X-Scheme $scheme;\n    proxy_set_header    X-Forwarded-For   $remote_addr;\n    proxy_connect_timeout
+    5;\n    proxy_send_timeout 60;\n    proxy_read_timeout 70;\n    proxy_http_version
+    1.1;\n    proxy_set_header X-Request-ID $sb_request_id;\n    proxy_pass http://kong;\n
+    \ }\n  # Oauth2 config\n  location /oauth2/ {\n    set $target http://oauth2-proxy;\n
+    \   proxy_set_header Host                    $host;\n    proxy_set_header X-Real-IP
+    \              $remote_addr;\n    proxy_set_header X-Scheme                $scheme;\n
+    \   proxy_set_header X-Auth-Request-Redirect $request_uri;\n    proxy_set_header
+    X-Request-ID $sb_request_id;\n    proxy_pass $target;\n  }\n  location = /oauth2/auth
+    {\n    set $target http://oauth2-proxy;\n    proxy_set_header Host             $host;\n
+    \   proxy_set_header X-Real-IP        $remote_addr;\n    proxy_set_header X-Scheme
+    \        $scheme;\n    # nginx auth_request includes headers but not body\n    proxy_set_header
+    Content-Length   \"\";\n    proxy_pass_request_body           off;\n    proxy_set_header
+    X-Request-ID $sb_request_id;\n    proxy_pass $target;\n  }\n  location /graylog/
+    {\n    auth_request /oauth2/auth;\n    error_page 401 = /oauth2/sign_in;\n    #
+    Setting target url\n    auth_request_set $target http://graylog;\n    # pass information
+    via X-User and X-Email headers to backend,\n    # requires running with --set-xauthrequest
+    flag\n    auth_request_set $user   $upstream_http_x_auth_request_user;\n    auth_request_set
+    $email  $upstream_http_x_auth_request_email;\n    proxy_set_header X-User  $user;\n
+    \   proxy_set_header X-Email $email;\n    # if you enabled --cookie-refresh, this
+    is needed for it to work with auth_request\n    auth_request_set $auth_cookie
+    $upstream_http_set_cookie;\n    add_header Set-Cookie $auth_cookie;\n    proxy_set_header
+    X-Request-ID $sb_request_id;\n    proxy_set_header Host $host;\n    proxy_set_header
+    X-Forwarded-Host $host;\n    proxy_set_header X-Forwarded-Server $host;\n    proxy_set_header
+    X-Scheme $scheme;\n    proxy_set_header Graylog-User viewer;\n    proxy_set_header
+    X-Graylog-Server-URL https://maharat.fmps.ma/graylog/;\n    rewrite  ^/graylog/(.*)$
+    \ /$1  break;\n    proxy_pass $target;\n  }\n  location /dashboard {\n    return
+    301 /graylog/;\n  }\n  location /oauth3 {\n    set $target http://oauth2-proxy;\n
+    \   proxy_set_header Host                    $host;\n    proxy_set_header X-Real-IP
+    \              $remote_addr;\n    proxy_set_header X-Scheme                $scheme;\n
+    \   proxy_set_header X-Auth-Request-Redirect $request_uri;\n    proxy_set_header
+    X-Request-ID $sb_request_id;\n    proxy_pass $target;\n  }\n  location = /oauth3/auth
+    {\n    set $target http://oauth2-proxy;\n    proxy_set_header Host             $host;\n
+    \   proxy_set_header X-Real-IP        $remote_addr;\n    proxy_set_header X-Scheme
+    \        $scheme;\n    proxy_set_header Content-Length   \"\";\n    proxy_pass_request_body
+    \          off;\n    proxy_set_header X-Request-ID $sb_request_id;\n    proxy_pass
+    $target;\n  }\n  location /grafana {\n    rewrite ^/grafana/(.*) /grafana/$1 break;\n
+    \   proxy_set_header Host $host;\n    proxy_set_header X-Real-IP $remote_addr;\n
+    \   proxy_set_header X-Scheme $scheme;\n    proxy_connect_timeout 1;\n    proxy_send_timeout
+    30;\n    proxy_read_timeout 40;\n    proxy_set_header    X-Forwarded-Proto $scheme;\n
+    \   proxy_set_header    X-Forwarded-For   $http_x_forwarded_for;\n    proxy_set_header
+    X-Request-ID $sb_request_id;\n    proxy_pass http://monitoring-grafana;\n  }\n
+    \ location /encryption/ {\n    set $target http://encryption;\n    rewrite ^/encryption/(.*)
+    /$1 break;\n    proxy_set_header Host $host;\n    proxy_set_header X-Real-IP $remote_addr;\n
+    \   proxy_set_header X-Scheme $scheme;\n    proxy_connect_timeout 1;\n    proxy_send_timeout
+    30;\n    proxy_read_timeout 40;\n    proxy_set_header    X-Forwarded-Proto $scheme;\n
+    \   proxy_set_header    X-Forwarded-For   $http_x_forwarded_for;\n    proxy_set_header
+    X-Request-ID $sb_request_id;\n    proxy_pass $target;\n  }\n  location /discussions/
+    {\n    proxy_set_header X-Real-IP $remote_addr;\n    proxy_set_header X-Forwarded-For
+    $proxy_add_x_forwarded_for;\n    proxy_set_header X-Forwarded-Proto $scheme;\n
+    \   proxy_set_header Host $http_host;\n    proxy_set_header X-NginX-Proxy true;\n
+    \   proxy_redirect off;\n    # Socket.IO Support\n    proxy_http_version 1.1;\n
+    \   proxy_set_header Upgrade $http_upgrade;\n    proxy_set_header Connection \"upgrade\";\n
+    \   #rewrite ^/discussions/(.*) /$1 break;\n    # set $target http://nodebb-service:4567;\n
+    \   # proxy_pass $target;\n    proxy_pass http://nodebb:4567;\n  }\n  location
+    ~* ^/assets/public/(.*) {\n    # Enabling cache for Response code 200\n    expires
+    1d;\n    add_header Pragma public;\n    add_header Cache-Control \"public\";\n
+    \   # Enabling compression\n    gzip            on;\n    gzip_min_length 100000;\n
+    \   gzip_proxied    expired no-cache no-store private auth;\n    gzip_types application/javascript
+    application/x-javascript text/javascript;\n    if ($request_method = OPTIONS )
+    {\n        add_header Access-Control-Allow-Origin \"*\" ;\n        add_header
+    Access-Control-Allow-Methods \"GET, OPTIONS, PATCH, POST\";\n        add_header
+    Access-Control-Allow-Headers \"Access-Control-Allow-Origin, Authorization, Content-Type,
+    user-id\";\n        # add_header Access-Control-Allow-Credentials \"true\";\n
+    \       add_header Content-Length 0;\n        add_header Content-Type text/plain;\n
+    \       return 200;\n    }\n    set $bucket           \"https://storage.googleapis.com/ed-prod-public-41ea104737\";\n
+    \   set $url_full         '$1';\n    proxy_http_version     1.1;\n    proxy_set_header
+    \      Host \"storage.googleapis.com\";\n    resolver kube-dns.kube-system.svc.cluster.local.;\n\n
+    \   proxy_set_header       Authorization '';\n    proxy_hide_header      Access-Control-Allow-Origin;\n
+    \   proxy_hide_header      Access-Control-Allow-Methods;\n    proxy_hide_header
+    \     x-amz-id-2;\n    proxy_hide_header      x-amz-request-id;\n    proxy_hide_header
+    \     Set-Cookie;\n    proxy_ignore_headers   \"Set-Cookie\";\n    proxy_buffering
+    \       off;\n    proxy_intercept_errors on;\n    add_header             Access-Control-Allow-Origin
+    \"*\";\n    add_header             Access-Control-Allow-Methods GET;\n    proxy_set_header
+    X-Request-ID $sb_request_id;\n    proxy_pass             $bucket/$url_full;\n
+    \ }\n  location ~* ^/content/preview/(.*) {\n    # Enabling compression\n    gzip
+    \           on;\n    gzip_min_length 100000;\n    gzip_proxied    expired no-cache
+    no-store private auth;\n    gzip_types application/javascript application/x-javascript
+    text/css text/javascript;\n    if ($request_method = OPTIONS ) {\n        add_header
+    Access-Control-Allow-Origin \"*\" ;\n        add_header Access-Control-Allow-Methods
+    \"GET, OPTIONS, PATCH, POST\";\n        add_header Access-Control-Allow-Headers
+    \"Access-Control-Allow-Origin, Authorization, Content-Type, user-id\";\n        #
+    add_header Access-Control-Allow-Credentials \"true\";\n        add_header Content-Length
+    0;\n        add_header Content-Type text/plain;\n        return 200;\n    }\n
+    \   set $bucket           \"https://storage.googleapis.com/ed-prod-public-41ea104737\";\n
+    \   set $url_full         '$1';\n    proxy_http_version     1.1;\n    proxy_set_header
+    \      Host \"storage.googleapis.com\";\n    resolver kube-dns.kube-system.svc.cluster.local.;\n
+    \   proxy_set_header       Authorization '';\n    proxy_hide_header      Access-Control-Allow-Origin;\n
+    \   proxy_hide_header      Access-Control-Allow-Methods;\n    proxy_hide_header
+    \     x-amz-id-2;\n    proxy_hide_header      x-amz-request-id;\n    proxy_hide_header
+    \     Set-Cookie;\n    proxy_ignore_headers   \"Set-Cookie\";\n    proxy_buffering
+    \       off;\n    proxy_intercept_errors on;\n    add_header             Access-Control-Allow-Origin
+    \"*\" ;\n    add_header             Access-Control-Allow-Methods GET;\n    proxy_set_header
+    X-Request-ID $sb_request_id;\n    proxy_pass             $bucket/v3/preview/$url_full;\n
+    }\n location ~ /content-editor/telemetry|collection-editor/telemetry {\n    rewrite
+    ^/(.*) /$1 break;\n    proxy_set_header Host $host;\n    proxy_set_header X-Real-IP
+    $remote_addr;\n    proxy_set_header X-Scheme $scheme;\n    proxy_connect_timeout
+    5;\n    proxy_send_timeout 60;\n    proxy_read_timeout 70;\n    proxy_set_header
+    \   X-Forwarded-Proto $scheme;\n    proxy_set_header Connection \"\";\n    proxy_http_version
+    1.1;\n    proxy_set_header X-Request-ID $sb_request_id;\n    proxy_pass http://player;\n
+    \ }\n  location ~* ^/content-editor/(.*) {\n    # Enabling compression\n    gzip
+    \           on;\n    gzip_min_length 100000;\n    gzip_proxied    expired no-cache
+    no-store private auth;\n    gzip_types application/javascript application/x-javascript
+    text/css text/javascript;\n    if ($request_method = OPTIONS ) {\n        add_header
+    Access-Control-Allow-Origin \"*\" ;\n        add_header Access-Control-Allow-Methods
+    \"GET, OPTIONS, PATCH, POST\";\n        add_header Access-Control-Allow-Headers
+    \"Access-Control-Allow-Origin, Authorization, Content-Type, user-id\";\n        #
+    add_header Access-Control-Allow-Credentials \"true\";\n        add_header Content-Length
+    0;\n        add_header Content-Type text/plain;\n        return 200;\n    }\n
+    \   set $bucket           \"https://storage.googleapis.com/ed-prod-public-41ea104737\";\n
+    \   set $url_full         '$1';\n    proxy_http_version     1.1;\n    proxy_set_header
+    \      Host \"storage.googleapis.com\";\n    resolver kube-dns.kube-system.svc.cluster.local.;\n\n
+    \   proxy_set_header       Authorization '';\n    proxy_hide_header      Access-Control-Allow-Origin;\n
+    \   proxy_hide_header      Access-Control-Allow-Methods;\n    proxy_hide_header
+    \     x-amz-id-2;\n    proxy_hide_header      x-amz-request-id;\n    proxy_hide_header
+    \     Set-Cookie;\n    proxy_ignore_headers   \"Set-Cookie\";\n    proxy_buffering
+    \       off;\n    proxy_intercept_errors on;\n    add_header             Access-Control-Allow-Origin
+    \"*\" ;\n    add_header             Access-Control-Allow-Methods GET;\n    proxy_set_header
+    X-Request-ID $sb_request_id;\n    proxy_pass             $bucket/content-editor/$url_full;\n
+    \ }\n  location ~* ^/discussion-ui/(.*) {\n    # Enabling compression\n    gzip
+    \           on;\n    gzip_min_length 100000;\n    gzip_proxied    expired no-cache
+    no-store private auth;\n    gzip_types application/javascript application/x-javascript
+    text/css text/javascript;\n    set $bucket            \"https://storage.googleapis.com\";\n
+    \   set $url_full          '$1';\n    proxy_http_version     1.1;\n    proxy_set_header
+    \      Host \"storage.googleapis.com\";\n    resolver kube-dns.kube-system.svc.cluster.local.;\n\n
+    \   proxy_set_header       Authorization '';\n    proxy_hide_header      Access-Control-Allow-Origin;\n
+    \   proxy_hide_header      Access-Control-Allow-Methods;\n    proxy_hide_header
+    \     x-amz-id-2;\n    proxy_hide_header      x-amz-request-id;\n    proxy_hide_header
+    \     Set-Cookie;\n    proxy_ignore_headers   \"Set-Cookie\";\n    proxy_buffering
+    \       off;\n    proxy_intercept_errors on;\n    add_header             Access-Control-Allow-Origin
+    \"*\" ;\n    add_header             Access-Control-Allow-Methods GET;\n    proxy_set_header
+    X-Request-ID $sb_request_id;\n    proxy_pass             $bucket/discussion-ui/$url_full;\n
+    \ }\n  location ~* ^/collection-editor/(.*) {\n    # Enabling compression\n    gzip
+    \           on;\n    gzip_min_length 100000;\n    gzip_proxied    expired no-cache
+    no-store private auth;\n    gzip_types application/javascript application/x-javascript
+    text/css text/javascript;\n    if ($request_method = OPTIONS ) {\n        add_header
+    Access-Control-Allow-Origin \"*\" ;\n        add_header Access-Control-Allow-Methods
+    \"GET, OPTIONS, PATCH, POST\";\n        add_header Access-Control-Allow-Headers
+    \"Access-Control-Allow-Origin, Authorization, Content-Type, user-id\";\n        #
+    add_header Access-Control-Allow-Credentials \"true\";\n        add_header Content-Length
+    0;\n        add_header Content-Type text/plain;\n        return 200;\n    }\n
+    \   set $bucket            \"https://storage.googleapis.com/ed-prod-public-41ea104737\";\n
+    \   set $url_full          '$1';\n    proxy_http_version     1.1;\n    proxy_set_header
+    \      Host \"storage.googleapis.com\";\n    resolver kube-dns.kube-system.svc.cluster.local.;\n\n
+    \   proxy_set_header       Authorization '';\n    proxy_hide_header      Access-Control-Allow-Origin;\n
+    \   proxy_hide_header      Access-Control-Allow-Methods;\n    proxy_hide_header
+    \     x-amz-id-2;\n    proxy_hide_header      x-amz-request-id;\n    proxy_hide_header
+    \     Set-Cookie;\n    proxy_ignore_headers   \"Set-Cookie\";\n    proxy_buffering
+    \       off;\n    proxy_intercept_errors on;\n    add_header             Access-Control-Allow-Origin
+    \"*\" ;\n    add_header             Access-Control-Allow-Methods GET;\n    proxy_set_header
+    X-Request-ID $sb_request_id;\n    proxy_pass             $bucket/collection-editor/$url_full;\n
+    \ }\n  location ~* ^/generic-editor/(.*) {\n    # Enabling compression\n    gzip
+    \           on;\n    gzip_min_length 100000;\n    gzip_proxied    expired no-cache
+    no-store private auth;\n    gzip_types application/javascript application/x-javascript
+    text/css text/javascript;\n    if ($request_method = OPTIONS ) {\n        add_header
+    Access-Control-Allow-Origin \"*\" ;\n        add_header Access-Control-Allow-Methods
+    \"GET, OPTIONS, PATCH, POST\";\n        add_header Access-Control-Allow-Headers
+    \"Access-Control-Allow-Origin, Authorization, Content-Type, user-id\";\n        #
+    add_header Access-Control-Allow-Credentials \"true\";\n        add_header Content-Length
+    0;\n        add_header Content-Type text/plain;\n        return 200;\n    }\n
+    \   set $bucket            \"https://storage.googleapis.com/ed-prod-public-41ea104737\";\n
+    \   set $url_full          '$1';\n    proxy_http_version     1.1;\n    proxy_set_header
+    \      Host \"storage.googleapis.com\";\n    resolver kube-dns.kube-system.svc.cluster.local.;\n\n
+    \   proxy_set_header       Authorization '';\n    proxy_hide_header      Access-Control-Allow-Origin;\n
+    \   proxy_hide_header      Access-Control-Allow-Methods;\n    proxy_hide_header
+    \     x-amz-id-2;\n    proxy_hide_header      x-amz-request-id;\n    proxy_hide_header
+    \     Set-Cookie;\n    proxy_ignore_headers   \"Set-Cookie\";\n    proxy_buffering
+    \       off;\n    proxy_intercept_errors on;\n    add_header             Access-Control-Allow-Origin
+    \"*\" ;\n    add_header             Access-Control-Allow-Methods GET;\n    proxy_set_header
+    X-Request-ID $sb_request_id;\n    proxy_pass             $bucket/generic-editor/$url_full;\n
+    \ }\n  location ~* ^/content-plugins/(.*) {\n    # Enabling cache for Response
+    code 200\n    expires 1d;\n    add_header Pragma public;\n    add_header Cache-Control
+    \"public\";\n    # Enabling compression\n    gzip        on;\n    gzip_min_length
+    100000;\n    gzip_proxied    expired no-cache no-store private auth;\n    gzip_types
+    application/javascript application/x-javascript text/css text/javascript;\n    if
+    ($request_method = OPTIONS ) {\n        add_header Access-Control-Allow-Origin
+    \"*\" ;\n        add_header Access-Control-Allow-Methods \"GET, OPTIONS, PATCH,
+    POST\";\n        add_header Access-Control-Allow-Headers \"Access-Control-Allow-Origin,
+    Authorization, Content-Type, user-id\";\n        # add_header Access-Control-Allow-Credentials
+    \"true\";\n        add_header Content-Length 0;\n        add_header Content-Type
+    text/plain;\n        return 200;\n    }\n    set $bucket           \"https://storage.googleapis.com/ed-prod-public-41ea104737\";\n
+    \   set $url_full         '$1';\n    proxy_http_version     1.1;\n    proxy_set_header
+    \      Host \"storage.googleapis.com\";\n    resolver kube-dns.kube-system.svc.cluster.local.;\n\n
+    \   proxy_set_header       Authorization '';\n    proxy_hide_header      Access-Control-Allow-Origin;\n
+    \   proxy_hide_header      Access-Control-Allow-Methods;\n    proxy_hide_header
+    \     x-amz-id-2;\n    proxy_hide_header      x-amz-request-id;\n    proxy_hide_header
+    \     Set-Cookie;\n    proxy_ignore_headers   \"Set-Cookie\";\n    proxy_buffering
+    \       off;\n    proxy_intercept_errors on;\n    add_header             Access-Control-Allow-Origin
+    \"*\";\n    add_header             Access-Control-Allow-Methods GET;\n    proxy_set_header
+    X-Request-ID $sb_request_id;\n    proxy_pass             $bucket/content-plugins/$url_full;\n
+    \ }\n  location /thirdparty {\n    # Enabling cache for Response code 200\n    expires
+    1d;\n    add_header Pragma public;\n    add_header Cache-Control \"public\";\n
+    \   # Enabling compression\n    gzip            on;\n    gzip_min_length 100000;\n
+    \   gzip_proxied    expired no-cache no-store private auth;\n    gzip_types application/javascript
+    application/x-javascript text/css text/javascript;\n    rewrite ^/(.*) /$1 break;\n
+    \   proxy_set_header Host $host;\n    proxy_set_header X-Real-IP $remote_addr;\n
+    \   proxy_set_header X-Scheme $scheme;\n    proxy_connect_timeout 5;\n    proxy_send_timeout
+    60;\n    proxy_read_timeout 70;\n    proxy_set_header    X-Forwarded-Proto $scheme;\n
+    \   proxy_set_header Connection \"\";\n    proxy_http_version 1.1;\n    proxy_set_header
+    X-Request-ID $sb_request_id;\n    proxy_pass http://player;\n  }\n  location ~*
+    ^/.well-known/assetlinks.json {\n    # Enabling cache for Response code 200\n
+    \   expires 1d;\n    add_header Pragma public;\n    add_header Cache-Control \"public\";\n
+    \   # Enabling compression\n    gzip        on;\n    gzip_min_length 100000;\n
+    \   gzip_proxied    expired no-cache no-store private auth;\n    gzip_types application/javascript
+    application/x-javascript text/css text/javascript;\n    if ($request_method =
+    OPTIONS ) {\n        add_header Access-Control-Allow-Origin \"*\" ;\n        add_header
+    Access-Control-Allow-Methods \"GET, OPTIONS, PATCH, POST\";\n        add_header
+    Access-Control-Allow-Headers \"Access-Control-Allow-Origin, Authorization, Content-Type,
+    user-id\";\n        # add_header Access-Control-Allow-Credentials \"true\";\n
+    \       add_header Content-Length 0;\n        add_header Content-Type text/plain;\n
+    \       return 200;\n    }\n    set $bucket           \"https://storage.googleapis.com/ed-prod-public-41ea104737\";\n
+    \   set $url_full         '$1';\n    proxy_http_version     1.1;\n    proxy_set_header
+    \      Host \"storage.googleapis.com\";\n    proxy_set_header       Authorization
+    '';\n    proxy_hide_header      Access-Control-Allow-Origin;\n    proxy_hide_header
+    \     Access-Control-Allow-Methods;\n    proxy_hide_header      x-amz-id-2;\n
+    \   proxy_hide_header      x-amz-request-id;\n    proxy_hide_header      Set-Cookie;\n
+    \   proxy_ignore_headers   \"Set-Cookie\";\n    proxy_buffering        off;\n
+    \   proxy_intercept_errors on;\n    add_header             Access-Control-Allow-Origin
+    \"*\";\n    add_header             Access-Control-Allow-Methods GET;\n    proxy_set_header
+    X-Request-ID $sb_request_id;\n    proxy_pass             $bucket/mobile-deeplink/assetlinks.json;\n
+    \ }\n  location ~* ^/desktop/(.*) {\n     # Enabling cache for Response code 200\n
+    \    expires 1d;\n     add_header Pragma public;\n     add_header Cache-Control
+    \"public\";\n     # Enabling compression\n     gzip            on;\n     gzip_min_length
+    100000;\n     gzip_proxied    expired no-cache no-store private auth;\n     gzip_types
+    application/javascript application/x-javascript text/css text/javascript;\n     if
+    ($request_method = OPTIONS ) {\n         add_header Access-Control-Allow-Origin
+    \"*\" ;\n         add_header Access-Control-Allow-Methods \"GET, OPTIONS, PATCH,
+    POST\";\n         add_header Access-Control-Allow-Headers \"Access-Control-Allow-Origin,
+    Authorization, Content-Type, user-id\";\n         # add_header Access-Control-Allow-Credentials
+    \"true\";\n         add_header Content-Length 0;\n         add_header Content-Type
+    text/plain;\n         return 200;\n    }\n    set $offline_bucket        \"https://storage.googleapis.com/\";\n
+    \   set $url_full         '$1';\n    proxy_http_version     1.1;\n    proxy_set_header
+    \      Host \"storage.googleapis.com\";\n    proxy_set_header       Authorization
+    '';\n    proxy_hide_header      Access-Control-Allow-Origin;\n    proxy_hide_header
+    \     Access-Control-Allow-Methods;\n    proxy_hide_header      x-amz-id-2;\n
+    \   proxy_hide_header      x-amz-request-id;\n    proxy_hide_header      Set-Cookie;\n
+    \   proxy_ignore_headers   \"Set-Cookie\";\n    proxy_buffering        off;\n
+    \   proxy_intercept_errors on;\n    add_header             Access-Control-Allow-Origin
+    \"*\";\n    add_header             Access-Control-Allow-Methods GET;\n    proxy_set_header
+    X-Request-ID $sb_request_id;\n    proxy_pass             https://$offline_bucket/$url_full;\n
+    \ }\n  # compression for svg certs download\n  location /api/certreg/v2/certs/download
+    {\n    rewrite ^/api/(.*) /$1 break;\n    include /etc/nginx/defaults.d/compression.conf;\n
+    \   proxy_set_header Connection \"\";\n    proxy_set_header Host $host;\n    proxy_set_header
+    X-Real-IP $remote_addr;\n    proxy_set_header X-Scheme $scheme;\n    proxy_set_header
+    \   X-Forwarded-For   $remote_addr;\n    proxy_connect_timeout 5;\n    proxy_send_timeout
+    60;\n    proxy_read_timeout 70;\n    proxy_http_version 1.1;\n    proxy_set_header
+    X-Request-ID $sb_request_id;\n    proxy_pass http://kong;\n  }\n  location /userorg/certreg/v2/certs/download
+    {\n    # Compression\n    gzip on;\n    gzip_comp_level    5;\n    gzip_min_length
+    \   50000; # 50KB\n    gzip_proxied       any;\n    gzip_vary          on;\n    #
+    Content types for compression\n    gzip_types\n    application/atom+xml\n    application/javascript\n
+    \   application/json\n    application/ld+json\n    application/manifest+json\n
+    \   application/rss+xml\n    application/vnd.geo+json\n    application/vnd.ms-fontobject\n
+    \   application/x-font-ttf\n    application/x-web-app-manifest+json\n    application/xhtml+xml\n
+    \   application/xml\n    font/opentype\n    image/bmp\n    image/svg+xml\n    image/x-icon\n
+    \   text/cache-manifest\n    text/css\n    text/plain\n    add_header test hello;\n
+    \   proxy_set_header Host $host;\n    proxy_set_header X-Real-IP $remote_addr;\n
+    \   proxy_set_header X-Scheme $scheme;\n    proxy_connect_timeout 5;\n    proxy_send_timeout
+    60;\n    proxy_read_timeout 70;\n    proxy_set_header    X-Forwarded-Proto $scheme;\n
+    \   proxy_set_header Connection \"\";\n    proxy_http_version 1.1;\n    proxy_set_header
+    X-Request-ID $sb_request_id;\n    proxy_pass http://player;\n  }\n  location /
+    {\n    rewrite ^/(.*) /$1 break;\n    proxy_set_header Host $host;\n    proxy_set_header
+    X-Real-IP $remote_addr;\n    proxy_set_header X-Scheme $scheme;\n    proxy_connect_timeout
+    5;\n    proxy_send_timeout 60;\n    proxy_read_timeout 70;\n    proxy_set_header
+    \   X-Forwarded-Proto $scheme;\n    proxy_set_header Connection \"\";\n    proxy_http_version
+    1.1;\n    proxy_set_header X-Request-ID $sb_request_id;\n    proxy_pass http://player;\n
+    \ }\n  location /v3/device/register {\n    proxy_set_header X-Request-ID $sb_request_id;\n
+    \   proxy_pass http://kong;\n    proxy_set_header Connection \"\";\n    rewrite
+    ^/v3/device/register/(.*) /v3/device/register/$1 break;\n    proxy_set_header
+    Host $host;\n    proxy_set_header X-Real-IP $remote_addr;\n    proxy_set_header
+    X-Scheme $scheme;\n    proxy_connect_timeout 5;\n    proxy_send_timeout 60;\n
+    \   proxy_read_timeout 70;\n    proxy_http_version 1.1;\n  }\n  location /action/data/v3/metrics
+    {\n    proxy_set_header X-Request-ID $sb_request_id;\n    proxy_pass http://kong;\n
+    \   proxy_set_header Connection \"\";\n    rewrite ^/action/data/v3/metrics/(.*)
+    /data/v3/metrics/$1 break;\n    proxy_http_version 1.1;\n    proxy_set_header
+    Host $host;\n    proxy_set_header X-Real-IP $remote_addr;\n    proxy_set_header
+    X-Scheme $scheme;\n    proxy_connect_timeout 5;\n    proxy_send_timeout 60;\n
+    \   proxy_read_timeout 70;\n  }\n  location  ~ /resourcebundles/v1/read|/userorg/data/v1/(role/read|system/settings/get)|/v1/tenant/info
+    \ {\n    # Enabling compression\n    include /etc/nginx/defaults.d/compression.conf;\n
+    \   # Enabling caching\n    # caching include Accept-Encoding header also, to
+    provide gziped or plain content as per request\n    proxy_cache_key \"$http_accept_encoding|$request_uri|$request_body\";\n
+    \   proxy_cache medium_cache;\n    add_header X-Proxy-Cache $upstream_cache_status;\n
+    \   add_header X-Proxy-Cache-Date $upstream_http_date;\n    proxy_cache_use_stale
+    error timeout updating http_500 http_502 http_503 http_504;\n    proxy_cache_revalidate
+    on;\n    proxy_cache_background_update on;\n    proxy_cache_lock on;\n    proxy_cache_valid
+    200 5m;\n    proxy_set_header Host $host;\n    proxy_set_header X-Real-IP $remote_addr;\n
+    \   proxy_set_header X-Scheme $scheme;\n    proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;\n
+    \   proxy_set_header X-Forwarded-Proto $scheme;\n    proxy_set_header X-Request-ID
+    $sb_request_id;\n    proxy_pass http://player;\n  }\n  location /api/channel/v1/read
+    {\n    # Enabling compression\n    include /etc/nginx/defaults.d/compression.conf;\n
+    \   # Enabling caching\n    # caching include Accept-Encoding header also, to
+    provide gziped or plain content as per request\n    proxy_cache_key \"$http_accept_encoding|$request_uri|$request_body\";\n
+    \   proxy_cache medium_cache;\n    add_header X-Proxy-Cache $upstream_cache_status;\n
+    \   add_header X-Proxy-Cache-Date $upstream_http_date;\n    proxy_cache_use_stale
+    error timeout updating http_500 http_502 http_503 http_504;\n    proxy_cache_revalidate
+    on;\n    proxy_cache_background_update on;\n    proxy_cache_lock on;\n    proxy_cache_valid
+    200 5m;\n    rewrite ^/api/channel/v1/read/(.*) /channel/v1/read/$1 break;\n    proxy_set_header
+    Connection \"\";\n    proxy_set_header Host $host;\n    proxy_set_header X-Real-IP
+    $remote_addr;\n    proxy_set_header X-Scheme $scheme;\n    proxy_set_header    X-Forwarded-For
+    \  $remote_addr;\n    proxy_connect_timeout 5;\n    proxy_send_timeout 60;\n    proxy_read_timeout
+    70;\n    proxy_http_version 1.1;\n    proxy_set_header X-Request-ID $sb_request_id;\n
+    \   proxy_pass http://kong;\n  }\n  location ~ ^/chatapi/ {\n    set $target http://router-service:8000;\n
+    \   rewrite ^/chatapi/(.*) /$1 break;\n    proxy_pass $target;\n    proxy_set_header
+    Host $host;\n    proxy_set_header X-Real-IP $remote_addr;\n    proxy_set_header
+    X-Scheme $scheme;\n    proxy_connect_timeout 5;\n    proxy_send_timeout 60;\n
+    \   proxy_read_timeout 70;\n    proxy_set_header    X-Forwarded-Proto $scheme;\n
+    \   proxy_set_header Connection \"\";\n    proxy_http_version 1.1;\n  }\n  location
+    /oauth2callback {\n    return 200 'OK';\n    add_header Content-Type text/plain;\n
+    \ }\n  location /dial/ {\n    if ($dial_upstream_host = kong) {\n        rewrite
+    ^/dial/(.*) /api/dialcode/v2/read/$1;\n    }\n    proxy_set_header Host $host;\n
+    \   proxy_set_header X-Real-IP $remote_addr;\n    proxy_set_header X-Scheme $scheme;\n
+    \   proxy_connect_timeout 5;\n    proxy_send_timeout 60;\n    proxy_read_timeout
+    70;\n    proxy_set_header    X-Forwarded-Proto $scheme;\n    proxy_set_header
+    Connection \"\";\n    proxy_http_version 1.1;\n    proxy_set_header X-Request-ID
+    $sb_request_id;\n    proxy_pass http://$dial_upstream_host;\n  }\n}\nserver {\n
+    \  listen 80;\n   server_name superset.maharat.fmps.ma;\n   # Redirect all HTTP
+    requests to HTTPS\n   return 301 https://$host$request_uri; \n}\nserver {\n  listen
+    443 ssl;\n  ssl_certificate /etc/secrets/tls.crt;\n  ssl_certificate_key /etc/secrets/tls.key;\n
+    \ ssl_protocols TLSv1.2 TLSv1.3;\n  ssl_ciphers \"EECDH+ECDSA+AESGCM EECDH+aRSA+AESGCM
+    EECDH+ECDSA+SHA384 EECDH+ECDSA+SHA256 EECDH+aRSA+SHA384 EECDH+aRSA+SHA256 EECDH+aRSA+RC4
+    EECDH EDH+aRSA HIGH !RC4 !aNULL !eNULL !LOW !3DES !MD5 !EXP !PSK !SRP !DSS\";\n
+    \ server_name *.superset.maharat.fmps.ma superset.maharat.fmps.ma;\n  limit_conn
+    limitbyaddr 400;\n  proxy_set_header Host $host;\n  proxy_set_header X-Real-IP
+    $remote_addr;\n  proxy_set_header X-Forwarded-SSL on;\n  proxy_set_header X-Forwarded-Proto
+    $scheme;\n  ignore_invalid_headers off;\n  resolver 34.118.224.10;\n  location
+    / {\n    proxy_pass http://superset.sunbird.svc.cluster.local:8088;\n    proxy_set_header
+    Host $host;\n    proxy_set_header X-Real-IP $remote_addr;\n    proxy_set_header
+    X-Forwarded-Host $host;\n    proxy_set_header X-Forwarded-Proto $scheme;\n  }\n}"
+  tls.crt: |-
+    -----BEGIN CERTIFICATE-----
+    MIIDmjCCAyGgAwIBAgISBTA7SUx05AIDhFfLKPDgPh9hMAoGCCqGSM49BAMDMDIx
+    CzAJBgNVBAYTAlVTMRYwFAYDVQQKEw1MZXQncyBFbmNyeXB0MQswCQYDVQQDEwJF
+    NTAeFw0yNTA1MDgwNjA4MDJaFw0yNTA4MDYwNjA4MDFaMBoxGDAWBgNVBAMTD21h
+    aGFyYXQuZm1wcy5tYTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABOuohuExR8cX
+    4p8FxpqvOlKup4XPlnGEbndauTh5MGMQfT2ugHzLiBii8NxE2n0/42eJsqXkTXak
+    aGS7YeLibzKjggItMIICKTAOBgNVHQ8BAf8EBAMCB4AwHQYDVR0lBBYwFAYIKwYB
+    BQUHAwEGCCsGAQUFBwMCMAwGA1UdEwEB/wQCMAAwHQYDVR0OBBYEFCTmVSme3/3P
+    JQNYWARVyYe8EY0HMB8GA1UdIwQYMBaAFJ8rX888IU+dBLftKyzExnCL0tcNMDIG
+    CCsGAQUFBwEBBCYwJDAiBggrBgEFBQcwAoYWaHR0cDovL2U1LmkubGVuY3Iub3Jn
+    LzApBgNVHREEIjAggg1tYWhhcmF0LmNvLm1hgg9tYWhhcmF0LmZtcHMubWEwEwYD
+    VR0gBAwwCjAIBgZngQwBAgEwLQYDVR0fBCYwJDAioCCgHoYcaHR0cDovL2U1LmMu
+    bGVuY3Iub3JnLzk4LmNybDCCAQUGCisGAQQB1nkCBAIEgfYEgfMA8QB3AO08S9bo
+    BsKkogBX28sk4jgB31Ev7cSGxXAPIN23Pj/gAAABlq63pJUAAAQDAEgwRgIhAN3y
+    bTeN9UxxKLZffRg8xyHuX0Rvlb4BetSi+NLUS28NAiEAzEKVsxyATnQrrhAnSZRM
+    gQ1U99nMg1O6Xup9pjh/C7MAdgAN4fIwK9MNwUBiEgnqVS78R3R8sdfpMO8OQh60
+    fk6qNAAAAZaut6SeAAAEAwBHMEUCIQDgudc7/E1qK1VWiNAvZMFRmOSUhz0olJ3F
+    lr9VmthoZQIgFwLWF01Ex4E6ZforZ7NPTSlx24F1M/X55jjNucOB738wCgYIKoZI
+    zj0EAwMDZwAwZAIwCr5Dt2yFu7EOFrhZAA1vrnUkd6C+YnxkfewWPs+jJusoTCbz
+    ukNS5nBi0rbMO2mJAjB5KK7n8cRxyUuBtGq4YZu+IH0FP64Vci6X9eIKc8Shl91u
+    Z9WlXmtxfdF9K8SOZsY=
+    -----END CERTIFICATE-----
+    -----BEGIN CERTIFICATE-----
+    MIIEVzCCAj+gAwIBAgIRAIOPbGPOsTmMYgZigxXJ/d4wDQYJKoZIhvcNAQELBQAw
+    TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh
+    cmNoIEdyb3VwMRUwEwYDVQQDEwxJU1JHIFJvb3QgWDEwHhcNMjQwMzEzMDAwMDAw
+    WhcNMjcwMzEyMjM1OTU5WjAyMQswCQYDVQQGEwJVUzEWMBQGA1UEChMNTGV0J3Mg
+    RW5jcnlwdDELMAkGA1UEAxMCRTUwdjAQBgcqhkjOPQIBBgUrgQQAIgNiAAQNCzqK
+    a2GOtu/cX1jnxkJFVKtj9mZhSAouWXW0gQI3ULc/FnncmOyhKJdyIBwsz9V8UiBO
+    VHhbhBRrwJCuhezAUUE8Wod/Bk3U/mDR+mwt4X2VEIiiCFQPmRpM5uoKrNijgfgw
+    gfUwDgYDVR0PAQH/BAQDAgGGMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcD
+    ATASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdDgQWBBSfK1/PPCFPnQS37SssxMZw
+    i9LXDTAfBgNVHSMEGDAWgBR5tFnme7bl5AFzgAiIyBpY9umbbjAyBggrBgEFBQcB
+    AQQmMCQwIgYIKwYBBQUHMAKGFmh0dHA6Ly94MS5pLmxlbmNyLm9yZy8wEwYDVR0g
+    BAwwCjAIBgZngQwBAgEwJwYDVR0fBCAwHjAcoBqgGIYWaHR0cDovL3gxLmMubGVu
+    Y3Iub3JnLzANBgkqhkiG9w0BAQsFAAOCAgEAH3KdNEVCQdqk0LKyuNImTKdRJY1C
+    2uw2SJajuhqkyGPY8C+zzsufZ+mgnhnq1A2KVQOSykOEnUbx1cy637rBAihx97r+
+    bcwbZM6sTDIaEriR/PLk6LKs9Be0uoVxgOKDcpG9svD33J+G9Lcfv1K9luDmSTgG
+    6XNFIN5vfI5gs/lMPyojEMdIzK9blcl2/1vKxO8WGCcjvsQ1nJ/Pwt8LQZBfOFyV
+    XP8ubAp/au3dc4EKWG9MO5zcx1qT9+NXRGdVWxGvmBFRAajciMfXME1ZuGmk3/GO
+    koAM7ZkjZmleyokP1LGzmfJcUd9s7eeu1/9/eg5XlXd/55GtYjAM+C4DG5i7eaNq
+    cm2F+yxYIPt6cbbtYVNJCGfHWqHEQ4FYStUyFnv8sjyqU8ypgZaNJ9aVcWSICLOI
+    E1/Qv/7oKsnZCWJ926wU6RqG1OYPGOi1zuABhLw61cuPVDT28nQS/e6z95cJXq0e
+    K1BcaJ6fJZsmbjRgD5p3mvEf5vdQM7MCEvU0tHbsx2I5mHHJoABHb8KVBgWp/lcX
+    GWiWaeOyB7RP+OfDtvi2OsapxXiV7vNVs7fMlrRjY1joKaqmmycnBvAq14AEbtyL
+    sVfOS66B8apkeFX2NY4XPEYV4ZSCe8VHPrdrERk2wILG3T/EGmSIkCYVUMSnjmJd
+    VQD9F6Na/+zmXCc=
+    -----END CERTIFICATE-----
+  tls.key: |-
+    -----BEGIN EC PRIVATE KEY-----
+    MHcCAQEEILgrEzZTUUOgVB1oxb8Jd+5FOsH1awv3w7MEVTf4XTVloAoGCCqGSM49
+    AwEHoUQDQgAE66iG4TFHxxfinwXGmq86Uq6nhc+WcYRud1q5OHkwYxB9Pa6AfMuI
+    GKLw3ETafT/jZ4mypeRNdqRoZLth4uJvMg==
+    -----END EC PRIVATE KEY-----
+kind: ConfigMap
+metadata:
+  annotations:
+    cloud.google.com/load-balancer-type: External
+    meta.helm.sh/release-name: edbb
+    meta.helm.sh/release-namespace: sunbird
+    reloader.stakater.com/auto: "true"
+  creationTimestamp: "2025-05-16T06:09:20Z"
+  labels:
+    app.kubernetes.io/instance: edbb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: nginx-public-ingress
+    app.kubernetes.io/version: 1.0.0
+    helm.sh/chart: nginx-public-ingress-0.1.0
+  name: nginx-public-ingress
+  namespace: sunbird
+  resourceVersion: "47493856"
+  uid: 90b60d3c-a7d1-4357-a26f-934cb177f8aa

@@ -1,0 +1,35 @@
+server {
+  listen 80;
+  server_name superset.maharat.fmps.ma;
+  # Redirect all HTTP requests to HTTPS
+  return 301 https://$host$request_uri;
+}
+server {
+    listen 443 ssl;
+
+    ssl_certificate       /etc/secrets/tls.crt;
+    ssl_certificate_key   /etc/secrets/tls.key;
+
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers "EECDH+ECDSA+AESGCM EECDH+aRSA+AESGCM EECDH+ECDSA+SHA384 EECDH+ECDSA+SHA256 EECDH+aRSA+SHA384 EECDH+aRSA+SHA256 EECDH+aRSA+RC4 EECDH EDH+aRSA HIGH !RC4 !aNULL !eNULL !LOW !3DES !MD5 !EXP !PSK !SRP !DSS";
+
+    server_name *.superset.maharat.fmps.ma superset.maharat.fmps.ma;
+
+    # Limiting open connections per IP
+    limit_conn limitbyaddr 400;
+
+    proxy_set_header Host              $host;
+    proxy_set_header X-Real-IP         $remote_addr;
+    proxy_set_header X-Forwarded-SSL   on;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    ignore_invalid_headers off;
+    resolver 34.118.224.10;
+
+    location / {
+        proxy_pass http://superset.sunbird.svc.cluster.local:8088;
+        proxy_set_header Host               $host;
+        proxy_set_header X-Real-IP          $remote_addr;
+        proxy_set_header X-Forwarded-Host   $host;
+        proxy_set_header X-Forwarded-Proto  $scheme;
+    }
+}

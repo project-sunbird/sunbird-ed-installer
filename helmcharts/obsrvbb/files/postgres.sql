@@ -233,6 +233,29 @@ ALTER TABLE report ADD CONSTRAINT report_type_check CHECK (type IN ('public', 'p
 ALTER TABLE report ALTER COLUMN type TYPE varchar(10);
 
 
+CREATE TABLE IF NOT EXISTS user_summary_report (
+    userid TEXT PRIMARY KEY,
+    firstname TEXT,
+    lastname TEXT,
+    username TEXT,
+    email TEXT,
+    usertype TEXT,
+    cin TEXT,
+    fmpsid TEXT,
+    province TEXT,
+    orgname TEXT,
+    createddate TEXT,
+    num_courses_enrolled INTEGER,
+    num_courses_started INTEGER,
+    num_courses_completed INTEGER,
+    updated_date TIMESTAMP
+);
+
+ALTER TABLE user_summary_report ADD COLUMN course_metrics JSONB;
+
+ALTER TABLE user_summary_report
+ADD COLUMN designation text;
+
 
 -- superset
 CREATE DATABASE superset;

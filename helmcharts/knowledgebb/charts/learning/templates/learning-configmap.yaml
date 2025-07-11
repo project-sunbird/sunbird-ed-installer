@@ -13,7 +13,7 @@ data:
     content.metadata.visibility.parent=["textbookunit", "courseunit", "lessonplanunit"]
 
     # Language-Service Configuration
-    language.graph_ids=["as","bn","en","gu","hi","hoc","jun","ka","mai","mr","unx","or","san","sat","ta","te","urd","pj"]
+    language.graph_ids=["as","bn","en","gu","hi","hoc","jun","ka","mai","mr","unx","or","san","sat","ta","te","urd","pj","ar","fr"]
 
     # Redis Configuration
     redis.host="{{ .Values.global.redis.host }}"
@@ -160,7 +160,7 @@ data:
     platform.cache.ttl=3600000
     platform.object.bookmark.expiry="15"
 
-    language.map={"Hindi":"hi", "English":"en", "Telugu":"te", "Kannada":"ka", "Tamil":"ta", "Assamese":"as", "Bengali":"bn", "Bodo":"bo", "Gujarati":"gu", "Konkani":"ko", "Malayalam":"ml", "Marathi":"mr", "Nepali":"ne", "Odia":"or", "Punjabi":"pj", "Sanskrit":"san"}
+    language.map={"Hindi":"hi", "English":"en", "Telugu":"te", "Kannada":"ka", "Tamil":"ta", "Assamese":"as", "Bengali":"bn", "Bodo":"bo", "Gujarati":"gu", "Konkani":"ko", "Malayalam":"ml", "Marathi":"mr", "Nepali":"ne", "Odia":"or", "Punjabi":"pj", "Sanskrit":"san", "Arabic":"ar", "French":"fr"}
 
     framework.max_term_creation_limit=200
 
@@ -171,6 +171,7 @@ data:
     kafka.topics.instruction="{{ .Values.global.env }}.knowlg.learning.job.request"
     kafka.urls="{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
     kafka.publish.request.topic="{{ .Values.global.env }}.knowlg.publish.job.request"
+    kafka_topics_graph_event: "{{ .Values.global.env }}.learning.graph.events"
     kafka.topic.system.command="{{ .Values.global.env }}.system.command"
     job.request.event.mimetype=["application/pdf",
                                   "application/vnd.ekstep.ecml-archive",

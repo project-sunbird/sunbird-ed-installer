@@ -43,7 +43,7 @@ get_report_job_model_name(){
 		;;
 		"program-collection-summary-report") echo 'org.sunbird.analytics.job.report.CollectionSummaryJob'
 		;;
-		"collection-summary-report-v2") echo 'org.sunbird.analytics.job.report.CollectionSummaryJobV2'
+		"collection-summary-report-v2") echo  'org.sunbird.analytics.job.report.UserSummaryReport'
 		;;
 		"assessment-score-metric-correction") echo 'org.sunbird.analytics.audit.AssessmentScoreCorrectionJob'
 		;;
@@ -93,18 +93,6 @@ if [[ "{{ .Values.global.sunbird_cloud_storage_provider }}" == "gcloud" ]]; then
     --class org.ekstep.analytics.job.JobExecutor \
     $MODELS_HOME/batch-models-2.0.jar --model "$job_id" --config "$job_config$batchIds" \
     >> "$DP_LOGS/$today-job-execution.log" 2>&1
-
-elif [[ "{{ .Values.global.sunbird_cloud_storage_provider }}" == "azure" ]]; then
-  nohup $SPARK_HOME/bin/spark-submit \
-    --conf spark.jars.ivy=/tmp/.ivy \
-    --conf spark.driver.extraJavaOptions='-Dconfig.file=/data/analytics/scripts/common.conf' \
-    --conf "fs.azure.account.key.{{ .Values.global.cloud_storage_access_key }}.blob.core.windows.net={{ .Values.global.cloud_storage_secret_key }}" \
-    --master 'local[*]' \
-    --jars $(echo ${libs_path}/lib/*.jar | tr ' ' ','),$MODELS_HOME/analytics-framework-2.0.jar,$MODELS_HOME/scruid_2.12-2.5.0.jar,$MODELS_HOME/batch-models-2.0.jar \
-    --class org.ekstep.analytics.job.JobExecutor \
-    $MODELS_HOME/batch-models-2.0.jar --model "$job_id" --config "$job_config$batchIds" \
-    >> "$DP_LOGS/$today-job-execution.log" 2>&1
-
 else
   nohup $SPARK_HOME/bin/spark-submit \
     --conf spark.jars.ivy=/tmp/.ivy \

@@ -1,8 +1,8 @@
 replicaCount: 1
 
 image:
-  repository: sunbirded.azurecr.io/data-pipeline
-  tag: release-7.0.0_RC5_b06135e
+  repository: aimansharief/data-pipeline
+  tag: release-7.0.0_RV09
   pullPolicy: IfNotPresent
   pullSecrets: []
 
@@ -663,6 +663,8 @@ flink_jobs:
         rc.basePath = "{{ .Values.cert_rc_base_url }}"
         rc.entity = "{{ .Values.cert_rc_entity }}"
         rc.rcApiKey = "{{ .Values.sunbird_api_auth_token }}"
+        search.basePath = "{{ .Values.kp_search_service_base_url }}"
+        lms.basePath: http://lms-service:9000/
       }
       enable.suppress.exception = "{{ include "common.tplvalues.render" (dict "value" .Values.collection_certificate_generator_enable_suppress_exception "context" $) }}"
       enable.rc.certificate = "{{ include "common.tplvalues.render" (dict "value" .Values.collection_certificate_generator_enable_rc_certificate "context" $) }}"

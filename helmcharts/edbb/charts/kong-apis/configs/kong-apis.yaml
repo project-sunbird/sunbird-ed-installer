@@ -9090,3 +9090,39 @@ kong_apis:
     config.limit_by: credential
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
+
+- name: assessmentItemCreate
+  uris: "{{ .Values.assessment_prefix }}/v1/items/create"
+  upstream_url: "{{ .Values.learning_service_url }}/assessment/v3/items/create"
+  strip_uri: true
+  plugins:
+  - name: jwt
+  - name: cors
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
+  - name: acl
+    config.whitelist:
+    - assessmentAccess
+  - name: rate-limiting
+    config.policy: local
+    config.hour: "{{ .Values.medium_rate_limit_per_hour }}"
+    config.limit_by: credential
+  - name: request-size-limiting
+    config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"  
+
+- name: assessmentItemUpdate
+  uris: "{{ .Values.assessment_prefix }}/v1/items/update"
+  upstream_url: "{{ .Values.learning_service_url }}/assessment/v3/items/update"
+  strip_uri: true
+  plugins:
+  - name: jwt
+  - name: cors
+  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
+  - name: acl
+    config.whitelist:
+    - assessmentAccess
+  - name: rate-limiting
+    config.policy: local
+    config.hour: "{{ .Values.medium_rate_limit_per_hour }}"
+    config.limit_by: credential
+  - name: request-size-limiting
+    config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"     

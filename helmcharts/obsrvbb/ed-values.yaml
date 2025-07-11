@@ -8,3 +8,7 @@ redis:
   enabled: false
 postgresql:
   enabled: false
+druid-operator:
+  enabled: true
+druid-raw-cluster:
+  enabled: true

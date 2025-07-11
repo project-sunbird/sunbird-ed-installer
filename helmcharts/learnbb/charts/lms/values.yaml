@@ -3,8 +3,8 @@ fullnameOverride: "lms"
 replicaCount: 1
 
 image:
-  repository: sunbirded.azurecr.io/lms_service
-  tag: "release-7.0.0_RC2_d14e96b_32"
+  repository: asia-south1-docker.pkg.dev/sunbird-morocco-sandbox-434709/sunbird-morocco-artifact-dev/lms-service
+  tag: "release-7.0.0_RC4"
   pullPolicy: IfNotPresent
   pullSecrets: []
 

@@ -3,8 +3,8 @@ fullnameOverride: "userorg"
 replicaCount: 1
 
 image:
-  repository: sunbirded.azurecr.io/userorg-service
-  tag: "release-7.0.0_RC5_0d513be_31"
+  repository: asia-south1-docker.pkg.dev/sunbird-morocco-sandbox-434709/sunbird-morocco-artifact-dev/userorg-service
+  tag: "email-special-chars"
   pullPolicy: IfNotPresent
   pullSecrets: []
 

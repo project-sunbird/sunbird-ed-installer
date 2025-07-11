@@ -89,15 +89,13 @@ neo4j:
     annotations: "keep"
     resources:
       requests:
-        storage: 25Gi
+        storage: 100Gi
 
 
 logstash:
   name: logstash
   image: logstash:6.8.21
   imagePullPolicy: Always
-  pipeline_workers: 1
-  pipeline_bacth_size: 1
   configmap:
     name: logstash-config
   mountPath:
