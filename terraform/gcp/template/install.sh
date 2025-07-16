@@ -116,6 +116,24 @@ function install_helm_components() {
     done
 }
 
+function post_install_nodebb_plugins() {
+    echo ">> Waiting for NodeBB deployment to be ready..."
+    kubectl rollout status deployment nodebb -n sunbird --timeout=300s
+
+    echo ">> Activating NodeBB plugins..."
+    kubectl exec -n sunbird deploy/nodebb -- ./nodebb activate nodebb-plugin-create-forum
+    kubectl exec -n sunbird deploy/nodebb -- ./nodebb activate nodebb-plugin-sunbird-oidc
+    kubectl exec -n sunbird deploy/nodebb -- ./nodebb activate nodebb-plugin-write-api
+
+    echo ">> Rebuilding NodeBB to apply plugin changes..."
+    kubectl exec -n sunbird deploy/nodebb -- ./nodebb build
+
+    echo ">> Restarting NodeBB..."
+    kubectl delete pod -n sunbird -l app.kubernetes.io/name=nodebb
+
+    echo "✅ NodeBB plugins are activated, built, and NodeBB has been restarted."
+}
+
 function dns_mapping() {
     domain_name=$(kubectl get cm -n sunbird lms-env -ojsonpath='{.data.sunbird_web_url}')
     PUBLIC_IP=$(kubectl get svc -n sunbird nginx-public-ingress -ojsonpath='{.status.loadBalancer.ingress[0].ip}')
