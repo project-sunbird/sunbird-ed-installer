@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: aimansharief/data-pipeline
-  tag: release-7.0.0_RV09
+  tag: release-7.0.0_RV11
   pullPolicy: IfNotPresent
   pullSecrets: []
 
