@@ -80,23 +80,14 @@ player:
       cpu: 1
       memory: 1G      
 
-report:
-  resources:
-    requests:
-      cpu: 100m
-      memory: 100Mi
-    limits:
-      cpu: 1
-      memory: 1G
-
-router: 
+report: 
   resources:
     requests:
       cpu: 100m
       memory: 100Mi
     limits:
       cpu: 1000m
-      memory: 1024Mi
+      memory: 1G
     
 #inquirybb
 assessment:
@@ -172,7 +163,7 @@ taxonomy:
       memory: 1024Mi
 
 #learnbb
-adminutil:
+adminutils:
   resources:
     requests:
       cpu: 100m
@@ -226,7 +217,7 @@ druid-operator:
       cpu: 1
       memory: 1024Mi   
 
-cassandra: 
+cassandra:
   persistence:
     size: 25Gi
   resources:
@@ -246,43 +237,43 @@ druid-raw-cluster:
         cpu: 100m
         memory: 1024Mi
       limits:
-        cpu: 200m
-        memory: 2048Mi
+       cpu: 200m
+       memory: 2048Mi
     druid_coordinator:
       requests:
         cpu: 250m
         memory: 750Mi
       limits:
-        cpu: 250m
-        memory: 1024Mi
+       cpu: 250m
+       memory: 1024Mi
     druid_overlord:
       requests:
         cpu: 250m
         memory: 750Mi
       limits:
-        cpu: 250m
-        memory: 1024Mi
+       cpu: 250m
+       memory: 1024Mi
     druid_historical:
       requests:
         cpu: 750m
         memory: 512Mi
       limits:
-        cpu: 1
-        memory: 2048Mi
+       cpu: 1000m
+       memory: 2048Mi
     druid_indexer:
       requests:
         cpu: 200m
         memory: 10Gi
       limits:
-        cpu: 200m
-        memory: 11Gi
+       cpu: 200m
+       memory: 11Gi
     druid_router:
       requests:
         cpu: 250m
         memory: 500Mi
       limits:
-        cpu: 512m
-        memory: 1024Mi
+       cpu: 512m
+       memory: 1024Mi
 
 groups:
   resources:
@@ -357,15 +348,16 @@ kafka:
       memory: 1024Mi
   persistence:
     size: 10Gi
-  metrics:
-    kafka:
-      resources:
-        limits:
-          cpu: 100m
-          memory: 512Mi
-        requests:
-          cpu: 100m
-          memory: 256Mi
+  zookeeper:  
+    persistence:
+      size: 2Gi
+    resources:
+      limits:
+        cpu: 256m
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
 
 neo4j:
   resources:
@@ -384,52 +376,41 @@ neo4j:
 postgresql: 
   persistence:
     size: 25Gi
-  primary:
-    resources:
-      limits:
-        cpu: 250m
-        memory: 512Mi
-      requests:
-        cpu: 250m
-        memory: 256Mi
+  resources:
+    limits:
+      cpu: 250m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
 
 redis: 
   master:
     persistence:
       size: 25Gi
     primary:
-      resources:
-        limits:
-          cpu: 0.5
-          memory: 2Gi
-        requests:
-          cpu: 0.5
-          memory: 1Gi 
+    resources:
+      limits:
+        cpu: 0.5
+        memory: 2Gi
+      requests:
+        cpu: 0.5
+        memory: 1Gi 
 
-spark:
-  resources:
-    limits:
-      cpu: 0.5
-      memory: 2Gi
-    requests:
-      cpu: 0.5
-      memory: 1Gi
+spark: 
+  master:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 2Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
   persistence:
     spark_data_pvc:
       size: 25Gi
     log_data_pvc:
-      size: 25Gi   
-
-zookeeper: 
-  persistence:
-    size: 2Gi
-  resources:
-    limits:
-      cpu: 256m
-      memory: 512Mi
-    requests:
-      cpu: 100m
-      memory: 128Mi 
+      size: 25Gi    
 
 #Obsrvbb
 analytics:
@@ -448,15 +429,6 @@ analytics:
 #     requests:
 #       cpu: 500m
 #       memory: 700Mi
-
-submit-ingestion:
-  resources:
-    requests:
-      cpu: 100m
-      memory: 100Mi
-    limits:
-      cpu: 1
-      memory: 1024Mi
 
 superset:
   resources:
@@ -506,7 +478,7 @@ kubernetes-dashboard:
         limits:
           cpu: 250m
           memory: 400Mi
-  metricsScrapper:
+  metricsScraper:
     containers:
       resources:
         requests:
@@ -526,14 +498,15 @@ promtail:
       memory: 128Mi
 
 reloader:
-  deployment:
-    resources:
-      requests:
-        cpu: 100m
-        memory: 100Mi
-      limits:
-        cpu: 1
-        memory: 1G
+  reloader:
+    deployment:
+      resources:
+        requests:
+          cpu: 100m
+          memory: 100Mi
+        limits:
+          cpu: 1000m
+          memory: 1G
 
 kube-prometheus-stack:
   alertmanager:
@@ -546,14 +519,7 @@ kube-prometheus-stack:
           cpu: "0.1"
           memory: 128Mi
   prometheusOperator:
-    resources:
-      limits:
-        cpu: 0.1
-        memory: 512Mi
-      requests:
-        cpu: 0.1
-        memory: 128Mi
-    prometheusConfigReloader:
+    prometheusConfigReloader: 
       resources:
         requests:
           cpu: 200m
