@@ -1,5 +1,5 @@
 #edbb
-bot:
+bot: 
   resources:
     requests:
       cpu: 100m
@@ -8,43 +8,43 @@ bot:
       cpu: 1000m
       memory: 1024Mi
 
-discussionmw:
+discussionmw: 
   resources:
     requests:
       cpu: 100m
       memory: 100M
     limits:
-      cpu: 1
+      cpu: 1000m
       memory: 1G
 
-echo:
+echo: 
   resources:
     requests:
       cpu: 100m
       memory: 100Mi
     limits:
-      cpu: 1
+      cpu: 1000m
       memory: 1024Mi  
 
-knowledgemw:
+knowledgemw: 
   resources:
     requests:
       cpu: 100m
       memory: 100Mi
     limits:
-      cpu: 1
+      cpu: 1000m
       memory: 1G    
 
-kong:
+kong: 
   resources:
     requests:
       cpu: 100m
       memory: 100M
     limits:
-      cpu: 1
+      cpu: 1000m
       memory: 1G    
 
-nginx-private-ingress:
+nginx-private-ingress: 
   resources:
     requests:
       cpu: 100m
@@ -53,59 +53,50 @@ nginx-private-ingress:
       cpu: 500m
       memory: 500Mi
 
-nginx-public-ingress:
-  resources:
-    requests:
-      cpu: 100m
-      memory: 100Mi
-    limits:
-      cpu: 1
-      memory: 1G  
-
-nodebb:
-  resources:
-    requests:
-      cpu: 100m
-      memory: 100M
-    limits:
-      cpu: 1
-      memory: 2G      
-
-player:
-  resources:
-    requests:
-      cpu: 100m
-      memory: 100Mi
-    limits:
-      cpu: 1
-      memory: 1G      
-
-report:
-  resources:
-    requests:
-      cpu: 100m
-      memory: 100Mi
-    limits:
-      cpu: 1
-      memory: 1G
-
-router: 
+nginx-public-ingress: 
   resources:
     requests:
       cpu: 100m
       memory: 100Mi
     limits:
       cpu: 1000m
-      memory: 1024Mi
-    
-#inquirybb
-assessment:
+      memory: 1G  
+
+nodebb: 
   resources:
     requests:
       cpu: 100m
       memory: 100M
     limits:
-      cpu: 1
+      cpu: 1000m
+      memory: 2G      
+
+player: 
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1000m
+      memory: 1G      
+
+report: 
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1000m
+      memory: 1G
+    
+#inquirybb
+assessment: 
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100M
+    limits:
+      cpu: 1000m
       memory: 1G
       
 flink: &flink
@@ -114,116 +105,116 @@ flink: &flink
       cpu: 100m
       memory: 500M
     limits:
-      cpu: 1
+      cpu: 1000m
       memory: 2048Mi  
 
-inquirybb:
+inquirybb: 
   flink: *flink
 
-knowledgebb:
+knowledgebb: 
   flink: *flink
 
-learnbb:
+learnbb: 
   flink: *flink
 
 #knowledgebb
-content:
+content: 
   resources:
     requests:
       cpu: 100m
       memory: 100Mi
     limits:
-      cpu: 1
+      cpu: 1000m
       memory: 1024Mi
-dial:
+dial: 
   resources:
     requests:
       cpu: 100m
       memory: 100Mi
     limits:
-      cpu: 1
+      cpu: 1000m
       memory: 1024Mi   
 
-learning:
+learning: 
   resources:
     requests:
       cpu: 100m
       memory: 1024Mi
     limits:
-      cpu: 1
+      cpu: 1000m
       memory: 4096Mi  
 
-search:
+search: 
   resources:
     requests:
       cpu: 100m
       memory: 100Mi
     limits:
-      cpu: 1
+      cpu: 1000m
       memory: 1024Mi 
 
-taxonomy:
+taxonomy: 
   resources:
     requests:
       cpu: 100m
       memory: 100Mi
     limits:
-      cpu: 1
+      cpu: 1000m
       memory: 1024Mi
 
 #learnbb
-adminutil:
+adminutils: 
   resources:
     requests:
       cpu: 100m
       memory: 100M
     limits:
-      cpu: 1
+      cpu: 1000m
       memory: 1G
       
-cert:
+cert: 
   resources:
     requests:
       cpu: 100m
       memory: 100Mi
     limits:
-      cpu: 1
+      cpu: 1000m
       memory: 1024Mi
 
-certificateapi:
+certificateapi: 
   resources:
     requests:
       cpu: 100m
       memory: 100Mi
     limits:
-      cpu: 1
+      cpu: 1000m
       memory: 1024Mi
 
-certificatesign:
+certificatesign: 
   resources:
     requests:
       cpu: 100m
       memory: 100Mi
     limits:
-      cpu: 1
+      cpu: 1000m
       memory: 1024Mi
 
-certregistry:
+certregistry: 
   resources:
     requests:
       cpu: 100m
       memory: 100Mi
     limits:
-      cpu: 1
+      cpu: 1000m
       memory: 1024Mi      
 
-druid-operator:
+druid-operator: 
   resources:
     requests:
       cpu: 100m
       memory: 100Mi
     limits:
-      cpu: 1
+      cpu: 1000m
       memory: 1024Mi   
 
 cassandra: 
@@ -239,58 +230,58 @@ cassandra:
 
 druid-raw-cluster:
   druid_indexer_persistent_volume_size: 25Gi 
-  druid_historical_persistent_volume_size: 25Gi
+  druid_historical_persistent_volume_size: 25Gi 
   resources:
-    druid_broker:
+    druid_broker: 
       requests:
         cpu: 100m
         memory: 1024Mi
       limits:
-        cpu: 200m
-        memory: 2048Mi
-    druid_coordinator:
+       cpu: 200m
+       memory: 2048Mi
+    druid_coordinator: 
       requests:
         cpu: 250m
         memory: 750Mi
       limits:
-        cpu: 250m
-        memory: 1024Mi
-    druid_overlord:
+       cpu: 250m
+       memory: 1024Mi
+    druid_overlord: 
       requests:
         cpu: 250m
         memory: 750Mi
       limits:
-        cpu: 250m
-        memory: 1024Mi
-    druid_historical:
+       cpu: 250m
+       memory: 1024Mi
+    druid_historical: 
       requests:
         cpu: 750m
         memory: 512Mi
       limits:
-        cpu: 1
-        memory: 2048Mi
-    druid_indexer:
+       cpu: 1000m
+       memory: 2048Mi
+    druid_indexer: 
       requests:
         cpu: 200m
         memory: 10Gi
       limits:
-        cpu: 200m
-        memory: 11Gi
-    druid_router:
+       cpu: 200m
+       memory: 11Gi
+    druid_router: 
       requests:
         cpu: 250m
         memory: 500Mi
       limits:
-        cpu: 512m
-        memory: 1024Mi
+       cpu: 512m
+       memory: 1024Mi
 
-groups:
+groups: 
   resources:
     requests:
       cpu: 100m
       memory: 100M
     limits:
-      cpu: 1
+      cpu: 1000m
       memory: 1G
 
 # keycloak:
@@ -302,7 +293,16 @@ groups:
 #         cpu: 750m
 #         memory: 750Mi
 
-lms:
+lms: 
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1000m
+      memory: 1024Mi
+
+notification: 
   resources:
     requests:
       cpu: 100m
@@ -311,63 +311,55 @@ lms:
       cpu: 1
       memory: 1024Mi
 
-notification:
+print: 
   resources:
     requests:
       cpu: 100m
       memory: 100Mi
     limits:
-      cpu: 1
+      cpu: 1000m
       memory: 1024Mi
 
-print:
+registry: 
   resources:
     requests:
       cpu: 100m
       memory: 100Mi
     limits:
-      cpu: 1
-      memory: 1024Mi
-
-registry:
-  resources:
-    requests:
-      cpu: 100m
-      memory: 100Mi
-    limits:
-      cpu: 1
+      cpu: 1000m
       memory: 2G
 
-userorg:
+userorg: 
   resources:
     requests:
       cpu: 100m
       memory: 100Mi
     limits:
-      cpu: 1
+      cpu: 1000m
       memory: 1024Mi
 
-kafka:
+kafka: 
   resources:
     limits:
-      cpu: 1
+      cpu: 1000m
       memory: 2048Mi
     requests:
       cpu: 750m
       memory: 1024Mi
   persistence:
     size: 10Gi
-  metrics:
-    kafka:
-      resources:
-        limits:
-          cpu: 100m
-          memory: 512Mi
-        requests:
-          cpu: 100m
-          memory: 256Mi
+  zookeeper:  
+    persistence:
+      size: 2Gi
+    resources:
+      limits:
+        cpu: 256m
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
 
-neo4j:
+neo4j: 
   resources:
     requests:
       cpu: "0.5"
@@ -381,64 +373,53 @@ neo4j:
         requests:
           storage: 25Gi
 
-postgresql: 
+postgresql:  
   persistence:
     size: 25Gi
-  primary:
-    resources:
-      limits:
-        cpu: 250m
-        memory: 512Mi
-      requests:
-        cpu: 250m
-        memory: 256Mi
+  resources:
+    limits:
+      cpu: 250m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
 
 redis: 
   master:
     persistence:
       size: 25Gi
     primary:
-      resources:
-        limits:
-          cpu: 0.5
-          memory: 2Gi
-        requests:
-          cpu: 0.5
-          memory: 1Gi 
+    resources:
+      limits:
+        cpu: 500m
+        memory: 2Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi 
 
-spark:
-  resources:
-    limits:
-      cpu: 0.5
-      memory: 2Gi
-    requests:
-      cpu: 0.5
-      memory: 1Gi
+spark: 
+  master:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 2Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
   persistence:
     spark_data_pvc:
-      size: 25Gi
+      size: 50Gi
     log_data_pvc:
-      size: 25Gi   
-
-zookeeper: 
-  persistence:
-    size: 2Gi
-  resources:
-    limits:
-      cpu: 256m
-      memory: 512Mi
-    requests:
-      cpu: 100m
-      memory: 128Mi 
+      size: 50Gi    
 
 #Obsrvbb
-analytics:
+analytics: 
   resources:
     requests:
       cpu: 500m
       memory: 1G
     limits:
-      cpu: 1
+      cpu: 1000m
       memory: 2G
 
 # secor:
@@ -449,16 +430,7 @@ analytics:
 #       cpu: 500m
 #       memory: 700Mi
 
-submit-ingestion:
-  resources:
-    requests:
-      cpu: 100m
-      memory: 100Mi
-    limits:
-      cpu: 1
-      memory: 1024Mi
-
-superset:
+superset: 
   resources:
     limits:
       cpu: 512m
@@ -467,28 +439,28 @@ superset:
       cpu: 250m
       memory: 512Mi
 
-telemetry:
+telemetry: 
   resources:
     requests:
       cpu: 100m
       memory: 100Mi
     limits:
-      cpu: 1
+      cpu: 1000m
       memory: 1024Mi
 
 #monitoring
-loki:
+loki: 
   gateway:
     resources: 
       limits:
-        cpu: 0.1
+        cpu: 100m
         memory: 256Mi
       requests:
-        cpu: 0.1
+        cpu: 100m
         memory: 128Mi
 
 kubernetes-dashboard:
-  api:
+  api: 
     containers:
       resources:
         requests:
@@ -497,7 +469,7 @@ kubernetes-dashboard:
         limits:
           cpu: 250m
           memory: 400Mi
-  web:
+  web: 
     containers:
       resources:
         requests:
@@ -506,7 +478,7 @@ kubernetes-dashboard:
         limits:
           cpu: 250m
           memory: 400Mi
-  metricsScrapper:
+  metricsScraper: 
     containers:
       resources:
         requests:
@@ -516,7 +488,7 @@ kubernetes-dashboard:
           cpu: 250m
           memory: 400Mi
 
-promtail:
+promtail: 
   resources:
     limits:
       cpu: 200m
@@ -525,18 +497,19 @@ promtail:
       cpu: 100m
       memory: 128Mi
 
-reloader:
-  deployment:
-    resources:
-      requests:
-        cpu: 100m
-        memory: 100Mi
-      limits:
-        cpu: 1
-        memory: 1G
+reloader: 
+  reloader:
+    deployment:
+      resources:
+        requests:
+          cpu: 100m
+          memory: 100Mi
+        limits:
+          cpu: 1000m
+          memory: 1G
 
 kube-prometheus-stack:
-  alertmanager:
+  alertmanager: 
     alertmanagerSpec:
       resources:
         limits:
@@ -546,14 +519,7 @@ kube-prometheus-stack:
           cpu: "0.1"
           memory: 128Mi
   prometheusOperator:
-    resources:
-      limits:
-        cpu: 0.1
-        memory: 512Mi
-      requests:
-        cpu: 0.1
-        memory: 128Mi
-    prometheusConfigReloader:
+    prometheusConfigReloader: 
       resources:
         requests:
           cpu: 200m
@@ -561,7 +527,7 @@ kube-prometheus-stack:
         limits:
           cpu: 200m
           memory: 50Mi
-  prometheus:
+  prometheus: 
     prometheusSpec:
       retention: "30d"
       storageSpec:
@@ -576,16 +542,16 @@ kube-prometheus-stack:
           cpu: 500m
           memory: 1Gi
         limits:
-          cpu: 1
+          cpu: 1000m
           memory: 2Gi      
 
-velero:
+velero: 
   resources: 
     limits:
-      cpu: 0.1
+      cpu: 100m
       memory: 1024Mi
     requests:
-      cpu: 0.1
+      cpu: 100m
       memory: 512Mi
   nodeAgent:
     resources:
@@ -596,7 +562,7 @@ velero:
         cpu: 1000m
         memory: 1024Mi
 
-elasticsearch:
+elasticsearch: 
   master:
     resources:
       requests:
