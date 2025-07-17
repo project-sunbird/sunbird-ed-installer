@@ -89,14 +89,10 @@ global:
   # CERTIFICATE-KEYS 
 
 passwords:
-    grafana_admin_user: &grafana-admin-user "admin"
-    grafana_admin_password: &grafana-admin-password "meZW32wSHlqJ2s5O"
-    superset_admin_user: &superset-admin-user "admin"
-    superset_admin_password: &superset-admin-password "Bo+XfivggAUiUTAp"  
-    keycloak_user: &keycloak-user "admin"
-    keycloak_password: &keycloak-password "jkMpZRT3z1mahTVS"    
-    postgresqlUsername: "postgres"
-    postgresqlPassword: "fU6GvU7aH48mM5w4"
+    grafana_admin_password: &grafana-admin-password "prom-operator"
+    superset_admin_password: &superset-admin-password "admin"  
+    keycloak_password: &keycloak-password "admin"    
+    postgresqlPassword: &postgresqlPassword "postgres"
 
 superset:
     init:
