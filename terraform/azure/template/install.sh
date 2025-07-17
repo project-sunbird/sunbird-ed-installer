@@ -47,6 +47,64 @@ function certificate_keys() {
     echo "  CERTIFICATESIGN_PUBLIC_KEY: \"$CERTIFICATESIGNPUKEY\"" >> ../terraform/azure/$environment/global-values.yaml
 }
 
+override_passwords() {
+  local yaml_file="global-values.yaml"
+  local state_file="passwords.state.yaml"
+
+  if [[ ! -f "$yaml_file" ]]; then
+    echo "YAML file not found: $yaml_file"
+    return 1
+  fi
+
+  echo "Generating or loading secure random passwords..."
+
+  if [[ -f "$state_file" ]]; then
+    grafana_pass=$(grep "^grafana_pass:" "$state_file" | awk '{print $2}')
+    superset_pass=$(grep "^superset_pass:" "$state_file" | awk '{print $2}')
+    keycloak_pass=$(grep "^keycloak_pass:" "$state_file" | awk '{print $2}')
+    postgresql_pass=$(grep "^postgresql_pass:" "$state_file" | awk '{print $2}')
+    echo "Loaded passwords from $state_file"
+  else
+    grafana_pass=$(openssl rand -base64 12)
+    superset_pass=$(openssl rand -base64 12)
+    keycloak_pass=$(openssl rand -base64 12)
+    postgresql_pass=$(openssl rand -base64 12)
+
+    cat <<EOF > "$state_file"
+grafana_pass: $grafana_pass
+superset_pass: $superset_pass
+keycloak_pass: $keycloak_pass
+postgresql_pass: $postgresql_pass
+EOF
+    echo "Saved passwords to $state_file"
+  fi
+
+  cp "$yaml_file" "${yaml_file}.bak"
+  echo "Backup created: ${yaml_file}.bak"
+
+  # Replace each password with OS-specific sed usage
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    sed -i '' -E "s/(grafana_admin_password:[[:space:]]*)\"[^\"]*\"/\1\"$grafana_pass\"/" "$yaml_file"
+    sed -i '' -E "s/(superset_admin_password:[[:space:]]*)\"[^\"]*\"/\1\"$superset_pass\"/" "$yaml_file"
+    sed -i '' -E "s/(password:[[:space:]]*)\"[^\"]*\"/\1\"$superset_pass\"/" "$yaml_file"
+    sed -i '' -E "s/(keycloak_password:[[:space:]]*)\"[^\"]*\"/\1\"$keycloak_pass\"/" "$yaml_file"
+    sed -i '' -E "s/(postgresqlPassword:[[:space:]]*)\"[^\"]*\"/\1\"$postgresql_pass\"/" "$yaml_file"
+  else
+    sed -i -E "s/(grafana_admin_password:[[:space:]]*)\"[^\"]*\"/\1\"$grafana_pass\"/" "$yaml_file"
+    sed -i -E "s/(superset_admin_password:[[:space:]]*)\"[^\"]*\"/\1\"$superset_pass\"/" "$yaml_file"
+    sed -i -E "s/(password:[[:space:]]*)\"[^\"]*\"/\1\"$superset_pass\"/" "$yaml_file"
+    sed -i -E "s/(keycloak_password:[[:space:]]*)\"[^\"]*\"/\1\"$keycloak_pass\"/" "$yaml_file"
+    sed -i -E "s/(postgresqlPassword:[[:space:]]*)\"[^\"]*\"/\1\"$postgresql_pass\"/" "$yaml_file"
+  fi
+
+  echo "Passwords updated successfully in $yaml_file"
+  echo "Grafana password: $grafana_pass"
+  echo "Superset password: $superset_pass"
+  echo "Keycloak password: $keycloak_pass"
+  echo "PostgreSQL password: $postgresql_pass"
+}
+
+
 function certificate_config() {
     # Check if the key is already present in RC 
     echo "Configuring Certificatekeys"
@@ -264,6 +322,7 @@ CERTPRIVATEKEY=""
 if [ $# -eq 0 ]; then
     create_tf_backend
     backup_configs
+    override_passwords
     create_tf_resources
     cd ../../../helmcharts
     install_helm_components

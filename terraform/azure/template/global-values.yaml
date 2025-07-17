@@ -87,3 +87,35 @@ global:
   proxy_certificate: |
     REPLACE_ME
   # CERTIFICATE-KEYS 
+
+passwords:
+    grafana_admin_user: &grafana-admin-user "admin"
+    grafana_admin_password: &grafana-admin-password "meZW32wSHlqJ2s5O"
+    superset_admin_user: &superset-admin-user "admin"
+    superset_admin_password: &superset-admin-password "Bo+XfivggAUiUTAp"  
+    keycloak_user: &keycloak-user "admin"
+    keycloak_password: &keycloak-password "jkMpZRT3z1mahTVS"    
+    postgresqlUsername: "postgres"
+    postgresqlPassword: "fU6GvU7aH48mM5w4"
+
+superset:
+    init:
+      adminUser:
+        username: admin
+        firstname: Superset
+        lastname: Admin
+        email: admin@example.com
+        password: *superset-admin-password
+
+kube-prometheus-stack:
+   grafana:
+     adminUser: *grafana-admin-user
+     adminPassword: *grafana-admin-password 
+
+keycloak:
+  keycloak_user: *keycloak-user
+  keycloak_password: *keycloak-password
+
+postgresql:
+  postgresqlUsername: *postgresqlUsername
+  postgresqlPassword: *postgresqlPassword   
