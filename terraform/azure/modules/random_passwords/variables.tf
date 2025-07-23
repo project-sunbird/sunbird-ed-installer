@@ -27,13 +27,8 @@ variable "keycloak_special" {
   type    = bool
   default = true
 }
-
 variable "postgresql_length" {
   type    = number
-  default = 16
-}
-
-variable "postgresql_special" {
-  type    = bool
-  default = true
+  default = 8
+  
 }

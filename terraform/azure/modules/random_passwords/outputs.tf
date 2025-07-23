@@ -12,7 +12,6 @@ output "keycloak_password" {
   value     = random_password.keycloak.result
   sensitive = true
 }
-
 output "postgresql_password" {
   value     = random_password.postgresql.result
   sensitive = true
