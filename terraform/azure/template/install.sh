@@ -47,6 +47,7 @@ function certificate_keys() {
     echo "  CERTIFICATESIGN_PUBLIC_KEY: \"$CERTIFICATESIGNPUKEY\"" >> ../terraform/azure/$environment/global-values.yaml
 }
 
+
 function certificate_config() {
     # Check if jq is available in the nodebb container, install only if missing
     echo "Configuring Certificate keys"
@@ -124,7 +125,7 @@ function post_install_nodebb_plugins() {
     echo ">> Restarting NodeBB..."
     kubectl delete pod -n sunbird -l app.kubernetes.io/name=nodebb
 
-    echo "✅ NodeBB plugins are activated, built, and NodeBB has been restarted."
+    echo "NodeBB plugins are activated, built, and NodeBB has been restarted."
 }
 
 function dns_mapping() {

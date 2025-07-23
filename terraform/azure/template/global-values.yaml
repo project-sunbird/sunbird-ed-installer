@@ -1,3 +1,26 @@
+default_passwords:
+  grafana_admin_password: &grafana-admin-password "prom-operator"
+  superset_admin_password: &superset-admin-password "admin"
+  keycloak_password: &keycloak-password "admin"
+  postgresql_password: &postgresql-password "postgres"
+superset:
+  credentials:
+    adminUser: admin
+    adminPassword: *superset-admin-password
+kube-prometheus-stack:
+  grafana:
+    adminUser: admin
+    adminPassword: *grafana-admin-password
+keycloak:
+  keycloak_user: admin
+  keycloak_password: *keycloak-password
+keycloak-kids-keys:
+  KEYCLOAK_ADMIN_PASSWORD: *keycloak-password
+postgresql:
+  postgresqlUsername: postgres
+  postgresqlPassword: *postgresql-password
+kong:
+  kong_pg_password: *postgresql-password
 global:
   building_block: "" # building block name
   env: "" 
@@ -23,6 +46,9 @@ global:
   sunbird_msg_91_auth: ""
   sunbird_msg_sender: ""
   youtube_apikey: ""
+  postgresql:
+    postgresqlUsername: postgres
+    postgresqlPassword: *postgresql-password
   # The merge domain is optional and is required  `only if user merge workflow is required.
   # For most audience, this workflow is not required. If you need this workflow, then
   # set the value of merge_domain_status to "true" and provide a subdomain / another domain

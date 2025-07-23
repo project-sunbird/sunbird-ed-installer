@@ -135,7 +135,7 @@ function post_install_nodebb_plugins() {
     echo ">> Restarting NodeBB..."
     kubectl delete pod -n sunbird -l app.kubernetes.io/name=nodebb
 
-    echo "✅ NodeBB plugins are activated, built, and NodeBB has been restarted."
+    echo "NodeBB plugins are activated, built, and NodeBB has been restarted."
 }
 
 function dns_mapping() {

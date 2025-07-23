@@ -54,7 +54,7 @@ spec:
 {{ toYaml .Values.resources | indent 12 }}
           envFrom:
             - configMapRef:
-                name: envvar-configmap
+                name: superset-env
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
