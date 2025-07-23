@@ -1,8 +1,8 @@
 default_passwords:
-  grafana_admin_password: &grafana-admin-password "ecsVugHbXYZebJOl"
-  superset_admin_password: &superset-admin-password "7LJUeruX8I82BNmS"
-  keycloak_password: &keycloak-password "dasQfcmYhjXcueus"
-  postgresql_password: &postgresql-password "59PagOfduY70cxCs"
+  grafana_admin_password: &grafana-admin-password "prom-operator"
+  superset_admin_password: &superset-admin-password "admin"
+  keycloak_password: &keycloak-password "admin"
+  postgresql_password: &postgresql-password "postgres"
 superset:
   credentials:
     adminUser: admin

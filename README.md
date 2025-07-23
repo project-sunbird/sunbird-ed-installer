@@ -1,6 +1,6 @@
 # Sunbird-ED Installer
 
-Resources required to install and run Sunbird-ED on any cloud provider:
+Minimum resources required to install and run Sunbird-ED on any cloud provider
 - **vCPUs**: 48  
 - **RAM**: 192 GB
 
