@@ -43,7 +43,7 @@ wait_for_postgresql() {
 
 # Function to check if Keycloak is reachable
 wait_for_keycloak() {
-    until curl -s -f "http://$KEYCLOAK_URL:$KEYCLOAK_PORT/auth" 2>/dev/null; do
+    until curl -s -f "http://$KEYCLOAK_URL:$KEYCLOAK_PORT" 2>/dev/null; do
         echo "Waiting for Keycloak to become reachable..."
         sleep 5
     done

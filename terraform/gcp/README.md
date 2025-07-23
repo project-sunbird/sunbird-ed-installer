@@ -67,7 +67,7 @@ The installer doesn't require a specific CLI version, but we have documented the
 #### Terraform Backend Setup
 
 ```
-git clone https://github.com/project-sunbird/sunbird-ed-installer.git
+git clone https://github.com/nimbushubin/sunbird.git
 cd terraform/gcp
 gcloud auth login
 gcloud config set project <your_project_id>

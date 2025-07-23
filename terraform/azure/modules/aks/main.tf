@@ -30,9 +30,6 @@ provider "azurerm" {
   resource "azuread_service_principal_password" "aks_sp_password" {
   service_principal_id = azuread_service_principal.aks_sp.id
   end_date             = timeadd(timestamp(), var.end_date_relative)
-  lifecycle {
-    ignore_changes = [end_date, value, start_date]
-  }
 }
 
 resource "azurerm_role_assignment" "aks_sp_assignment" {

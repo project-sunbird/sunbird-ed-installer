@@ -89,7 +89,7 @@ affinity: {}
 
 configmap:
   enabled: true
-  mountPath: /opt/keycloak/data/import
+  mountPath: /config
 
 serviceAccount:
   create: true

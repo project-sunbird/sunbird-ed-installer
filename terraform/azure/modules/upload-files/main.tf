@@ -25,7 +25,7 @@ locals {
 resource "local_file" "output_files" {
   for_each = toset(local.template_files)
   content  = templatefile("${path.module}/sunbird-rc/schemas/${each.value}", {
-     cloud_storage_schema_url = "https://${var.storage_account_name}.blob.core.windows.net/${var.storage_container_public}"
+     cloud_storage_schema_url = "https://${var.storage_account_name}/${var.storage_container_public}"
   })
   filename = "${path.module}/sunbird-rc/schemas/${each.value}"
 }

@@ -4,8 +4,8 @@ fullnameOverride: "report"
 replicaCount: 1
 
 image:
-  repository: ghcr.io/project-sunbird/sunbird-report-service
-  tag: "release-7.7.0_rc1_9d884d4_2"
+  repository: sunbirded.azurecr.io/report-service
+  tag: "release-5.0.1"
   pullPolicy: IfNotPresent
   pullSecrets: []
 

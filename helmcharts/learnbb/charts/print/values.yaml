@@ -1,5 +1,5 @@
 nameOverride: ""
-fullnameOverride: "print"
+fullnameOverride: ""
 
 replicaCount: 1
 
