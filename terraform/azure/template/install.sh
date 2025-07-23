@@ -104,17 +104,14 @@ function install_component() {
 }
 
 function install_helm_components() {
-    # components=( "edbb")
     components=("monitoring" "edbb" "learnbb" "knowledgebb" "obsrvbb" "inquirybb" "additional")
-
-
     for component in "${components[@]}"; do
         install_component "$component"
     done
 }
 
 function post_install_nodebb_plugins() {
-    echo ">> Waiting for NodeBB to be ready..."
+    echo ">> Waiting for NodeBB deployment to be ready..."
     kubectl rollout status deployment nodebb -n sunbird --timeout=300s
 
     echo ">> Activating NodeBB plugins..."
@@ -122,11 +119,13 @@ function post_install_nodebb_plugins() {
     kubectl exec -n sunbird deploy/nodebb -- ./nodebb activate nodebb-plugin-sunbird-oidc
     kubectl exec -n sunbird deploy/nodebb -- ./nodebb activate nodebb-plugin-write-api
 
-    echo ">> Rebuilding and restarting NodeBB..."
+    echo ">> Rebuilding NodeBB to apply plugin changes..."
     kubectl exec -n sunbird deploy/nodebb -- ./nodebb build
-    kubectl exec -n sunbird deploy/nodebb -- ./nodebb restart
 
-    echo " NodeBB plugins are activated and NodeBB has been restarted."
+    echo ">> Restarting NodeBB..."
+    kubectl delete pod -n sunbird -l app.kubernetes.io/name=nodebb
+
+    echo "NodeBB plugins are activated, built, and NodeBB has been restarted."
 }
 
 function dns_mapping() {
