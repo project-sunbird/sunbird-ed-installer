@@ -57,19 +57,23 @@ function certificate_keys() {
 }
 
 function certificate_config() {
-    # Check if the key is already present in RC 
-    echo "Configuring Certificatekeys"
-    kubectl -n sunbird exec deploy/nodebb -- apt update -y
-    kubectl -n sunbird exec deploy/nodebb -- apt install jq -y
-    CERTKEY=`kubectl -n sunbird exec deploy/nodebb -- curl --location --request POST 'http://registry-service:8081/api/v1/PublicKey/search' --header 'Content-Type: application/json' --data-raw '{ "filters": {}}' | jq '.[] | .value'`
-    # Inject cert keys to the service if its not available 
-    if [ "$CERTKEY" = "" ]; then
-            echo "Certificate RSA public key not available"
-            CERTPUBKEY=`awk -F'"' '/CERTIFICATE_PUBLIC_KEY/{print $2}' global-values.yaml`
-            curl_data="curl --location --request POST 'http://registry-service:8081/api/v1/PublicKey' --header 'Content-Type: application/json' --data-raw '{\"value\":\"$CERTPUBKEY\"}'"
-            echo "kubectl -n sunbird exec deploy/nodebb -- $curl_data" | sh -
+    # Check if jq is available in the nodebb container, install only if missing
+    echo "Configuring Certificate keys"
+    if ! kubectl -n sunbird exec deploy/nodebb -- which jq >/dev/null 2>&1; then
+        echo "jq not found in nodebb container, attempting to install..."
+        # Try to install jq using available package manager, fallback if apt fails
+        kubectl -n sunbird exec deploy/nodebb -- bash -c "apt-get update || true"
+        kubectl -n sunbird exec deploy/nodebb -- bash -c "apt-get install -y jq || true"
     fi
 
+    CERTKEY=$(kubectl -n sunbird exec deploy/nodebb -- curl --location --request POST 'http://registry-service:8081/api/v1/PublicKey/search' --header 'Content-Type: application/json' --data-raw '{ "filters": {}}' | jq '.[] | .value')
+    # Inject cert keys to the service if its not available 
+    if [ -z "$CERTKEY" ]; then
+        echo "Certificate RSA public key not available"
+        CERTPUBKEY=$(awk -F'"' '/CERTIFICATE_PUBLIC_KEY/{print $2}' global-values.yaml)
+        curl_data="curl --location --request POST 'http://registry-service:8081/api/v1/PublicKey' --header 'Content-Type: application/json' --data-raw '{\"value\":\"$CERTPUBKEY\"}'"
+        echo "kubectl -n sunbird exec deploy/nodebb -- $curl_data" | sh -
+    fi
 }
 
 function install_component() {
@@ -114,6 +118,24 @@ function install_helm_components() {
     for component in "${components[@]}"; do
         install_component "$component"
     done
+}
+
+function post_install_nodebb_plugins() {
+    echo ">> Waiting for NodeBB deployment to be ready..."
+    kubectl rollout status deployment nodebb -n sunbird --timeout=300s
+
+    echo ">> Activating NodeBB plugins..."
+    kubectl exec -n sunbird deploy/nodebb -- ./nodebb activate nodebb-plugin-create-forum
+    kubectl exec -n sunbird deploy/nodebb -- ./nodebb activate nodebb-plugin-sunbird-oidc
+    kubectl exec -n sunbird deploy/nodebb -- ./nodebb activate nodebb-plugin-write-api
+
+    echo ">> Rebuilding NodeBB to apply plugin changes..."
+    kubectl exec -n sunbird deploy/nodebb -- ./nodebb build
+
+    echo ">> Restarting NodeBB..."
+    kubectl delete pod -n sunbird -l app.kubernetes.io/name=nodebb
+
+    echo "NodeBB plugins are activated, built, and NodeBB has been restarted."
 }
 
 function dns_mapping() {

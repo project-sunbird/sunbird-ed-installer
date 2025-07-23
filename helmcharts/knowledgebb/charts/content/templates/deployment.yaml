@@ -28,6 +28,16 @@ spec:
       {{- with .Values.initContainers }}
       initContainers:
         {{- toYaml . | nindent 8 }}
+        - name: wait-for-neo4j
+          image: busybox:1.35
+          command: ['sh', '-c', 'until nc -z neo4j 7687; do echo "Waiting for Neo4j..."; sleep 5; done']
+          resources:
+            limits:
+              cpu: 50m
+              memory: 64Mi
+            requests:
+              cpu: 10m
+              memory: 32Mi
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}

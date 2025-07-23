@@ -497,7 +497,4 @@ spec:
 
       resources:
       {{- toYaml .Values.resources.druid_router| nindent 8 }}
-
-
-
-
+      

@@ -4,8 +4,8 @@ fullnameOverride: "echo"
 replicaCount: 1
 
 image:
-  repository: sunbirded.azurecr.io/echo-server
-  tag: "master-RC1"
+  repository: ghcr.io/project-sunbird/sunbird-echo-service
+  tag: "release-7.7.0_rc1_50b5b2d_2"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
