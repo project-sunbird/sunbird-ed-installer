@@ -148,7 +148,7 @@ data:
     graph.dir="/data/graphDB"
     akka.request_timeout=30
     environment.id="20000000"
-    graph.passport.key.base="graph_passport_key "
+    graph.passport.key.base="{{.Values.graph_passport_key}}"
     route.domain="bolt://{{ .Values.global.neo4j.host }}:7687"
     route.bolt.write.domain="bolt://{{ .Values.global.neo4j.host }}:7687"
     route.bolt.read.domain="bolt://{{ .Values.global.neo4j.host }}:7687"
