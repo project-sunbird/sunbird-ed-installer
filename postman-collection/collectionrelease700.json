@@ -1067,6 +1067,50 @@
 						"url": "{{host}}/api/data/v1/system/settings/set"
 					},
 					"response": []
+				},
+				{
+					"name": "24 - set setting - enableDeleteAccount",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{apikey}}"
+							},
+							{
+								"key": "x-authenticated-user-token",
+								"value": "{{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"request\": {\n        \"id\": \"enableDeleteAccount\",\n        \"field\": \"enableDeleteAccount\",\n        \"value\": \"false\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/data/v1/system/settings/set",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"data",
+								"v1",
+								"system",
+								"settings",
+								"set"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
