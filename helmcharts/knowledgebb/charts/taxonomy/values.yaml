@@ -3,8 +3,8 @@ fullnameOverride: "taxonomy"
 replicaCount: 1
 
 image:
-  repository: sunbirded.azurecr.io/taxonomy-service
-  tag: "release-6.1.0_RC4_2272e93_47"
+  repository: ghcr.io/sunbird-knowlg/knowledge-platform/taxonomy-api
+  tag: "release-8.0.0_rc2_0eec5de"
   pullPolicy: IfNotPresent
   pullSecrets: []
 

@@ -4,8 +4,8 @@ fullnameOverride: "knowledge-mw"
 replicaCount: 1
 
 image:
-  repository: sunbirded.azurecr.io/knowledge-mw-service
-  tag: "release-6.0.1_v5"
+  repository: ghcr.io/sunbird-knowlg/knowledge-mw-service
+  tag: "release-8.0.0_rc3_2e12b8f_3"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
