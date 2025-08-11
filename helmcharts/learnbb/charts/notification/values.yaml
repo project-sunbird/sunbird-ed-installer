@@ -4,8 +4,8 @@ fullnameOverride: "notification"
 replicaCount: 1
 
 image:
-  repository: sunbirded.azurecr.io/notification_service
-  tag: "release-7.0.0_RC4_db7555c_10"
+  repository: ghcr.io/sunbird-lern/notification-service
+  tag: "release-8.0.0_rc4_1fd3be9_5"
   pullPolicy: IfNotPresent
   pullSecrets: []
 

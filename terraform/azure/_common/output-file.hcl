@@ -35,6 +35,7 @@ dependency "keys" {
     config_path = "../keys"
     mock_outputs = {
       random_string = "dummy-string"
+      encryption_string = "dummy-encryption-string"
     }
 }
 
