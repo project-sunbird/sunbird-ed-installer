@@ -1,8 +1,8 @@
 replicaCount: 1
 
 image:
-  repository: ghcr.io/sunbird-lern/data-pipeline
-  tag: release-8.0.0_rc4_57d62fc
+  repository: chethann07/sunbird-data-pipeline
+  tag: release-8.0.0_delete_fix_final
   pullPolicy: IfNotPresent
   pullSecrets: []
 
@@ -308,6 +308,7 @@ mail_server_port: "587"
 ### User-deletion-cleanup Job vars
 user_deletion_cleanup_job_parallelism: 1
 sunbird_keycloak_user_federation_provider_id: "cassandrafederationid"
+sunbird_sso_client_id: "lms"
 
 log4j_console_properties: |
   # This affects logging for both user code and Flink
@@ -888,9 +889,15 @@ flink_jobs:
           }
       }
   
-      sunbird_keycloak_user_federation_provider_id="{{ .Values.core_vault_sunbird_keycloak_user_federation_provider_id }}"
-      user_read_api = "/user/v5/read/"
+      sunbird_keycloak_user_federation_provider_id="{{ .Values.sunbird_keycloak_user_federation_provider_id }}"
+      user_read_api = "/private/user/v1/read"
       batch_search_api = "/course/v1/batch/list"
+      sunbird_sso_realm = "sunbird"
+      sunbird_sso_client_secret = "{{ .Values.sunbird_sso_client_id }}{{ .Values.global.random_string }}"
+      sunbird_sso_client_id = "{{ .Values.sunbird_sso_client_id }}"
+      sunbird_sso_password = "{{.Values.global.keycloak.keycloak_password}}"
+      sunbird_sso_username = "{{.Values.global.keycloak.keycloak_user}}"
+      sunbird_sso_url = "https://{{ .Values.global.domain }}/auth/"
   
       user {
           keyspace = "sunbird"
