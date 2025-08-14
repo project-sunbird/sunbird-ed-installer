@@ -46,41 +46,37 @@ resource "null_resource" "patch_global_values" {
 
   triggers = {
     patch_file_sha = sha256(local_file.patch_passwords_file.content)
+    always_run     = timestamp()
   }
 
   provisioner "local-exec" {
     command = <<EOT
-echo "🔄 Starting merge process..."
+    set -e
+    echo "Starting merge process..."
 
-REPO_ROOT=$(cd ../../../../../ && pwd)
-GLOBAL_FILE="$REPO_ROOT/global-values.yaml"
-PATCH_FILE="$REPO_ROOT/patch-passwords.yaml"
-TMP_FILE="$REPO_ROOT/global-values.tmp"
+    REPO_ROOT=$(cd ../../../../../ && pwd)
+    GLOBAL_FILE="$REPO_ROOT/global-values.yaml"
+    PATCH_FILE="${path.module}/patch-passwords.yaml"
+    TMP_FILE="$REPO_ROOT/global-values.tmp"
 
-echo " REPO_ROOT = $REPO_ROOT"
-echo " Checking files..."
+    echo "GLOBAL_FILE: $GLOBAL_FILE"
+    echo "PATCH_FILE: $PATCH_FILE"
 
-if [ ! -f "$GLOBAL_FILE" ]; then
-  echo " Missing global-values.yaml at $GLOBAL_FILE"
-  exit 1
-fi
+    if [ ! -f "$GLOBAL_FILE" ]; then
+      echo "Missing global-values.yaml"
+      exit 1
+    fi
 
-echo " Creating patch file at $PATCH_FILE"
-cat <<EOF > "$PATCH_FILE"
-${local_file.patch_passwords_file.content}
-EOF
+    if [ ! -f "$PATCH_FILE" ]; then
+      echo "Missing patch-passwords.yaml"
+      exit 1
+    fi
 
-ls -l "$GLOBAL_FILE"
-ls -l "$PATCH_FILE"
+    yq eval '.default_passwords = load("'"$PATCH_FILE"'").default_passwords' "$GLOBAL_FILE" | tee "$TMP_FILE" >/dev/null
+    mv "$TMP_FILE" "$GLOBAL_FILE"
 
-echo "🔀 Merging files..."
-yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' \
-  "$GLOBAL_FILE" "$PATCH_FILE" > "$TMP_FILE" && mv "$TMP_FILE" "$GLOBAL_FILE"
-
-echo "🧹 Removing patch file..."
-rm -f "$PATCH_FILE"
-
-echo " Merge complete: $GLOBAL_FILE updated."
-EOT
+    rm -f "$PATCH_FILE"
+    echo "Merge complete"
+    EOT
   }
 }
