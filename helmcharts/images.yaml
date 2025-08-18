@@ -1,0 +1,85 @@
+global:
+  image:
+    dockerRegistrySecretName: &dockerSecretName "registry-secret-name"
+     #Replace the dockerConfigJson below for the private images
+    dockerConfigJson: |-
+      {"auths":{"http://registry.your-domain.io":{"auth":"eW91cl9yZWdpc3RyeV91c2VybmFtZTp5b3VyX3JlZ2lzdHJ5X3Rva2Vu"}}}
+
+imagePullSecrets: &imagePullSecrets
+  - name: *dockerSecretName
+
+
+images: &images
+    velero: &velero
+      registry: "docker.io"
+      repository: "velero/velero"
+      tag: "v1.15.0"
+
+    volume-autoscaler: &volume-autoscaler
+      registry: "docker.io"
+      repository: devopsnirvana/kubernetes-volume-autoscaler
+      tag: 1.0.6
+      digest: ""  
+
+    kafka: &kafka
+      registry: ""
+      repository: bitnami/kafka
+      tag: 3.3.1-debian-11-r25
+      digest: "" 
+
+    postgresql: &postgresql
+      registry: "docker.io"
+      repository: "bitnami/postgresql"
+      tag: "11.14.0-debian-10-r49"
+      digest: ""  
+
+    elasticsearch:  &elasticsearch
+      image:
+        registry: docker.io
+        repository: bitnami/elasticsearch
+        tag: 6.8.23   
+
+    grafana: &grafana
+      registry: docker.io
+      repository: grafana/grafana
+      tag: "11.4.0"
+      digest: ""    
+
+internal: &internal
+  velero:
+      image:
+        <<: *velero
+        imagePullSecrets: 
+        - *dockerSecretName 
+
+  volume-autoscaler:
+      <<: *volume-autoscaler
+      imagePullSecrets: 
+      - name: *dockerSecretName   
+
+  kafka:
+      image:
+        <<: *kafka
+        pullSecrets:
+        - *dockerSecretName   
+
+  postgresql:
+    image:
+      <<: *postgresql
+      pullSecrets:
+      - *dockerSecretName 
+
+  elasticsearch:
+    image:
+      <<: *elasticsearch
+      pullSecrets:
+      - *dockerSecretName  
+
+kube-prometheus-stack:
+    grafana:
+        image:
+          <<: *grafana
+          pullSecrets:
+          - *dockerSecretName     
+            
+<<: *internal

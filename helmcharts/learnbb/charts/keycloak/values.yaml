@@ -4,8 +4,8 @@ fullnameOverride: "keycloak"
 replicaCount: 1
 
 image:
-  repository: chethann07/keycloak-user-delete
-  tag: "v2"
+  repository: sunbirded.azurecr.io/keycloak
+  tag: "release-8.0.0_91e02cd"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
