@@ -1,8 +1,8 @@
 replicaCount: 1
 
 image:
-  repository: chethann07/sunbird-data-pipeline
-  tag: release-8.0.0_delete_fix_final
+  repository: ghcr.io/sunbird-lern/data-pipeline
+  tag: release-8.0.0_rc5_b9be252
   pullPolicy: IfNotPresent
   pullSecrets: []
 
