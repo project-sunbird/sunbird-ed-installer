@@ -220,6 +220,11 @@ images:
     repository: "divyagovindaiah123/flink-nlweb-job"
     tag: "test"
 
+  spark: &spark
+    image:
+      registry: sunbirded.azurecr.io
+      repository: spark  
+
 # Internal block with pull secrets
 internal: &internal
   velero:
@@ -471,6 +476,11 @@ internal: &internal
     image: *nlwebflink
     imagePullSecrets:
       - name: "registry-secret-name"
+
+  spark:
+    image: *spark
+    imagePullSecrets:
+      - name: "registry-secret-name"     
 
 # Merge internal into root for direct access
 <<: *internal
