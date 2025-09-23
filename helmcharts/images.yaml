@@ -1,85 +1,498 @@
-global:
-  image:
-    dockerRegistrySecretName: &dockerSecretName "registry-secret-name"
-     #Replace the dockerConfigJson below for the private images
-    dockerConfigJson: |-
-      {"auths":{"http://registry.your-domain.io":{"auth":"eW91cl9yZWdpc3RyeV91c2VybmFtZTp5b3VyX3JlZ2lzdHJ5X3Rva2Vu"}}}
+image:
+  dockerRegistrySecretName: "registry-secret-name"
+  dockerConfigJson: |-
+    {"auths":{"http://registry.your-domain.io":{"auth":"eW91cl9yZWdpc3RyeV91c2VybmFtZTp5b3VyX3JlZ2lzdHJ5X3Rva2Vu"}}}
 
-imagePullSecrets: &imagePullSecrets
-  - name: *dockerSecretName
+imagePullSecrets:
+  - name: "registry-secret-name"
 
+# All images defined with anchors
+images:
+  velero: &velero
+    registry: "docker.io"
+    repository: "velero/velero"
+    tag: "v1.15.0"
 
-images: &images
-    velero: &velero
-      registry: "docker.io"
-      repository: "velero/velero"
-      tag: "v1.15.0"
+  volume_autoscaler: &volume_autoscaler
+    registry: "docker.io"
+    repository: "devopsnirvana/kubernetes-volume-autoscaler"
+    tag: "1.0.6"
 
-    volume-autoscaler: &volume-autoscaler
-      registry: "docker.io"
-      repository: devopsnirvana/kubernetes-volume-autoscaler
-      tag: 1.0.6
-      digest: ""  
+  kafka: &kafka
+    registry: "sunbirded.azurecr.io"
+    repository: "kafka"
+    tag: "3.3.1-debian-11-r25"
 
-    kafka: &kafka
-      registry: ""
-      repository: bitnami/kafka
-      tag: 3.3.1-debian-11-r25
-      digest: "" 
+  zookeeper: &zookeeper
+    registry: "sunbirded.azurecr.io"
+    repository: "zookeeper"
+    tag: "3.8.1-debian-11-r6"
 
-    postgresql: &postgresql
-      registry: "docker.io"
-      repository: "bitnami/postgresql"
-      tag: "11.14.0-debian-10-r49"
-      digest: ""  
+  cassandra: &cassandra
+    registry: "sunbirded.azurecr.io"
+    repository: "cassandra"
+    tag: "3.11.13-debian-11-r3"
 
-    elasticsearch:  &elasticsearch
-      image:
-        registry: docker.io
-        repository: bitnami/elasticsearch
-        tag: 6.8.23   
+  postgresql: &postgresql
+    registry: "sunbirded.azurecr.io"
+    repository: "postgresql"
+    tag: "11.14.0"
 
-    grafana: &grafana
-      registry: docker.io
-      repository: grafana/grafana
-      tag: "11.4.0"
-      digest: ""    
+  redis: &redis
+    registry: "sunbirded.azurecr.io"
+    repository: "redis"
+    tag: "7.0.9-debian-11-r1"
 
+  elasticsearch: &elasticsearch
+    registry: "sunbirded.azurecr.io"
+    repository: "elasticsearch"
+    tag: "6.8.23"
+
+  neo4j: &neo4j
+    registry: "sunbirded.azurecr.io"
+    repository: "neo4j"
+    tag: "4.4.12-enterprise"
+
+  grafana: &grafana
+    registry: "docker.io"
+    repository: "grafana/grafana"
+    tag: "11.4.0"
+    digest: ""
+
+  bot: &bot
+    repository: "sunbirded.azurecr.io/bot"
+    tag: "release-5.1.0_RC1_29_bot"
+
+  discussion_mw: &discussion_mw
+    repository: "sunbirded.azurecr.io/discussion-middleware"
+    tag: "release-7.0.0_RC1_850b795_3"
+
+  echo: &echo
+    repository: "ghcr.io/project-sunbird/sunbird-echo-service"
+    tag: "release-7.7.0_rc1_50b5b2d_2"
+
+  player: &player
+    repository: "ghcr.io/sunbird-ed/sunbirded-portal/player"
+    tag: "release-8.0.1-rc1-t15_17d6ab"
+
+  report: &report
+    repository: "ghcr.io/project-sunbird/sunbird-report-service"
+    tag: "release-8.0.0_rc2_ea97f3a_3"
+
+  router: &router
+    repository: "sunbirded.azurecr.io/router"
+    tag: "release-3.9.0_RC1_01339f9_07941f0_1_router"
+
+  kong: &kong
+    repository: "sunbirded.azurecr.io/kong"
+    tag: "0.14.1"
+
+  kong_apis: &kong_apis
+    repository: "sunbirded.azurecr.io/kong-apis"
+    tag: "0.14.1"
+
+  kong_consumer: &kong_consumer
+    repository: "sunbirded.azurecr.io/kong-consumer"
+    tag: "0.14.1"
+
+  knowledge_mw: &knowledge_mw
+    repository: "ghcr.io/sunbird-knowlg/knowledge-mw-service"
+    tag: "release-8.0.0_rc3_2e12b8f_3"
+
+  nginx_private_ingress: &nginx_private_ingress
+    repository: "sunbirded.azurecr.io/proxy"
+    tag: "release-7.0.0_8e6b2db_2345"
+
+  nginx_public_ingress: &nginx_public_ingress
+    repository: "sunbirded.azurecr.io/proxy"
+    tag: "release-7.0.0_8e6b2db_23"
+
+  nodebb: &nodebb
+    repository: "sunbirded.azurecr.io/nodebb"
+    tag: "release-5.0.0_RC1_1_v1.18.6"
+
+  adminutil: &adminutil
+    repository: "ghcr.io/sunbird-lern/sunbird-apimanager-util"
+    tag: "release-7.0.0_RC1_1_6c8f6f"
+
+  cert: &cert
+    repository: "ghcr.io/sunbird-lern/cert-service"
+    tag: "release-7.0.0_RC1_1_6c8f6f"
+
+  certregistry: &certregistry
+    repository: "ghcr.io/sunbird-lern/certificate-registry"
+    tag: "release-8.0.0_rc1_f8ac384_1"
+
+  certificateapi: &certificateapi
+    repository: "sunbirded.azurecr.io/sunbird-rc-certificate-api"
+    tag: "release-5.1.0_2bc7760_10"
+
+  certificatesign: &certificatesign
+    repository: "sunbirded.azurecr.io/sunbird-rc-certificate-signer"
+    tag: "release-5.1.0_2bc7760_9"
+
+  groups: &groups
+    repository: "ghcr.io/sunbird-lern/groups-service"
+    tag: "release-8.0.0_rc5_952df5d_5"
+
+  keycloak: &keycloak
+    repository: "sunbirded.azurecr.io/keycloak"
+    tag: "release-8.0.0_91e02cdtest"
+
+  keycloak-kids-keys: &keycloak-kids-keys
+    repository: "sunbirded.azurecr.io/keycloak-kids-keys"
+    tag: "0.1.5"
+
+  lms: &lms
+    repository: "ghcr.io/sunbird-lern/lms-service"
+    tag: "release-8.0.0_rc6_cc1f3e3_8"
+
+  notification: &notification
+    repository: "ghcr.io/sunbird-lern/notification-service"
+    tag: "release-8.0.0_rc4_1fd3be9_5"
+
+  print: &print
+    repository: "sunbirded.azurecr.io/print-service"
+    tag: "release-3.1.0_f9a608c"
+
+  registry: &registry
+    repository: "sunbirded.azurecr.io/sunbird-rc-core"
+    tag: "release-5.1.0_ece7ed3_14"
+
+  userorg: &userorg
+    registry: "sunbirded.azurecr.io"
+    repository: "ghcr.io/sunbird-lern/userorg-service"
+    tag: "release-8.0.0_rc7_5178806_9"
+
+  content: &content
+    repository: "ghcr.io/sunbird-knowlg/knowledge-platform/content-service"
+    tag: "release-8.0.0_rc3_09d6e64"
+
+  dial: &dial
+    repository: "ghcr.io/sunbird-knowlg/sunbird-dial-service"
+    tag: "release-8.0.0_rc4_726775d"
+
+  learning: &learning
+    repository: "sunbirded.azurecr.io/learning-service"
+    tag: "latest"
+
+  search: &search
+    repository: "ghcr.io/sunbird-knowlg/knowledge-platform/search-api"
+    tag: "release-8.0.0_rc3_09d6e64"
+
+  taxonomy: &taxonomy
+    repository: "sunbirded.azurecr.io/taxonomy-service"
+    tag: "release-7.0.0_RC1_1_6c8f6f"
+
+  assignment: &assignment
+    repository: "sunbirded.azurecr.io/assignment-service"
+    tag: "release-7.0.0_RC2_aeccd6e_16"
+
+  analytics: &analytics
+    registry: "sunbirded.azurecr.io"
+    repository: "sunbird-analytics-service"
+    tag: "release-5.1.4"
+
+  druid-operator: &druid-operator
+    repository: "druidio/druid-operator"
+    tag: ""
+
+  druid-raw-cluster: &druid-raw-cluster
+    druid_image: "apache/druid:25.0.0"
+
+  secor: &secor
+    repository: "sunbirded.azurecr.io/secor"
+    tag: "1.0.0-GA"
+
+  superset: &superset
+    repository: "sunbirded.azurecr.io/superset"
+    tag: "release-7.0.0"
+
+  telemetry: &telemetry
+    repository: "ghcr.io/project-sunbird/sunbird-telemetry-service"
+    tag: "release-8.0.0_rc3_f082527_4"
+
+  nlweb: &nlweb
+    repository: "sanketikahub/nlweb"
+    tag: "0.0.1"
+
+  nlwebflink: &nlwebflink
+    repository: "divyagovindaiah123/flink-nlweb-job"
+    tag: "test"
+
+# Internal block with pull secrets
 internal: &internal
   velero:
-      image:
-        <<: *velero
-        imagePullSecrets: 
-        - *dockerSecretName 
+    image: *velero
+    imagePullSecrets:
+      - name: "registry-secret-name"
 
-  volume-autoscaler:
-      <<: *volume-autoscaler
-      imagePullSecrets: 
-      - name: *dockerSecretName   
+  volume_autoscaler:
+    image: *volume_autoscaler
+    imagePullSecrets:
+      - name: "registry-secret-name"
 
   kafka:
-      image:
-        <<: *kafka
-        pullSecrets:
-        - *dockerSecretName   
+    image: *kafka
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  zookeeper:
+    image: *zookeeper
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  cassandra:
+    image: *cassandra
+    imagePullSecrets:
+      - name: "registry-secret-name"
 
   postgresql:
-    image:
-      <<: *postgresql
-      pullSecrets:
-      - *dockerSecretName 
+    image: *postgresql
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  redis:
+    image: *redis
+    imagePullSecrets:
+      - name: "registry-secret-name"
 
   elasticsearch:
-    image:
-      <<: *elasticsearch
-      pullSecrets:
-      - *dockerSecretName  
+    image: *elasticsearch
+    imagePullSecrets:
+      - name: "registry-secret-name"
 
-kube-prometheus-stack:
-    grafana:
-        image:
-          <<: *grafana
-          pullSecrets:
-          - *dockerSecretName     
-            
+  neo4j:
+    image: *neo4j
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  grafana:
+    image: *grafana
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  bot:
+    image: *bot
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  discussion_mw:
+    image: *discussion_mw
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  echo:
+    image: *echo
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  player:
+    image: *player
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  report:
+    image: *report
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  router:
+    image: *router
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  kong:
+    image: *kong
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  kong_apis:
+    image: *kong_apis
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  kong_consumer:
+    image: *kong_consumer
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  knowledge_mw:
+    image: *knowledge_mw
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  nginx_private_ingress:
+    image: *nginx_private_ingress
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  nginx_public_ingress:
+    image: *nginx_public_ingress
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  nodebb:
+    image: *nodebb
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  adminutil:
+    image: *adminutil
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  cert:
+    image: *cert
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  certregistry:
+    image: *certregistry
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  certificateapi:
+    image: *certificateapi
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  certificatesign:
+    image: *certificatesign
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  groups:
+    image: *groups
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  keycloak:
+    image: *keycloak
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  keycloak-kids-keys:
+    image: *keycloak-kids-keys
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  lms:
+    image: *lms
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  notification:
+    image: *notification
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  print:
+    image: *print
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  registry:
+    image: *registry
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  userorg:
+    image: *userorg
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  content:
+    image: *content
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  dial:
+    image: *dial
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  learning:
+    image: *learning
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  search:
+    image: *search
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  taxonomy:
+    image: *taxonomy
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  assignment:
+    image: *assignment
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  analytics:
+    image: *analytics
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  druid-operator:
+    image: *druid-operator
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  druid-raw-cluster:
+    image: *druid-raw-cluster
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  secor:
+    image: *secor
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  superset:
+    image: *superset
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  telemetry:
+    image: *telemetry
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  nlweb:
+    image: *nlweb
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+  nlwebflink:
+    image: *nlwebflink
+    imagePullSecrets:
+      - name: "registry-secret-name"
+
+# Merge internal into root for direct access
 <<: *internal
+
+# Flink images
+global:
+  knowledgeflink:
+    registry: "ghcr.io"
+    repository: "sunbird-knowlg/knowledge-platform-jobs"
+    tag: "release-8.0.0_rc5_b49d280"
+
+  learnflink:
+    registry: "ghcr.io"
+    repository: "sunbird-lern/data-pipeline"
+    tag: "release-8.0.0_rc7_a377ffa"
+
+  inquiryflink:
+    registry: "sunbirded.azurecr.io"
+    repository: "data-pipeline"
+    tag: "release-8.0.0_RC1_b4f909c"
+
+  obsrvflink:
+    registry: "sunbirded.azurecr.io"
+    repository: "sunbird-datapipeline"
+    tag: "release-5.2.0_RC8_9610bc7_13_be0895d"

@@ -369,9 +369,7 @@ neo4j:
       memory: "4Gi"
   neo4j:
     pvc:
-      resources:
-        requests:
-          storage: 25Gi
+      storage: 25Gi
 
 postgresql: 
   persistence:

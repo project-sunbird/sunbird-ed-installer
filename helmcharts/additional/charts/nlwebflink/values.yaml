@@ -1,0 +1,17 @@
+
+image:
+  repository: divyagovindaiah123/flink-nlweb-job
+  tag: test
+kafka:
+  topic: dv.telemetry.coss
+  bootstrapServers: kafka.sunbird.svc.cluster.local:9092
+siteName: default_site
+batchSize: 100
+job:
+  pythonFile: /opt/flink/job/flink_kafka_to_qdrant.py
+
+qdrant:
+  endpoint: "http://qdrant:6333"
+
+# API endpoint for data loading
+apiEndpoint: "http://nlweb:8000/load-data"

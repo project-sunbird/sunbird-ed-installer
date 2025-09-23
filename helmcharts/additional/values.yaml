@@ -64,3 +64,17 @@ volume-autoscaler:
   scale_up_max_increment: ""
   # The maximum size of disks to scale up to.  By default on AWS using EBS volumes this is set to 16TB as that is the EBS Max disk size.
   scale_up_max_size: ""     
+
+nlwebflink:
+  enabled: false
+  image:
+    repository: sanketikahub/nlwebflink
+    tag: 0.0.1
+  kafka:
+    topic: dv.telemetry.coss
+    bootstrapServers: kafka.sunbird.svc.cluster.local:9092  
+
+
+nlweb:
+  enabled: false
+  image:  sanketikahub/nlweb:0.0.1

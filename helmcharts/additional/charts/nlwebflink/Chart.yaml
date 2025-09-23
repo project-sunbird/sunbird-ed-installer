@@ -1,0 +1,4 @@
+apiVersion: v2
+name: flink-nlweb-job
+version: 0.1.0
+description: Helm chart for Flink cluster running nlweb PyFlink job

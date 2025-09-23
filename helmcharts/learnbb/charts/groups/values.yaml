@@ -4,7 +4,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/sunbird-lern/groups-service
-  tag: "release-8.0.0_rc4_0d054b5_4"
+  tag: "release-8.0.0_rc5_952df5d_5"
   pullPolicy: IfNotPresent
   pullSecrets: []
 

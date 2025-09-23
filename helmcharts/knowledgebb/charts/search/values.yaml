@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/sunbird-knowlg/knowledge-platform/search-api
-  tag: "release-8.0.0_rc2_0eec5de"
+  tag: "release-8.0.0_rc3_09d6e64"
   pullPolicy: IfNotPresent
   pullSecrets: []
 

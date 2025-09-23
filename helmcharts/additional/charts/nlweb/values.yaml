@@ -1,0 +1,32 @@
+nlweb:
+  image:
+    repository: "sanketikahub/nlweb"
+    tag: "0.0.1"
+
+  port: 8000
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000   
+  probePath: /
+  env:
+    PYTHONPATH: /app:/usr/local/lib/python3.13/site-packages
+    PORT: 8000
+    NLWEB_CONFIG_DIR: /config
+    QDRANT_URL: http://qdrant:6333
+  static:
+    enabled: true
+  envSecret:
+    enabled: true
+    data:
+      AZURE_VECTOR_SEARCH_ENDPOINT: ""
+      AZURE_VECTOR_SEARCH_API_KEY: ""
+      AZURE_OPENAI_ENDPOINT: "" #update this
+      AZURE_OPENAI_API_KEY: "" # update this
+      OPENAI_API_KEY: ""
+
+qdrant:
+  image: qdrant/qdrant:v1.15.1
+  port: 6333
+  storage: 10Gi
+
+

@@ -74,8 +74,8 @@ elasticsearch: &es
   persistence:
     size: 25Gi
   sysctlImage:
-    registry: docker.io
-    repository: bitnami/bitnami-shell-archived
+    registry: sunbirded.azurecr.io
+    repository: bitnami-shell-archived
     tag: 11-debian-11-r54
 
 cassandra: &cassandra
@@ -87,7 +87,8 @@ cassandra: &cassandra
   provisioning:
     annotations: *provisioningAnnotations
   image:
-    repository: bitnami/cassandra
+    registry: sunbirded.azurecr.io
+    repository: cassandra
     tag: 3.11.13-debian-11-r3
   extraEnvVars:
     - name: CASSANDRA_AUTHENTICATOR

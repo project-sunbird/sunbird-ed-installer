@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/sunbird-lern/data-pipeline
-  tag: release-8.0.0_rc5_b9be252
+  tag: release-8.0.0_rc7_a377ffa
   pullPolicy: IfNotPresent
   pullSecrets: []
 

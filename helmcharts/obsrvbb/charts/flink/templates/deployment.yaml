@@ -45,7 +45,8 @@ spec:
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.global.obsrvflink.registry }}/{{ .Values.global.obsrvflink.repository }}:{{ .Values.global.obsrvflink.tag }}"
+
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           workingDir: {{ .Values.taskmanager.flink_work_dir }}
           command: ["/opt/flink/bin/taskmanager.sh"]
@@ -139,7 +140,8 @@ spec:
       {{- end }}
       containers:
         - name: {{ $jobName }}-jobmanager
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.global.obsrvflink.registry }}/{{ .Values.global.obsrvflink.repository }}:{{ .Values.global.obsrvflink.tag }}"
+
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           workingDir: /opt/flink
           command: ["/opt/flink/bin/standalone-job.sh"]

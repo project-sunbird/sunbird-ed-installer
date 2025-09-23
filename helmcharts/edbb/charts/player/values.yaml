@@ -5,7 +5,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/sunbird-ed/sunbirded-portal/player
-  tag: "release-7.7.0_rc1_abd77af"
+  tag: "release-8.0.1-rc1-t15_17d6abc"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
