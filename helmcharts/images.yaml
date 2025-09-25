@@ -46,12 +46,12 @@ images:
   elasticsearch: &elasticsearch
     registry: "sunbirded.azurecr.io"
     repository: "elasticsearch"
-    tag: "6.8.23"
+    tag: "7.10.2"
 
   neo4j: &neo4j
     registry: "sunbirded.azurecr.io"
     repository: "neo4j"
-    tag: "4.4.12-enterprise"
+    tag: "3.3.0"
 
   grafana: &grafana
     registry: "docker.io"
@@ -73,7 +73,7 @@ images:
 
   player: &player
     repository: "ghcr.io/sunbird-ed/sunbirded-portal/player"
-    tag: "release-8.0.1-rc1-t15_17d6ab"
+    tag: "release-8.0.1-rc-t17_6125310"
 
   report: &report
     repository: "ghcr.io/project-sunbird/sunbird-report-service"
@@ -117,7 +117,7 @@ images:
 
   cert: &cert
     repository: "ghcr.io/sunbird-lern/cert-service"
-    tag: "release-7.0.0_RC1_1_6c8f6f"
+    tag: "release-8.0.0_rc1_ba5cc75_1"
 
   certregistry: &certregistry
     repository: "ghcr.io/sunbird-lern/certificate-registry"
@@ -133,11 +133,11 @@ images:
 
   groups: &groups
     repository: "ghcr.io/sunbird-lern/groups-service"
-    tag: "release-8.0.0_rc5_952df5d_5"
+    tag: "release-8.0.0_rc7_86387c8_7"
 
   keycloak: &keycloak
     repository: "sunbirded.azurecr.io/keycloak"
-    tag: "release-8.0.0_91e02cdtest"
+    tag: "release-8.0.0_91e02cd"
 
   keycloak-kids-keys: &keycloak-kids-keys
     repository: "sunbirded.azurecr.io/keycloak-kids-keys"
@@ -181,8 +181,8 @@ images:
     tag: "release-8.0.0_rc3_09d6e64"
 
   taxonomy: &taxonomy
-    repository: "sunbirded.azurecr.io/taxonomy-service"
-    tag: "release-7.0.0_RC1_1_6c8f6f"
+    repository: "ghcr.io/sunbird-knowlg/knowledge-platform/taxonomy-api"
+    tag: "release-8.0.0_rc3_09d6e64"
 
   assignment: &assignment
     repository: "sunbirded.azurecr.io/assignment-service"

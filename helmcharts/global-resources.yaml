@@ -300,7 +300,7 @@ lms:
       memory: 100Mi
     limits:
       cpu: 1
-      memory: 1024Mi
+      memory: 1536Mi
 
 notification:
   resources:
