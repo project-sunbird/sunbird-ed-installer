@@ -49,8 +49,7 @@ images:
     tag: "7.10.2"
 
   neo4j: &neo4j
-    registry: "sunbirded.azurecr.io"
-    repository: "neo4j"
+    repository: "sunbirded.azurecr.io/neo4j"
     tag: "3.3.0"
 
   grafana: &grafana
@@ -73,7 +72,7 @@ images:
 
   player: &player
     repository: "ghcr.io/sunbird-ed/sunbirded-portal/player"
-    tag: "release-8.0.1-rc-t17_6125310"
+    tag: "release-8.0.1-rc-t18_72ced66"
 
   report: &report
     repository: "ghcr.io/project-sunbird/sunbird-report-service"
@@ -217,8 +216,8 @@ images:
     tag: "0.0.1"
 
   nlwebflink: &nlwebflink
-    repository: "divyagovindaiah123/flink-nlweb-job"
-    tag: "test"
+    repository: "sunbirded.azurecr.io/flink-nlweb"
+    tag: "v1.0.0"
 
   spark: &spark
     image:
