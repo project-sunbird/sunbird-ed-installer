@@ -5,7 +5,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/sunbird-knowlg/knowledge-platform-jobs
-  tag: "release-8.0.0_rc2_3430e99"
+  tag: "release-8.0.0_rc6_b49d280"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
@@ -833,6 +833,7 @@ flink_jobs:
         mvc.topic = "{{ .Values.global.env }}.knowlg.mvc.processor.job.request"
         error.topic = "{{ .Values.global.env }}.knowlg.learning.events.failed"
         groupId = "{{ .Values.global.env }}-content-publish-group"
+        content_metadata.topic = "dv.telemetry.coss"
       }
 
       task {
@@ -996,6 +997,8 @@ flink_jobs:
       cloud_storage_container="{{ .Values.global.public_container_name }}"
       cloud_storage_endpoint=""
       schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
+      ai_search_enabled = true
+
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
       taskmanager.memory.flink.size: 1024m

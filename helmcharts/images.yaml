@@ -72,7 +72,7 @@ images:
 
   player: &player
     repository: "ghcr.io/sunbird-ed/sunbirded-portal/player"
-    tag: "release-8.0.1-rc-t18_72ced66"
+    tag: "release-8.0.1-rc-t25_dc3d7be"
 
   report: &report
     repository: "ghcr.io/project-sunbird/sunbird-report-service"
