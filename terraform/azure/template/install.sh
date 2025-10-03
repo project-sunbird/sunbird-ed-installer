@@ -78,6 +78,8 @@ function install_component() {
     kubectl create namespace sunbird 2>/dev/null || true
     kubectl create namespace velero 2>/dev/null || true
     kubectl create namespace volume-autoscaler 2>/dev/null || true
+    kubectl create namespace nlweb 2>/dev/null || true
+
     echo -e "\nInstalling $component"
     local ed_values_flag=""
     if [ -f "$component/ed-values.yaml" ]; then
@@ -98,6 +100,7 @@ function install_component() {
       fi
     helm upgrade --install "$component" "$component" --namespace sunbird -f "$component/values.yaml" \
         $ed_values_flag \
+        -f images.yaml \
         -f "global-resources.yaml" \
         -f "../terraform/azure/$environment/global-values.yaml" \
         -f "../terraform/azure/$environment/global-cloud-values.yaml" --timeout 30m --debug

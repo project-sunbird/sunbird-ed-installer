@@ -67,8 +67,9 @@ volume-autoscaler:
 
 nlwebflink:
   enabled: false
+  namespace: nlweb
   image:
-    repository: sanketikahub/nlwebflink
+    repository: sunbirded.azurecr.io/flink-nlweb
     tag: 0.0.1
   kafka:
     topic: dv.telemetry.coss
@@ -77,4 +78,16 @@ nlwebflink:
 
 nlweb:
   enabled: false
-  image:  sanketikahub/nlweb:0.0.1
+  namespace: nlweb
+  image:
+    repository: sanketikahub/nlweb
+    tag: 0.0.1
+  port: 8000
+  static:
+    enabled: false
+  envSecret:
+    enabled: false
+  qdrant:
+    image: qdrant/qdrant:v1.15.1
+    port: 6333
+    storage: 10Gi

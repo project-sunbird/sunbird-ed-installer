@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nlweb
+  namespace: {{ .Values.namespace }}
 spec:
   replicas: 1
   selector:
@@ -23,47 +24,47 @@ spec:
             - name: vendor
               mountPath: /vendor
       securityContext:
-        runAsUser: {{ .Values.nlweb.runAsUser | default 1000 }}
-        runAsGroup: {{ .Values.nlweb.runAsGroup | default 1000 }}
-        fsGroup: {{ .Values.nlweb.fsGroup | default 1000 }}
+        runAsUser: {{ .Values.runAsUser | default 1000 }}
+        runAsGroup: {{ .Values.runAsGroup | default 1000 }}
+        fsGroup: {{ .Values.fsGroup | default 1000 }}
 
       containers:
         - name: nlweb
-          image: "{{ .Values.nlweb.image.repository }}:{{ .Values.nlweb.image.tag }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           ports:
-            - containerPort: {{ .Values.nlweb.port }}
+            - containerPort: {{ .Values.port }}
           readinessProbe:
             httpGet:
-              path: {{ .Values.nlweb.probePath | default "/" }}
-              port: {{ .Values.nlweb.port }}
+              path: {{ .Values.probePath | default "/" }}
+              port: {{ .Values.port }}
             initialDelaySeconds: 10
             periodSeconds: 15
             timeoutSeconds: 5
             failureThreshold: 3
           livenessProbe:
             httpGet:
-              path: {{ .Values.nlweb.probePath | default "/" }}
-              port: {{ .Values.nlweb.port }}
+              path: {{ .Values.probePath | default "/" }}
+              port: {{ .Values.port }}
             initialDelaySeconds: 20
             periodSeconds: 20
             timeoutSeconds: 5
             failureThreshold: 3
           env:
             - name: PYTHONPATH
-              value: {{ .Values.nlweb.env.PYTHONPATH }}
+              value: {{ .Values.env.PYTHONPATH }}
             - name: PORT
-              value: "{{ .Values.nlweb.env.PORT }}"
+              value: "{{ .Values.env.PORT }}"
             - name: NLWEB_CONFIG_DIR
-              value: {{ .Values.nlweb.env.NLWEB_CONFIG_DIR }}
+              value: {{ .Values.env.NLWEB_CONFIG_DIR }}
             - name: QDRANT_URL
-              value: {{ .Values.nlweb.env.QDRANT_URL }}
+              value: {{ .Values.env.QDRANT_URL }}
             - name: PIP_NO_CACHE_DIR
               value: "1"
             - name: PIP_USER
               value: "1"
             - name: HOME
               value: "/tmp"
-          {{- if .Values.nlweb.envSecret.enabled }}
+          {{- if .Values.envSecret.enabled }}
           envFrom:
             - secretRef:
                 name: nlweb-env
@@ -73,7 +74,7 @@ spec:
               mountPath: /app/data
             - name: vendor
               mountPath: /app/vendor
-            {{- if .Values.nlweb.static.enabled }}
+            {{- if .Values.static.enabled }}
             - name: static
               mountPath: /static
             {{- end }}
@@ -85,7 +86,7 @@ spec:
         - name: data
           persistentVolumeClaim:
             claimName: data-pvc
-        {{- if .Values.nlweb.static.enabled }}
+        {{- if .Values.static.enabled }}
         - name: static
           configMap:
             name: nlweb-static
@@ -97,10 +98,12 @@ spec:
           emptyDir: {}
         - name: vendor
           emptyDir: {}
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: qdrant
+  namespace: {{ .Values.namespace }}
 spec:
   replicas: 1
   selector:
@@ -113,7 +116,7 @@ spec:
     spec:
       containers:
         - name: qdrant
-          image: "{{ .Values.qdrant.image }}"
+          image: {{ .Values.qdrant.image }}
           ports:
             - containerPort: {{ .Values.qdrant.port }}
           volumeMounts:

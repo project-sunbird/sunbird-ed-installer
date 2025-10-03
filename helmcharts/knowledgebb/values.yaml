@@ -87,7 +87,7 @@ cassandra: &cassandra
   provisioning:
     annotations: *provisioningAnnotations
   image:
-    repository: bitnami/cassandra
+    repository: sunbirded.azurecr.io/cassandra
     tag: 3.11.13-debian-11-r3
   extraEnvVars:
     - name: CASSANDRA_AUTHENTICATOR

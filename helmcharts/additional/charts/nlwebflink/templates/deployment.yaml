@@ -1,3 +1,4 @@
+{{- if .Values.enabled }}
 # ----------------------------------------
 # Flink JobManager Deployment
 # ----------------------------------------
@@ -5,6 +6,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nlwebflink-jobmanager
+  namespace: {{ .Values.namespace }}
 spec:
   replicas: 1
   selector:
@@ -20,7 +22,7 @@ spec:
           emptyDir: {}
       initContainers:
         - name: setup-pyflink
-          image: "{{- if .Values.images.additional -}}{{ .Values.images.additional.nlwebflink.repository }}:{{ .Values.images.additional.nlwebflink.tag }}{{- else -}}{{ .Values.image.repository }}:{{ .Values.image.tag }}{{- end }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           command: ["/bin/sh", "-c"]
           args:
             - |
@@ -31,7 +33,7 @@ spec:
               mountPath: /opt/python-deps
       containers:
         - name: jobmanager
-          image: "{{- if .Values.images.additional -}}{{ .Values.images.additional.nlwebflink.repository }}:{{ .Values.images.additional.nlwebflink.tag }}{{- else -}}{{ .Values.image.repository }}:{{ .Values.image.tag }}{{- end }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: Always
           volumeMounts:
             - name: pyflink-deps
@@ -79,6 +81,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: nlwebflink-jobmanager
+  namespace: {{ .Values.namespace }}
 spec:
   selector:
     app: nlwebflink-jobmanager
@@ -101,6 +104,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nlwebflink-taskmanager
+  namespace: {{ .Values.namespace }}
 spec:
   replicas: 1
   selector:
@@ -116,7 +120,7 @@ spec:
           emptyDir: {}
       initContainers:
         - name: setup-pyflink
-          image: "{{- if .Values.images.additional -}}{{ .Values.images.additional.nlwebflink.repository }}:{{ .Values.images.additional.nlwebflink.tag }}{{- else -}}{{ .Values.image.repository }}:{{ .Values.image.tag }}{{- end }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           command: ["/bin/sh", "-c"]
           args:
             - |
@@ -127,7 +131,7 @@ spec:
               mountPath: /opt/python-deps
       containers:
         - name: taskmanager
-          image: "{{- if .Values.images.additional -}}{{ .Values.images.additional.nlwebflink.repository }}:{{ .Values.images.additional.nlwebflink.tag }}{{- else -}}{{ .Values.image.repository }}:{{ .Values.image.tag }}{{- end }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: Always
           volumeMounts:
             - name: pyflink-deps
@@ -166,6 +170,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: nlwebflink-taskmanager
+  namespace: {{ .Values.namespace }}
 spec:
   selector:
     app: nlwebflink-taskmanager
@@ -176,5 +181,6 @@ spec:
     - name: rpc
       port: 6123
       targetPort: 6123
+{{- end }}
 
 

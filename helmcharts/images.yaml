@@ -489,7 +489,7 @@ global:
   knowledgeflink:
     registry: "ghcr.io"
     repository: "sunbird-knowlg/knowledge-platform-jobs"
-    tag: "release-8.0.0_rc5_b49d280"
+    tag: "release-8.0.0_rc7_be30b86"
 
   learnflink:
     registry: "ghcr.io"
