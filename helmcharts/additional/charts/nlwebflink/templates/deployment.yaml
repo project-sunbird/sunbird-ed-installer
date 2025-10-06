@@ -1,0 +1,186 @@
+{{- if .Values.enabled }}
+# ----------------------------------------
+# Flink JobManager Deployment
+# ----------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nlwebflink-jobmanager
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nlwebflink-jobmanager
+  template:
+    metadata:
+      labels:
+        app: nlwebflink-jobmanager
+    spec:
+      volumes:
+        - name: pyflink-deps
+          emptyDir: {}
+      initContainers:
+        - name: setup-pyflink
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              apt-get update && apt-get install -y python3 python3-pip && \
+              pip3 install --target=/opt/python-deps apache-flink==1.17.1 requests protobuf grpcio
+          volumeMounts:
+            - name: pyflink-deps
+              mountPath: /opt/python-deps
+      containers:
+        - name: jobmanager
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: pyflink-deps
+              mountPath: /opt/python-deps
+          env:
+            - name: JOB_MANAGER_RPC_ADDRESS
+              value: "nlwebflink-jobmanager"
+            - name: KAFKA_TOPIC
+              value: "{{ .Values.kafka.topic }}"
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: "{{ .Values.kafka.bootstrapServers }}"
+            - name: SITE_NAME
+              value: "{{ .Values.siteName }}"
+            - name: BATCH_SIZE
+              value: "{{ .Values.batchSize }}"
+            - name: PYFLINK_PYTHON
+              value: "python3"
+            - name: PYTHONPATH
+              value: "/opt/python-deps:$PYTHONPATH"
+            - name: FLINK_PYTHON_PATH
+              value: "/opt/python-deps"
+            - name: QDRANT_DB_ENDPOINT
+              value: "{{ .Values.qdrant.endpoint }}"
+            - name: API_ENDPOINT
+              value: "{{ .Values.apiEndpoint }}"
+            - name: PYFLINK_JOB_FILE
+              value: "/opt/flink/job/flink_kafka_to_qdrant.py"
+          ports:
+            - containerPort: 8081   # Flink Web UI
+            - containerPort: 6123   # RPC
+            - containerPort: 6124   # Blob (optional)
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              /docker-entrypoint.sh jobmanager &
+              while ! nc -z localhost 8081; do sleep 2; done
+              flink run -py $PYFLINK_JOB_FILE
+              wait
+
+---
+# ----------------------------------------
+# JobManager Service
+# ----------------------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: nlwebflink-jobmanager
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    app: nlwebflink-jobmanager
+  ports:
+    - name: rpc
+      port: 6123
+      targetPort: 6123
+    - name: blob
+      port: 6124
+      targetPort: 6124
+    - name: ui
+      port: 8081
+      targetPort: 8081
+
+---
+# ----------------------------------------
+# Flink TaskManager Deployment
+# ----------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nlwebflink-taskmanager
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nlwebflink-taskmanager
+  template:
+    metadata:
+      labels:
+        app: nlwebflink-taskmanager
+    spec:
+      volumes:
+        - name: pyflink-deps
+          emptyDir: {}
+      initContainers:
+        - name: setup-pyflink
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              apt-get update && apt-get install -y python3 python3-pip && \
+              pip3 install --target=/opt/python-deps apache-flink==1.17.1 requests protobuf grpcio
+          volumeMounts:
+            - name: pyflink-deps
+              mountPath: /opt/python-deps
+      containers:
+        - name: taskmanager
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: pyflink-deps
+              mountPath: /opt/python-deps
+          env:
+            - name: JOB_MANAGER_RPC_ADDRESS
+              value: "nlwebflink-jobmanager"
+            - name: KAFKA_TOPIC
+              value: "{{ .Values.kafka.topic }}"
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: "{{ .Values.kafka.bootstrapServers }}"
+            - name: SITE_NAME
+              value: "{{ .Values.siteName }}"
+            - name: BATCH_SIZE
+              value: "{{ .Values.batchSize }}"
+            - name: PYFLINK_PYTHON
+              value: "python3"
+            - name: PYTHONPATH
+              value: "/opt/python-deps:$PYTHONPATH"
+            - name: FLINK_PYTHON_PATH
+              value: "/opt/python-deps"
+            - name: QDRANT_DB_ENDPOINT
+              value: "{{ .Values.qdrant.endpoint }}"
+            - name: API_ENDPOINT
+              value: "{{ .Values.apiEndpoint }}"
+          ports:
+            - containerPort: 6122   # Data/Shuffle
+            - containerPort: 6123   # RPC
+          command: ["/docker-entrypoint.sh", "taskmanager"]
+
+---
+# ----------------------------------------
+# TaskManager Service (optional)
+# ----------------------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: nlwebflink-taskmanager
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    app: nlwebflink-taskmanager
+  ports:
+    - name: data
+      port: 6122
+      targetPort: 6122
+    - name: rpc
+      port: 6123
+      targetPort: 6123
+{{- end }}
+
+

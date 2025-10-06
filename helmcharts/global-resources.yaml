@@ -300,7 +300,7 @@ lms:
       memory: 100Mi
     limits:
       cpu: 1
-      memory: 1024Mi
+      memory: 1536Mi
 
 notification:
   resources:
@@ -369,9 +369,7 @@ neo4j:
       memory: "4Gi"
   neo4j:
     pvc:
-      resources:
-        requests:
-          storage: 25Gi
+      storage: 25Gi
 
 postgresql: 
   persistence:

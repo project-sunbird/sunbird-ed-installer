@@ -9,8 +9,14 @@ dependencies:
   - name: velero
     version: 8.1.0
     condition: velero.enabled
-
-dependencies:
   - name: volume-autoscaler
     version: 1.0.5
-    condition: volume-autoscaler.enabled    
+    condition: volume-autoscaler.enabled
+  - name: nlweb
+    version: 0.0.1
+    repository: "file://./charts/nlweb"
+    condition: nlweb.enabled
+  - name: nlwebflink
+    version: 0.0.1
+    repository: "file://./charts/nlwebflink"
+    condition: nlwebflink.enabled         

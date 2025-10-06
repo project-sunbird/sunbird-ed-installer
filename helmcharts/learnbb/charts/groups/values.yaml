@@ -3,8 +3,8 @@ fullnameOverride: "groups"
 replicaCount: 1
 
 image:
-  repository: sunbirded.azurecr.io/groups_service
-  tag: "release-7.0.0_RC1_e82e95d_3"
+  repository: ghcr.io/sunbird-lern/groups-service
+  tag: "release-8.0.0_rc5_952df5d_5"
   pullPolicy: IfNotPresent
   pullSecrets: []
 

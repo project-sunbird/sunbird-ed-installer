@@ -41,7 +41,7 @@ spec:
             mountPath: /opt/shared-volume
       containers:
       - name: migration
-        image: {{.Values.global.cassandra.image.repository}}:{{.Values.global.cassandra.image.tag}}
+        image: {{ .Values.global.cassandra.image.registry }}/{{.Values.global.cassandra.image.repository}}:{{.Values.global.cassandra.image.tag}}
         imagePullPolicy: IfNotPresent
         command: ['bash', '-c']
         args:

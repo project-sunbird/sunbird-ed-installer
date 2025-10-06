@@ -12,6 +12,8 @@ provisioningAnnotations: &provisioningAnnotations
 
 redis: &redis
   enabled: true
+  registry: "sunbirded.azurecr.io"
+  repository: "redis"
   replica:
     replicaCount: 0
   nameOverride: "redis"
@@ -43,6 +45,8 @@ cassandra: &cassandra
   provisioning:
     annotations: *provisioningAnnotations
   image:
+    registry: sunbirded.azurecr.io
+    repository: cassandra
     tag: 3.11.13-debian-11-r3
   extraEnvVars:
     - name: CASSANDRA_AUTHENTICATOR
@@ -64,8 +68,9 @@ cassandra: &cassandra
 postgresql: &postgresql
   enabled: true
   image:
-    repository: bitnami/postgresql
-    tag: 11.14.0-debian-10-r49
+    registry: sunbirded.azurecr.io
+    repository: postgresql
+    tag: 11.14.0
   fullnameOverride: postgresql
   host: postgresql
   port: 5432
@@ -93,6 +98,10 @@ postgresql: &postgresql
 zookeeper: &zookeeper
   fullnameOverride: zookeeper
   nameOverride: zookeeper
+  image:
+    registry: sunbirded.azurecr.io
+    repository: zookeeper
+    tag: 3.8.1-debian-11-r6
   host: "zookeeper"
   port: 2181
   persistence:
@@ -114,8 +123,8 @@ kafka: &kafka
   host: kafka
   port: 9092
   image:
-    registry: docker.io
-    repository: bitnami/kafka
+    registry: sunbirded.azurecr.io
+    repository: kafka
     tag: 3.3.1-debian-11-r25
   persistence:
     size: 25Gi

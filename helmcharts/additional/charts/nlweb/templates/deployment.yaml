@@ -1,0 +1,128 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nlweb
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nlweb
+  template:
+    metadata:
+      labels:
+        app: nlweb
+    spec:
+      initContainers:
+        - name: install-qdrant-client
+          image: python:3.10-slim   # ✅ reliable base image with /bin/sh
+          command: ["/bin/sh", "-c"]
+          args: ["pip install --no-cache-dir -t /vendor qdrant-client"]
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - name: vendor
+              mountPath: /vendor
+      securityContext:
+        runAsUser: {{ .Values.runAsUser | default 1000 }}
+        runAsGroup: {{ .Values.runAsGroup | default 1000 }}
+        fsGroup: {{ .Values.fsGroup | default 1000 }}
+
+      containers:
+        - name: nlweb
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.port }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.probePath | default "/" }}
+              port: {{ .Values.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.probePath | default "/" }}
+              port: {{ .Values.port }}
+            initialDelaySeconds: 20
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 3
+          env:
+            - name: PYTHONPATH
+              value: {{ .Values.env.PYTHONPATH }}
+            - name: PORT
+              value: "{{ .Values.env.PORT }}"
+            - name: NLWEB_CONFIG_DIR
+              value: {{ .Values.env.NLWEB_CONFIG_DIR }}
+            - name: QDRANT_URL
+              value: {{ .Values.env.QDRANT_URL }}
+            - name: PIP_NO_CACHE_DIR
+              value: "1"
+            - name: PIP_USER
+              value: "1"
+            - name: HOME
+              value: "/tmp"
+          {{- if .Values.envSecret.enabled }}
+          envFrom:
+            - secretRef:
+                name: nlweb-env
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+            - name: vendor
+              mountPath: /app/vendor
+            {{- if .Values.static.enabled }}
+            - name: static
+              mountPath: /static
+            {{- end }}
+            - name: nlweb-config
+              mountPath: /config
+            - name: logs
+              mountPath: /app/logs
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: data-pvc
+        {{- if .Values.static.enabled }}
+        - name: static
+          configMap:
+            name: nlweb-static
+        {{- end }}
+        - name: nlweb-config
+          configMap:
+            name: nlweb-config
+        - name: logs
+          emptyDir: {}
+        - name: vendor
+          emptyDir: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qdrant
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qdrant
+  template:
+    metadata:
+      labels:
+        app: qdrant
+    spec:
+      containers:
+        - name: qdrant
+          image: {{ .Values.qdrant.image }}
+          ports:
+            - containerPort: {{ .Values.qdrant.port }}
+          volumeMounts:
+            - name: qdrant-storage
+              mountPath: /qdrant/storage
+      volumes:
+        - name: qdrant-storage
+          persistentVolumeClaim:
+            claimName: qdrant-pvc

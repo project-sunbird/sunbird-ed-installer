@@ -1,0 +1,5 @@
+apiVersion: v2
+name: nlweb
+description: Helm chart for nlweb and Qdrant
+version: 0.0.1
+appVersion: "1.0"

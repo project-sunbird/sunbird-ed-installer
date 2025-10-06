@@ -3,8 +3,8 @@ fullnameOverride: "lms"
 replicaCount: 1
 
 image:
-  repository: sunbirded.azurecr.io/lms_service
-  tag: "release-7.0.0_RC2_d14e96b_32"
+  repository: ghcr.io/sunbird-lern/lms-service
+  tag: "release-8.0.0_rc6_cc1f3e3_8"
   pullPolicy: IfNotPresent
   pullSecrets: []
 

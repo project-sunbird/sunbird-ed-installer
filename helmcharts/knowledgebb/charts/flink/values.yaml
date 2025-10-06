@@ -4,8 +4,8 @@ fullnameOverride: ""
 replicaCount: 1
 
 image:
-  repository: sunbirded.azurecr.io/knowledge-platform-jobs
-  tag: "release-5.7.0_RC3_18c0d23_90"
+  repository: ghcr.io/sunbird-knowlg/knowledge-platform-jobs
+  tag: "release-8.0.0_rc7_be30b86"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
@@ -278,7 +278,53 @@ flink_jobs:
 
     job_classname: org.sunbird.job.searchindexer.task.SearchIndexerStreamTask
 
-  audit-event-generator:
+  # audit-event-generator:
+  #   enabled: true
+  #   config: |+
+  #     include file("/data/flink/conf/base-config.conf")
+  #     job {
+  #       env = "{{ .Values.global.env }}"
+  #     }
+
+  #     kafka {
+  #       input.topic = "{{ .Values.global.env }}.knowlg.learning.graph.events"
+  #       output.topic = "{{ .Values.global.env }}.knowlg.telemetry.raw"
+  #       groupId = "{{ .Values.global.env }}-audit-event-generator-group"
+  #     }
+
+  #     task {
+  #     consumer.parallelism = 1
+  #     parallelism = 1
+  #     producer.parallelism = 1
+  #     window.time = 60
+  #     }
+
+  #     schema {
+  #       basePath = "{{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_read_base_path "context" $) }}/{{ .Values.global.public_container_name }}/schemas/local/content/"
+  #     }
+
+  #     channel.default = "org.sunbird"
+  #     schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
+
+  #   flink-conf: |+
+  #     jobmanager.memory.flink.size: 1024m
+  #     taskmanager.memory.flink.size: 1024m
+  #     taskmanager.numberOfTaskSlots: 1
+  #     jobManager.numberOfTaskSlots: 1
+  #     parallelism.default: 1
+  #     jobmanager.execution.failover-strategy: region
+  #     taskmanager.memory.network.fraction: 0.1
+  #     scheduler-mode: reactive
+  #     heartbeat.timeout: 8000
+  #     heartbeat.interval: 5000
+  #     taskmanager.memory.process.size: 1700m
+  #     jobmanager.memory.process.size: 1600m
+  #     # classloader.resolve-order: "parent-first"
+  #     # state.savepoints.dir: file:///tmp
+
+  #   job_classname: org.sunbird.job.auditevent.task.AuditEventGeneratorStreamTask
+
+  transaction-event-processor:
     enabled: true
     config: |+
       include file("/data/flink/conf/base-config.conf")
@@ -288,8 +334,9 @@ flink_jobs:
 
       kafka {
         input.topic = "{{ .Values.global.env }}.knowlg.learning.graph.events"
-        output.topic = "{{ .Values.global.env }}.knowlg.telemetry.raw"
-        groupId = "{{ .Values.global.env }}-audit-event-generator-group"
+        output.audit.topic = "{{ .Values.global.env }}.knowlg.telemetry.raw"
+        output.obsrv.topic = "{{ .Values.global.env }}.knowlg.transaction.meta"
+        groupId = "{{ .Values.global.env }}-transaction-event-processor-group"
       }
 
       task {
@@ -305,6 +352,16 @@ flink_jobs:
 
       channel.default = "org.sunbird"
       schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
+
+      channel.default = "org.sunbird"
+
+      timezone = "IST"
+
+      job {
+          audit-event-generator = true
+          audit-history-indexer = true
+          obsrv-metadata-generator = true
+      }
 
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
@@ -322,7 +379,7 @@ flink_jobs:
       # classloader.resolve-order: "parent-first"
       # state.savepoints.dir: file:///tmp
 
-    job_classname: org.sunbird.job.auditevent.task.AuditEventGeneratorStreamTask
+    job_classname: org.sunbird.job.transaction.task.TransactionEventProcessorStreamTask
 
   asset-enrichment:
     enabled: true
@@ -721,45 +778,45 @@ flink_jobs:
 
     job_classname: org.sunbird.job.videostream.task.VideoStreamGeneratorStreamTask
 
-  audit-history-indexer:
-    enabled: true
-    config: |+
-      include file("/data/flink/conf/base-config.conf")
-      job {
-        env = "{{ .Values.global.env }}"
-      }
+  # audit-history-indexer:
+  #   enabled: true
+  #   config: |+
+  #     include file("/data/flink/conf/base-config.conf")
+  #     job {
+  #       env = "{{ .Values.global.env }}"
+  #     }
 
-      kafka {
-        input.topic = "{{ .Values.global.env }}.knowlg.learning.graph.events"
-        groupId = "{{ .Values.global.env }}-audit-history-indexer-group"
-      }
+  #     kafka {
+  #       input.topic = "{{ .Values.global.env }}.knowlg.learning.graph.events"
+  #       groupId = "{{ .Values.global.env }}-audit-history-indexer-group"
+  #     }
 
-      task {
-        consumer.parallelism = 1
-        parallelism = 1
-        window.time = 60
-      }
+  #     task {
+  #       consumer.parallelism = 1
+  #       parallelism = 1
+  #       window.time = 60
+  #     }
 
-      timezone = "IST"
-      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
+  #     timezone = "IST"
+  #     schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
 
-    flink-conf: |+
-      jobmanager.memory.flink.size: 1024m
-      taskmanager.memory.flink.size: 1024m
-      taskmanager.numberOfTaskSlots: 1
-      jobManager.numberOfTaskSlots: 1
-      parallelism.default: 1
-      jobmanager.execution.failover-strategy: region
-      taskmanager.memory.network.fraction: 0.1
-      scheduler-mode: reactive
-      heartbeat.timeout: 8000
-      heartbeat.interval: 5000
-      taskmanager.memory.process.size: 1700m
-      jobmanager.memory.process.size: 1600m
-      # classloader.resolve-order: "parent-first"
-      # state.savepoints.dir: file:///tmp
+  #   flink-conf: |+
+  #     jobmanager.memory.flink.size: 1024m
+  #     taskmanager.memory.flink.size: 1024m
+  #     taskmanager.numberOfTaskSlots: 1
+  #     jobManager.numberOfTaskSlots: 1
+  #     parallelism.default: 1
+  #     jobmanager.execution.failover-strategy: region
+  #     taskmanager.memory.network.fraction: 0.1
+  #     scheduler-mode: reactive
+  #     heartbeat.timeout: 8000
+  #     heartbeat.interval: 5000
+  #     taskmanager.memory.process.size: 1700m
+  #     jobmanager.memory.process.size: 1600m
+  #     # classloader.resolve-order: "parent-first"
+  #     # state.savepoints.dir: file:///tmp
 
-    job_classname: org.sunbird.job.audithistory.task.AuditHistoryIndexerStreamTask
+  #   job_classname: org.sunbird.job.audithistory.task.AuditHistoryIndexerStreamTask
 
   content-publish:
     enabled: true
@@ -776,6 +833,7 @@ flink_jobs:
         mvc.topic = "{{ .Values.global.env }}.knowlg.mvc.processor.job.request"
         error.topic = "{{ .Values.global.env }}.knowlg.learning.events.failed"
         groupId = "{{ .Values.global.env }}-content-publish-group"
+        content_metadata.topic = "dv.telemetry.coss"
       }
 
       task {
@@ -939,6 +997,8 @@ flink_jobs:
       cloud_storage_container="{{ .Values.global.public_container_name }}"
       cloud_storage_endpoint=""
       schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
+      ai_search_enabled = true
+
     flink-conf: |+
       jobmanager.memory.flink.size: 1024m
       taskmanager.memory.flink.size: 1024m

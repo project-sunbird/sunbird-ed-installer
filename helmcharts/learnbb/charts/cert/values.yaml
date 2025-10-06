@@ -3,8 +3,8 @@ fullnameOverride: "cert"
 replicaCount: 1
 
 image:
-  repository: sunbirded.azurecr.io/cert_service
-  tag: "release-5.0.1_RC2"
+  repository: ghcr.io/sunbird-lern/cert-service
+  tag: "release-8.0.0_rc1_ba5cc75_1"
   pullPolicy: IfNotPresent
   pullSecrets: []
 

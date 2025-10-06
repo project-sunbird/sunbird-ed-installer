@@ -45,7 +45,7 @@ spec:
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.global.inquiryflink.registry }}/{{ .Values.global.inquiryflink.repository }}:{{ .Values.global.inquiryflink.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           workingDir: {{ .Values.taskmanager.flink_work_dir }}
           command: ["/opt/flink/bin/taskmanager.sh"]
@@ -139,7 +139,7 @@ spec:
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.global.inquiryflink.registry }}/{{ .Values.global.inquiryflink.repository }}:{{ .Values.global.inquiryflink.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           workingDir: {{ .Values.jobmanager.flink_work_dir }}
           command: ["/opt/flink/bin/standalone-job.sh"]

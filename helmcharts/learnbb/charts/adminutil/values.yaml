@@ -3,8 +3,8 @@ fullnameOverride: "adminutil"
 replicaCount: 1
 
 image:
-  repository: sunbirded.azurecr.io/adminutil
-  tag: "release-4.5.0_RC3_68b1eaa_61"
+  repository: ghcr.io/sunbird-lern/sunbird-apimanager-util
+  tag: "release-8.0.0_rc1_21f5d46_1"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
