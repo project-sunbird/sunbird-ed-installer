@@ -37,6 +37,9 @@ spec:
           {{/* export sunbird_cassandra_migration_location="filesystem:cassandra/sunbird" */}}
           export migration_version={{ .Values.cassandra_migration_version }}
 
+          # Install curl if not present
+          apt-get update && apt-get install -y curl
+
 
           cwd=$PWD
 
@@ -47,12 +50,23 @@ spec:
           git sparse-checkout set sunbird-cassandra-migration/cassandra-migration/src/main/resources/db/migration/cassandra
           git checkout
           cd sunbird-cassandra-migration/cassandra-migration/src/main/resources/db/migration/
-          wget https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/artifacts-{{.Values.global.release_version}}/cassandra-migration-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+          
+          # Download the JAR file using curl instead of wget
+          curl -o cassandra-migration-0.0.1-SNAPSHOT-jar-with-dependencies.jar https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/artifacts-{{.Values.global.release_version}}/cassandra-migration-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+          
+          # Check if JAR file was downloaded successfully
+          if [ ! -f "cassandra-migration-0.0.1-SNAPSHOT-jar-with-dependencies.jar" ]; then
+            echo "Error: Failed to download cassandra-migration JAR file"
+            exit 1
+          fi
+          
           for folder in ./cassandra/*/; do
-            folder_name=$(basename "$folder");
-            echo "$folder_name"
-            export sunbird_cassandra_migration_location="filesystem:cassandra/$folder_name"
-            export sunbird_cassandra_keyspace=$folder_name
-            java -cp "cassandra-migration-0.0.1-SNAPSHOT-jar-with-dependencies.jar" com.contrastsecurity.cassandra.migration.utils.MigrationScriptEntryPoint;
+            if [ -d "$folder" ]; then
+              folder_name=$(basename "$folder");
+              echo "Processing keyspace: $folder_name"
+              export sunbird_cassandra_migration_location="filesystem:cassandra/$folder_name"
+              export sunbird_cassandra_keyspace=$folder_name
+              java -cp "cassandra-migration-0.0.1-SNAPSHOT-jar-with-dependencies.jar" com.contrastsecurity.cassandra.migration.utils.MigrationScriptEntryPoint;
+            fi
           done
   backoffLimit: 30
