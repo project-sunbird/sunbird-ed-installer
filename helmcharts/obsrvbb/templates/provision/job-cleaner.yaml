@@ -50,7 +50,7 @@ spec:
       serviceAccountName: {{ .Chart.Name }}-job-deleter
       containers:
       - name: kubectl-container
-        image: bitnami/kubectl
+        image:  sunbirded.azurecr.io/kubectl:1.28.4
         imagePullPolicy: IfNotPresent
         command: ["bash", "-c"]
         args:
