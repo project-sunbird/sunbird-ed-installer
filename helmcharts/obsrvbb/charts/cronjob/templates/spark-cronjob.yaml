@@ -10,7 +10,7 @@ spec:
         spec:
           containers:
           - name: spark-cron
-            image: bitnami/kubectl:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -34,7 +34,7 @@ spec:
         spec:
           containers:
           - name: spark-cron
-            image: bitnami/kubectl:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -58,7 +58,7 @@ spec:
         spec:
           containers:
           - name: spark-cron
-            image: bitnami/kubectl:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -82,7 +82,7 @@ spec:
         spec:
           containers:
           - name: spark-cron
-            image: bitnami/kubectl:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -104,7 +104,7 @@ spec:
         spec:
           containers:
           - name: daily-cron-jobs-for-wfs
-            image: bitnami/kubectl:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -126,7 +126,7 @@ spec:
         spec:
           containers:
           - name: daily-cron-jobs-for-monitor-job
-            image: bitnami/kubectl:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -148,7 +148,7 @@ spec:
         spec:
           containers:
           - name: daily-cron-jobs-using-submit-all-jobs
-            image: bitnami/kubectl:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -170,7 +170,7 @@ spec:
         spec:
           containers:
           - name: start-jobmanager-cron-jobs
-            image: bitnami/kubectl:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -193,7 +193,7 @@ spec:
         spec:
           containers:
           - name: course-batch-status-updater-cron-job
-            image: bitnami/kubectl:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -217,7 +217,7 @@ spec:
         spec:
           containers:
           - name: admin-user-reports-cron-job
-            image: bitnami/kubectl:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -240,7 +240,7 @@ spec:
         spec:
           containers:
           - name: admin-geo-reports-cron-job
-            image: bitnami/kubectl:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -263,7 +263,7 @@ spec:
         spec:
           containers:
           - name: progress-exhaust-cron-job
-            image: bitnami/kubectl:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -285,7 +285,7 @@ spec:
         spec:
           containers:
           - name: response-exhaust-cron-job
-            image: bitnami/kubectl:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -307,7 +307,7 @@ spec:
         spec:
           containers:
           - name: cassandra-migration-cron-job
-            image: bitnami/kubectl:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -329,7 +329,7 @@ spec:
         spec:
           containers:
           - name: userinfo-exhaust-cron-job
-            image: bitnami/kubectl:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -351,7 +351,7 @@ spec:
         spec:
           containers:
           - name: collection-summary-cron-job
-            image: bitnami/kubectl:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -361,47 +361,3 @@ spec:
           restartPolicy: OnFailure
           serviceAccountName: spark-cronjob-sa
 
-
----
-apiVersion: batch/v1
-kind: CronJob
-metadata:
-  name: druid-report-processor
-  labels:
-    app: druid-report-processor
-spec:
-  schedule: "30 3 * * *"
-  concurrencyPolicy: Allow
-  successfulJobsHistoryLimit: 3
-  failedJobsHistoryLimit: 1
-  jobTemplate:
-    spec:
-      template:
-        spec:
-          containers:
-          - name: druid-report-processor
-            image: bitnami/kubectl:1.28.4
-            imagePullPolicy: IfNotPresent
-            command:
-            - /bin/sh
-            - -c
-            - |
-              SPARK_POD=spark-master-0
-              kubectl exec -it $SPARK_POD -- bash -c "python3 /data/analytics/scripts/druid-report-processor.py"
-            env:
-            - name: SPARK_HOME
-              value: "/data/analytics/spark-3.1.3-bin-hadoop2.7"
-            - name: MODELS_HOME
-              value: "/data/analytics/models-2.0"
-            - name: DP_LOGS
-              value: "/data/analytics/logs/data-products"
-            - name: KAFKA_HOME
-              value: "/opt/bitnami/kafka_2.12-2.8.0"
-            - name: KAFKA_TOPIC
-              value: "{{ .Values.analytics_job_queue_topic }}"
-            - name: KAFKA_BOOTSTRAP_SERVERS
-              value: "kafka:9092"
-            - name: KAFKA_CONSUMER_GROUP
-              value: "druid-report-processor-group"
-          restartPolicy: OnFailure
-          serviceAccountName: spark-cronjob-sa
