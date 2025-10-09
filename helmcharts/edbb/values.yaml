@@ -16,6 +16,10 @@ redis: &redis
     replicaCount: 0
   nameOverride: "redis"
   fullnameOverride: "redis"
+  image:
+    registry: sunbirded.azurecr.io
+    repository: redis
+    tag: 7.0.9-debian-11-r1
   auth:
     enabled: false
   host: "redis-master"
@@ -43,6 +47,8 @@ cassandra: &cassandra
   provisioning:
     annotations: *provisioningAnnotations
   image:
+    registry: sunbirded.azurecr.io
+    repository: cassandra
     tag: 3.11.13-debian-11-r3
   extraEnvVars:
     - name: CASSANDRA_AUTHENTICATOR
@@ -64,8 +70,9 @@ cassandra: &cassandra
 postgresql: &postgresql
   enabled: true
   image:
-    repository: bitnami/postgresql
-    tag: 11.14.0-debian-10-r49
+    registry: sunbirded.azurecr.io
+    repository: postgresql
+    tag: 11.14.0
   fullnameOverride: postgresql
   host: postgresql
   port: 5432
@@ -114,8 +121,8 @@ kafka: &kafka
   host: kafka
   port: 9092
   image:
-    registry: docker.io
-    repository: bitnami/kafka
+    registry: sunbirded.azurecr.io
+    repository: kafka
     tag: 3.3.1-debian-11-r25
   persistence:
     size: 25Gi

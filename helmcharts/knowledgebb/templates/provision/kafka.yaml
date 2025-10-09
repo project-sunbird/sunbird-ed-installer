@@ -34,7 +34,7 @@ spec:
       initContainers:
         {{- if .Values.global.kafka.provisioning.waitForKafka }}
         - name: wait-for-available-kafka
-          image: "{{.Values.global.kafka.image.repository}}:{{.Values.global.kafka.image.tag}}"
+          image: "{{ .Values.global.kafka.image.registry }}/{{ .Values.global.kafka.image.repository }}:{{ .Values.global.kafka.image.tag }}"
           imagePullPolicy: IfNotPresent
           command:
             - /bin/bash
@@ -51,7 +51,7 @@ spec:
       {{- end }}
       containers:
         - name: kafka-provisioning
-          image: "{{.Values.global.kafka.image.repository}}:{{.Values.global.kafka.image.tag}}"
+          image: "{{ .Values.global.kafka.image.registry }}/{{.Values.global.kafka.image.repository}}:{{.Values.global.kafka.image.tag}}
           imagePullPolicy: IfNotPresent
           command:
             - /bin/bash

@@ -777,8 +777,8 @@ externalAccess:
     ## @param externalAccess.autoDiscovery.image.pullSecrets Init container auto-discovery image pull secrets
     ##
     image:
-      registry: docker.io
-      repository: bitnami/kubectl
+      registry: sunbirded.azurecr.io
+      repository: kubectl
       tag: 1.25.6-debian-11-r14
       digest: ""
       ## Specify a imagePullPolicy
@@ -1019,8 +1019,8 @@ volumePermissions:
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
   ##
   image:
-    registry: docker.io
-    repository: bitnami/bitnami-shell
+    registry: sunbirded.azurecr.io
+    repository: os-shell
     tag: 11-debian-11-r90
     digest: ""
     pullPolicy: IfNotPresent
@@ -1337,8 +1337,8 @@ metrics:
     ## @param metrics.jmx.image.pullSecrets Specify docker-registry secret names as an array
     ##
     image:
-      registry: docker.io
-      repository: bitnami/jmx-exporter
+      registry: sunbirded.azurecr.io
+      repository: jmx-exporter
       tag: 0.17.2-debian-11-r53
       digest: ""
       ## Specify a imagePullPolicy

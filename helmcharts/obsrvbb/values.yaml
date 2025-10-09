@@ -1,7 +1,7 @@
 replicaCount: 1
 fullname: obsrvbb
 devops_release_branch: release-6.0.0
-postgres_migration_image: bitnami/postgresql:11.14.0-debian-10-r49
+postgres_migration_image: sunbirded.azurecr.io/postgresql:11.14.0
 cassandra_migration_version: release-5.3.0
 
 provisioningAnnotations: &provisioningAnnotations
@@ -30,8 +30,8 @@ elasticsearch: &es
   host: "elasticsearch"
   port: 9200
   image:
-    registry: docker.io
-    repository: bitnami/elasticsearch
+    registry: sunbirded.azurecr.io
+    repository: elasticsearch
     tag: 6.8.23
     digest: ""
   master:
@@ -58,16 +58,16 @@ elasticsearch: &es
   provisioning:
     annotations: *provisioningAnnotations
   sysctlImage:
-    registry: docker.io
-    repository: bitnami/bitnami-shell-archived
+    registry: sunbirded.azurecr.io
+    repository: bitnami-shell-archived
     tag: 11-debian-11-r54
 
 
 postgresql: &postgresql
   enabled: true
   image:
-    repository: bitnami/postgresql
-    tag: 11.14.0-debian-10-r49
+    repository: sunbirded.azurecr.io/postgresql
+    tag: 11.14.0
   postgresqlUsername: postgres
   postgresqlPassword: postgres
   host: postgresql
@@ -118,8 +118,8 @@ kafka: &kafka
   host: "kafka"
   port: 9092
   image:
-    registry: docker.io
-    repository: bitnami/kafka
+    registry: sunbirded.azurecr.io
+    repository: kafka
     tag: 3.3.1-debian-11-r25
   commonAnnotations:
     "helm.sh/hook-weight": "-5"

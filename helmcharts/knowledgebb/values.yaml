@@ -31,8 +31,8 @@ elasticsearch: &es
   host: "elasticsearch"
   port: 9200
   image:
-    registry: docker.io
-    repository: bitnami/elasticsearch
+    registry: sunbirded.azurecr.io
+    repository: elasticsearch
     tag: 6.8.23
   master:
     masterOnly: false
@@ -58,8 +58,8 @@ elasticsearch: &es
   provisioning:
     annotations: *provisioningAnnotations
   sysctlImage:
-    registry: docker.io
-    repository: bitnami/bitnami-shell-archived
+    registry: sunbirded.azurecr.io
+    repository: bitnami-shell-archived
     tag: 11-debian-11-r54
 
 redis: &redis
@@ -87,7 +87,7 @@ cassandra: &cassandra
   provisioning:
     annotations: *provisioningAnnotations
   image:
-    repository: bitnami/cassandra
+    repository: sunbirded.azurecr.io/cassandra
     tag: 3.11.13-debian-11-r3
   extraEnvVars:
     - name: CASSANDRA_AUTHENTICATOR
@@ -116,8 +116,8 @@ kafka: &kafka
   host: "kafka"
   port: 9092
   image:
-    registry: docker.io
-    repository: bitnami/kafka
+    registry: sunbirded.azurecr.io
+    repository: kafka
     tag: 3.3.1-debian-11-r25
   commonAnnotations:
     "helm.sh/hook-weight": "-5"
