@@ -22,7 +22,7 @@ kubectlImage:
   # -- The Docker registry
   registry: docker.io
   # -- Docker image repository
-  repository: bitnami/kubectl
+  repository: sunbirded.azurecr.io/kubectl
   # -- Overrides the image tag whose default is the chart's appVersion
   tag: null
   # -- Overrides the image tag with an image digest

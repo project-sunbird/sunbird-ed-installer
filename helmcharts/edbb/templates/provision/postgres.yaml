@@ -23,7 +23,7 @@ spec:
         - "timeout {{ .Values.migration.postgresql.waitTime }} sh -c 'until nc -z {{ .Values.global.postgresql.host }} {{ .Values.global.postgresql.port }}; do echo waiting for postgres; sleep 10; done'"
       containers:
       - name: migration
-        image: {{ .Values.global.postgresql.image.repository }}:{{.Values.global.postgresql.image.tag}}
+        image: {{ .Values.global.postgresql.image.registry}}/{{ .Values.global.postgresql.image.repository }}:{{.Values.global.postgresql.image.tag}}
         imagePullPolicy: IfNotPresent
         command: ['bash', '-c']
         securityContext:
