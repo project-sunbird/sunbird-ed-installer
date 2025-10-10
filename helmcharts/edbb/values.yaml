@@ -16,6 +16,10 @@ redis: &redis
     replicaCount: 0
   nameOverride: "redis"
   fullnameOverride: "redis"
+  image:
+    registry: sunbirded.azurecr.io
+    repository: redis
+    tag: 7.0.9-debian-11-r1
   auth:
     enabled: false
   host: "redis-master"
