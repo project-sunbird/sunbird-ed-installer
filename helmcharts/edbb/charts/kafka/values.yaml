@@ -75,8 +75,8 @@ diagnosticMode:
 ## @param image.debug Specify if debug values should be set
 ##
 image:
-  registry: docker.io
-  repository: bitnami/kafka
+  registry: sunbirded.azurecr.io
+  repository: kubectl
   tag: 3.4.0-debian-11-r6
   digest: ""
   ## Specify a imagePullPolicy

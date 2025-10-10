@@ -39,6 +39,8 @@ cassandra: &cassandra
   provisioning:
     annotations: *provisioningAnnotations
   image:
+    registry: sunbirded.azurecr.io
+    repository: cassandra
     tag: 3.11.13-debian-11-r3
   extraEnvVars:
     - name: CASSANDRA_AUTHENTICATOR
