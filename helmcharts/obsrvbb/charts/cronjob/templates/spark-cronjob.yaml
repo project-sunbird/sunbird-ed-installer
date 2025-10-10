@@ -10,7 +10,7 @@ spec:
         spec:
           containers:
           - name: spark-cron
-            image: sunbirded.azurecr.io/kubectl:1.28.4:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -34,7 +34,7 @@ spec:
         spec:
           containers:
           - name: spark-cron
-            image: sunbirded.azurecr.io/kubectl:1.28.4:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -58,7 +58,7 @@ spec:
         spec:
           containers:
           - name: spark-cron
-            image: sunbirded.azurecr.io/kubectl:1.28.4:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -82,7 +82,7 @@ spec:
         spec:
           containers:
           - name: spark-cron
-            image: sunbirded.azurecr.io/kubectl:1.28.4:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -104,7 +104,7 @@ spec:
         spec:
           containers:
           - name: daily-cron-jobs-for-wfs
-            image: sunbirded.azurecr.io/kubectl:1.28.4:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -126,7 +126,7 @@ spec:
         spec:
           containers:
           - name: daily-cron-jobs-for-monitor-job
-            image: sunbirded.azurecr.io/kubectl:1.28.4:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -148,7 +148,7 @@ spec:
         spec:
           containers:
           - name: daily-cron-jobs-using-submit-all-jobs
-            image: sunbirded.azurecr.io/kubectl:1.28.4:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -170,7 +170,7 @@ spec:
         spec:
           containers:
           - name: start-jobmanager-cron-jobs
-            image: sunbirded.azurecr.io/kubectl:1.28.4:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -193,7 +193,7 @@ spec:
         spec:
           containers:
           - name: course-batch-status-updater-cron-job
-            image: sunbirded.azurecr.io/kubectl:1.28.4:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -217,7 +217,7 @@ spec:
         spec:
           containers:
           - name: admin-user-reports-cron-job
-            image: sunbirded.azurecr.io/kubectl:1.28.4:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -240,7 +240,7 @@ spec:
         spec:
           containers:
           - name: admin-geo-reports-cron-job
-            image: sunbirded.azurecr.io/kubectl:1.28.4:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -263,7 +263,7 @@ spec:
         spec:
           containers:
           - name: progress-exhaust-cron-job
-            image: sunbirded.azurecr.io/kubectl:1.28.4:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -285,7 +285,7 @@ spec:
         spec:
           containers:
           - name: response-exhaust-cron-job
-            image: sunbirded.azurecr.io/kubectl:1.28.4:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -307,7 +307,7 @@ spec:
         spec:
           containers:
           - name: cassandra-migration-cron-job
-            image: sunbirded.azurecr.io/kubectl:1.28.4:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -329,7 +329,7 @@ spec:
         spec:
           containers:
           - name: userinfo-exhaust-cron-job
-            image: sunbirded.azurecr.io/kubectl:1.28.4:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -351,7 +351,7 @@ spec:
         spec:
           containers:
           - name: collection-summary-cron-job
-            image: sunbirded.azurecr.io/kubectl:1.28.4:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             command:
             - /bin/sh
             - -c
@@ -380,7 +380,7 @@ spec:
         spec:
           containers:
           - name: druid-report-processor
-            image: sunbirded.azurecr.io/kubectl:1.28.4:1.28.4
+            image: sunbirded.azurecr.io/kubectl:1.28.4
             imagePullPolicy: IfNotPresent
             command:
             - /bin/sh
