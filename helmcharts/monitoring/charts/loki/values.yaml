@@ -20,11 +20,11 @@ clusterLabelOverride: null
 imagePullSecrets: []
 kubectlImage:
   # -- The Docker registry
-  registry: docker.io
+  registry: sunbirded.azurecr.io
   # -- Docker image repository
-  repository: sunbirded.azurecr.io/kubectl
+  repository: kubectl
   # -- Overrides the image tag whose default is the chart's appVersion
-  tag: null
+  tag: 1.28.4
   # -- Overrides the image tag with an image digest
   digest: null
   # -- Docker image pull policy
