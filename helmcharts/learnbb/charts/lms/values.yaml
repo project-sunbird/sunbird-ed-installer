@@ -4,7 +4,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/sunbird-lern/lms-service
-  tag: "release-8.0.0_rc6_cc1f3e3_8"
+  tag: "release-8.0.0_rc8_9838715_12"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
