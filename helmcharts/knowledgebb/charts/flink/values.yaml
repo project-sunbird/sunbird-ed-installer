@@ -497,6 +497,7 @@ flink_jobs:
 
       dialcode {
         linkable.primaryCategory = ["Course"]
+        storage.container = "{{ .Values.global.dial_state_container_public }}"
       }
 
       cloudstorage.metadata.replace_absolute_path=true
