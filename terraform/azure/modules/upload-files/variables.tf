@@ -22,8 +22,8 @@ variable "sunbird_public_artifacts_account" {
 
 variable "sunbird_public_artifacts_account_sas_url" {
     type        = string
-    description = "The readonly sas token url for the sunbird public account."
-    default     = "https://downloadableartifacts.blob.core.windows.net/?se=2030-12-31T23%3A59%3A00Z&sp=rxlft&spr=https&sv=2022-11-02&ss=fb&srt=sco&sig=9IDJq3H94oluxYUwB2M1SxwjdvpVvYzKMgAJHomrjuY%3D"
+    description = "The readonly sas token url for the sunbird public account. Must be provided by the user."
+    sensitive   = true
 }
 variable "sunbird_public_artifacts_container" {
     type        = string

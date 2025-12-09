@@ -28,20 +28,20 @@ resource "google_storage_bucket" "storage_container_public" {
     enabled = true
   }
 
-  uniform_bucket_level_access = false
-  public_access_prevention = "unspecified"
+  uniform_bucket_level_access = true
+  public_access_prevention = "inherited"
 
   cors {
     origin          = ["https://${var.domain}"]
-    method          = ["GET", "POST", "PUT", "DELETE"]
-    response_header = ["*"]
+    method          = ["GET", "HEAD", "OPTIONS"]
+    response_header = ["Content-Type", "Content-Length", "Content-Range", "Accept-Ranges"]
     max_age_seconds = 3600
   }
 }
 
 resource "google_storage_bucket_iam_member" "read_write_public" {
   bucket = google_storage_bucket.storage_container_public.name
-  role   = "roles/storage.objectAdmin"
+  role   = "roles/storage.objectViewer"
   member = "allUsers"
 }
 
@@ -59,6 +59,14 @@ resource "google_storage_bucket" "storage_container_private" {
   uniform_bucket_level_access = true
 }
 
+# Grant service account access to private bucket (if service account is provided)
+resource "google_storage_bucket_iam_member" "private_sa_access" {
+  count  = var.service_account_email != "" ? 1 : 0
+  bucket = google_storage_bucket.storage_container_private.name
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:${var.service_account_email}"
+}
+
 resource "google_storage_bucket" "dial_state_container_public" {
   name          = "${local.environment_name}-dial-${local.unique_uuid}"
   project       = var.project
@@ -69,19 +77,20 @@ resource "google_storage_bucket" "dial_state_container_public" {
     enabled = true
   }
 
-  uniform_bucket_level_access = false
+  uniform_bucket_level_access = true
+  public_access_prevention = "inherited"
 
   cors {
     origin          = ["https://${var.domain}"]
-    method          = ["GET", "POST", "PUT", "DELETE"]
-    response_header = ["*"]
+    method          = ["GET", "HEAD", "OPTIONS"]
+    response_header = ["Content-Type", "Content-Length", "Content-Range", "Accept-Ranges"]
     max_age_seconds = 3600
   }
 }
 
 resource "google_storage_bucket_iam_member" "full_access_dial" {
   bucket = google_storage_bucket.dial_state_container_public.name
-  role   = "roles/storage.objectAdmin"
+  role   = "roles/storage.objectViewer"
   member = "allUsers"
 }
 
@@ -97,5 +106,13 @@ resource "google_storage_bucket" "velero_storage_container_private" {
   }
 
   uniform_bucket_level_access = true
+}
+
+# Grant service account access to velero bucket (if service account is provided)
+resource "google_storage_bucket_iam_member" "velero_sa_access" {
+  count  = var.service_account_email != "" ? 1 : 0
+  bucket = google_storage_bucket.velero_storage_container_private.name
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:${var.service_account_email}"
 }
 

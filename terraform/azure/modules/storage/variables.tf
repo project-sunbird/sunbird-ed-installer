@@ -42,3 +42,8 @@ variable "subscription_id" {
   type        = string
 }
 
+variable "domain" {
+  description = "Domain name for CORS configuration"
+  type        = string
+}
+

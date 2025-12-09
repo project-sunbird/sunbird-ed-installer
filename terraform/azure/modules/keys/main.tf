@@ -57,7 +57,12 @@ resource "null_resource" "upload_global_jwt_values_yaml" {
     command = "${timestamp()}"
   }
   provisioner "local-exec" {
-      command = "az storage blob upload --account-name ${var.storage_account_name} --account-key ${var.storage_account_primary_access_key} --container-name ${var.storage_container_private}  --file ${var.base_location}/../../../../scripts/global-values-jwt-tokens.yaml --name ${var.environment}-global-values-jwt-tokens.yaml --overwrite"
+    # Use environment variable for account key to avoid exposing in process list
+    command = <<-EOT
+      export AZURE_STORAGE_KEY="${var.storage_account_primary_access_key}"
+      az storage blob upload --account-name ${var.storage_account_name} --auth-mode key --container-name ${var.storage_container_private} --file ${var.base_location}/../../../../scripts/global-values-jwt-tokens.yaml --name ${var.environment}-global-values-jwt-tokens.yaml --overwrite
+      unset AZURE_STORAGE_KEY
+    EOT
   }
   depends_on = [ null_resource.generate_jwt_keys ]
 }
@@ -67,7 +72,12 @@ resource "null_resource" "upload_global_rsa_values_yaml" {
     command = "${timestamp()}"
   }
   provisioner "local-exec" {
-      command = "az storage blob upload --account-name ${var.storage_account_name} --account-key ${var.storage_account_primary_access_key} --container-name ${var.storage_container_private} --file ${var.base_location}/../../../../scripts/global-values-rsa-keys.yaml --name ${var.environment}-global-values-rsa-keys.yaml --overwrite"
+    # Use environment variable for account key to avoid exposing in process list
+    command = <<-EOT
+      export AZURE_STORAGE_KEY="${var.storage_account_primary_access_key}"
+      az storage blob upload --account-name ${var.storage_account_name} --auth-mode key --container-name ${var.storage_container_private} --file ${var.base_location}/../../../../scripts/global-values-rsa-keys.yaml --name ${var.environment}-global-values-rsa-keys.yaml --overwrite
+      unset AZURE_STORAGE_KEY
+    EOT
   }
   depends_on = [ null_resource.generate_rsa_keys ]
 }

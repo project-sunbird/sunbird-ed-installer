@@ -1,10 +1,13 @@
+# SECURITY: Using local_sensitive_file to create rclone config with restricted permissions
+# The file will be created with 0600 permissions (owner read/write only)
 resource "local_sensitive_file" "rclone_config" {
-content  = templatefile("${path.module}/config.tfpl", {
+  content  = templatefile("${path.module}/config.tfpl", {
     storage_account_key = var.storage_account_primary_access_key
     sunbird_public_artifacts_account = var.sunbird_public_artifacts_account
     sunbird_public_artifacts_account_sas_url = var.sunbird_public_artifacts_account_sas_url
   })
   filename = pathexpand("~/.config/rclone/rclone.conf")
+  file_permission = "0600"
 }
 
 resource "null_resource" "copy_from_sunbird_container" {

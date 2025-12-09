@@ -159,21 +159,34 @@ variable "gce_persistent_disk_csi_driver" {
 }
 
 variable "enable_private_nodes" {
-  description = "Control whether nodes have internal IP addresses only. If enabled, all nodes are given only RFC 1918 private addresses and communicate with the master via private networking."
+  description = <<-EOT
+    SECURITY BEST PRACTICE: Enable private nodes so nodes have internal IP addresses only.
+    All nodes are given only RFC 1918 private addresses and communicate with the master via private networking.
+    Set to false only if you need nodes to have public IPs (not recommended for production).
+  EOT
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "disable_public_endpoint" {
-  description = "Control whether the master's internal IP address is used as the cluster endpoint. If set to 'true', the master can only be accessed from internal IP addresses."
+  description = <<-EOT
+    SECURITY BEST PRACTICE: Use private endpoint so master can only be accessed from internal IP addresses.
+    Set to false if you need to access the cluster control plane from the public internet.
+    For production, consider using Cloud VPN or Cloud Interconnect with private endpoint enabled.
+  EOT
   type        = bool
   default     = false
 }
 
 variable "master_ipv4_cidr_block" {
-  description = "The IP range in CIDR notation to use for the hosted master network. This range will be used for assigning internal IP addresses to the master or set of masters, as well as the ILB VIP. This range must not overlap with any other ranges in use within the cluster's network."
+  description = <<-EOT
+    REQUIRED for private clusters: The IP range in CIDR notation to use for the hosted master network.
+    This range will be used for assigning internal IP addresses to the master or set of masters, as well as the ILB VIP.
+    This range must not overlap with any other ranges in use within the cluster's network.
+    Recommended: Use a /28 CIDR block (16 IPs), e.g., 172.16.0.0/28
+  EOT
   type        = string
-  default     = ""
+  default     = "172.16.0.0/28"
 }
 
 variable "network_project" {
@@ -245,9 +258,19 @@ variable "basic_auth_password" {
 }
 
 variable "secrets_encryption_kms_key" {
-  description = "The Cloud KMS key to use for the encryption of secrets in etcd, e.g: projects/my-project/locations/global/keyRings/my-ring/cryptoKeys/my-key"
+  description = <<-EOT
+    SECURITY RECOMMENDATION: Provide a Cloud KMS key for encrypting Kubernetes secrets in etcd.
+    Without this, secrets are stored in plaintext in the cluster's database.
+    Format: projects/my-project/locations/global/keyRings/my-ring/cryptoKeys/my-key
+    To create a KMS key: gcloud kms keyrings create [KEYRING] --location [LOCATION] && gcloud kms keys create [KEY] --keyring [KEYRING] --location [LOCATION] --purpose encryption
+  EOT
   type        = string
   default     = null
+
+  validation {
+    condition     = var.secrets_encryption_kms_key != null
+    error_message = "SECURITY WARNING: secrets_encryption_kms_key is not set. Kubernetes secrets will be stored unencrypted in etcd. For production use, provide a Cloud KMS key."
+  }
 }
  variable "gsuite_domain_name" {  
   description = "The G Suite domain name to use for the cluster"

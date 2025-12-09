@@ -27,8 +27,9 @@ resource "google_container_cluster" "cluster" {
   network     = var.network
   subnetwork  = var.subnetwork
 
-  logging_service     = "none"
-  monitoring_service  = "none"
+  # Enable GKE logging and monitoring for security and operational visibility
+  logging_service     = "logging.googleapis.com/kubernetes"
+  monitoring_service  = "monitoring.googleapis.com/kubernetes"
   min_master_version  = local.kubernetes_version
   deletion_protection = var.deletion_protection
   enable_legacy_abac  = var.enable_legacy_abac
@@ -50,8 +51,14 @@ resource "google_container_cluster" "cluster" {
 
       service_account = var.alternative_default_service_account
 
+      # Use specific scopes instead of cloud-platform for least privilege
       oauth_scopes = [
-        "https://www.googleapis.com/auth/cloud-platform",
+        "https://www.googleapis.com/auth/devstorage.read_only",
+        "https://www.googleapis.com/auth/logging.write",
+        "https://www.googleapis.com/auth/monitoring",
+        "https://www.googleapis.com/auth/servicecontrol",
+        "https://www.googleapis.com/auth/service.management.readonly",
+        "https://www.googleapis.com/auth/trace.append",
       ]
 
       confidential_nodes {

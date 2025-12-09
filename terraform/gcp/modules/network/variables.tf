@@ -137,3 +137,9 @@ variable "cidr_subnetwork_spacing" {
   type        = number
   default     = 0
 }
+
+variable "allowed_http_https_sources" {
+  description = "List of source IP ranges allowed to access HTTP/HTTPS. Default is open to internet (0.0.0.0/0). For security, restrict to specific IP ranges or use Cloud Armor for DDoS protection."
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+}

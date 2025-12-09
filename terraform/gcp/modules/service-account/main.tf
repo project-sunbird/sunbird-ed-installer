@@ -25,11 +25,10 @@ resource "google_project_iam_member" "service_account-roles" {
   member  = "serviceAccount:${google_service_account.service_account.email}"
 }
 
-resource "google_project_iam_member" "storage_admin_role" {
-  project = var.project
-  role    = "roles/storage.admin"
-  member  = "serviceAccount:${google_service_account.service_account.email}"
-}
+# REMOVED: Project-wide storage.admin role is overly permissive
+# Storage access should be granted at the bucket level in the storage module
+# using google_storage_bucket_iam_member with specific buckets and minimal roles
+# such as roles/storage.objectAdmin for specific buckets only
 
 # Assign Workload Identity User role to service account (optional)
 resource "google_service_account_iam_member" "workload_identity_role" {
@@ -44,32 +43,33 @@ resource "google_service_account_iam_member" "workload_identity_role" {
 }
 
 
-# Create a service account key
-# Generate a service account key
-resource "google_service_account_key" "service_account" {
-  service_account_id = google_service_account.service_account.name
-  public_key_type    = "TYPE_X509_PEM_FILE"
-}
+# SECURITY WARNING: Service account keys are disabled for security reasons
+# Service account keys should NOT be created and stored as files
+# Instead, use Workload Identity to allow Kubernetes pods to authenticate
+# If keys are absolutely required, use a secrets management solution like:
+# - Google Secret Manager
+# - HashiCorp Vault
+# - Sealed Secrets
+#
+# Uncomment the blocks below ONLY if you have a secure key management solution
+# and understand the security implications
 
-# Save key to local file
-resource "local_file" "service_account" {
-  content  = base64decode(google_service_account_key.service_account.private_key)
-  filename = "${path.module}/sa-keys/${local.environment_name}.json"
-}
+# resource "google_service_account_key" "service_account" {
+#   service_account_id = google_service_account.service_account.name
+#   public_key_type    = "TYPE_X509_PEM_FILE"
+# }
 
-# Upload the key to GCS
-# Upload the key to GCS
-resource "google_storage_bucket_object" "gke_service_account" {
-  name   = "service-accounts/${local.environment_name}.json"
-  source = local_file.service_account.filename
-  bucket = var.sa_key_store_bucket
+# resource "local_file" "service_account" {
+#   content  = base64decode(google_service_account_key.service_account.private_key)
+#   filename = "${path.module}/sa-keys/${local.environment_name}.json"
+# }
 
-  lifecycle {
-    ignore_changes = [
-      crc32c,
-      md5hash,
-      generation
-    ]
-  }
-}
+# resource "google_storage_bucket_object" "gke_service_account" {
+#   name   = "service-accounts/${local.environment_name}.json"
+#   source = local_file.service_account.filename
+#   bucket = var.sa_key_store_bucket
+#   lifecycle {
+#     ignore_changes = [crc32c, md5hash, generation]
+#   }
+# }
 

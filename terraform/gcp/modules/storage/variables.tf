@@ -27,3 +27,9 @@ variable "domain" {
   description = "Domain name for the storage account."
   type        = string
 }
+
+variable "service_account_email" {
+  description = "Service account email for bucket IAM bindings. Leave empty to skip service account bindings."
+  type        = string
+  default     = ""
+}

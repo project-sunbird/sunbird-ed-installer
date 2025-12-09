@@ -30,11 +30,23 @@ provider "azurerm" {
   resource "azuread_service_principal_password" "aks_sp_password" {
   service_principal_id = azuread_service_principal.aks_sp.id
   end_date             = timeadd(timestamp(), var.end_date_relative)
+
+  # SECURITY WARNING: ignore_changes prevents automatic password rotation
+  # Consider removing ignore_changes and implementing proper secret rotation
+  # or migrate to Managed Identity (recommended)
   lifecycle {
     ignore_changes = [end_date, value, start_date]
   }
 }
 
+# SECURITY NOTE: Network Contributor role is broad and grants permissions to:
+# - Create/delete/modify NSGs, routes, load balancers, public IPs
+# - Recommended: Create a custom role with minimal permissions for AKS:
+#   - Microsoft.Network/virtualNetworks/subnets/join/action
+#   - Microsoft.Network/loadBalancers/*
+#   - Microsoft.Network/publicIPAddresses/join/action
+#   - Microsoft.Network/publicIPAddresses/read
+# Better option: Use system-assigned managed identity instead of service principal
 resource "azurerm_role_assignment" "aks_sp_assignment" {
   principal_id         = split("/", azuread_service_principal.aks_sp.id)[2]
   scope                = var.vnet_subnet_id

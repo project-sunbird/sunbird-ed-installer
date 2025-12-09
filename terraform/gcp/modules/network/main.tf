@@ -81,19 +81,24 @@ resource "google_compute_subnetwork" "vpc_subnetwork_public" {
 
 # ---------------------------------------------------------------------------------------------------------------------
 # Attach Firewall Rules to allow inbound traffic to tagged instances
+# SECURITY NOTE: By default, this allows HTTP/HTTPS from all sources (0.0.0.0/0)
+# For production, consider:
+# - Restricting source_ranges to specific IP ranges
+# - Using Cloud Armor for DDoS protection and WAF capabilities
+# - Using Identity-Aware Proxy (IAP) for admin interfaces
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "google_compute_firewall" "allow_http_https" {
   name    = "${local.environment_name}-allow-http-https"
   network = google_compute_network.vpc.name
-    project = var.project  # Add this line to specify the projec
+  project = var.project
 
   allow {
     protocol = "tcp"
     ports    = ["80", "443"]
   }
 
-  source_ranges = ["0.0.0.0/0"]
+  source_ranges = var.allowed_http_https_sources
   direction     = "INGRESS"
   target_tags   = ["http-server", "https-server"]
 

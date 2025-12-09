@@ -38,14 +38,15 @@ resource "azurerm_storage_account" "storage_account" {
   location                 = var.location
   account_tier             = var.azure_storage_tier
   account_replication_type = var.azure_storage_replication
-  https_traffic_only_enabled = false
+  https_traffic_only_enabled = true
+  min_tls_version          = "TLS1_2"
   blob_properties {
     cors_rule {
-      max_age_in_seconds = 200
-      allowed_origins    = ["*"]
-      allowed_methods    = ["GET", "HEAD", "OPTIONS", "PUT"]
-      exposed_headers    = ["Access-Control-Allow-Origin", "Access-Control-Allow-Methods"]
-      allowed_headers    = ["Access-Control-Allow-Origin", "Access-Control-Allow-Method", "Origin", "x-ms-meta-qq", "x-ms-blob-type", "x-ms-blob-content-type", "Content-Type"]
+      max_age_in_seconds = 3600
+      allowed_origins    = ["https://${var.domain}"]
+      allowed_methods    = ["GET", "HEAD", "OPTIONS"]
+      exposed_headers    = ["Content-Type", "Content-Length"]
+      allowed_headers    = ["Content-Type", "Accept"]
     }
   }
   tags = merge(
