@@ -223,4 +223,14 @@ small_cache_inactive: 10m
 
 apple_universal_links: '{"applinks":{"apps":[],"details":[{"appID":"123456.dev.sunbird.app","paths":["/explore","/dial/*","/get/dial","/play/content","/play/collection","/learn/course","/explore-course/course","/explore-course","/search","/search/Library","/faq","/profile","/play/quiz","/explore","/learn","/resources"]}]}}'
 
-lets_encrypt_ssl: false
+lets_encrypt_ssl: false #enable this if you are using  let's encrypt ssl
+storageClassName: "default"
+
+  # SMTP relay settings (for Gmail, Outlook, etc.)
+smtp:
+  host: <update the host> # e.g. smtp.gmail.com
+  port: <update the port> # e.g. 587
+  user: <update the user> # e.g. your_email@gmail.com
+  pass: "<app password>" # e.g. your_app_password
+  from: <update the from mail> # e.g. your_email@gmail.com
+  to: <update the to mail> # e.g. your_email@gmail.com

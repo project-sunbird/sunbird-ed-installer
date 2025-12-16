@@ -3,6 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ template "postgresql.metricsCM" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
   {{- include "common.labels.standard" . | nindent 4 }}
   {{- if .Values.commonLabels }}

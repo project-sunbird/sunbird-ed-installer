@@ -55,7 +55,7 @@ data:
 
     # Actor System Configuration
     LearningActorSystem {
-      akka {
+      pekko {
         actor {
           default-dispatcher {
               type = "Dispatcher"
@@ -146,7 +146,7 @@ data:
 
     # Neo4j Graph Configuration
     graph.dir="/data/graphDB"
-    akka.request_timeout=30
+    pekko.request_timeout=30
     environment.id="20000000"
     graph.passport.key.base="{{.Values.graph_passport_key}}"
     route.domain="bolt://{{ .Values.global.neo4j.host }}:7687"

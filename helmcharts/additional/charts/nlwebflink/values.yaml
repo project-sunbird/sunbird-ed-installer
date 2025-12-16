@@ -3,7 +3,7 @@ image:
   repository: divyagovindaiah123/flink-nlweb-job
   tag: test
 kafka:
-  topic: dv.telemetry.coss
+  topic: "{{ .Values.global.env }}.nlweb.ingest"
   bootstrapServers: kafka.sunbird.svc.cluster.local:9092
 siteName: default_site
 batchSize: 100

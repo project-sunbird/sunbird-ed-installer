@@ -2,6 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   annotations:
     {{- .Values.provisioningAnnotations | toYaml | nindent 4 }}
 spec:

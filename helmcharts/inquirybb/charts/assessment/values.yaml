@@ -112,6 +112,9 @@ inquiry:
       "medium", "board", "topic", "purpose", "subtopic", "contentCredits",
       "owner", "collaborators", "creators", "contributors", "badgeAssertions", "dialcodes",
       "concepts", "keywords", "reservedDialcodes", "dialcodeRequired", "leafNodes", "sYS_INTERNAL_LAST_UPDATED_ON", "prevStatus", "lastPublishedBy", "streamingUrl"]'
+    item:
+      keyspace: "{{ .Values.global.env }}_content_store"
+      table: "question_data"
   required_props: '["name", "code", "mimeType", "framework", "channel"]'
   cloudstorage_metadata_list: '["appIcon", "artifactUrl", "posterImage", "previewUrl", "thumbnail", "assetsMap", "certTemplate", "itemSetPreviewUrl", "grayScaleAppIcon", "sourceURL", "variants", "downloadUrl", "streamingUrl", "toc_url", "data", "question", "solutions", "editorState", "media", "pdfUrl", "transcripts"]'
   cloudstorage_relative_path_prefix: CONTENT_STORAGE_BASE_PATH

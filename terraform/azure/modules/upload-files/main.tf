@@ -1,5 +1,18 @@
+terraform {
+  required_providers {
+    local = {
+      source  = "hashicorp/local"
+      version = "~> 2.5"
+    }
+    null = {
+      source  = "hashicorp/null"
+      version = "~> 3.2"
+    }
+  }
+}
+
 resource "local_sensitive_file" "rclone_config" {
-content  = templatefile("${path.module}/config.tfpl", {
+  content  = templatefile("${path.module}/config.tfpl", {
     storage_account_name = var.storage_account_name,
     storage_account_key = var.storage_account_primary_access_key
     sunbird_public_artifacts_account = var.sunbird_public_artifacts_account

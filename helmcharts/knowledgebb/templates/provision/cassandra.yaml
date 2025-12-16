@@ -2,6 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ .Chart.Name }}-cassandra-migration-job
+  namespace: {{ .Release.Namespace }}
   labels:
     app: {{ .Chart.Name }}-cassandra-migration
     scope: provisioning

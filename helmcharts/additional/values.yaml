@@ -72,7 +72,7 @@ nlwebflink:
     repository: sunbirded.azurecr.io/flink-nlweb
     tag: 0.0.1
   kafka:
-    topic: dv.telemetry.coss
+    topic: "{{ .Values.global.env }}.nlweb.ingest"
     bootstrapServers: kafka.sunbird.svc.cluster.local:9092  
 
 
@@ -84,9 +84,9 @@ nlweb:
     tag: 0.0.1
   port: 8000
   static:
-    enabled: false
+    enabled: true
   envSecret:
-    enabled: false
+    enabled: true
   qdrant:
     image: qdrant/qdrant:v1.15.1
     port: 6333

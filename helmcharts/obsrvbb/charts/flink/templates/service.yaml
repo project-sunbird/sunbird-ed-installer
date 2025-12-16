@@ -1,36 +1,41 @@
-{{- define "flink.servicetpl" -}}
-{{- $jobName := index . "jobName" }}
-{{- $component := index . "component" }}
+{{- range $jobName, $jobData := .Values.flink_jobs }}
+{{- if $jobData.enabled }}
+{{- $components := list "jobmanager" "taskmanager" }}
+{{- range $component := $components }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: {{ $.Release.Namespace }}
   name: {{ $jobName }}-{{ $component }}
   labels:
-    {{- include "common.labels.standard" (dict "customLabels" .context.Values.commonLabels "context" .context) | nindent 4 }}
-  {{- if .context.Values.commonAnnotations }}
+    {{- include "common.labels.standard" (dict "customLabels" $.Values.commonLabels "context" $) | nindent 4 }}
+    component: {{ printf "%s-%s" $jobName $component }}
+  {{- if $.Values.commonAnnotations }}
   annotations:
-    {{- include "common.tplvalues.render" (dict "value" .context.Values.commonAnnotations "context" .context) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" $.Values.commonAnnotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: ClusterIP
   clusterIP: None
   ports:
-    {{- range .context.Values.service.ports }}
-    - name: {{ .name }}
-      port: {{ .port }}
-      targetPort: {{ .targetPort }}
+    {{- if eq $component "jobmanager" }}
+    - name: rpc
+      port: {{ $.Values.jobmanager.rpc_port }}
+    - name: blob
+      port: {{ $.Values.jobmanager.blob_port }}
+    - name: query
+      port: {{ $.Values.jobmanager.query_port }}
+    - name: ui
+      port: {{ $.Values.jobmanager.ui_port }}
+    - name: prom
+      port: {{ $.Values.jobmanager.prom_port }}
+    {{- else if eq $component "taskmanager" }}
+    - name: prom
+      port: {{ $.Values.taskmanager.prom_port }}
     {{- end }}
   selector:
     app.kubernetes.io/component: {{ $jobName }}-{{ $component }}
 {{- end }}
-
-{{- $currentScope := . }}
-{{- range $jobName, $jobData := .Values.flink_jobs }}
-{{- if $jobData.enabled }}
-    {{- /* Include the service template for JobManager */}}
-    {{- include "flink.servicetpl" (dict "jobName" $jobName "component" "jobmanager" "context" $currentScope) }}
-    {{- include "flink.servicetpl" (dict "jobName" $jobName "component" "taskmanager" "context" $currentScope) }}
-    {{- /* Include again for another component if needed, with different parameters */}}
 {{- end }}
 {{- end }}

@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: spark-conf
+  namespace: {{ .Release.Namespace }}
 data:
   spark-defaults.conf: |-
     spark.executor.extraJavaOptions  -Dconfig.file=/data/analytics/scripts/common.conf -Dlog4j.configurationFile=/data/analytics/models-2.0/log4j2.xml

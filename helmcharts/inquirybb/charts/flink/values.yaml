@@ -29,6 +29,9 @@ service:
       port: 80
       targetPort: 8081
 
+commonLabels:
+  release: monitoring
+
 ingress: {}
 
 resources:
@@ -69,13 +72,34 @@ configmap:
 serviceAccount:
   create: false
 
-serviceMonitor:
+# serviceMonitor:
+#   enabled: false
+#   interval: 30s
+#   scrapeTimeout: 10s
+#   labels: {} # additional labels e.g. release: prometheus
+#   honorLabels: true
+#   jobLabel: "app.kubernetes.io/name"
+
+serviceMonitor: &serviceMonitor
   enabled: false
-  interval: 30s
-  scrapeTimeout: 10s
-  labels: {} # additional labels e.g. release: prometheus
-  honorLabels: true
-  jobLabel: "app.kubernetes.io/name"
+  jobmanager:
+    enabled: true
+    interval: 30s
+    scrapeTimeout: 10s
+    labels:
+      release: monitoring # additional labels e.g. release: prometheus
+    honorLabels: true
+    jobLabel: "app.kubernetes.io/name"
+    port: prom
+  taskmanager:
+    enabled: true
+    interval: 30s
+    scrapeTimeout: 10s
+    labels:
+      release: monitoring # additional labels e.g. release: prometheus
+    honorLabels: true
+    jobLabel: "app.kubernetes.io/name"
+    port: prom
 
 initContainers: {}
 sidecars: {}
@@ -248,6 +272,7 @@ base_config: |
 flink_jobs:
   async-questionset-publish:
     enabled: true
+    serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
       kafka {
@@ -297,6 +322,7 @@ flink_jobs:
   
   questionset-republish:
     enabled: true
+    serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
       kafka {
@@ -347,6 +373,7 @@ flink_jobs:
   
   user-pii-data-updater:
     enabled: true
+    serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
       kafka {

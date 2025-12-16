@@ -1,8 +1,10 @@
+{{- if eq (include "dial.deployDialEnabled" .) "true" }}
 {{- if .Values.configmap.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
 {{ include "common.labels.standard" (dict "customLabels" .Values.commonLabels "context" $) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
@@ -32,7 +34,7 @@ metadata:
   annotations:
 {{ include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
   {{- end }}
-data:
+
   {{- $var := .Files.Get "configs/env.yaml" }}
   {{- include "common.tplvalues.render" (dict "value" $var "context" $) | nindent 2 }}
 
@@ -56,6 +58,8 @@ data:
   {{- $var := .Files.Get $path }}
   {{- include "common.tplvalues.render" (dict "value" $var "context" $) | nindent 6 }}
   {{- end }}
+{{- end }}
+
 {{- end }}
 ---
 apiVersion: v1

@@ -25,6 +25,8 @@ service:
     - name: http
       port: 80
       targetPort: 8081
+commonLabels:
+  release: monitoring
 
 ingress: {}
   # enabled: false
@@ -71,13 +73,32 @@ configmap:
 serviceAccount:
   create: false
 
-serviceMonitor:
-  enabled: false
-  interval: 30s
-  scrapeTimeout: 10s
-  labels: {} # additional labels e.g. release: prometheus
-  honorLabels: true
-  jobLabel: "app.kubernetes.io/name"
+# serviceMonitor:
+#   enabled: false
+#   interval: 30s
+#   scrapeTimeout: 10s
+#   labels: {} # additional labels e.g. release: prometheus
+#   honorLabels: true
+#   jobLabel: "app.kubernetes.io/name"
+serviceMonitor: &serviceMonitor
+  jobmanager:
+    enabled: true
+    interval: 30s
+    scrapeTimeout: 10s
+    labels:
+      release: monitoring # additional labels e.g. release: prometheus
+    honorLabels: true
+    jobLabel: "app.kubernetes.io/name"
+    port: prom
+  taskmanager:
+    enabled: true
+    interval: 30s
+    scrapeTimeout: 10s
+    labels:
+      release: monitoring # additional labels e.g. release: prometheus
+    honorLabels: true
+    jobLabel: "app.kubernetes.io/name"
+    port: prom
 
 # Example values.yaml structure
 initContainers: {}
@@ -428,6 +449,7 @@ base_config: |
 flink_jobs:
   activity-aggregate-updater:
     enabled: true
+    serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
       kafka {
@@ -488,6 +510,7 @@ flink_jobs:
 
   relation-cache-updater:
     enabled: true
+    serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
       kafka {
@@ -567,6 +590,7 @@ flink_jobs:
 
   collection-cert-pre-processor:
     enabled: true
+    serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
       kafka {
@@ -627,6 +651,7 @@ flink_jobs:
 
   collection-certificate-generator:
     enabled: true
+    serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
       kafka {
@@ -676,60 +701,9 @@ flink_jobs:
       jobmanager.execution.failover-strategy: region
       taskmanager.memory.network.fraction: 0.1
     job_classname: org.sunbird.job.certgen.task.CertificateGeneratorStreamTask
-
-  legacy-certificate-migrator:
-    enabled: true
-    config: |+
-      include file("/data/flink/conf/base-config.conf")
-      kafka {
-        input.topic = "{{ include "common.tplvalues.render" (dict "value" .Values.kafka_topic_migrate_certificate_request "context" $) }}"
-        output.audit.topic = "{{ include "common.tplvalues.render" (dict "value" .Values.kafka_topic_telemetry_raw "context" $) }}"
-        groupId = "{{ include "common.tplvalues.render" (dict "value" .Values.kafka_group_certificate_migrator "context" $) }}"
-      }
-      task {
-        restart-strategy.attempts = "{{ .Values.restart_attempts }}" # max 3 restart attempts
-        restart-strategy.delay = 240000 # in milli-seconds # on max restarts (3) within 4 min the job will fail.
-        consumer.parallelism = "{{ .Values.legacy_certificate_migrator_consumer_parallelism }}"
-        parallelism = "{{ .Values.legacy_certificate_migrator_parallelism }}"
-      }
-      lms-cassandra {
-        keyspace = "{{ .Values.middleware_course_keyspace }}"
-        user_enrolments.table = "{{ .Values.middleware_user_enrolments_table }}"
-        course_batch.table = "{{ .Values.middleware_course_batch_table }}"
-        sbkeyspace = "{{ .Values.registry_sunbird_keyspace }}"
-        certreg.table ="{{ .Values.cert_registry_table }}"
-      }
-      cert_domain_url = "{{ .Values.global.domain }}"
-      cert_container_name = "{{ .Values.global.public_container_name }}"
-      cert_cloud_storage_type = "{{ include "common.tplvalues.render" (dict "value" .Values.cert_cloud_storage_type "context" $) }}"
-      cert_cloud_storage_secret = "{{ include "common.tplvalues.render" (dict "value" .Values.cert_cloud_storage_secret "context" $) }}"
-      cert_cloud_storage_key = "{{ include "common.tplvalues.render" (dict "value" .Values.cert_cloud_storage_key "context" $) }}"
-      cloud_storage_base_url = "{{ include "common.tplvalues.render" (dict "value" .Values.cloud_storage_base_url "context" $) }}"
-      cloud_store_base_path_placeholder = "{{ include "common.tplvalues.render" (dict "value" .Values.cloud_store_base_path_placeholder "context" $) | default "CLOUD_BASE_PATH" }}"
-      content_cloud_storage_container = "{{ .Values.global.public_container_name }}"
-      cloud_storage_cname_url = "{{ include "common.tplvalues.render" (dict "value" .Values.cloud_storage_cname_url "context" $) }}"
-      service {
-        certreg.basePath = "{{ .Values.cert_reg_service_base_url }}"
-        learner.basePath = "{{ .Values.userorg_service_base_url }}"
-        enc.basePath = "{{ .Values.enc_service_base_url }}"
-        rc.basePath = "{{ .Values.cert_rc_base_url }}"
-        rc.entity = "{{ .Values.cert_rc_entity }}"
-        rc.rcApiKey = "{{ .Values.sunbird_api_auth_token }}"
-      }
-      enable.suppress.exception = "{{ .Values.certificate_migrator_enable_suppress_exception }}"
-      enable.rc.certificate = "{{ include "common.tplvalues.render" (dict "value" .Values.collection_certificate_generator_enable_rc_certificate "context" $) }}"
-      task.rc.badcharlist = "{{ include "common.tplvalues.render" (dict "value" .Values.collection_certificate_generator_rc_badcharlist "context" $) }}"
-    flink-conf: |+
-      jobmanager.memory.flink.size: 1024m
-      taskmanager.memory.flink.size: 1024m
-      taskmanager.numberOfTaskSlots: 1
-      parallelism.default: 1
-      jobmanager.execution.failover-strategy: region
-      taskmanager.memory.network.fraction: 0.1
-    job_classname: org.sunbird.job.certmigrator.task.CertificateGeneratorStreamTask
-
   merge-user-courses:
     enabled: true
+    serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
       kafka {
@@ -761,6 +735,7 @@ flink_jobs:
 
   assessment-aggregator:
     enabled: true
+    serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
       kafka {
@@ -807,6 +782,7 @@ flink_jobs:
 
   notification-job:
     enabled: true
+    serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
       kafka {
@@ -838,6 +814,7 @@ flink_jobs:
 
   program-user-info:
     enabled: true
+    serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
       kafka {
@@ -870,6 +847,7 @@ flink_jobs:
   
   user-deletion-cleanup:
     enabled: true
+    serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
       kafka {

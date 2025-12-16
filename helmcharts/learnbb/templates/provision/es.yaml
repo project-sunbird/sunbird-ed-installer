@@ -3,6 +3,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ .Chart.Name }}-elasticsearch-migration-job
+  namespace: {{ .Release.Namespace }}
   labels:
     app: {{ .Chart.Name }}-elasticsearch-migration
     scope: provisioning

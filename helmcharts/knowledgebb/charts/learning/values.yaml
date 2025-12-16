@@ -1,6 +1,6 @@
 ### Default variable file for learning-service ###
 
-replicaCount: 1
+replicaCount: 0
 image:
   repository: sunbirded.azurecr.io/learning-service
   tag: latest

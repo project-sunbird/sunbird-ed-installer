@@ -52,7 +52,20 @@ Minimum resources required to install and run Sunbird-ED on any cloud provider
 3. Fill in the variables in `demo/global-values.yaml`.
    take reference from  [terraform/azure/README.md]
 
-4. Log in to your cloud provider:
+4. Controlling DIAL Services and Flink Jobs
+
+     If you need DIAL-related services and Flink jobs, you can enable them using the
+     `deploy_dial_services` flag.
+
+     - Default: `false` (DIAL services are not deployed)
+
+     - To enable: set it to `true` in your `global-values.yaml` file. For example:
+
+         ```yaml
+         deploy_dial_services: true
+         ```
+
+5. Log in to your cloud provider:
     ```bash
     # If  cloud provider is Azure
     az login --tenant AZURE_TENANT_ID
@@ -63,7 +76,7 @@ Minimum resources required to install and run Sunbird-ED on any cloud provider
     # If cloud provider is GCP
     gcloud auth login
     ```
-5. Run the installation script:
+6. Run the installation script:
      ```bash
      time ./install.sh
      ```
@@ -87,3 +100,65 @@ This installation setup creates the following default users with different roles
 ```bash
 cd terraform/<cloud-provider>/<env>
 time ./install.sh destroy_tf_resources
+```
+
+## Note:
+
+## SSL Certificate Setup and Renewal (Let’s Encrypt Integration)
+
+If you are using Let’s Encrypt for SSL certificate management, follow the steps below to ensure proper setup and renewal handling.
+
+---
+
+### 1. Enable Let’s Encrypt in Nginx
+
+In your `global-values.yaml`, set the following flag:
+
+```yaml
+lets_encrypt_ssl: true
+```
+
+This enables automatic SSL certificate issuance and renewal via a Kubernetes Certbot CronJob.
+
+---
+
+### 2. Automatic Certificate Renewal
+
+When `lets_encrypt_ssl` is enabled:
+
+- The Certbot CronJob automatically renews your SSL certificates approximately every **85 days**.
+- After renewal, it updates the SSL certificate and private key in the Kubernetes ConfigMap named `nginx-public-ingress`.
+
+---
+
+### 3. Update Global Values After Renewal
+
+Once the renewal completes:
+
+1. Fetch the renewed keys from the ConfigMap.
+2. Update your `terraform/<cloud-provider>/<env>/global-values.yaml` file with the new values:
+
+```yaml
+proxy_private_key: |
+  <paste the renewed private key from ConfigMap>
+
+proxy_certificate: |
+  <paste the renewed certificate from ConfigMap>
+```
+
+These values are essential because **edbb bundle  fetches SSL certificates from the global level** defined in above file.
+
+---
+
+### 4. If Not Using Let’s Encrypt
+
+If you are not using Let’s Encrypt:
+x
+- Keep `lets_encrypt_ssl: false`.
+- Manually provide your SSL certificate and private key under the same fields in `global-values.yaml`.
+
+---
+### Additional Notes
+- The CronJob handles only Let’s Encrypt–issued certificates.
+- The default renewal schedule is every **85 days**.
+- Always ensure your domain DNS records are properly configured and reachable before renewal.

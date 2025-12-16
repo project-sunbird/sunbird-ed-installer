@@ -124,7 +124,7 @@ sunbird_search_service_api_base_url: "http://search-service:9000"
 sunbird_quartz_mode: cluster
 sunbird_encryption_mode: local
 sunbird_badger_baseurl: http://badger:8004
-sunbird_remote_req_router_path: akka.tcp://SunbirdMWSystem@actor-service:8088/user/RequestRouter
+sunbird_remote_req_router_path: pekko.tcp://SunbirdMWSystem@actor-service:8088/user/RequestRouter
 sunbird_remote_bg_req_router_path: kka.tcp://SunbirdMWSystem@actor-service:8088/user/BackgroundRequestRouter
 sunbird_api_mgr_base_url: http://knowledge-mw-service:5000
 sunbird_api_base_url: http://knowledge-mw-service:5000

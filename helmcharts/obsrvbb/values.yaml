@@ -167,6 +167,7 @@ kafka: &kafka
     - name: "{{ .Values.global.env }}.telemetry.assess"
     - name: "{{ .Values.global.env }}.telemetry.assess.failed"
     - name: "{{ .Values.global.env }}.issue.certificate.request"
+    - name: "{{ .Values.global.env }}.nlweb.ingest"
     parallel: 1
 
 druid: &druid

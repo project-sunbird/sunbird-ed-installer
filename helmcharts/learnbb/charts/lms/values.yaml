@@ -133,7 +133,7 @@ bind_hostname: "0.0.0.0"
 sunbird_pg_db: quartz
 sunbird_quartz_mode: cluster
 sunbird_encryption_mode: local
-sunbird_remote_req_router_path: akka.tcp://SunbirdMWSystem@actor-service:8088/user/RequestRouter
+sunbird_remote_req_router_path: pekko.tcp://SunbirdMWSystem@actor-service:8088/user/RequestRouter
 sunbird_remote_bg_req_router_path: kka.tcp://SunbirdMWSystem@actor-service:8088/user/BackgroundRequestRouter
 sunbird_default_channel: "sunbird"
 sunbird_user_bulk_upload_size: 1001

@@ -64,7 +64,7 @@ images:
 
   discussion_mw: &discussion_mw
     repository: "sunbirded.azurecr.io/discussion-middleware"
-    tag: "release-7.0.0_RC1_850b795_3"
+    tag: "release-8.1.0_rc2-e7360ec-2"
 
   echo: &echo
     repository: "ghcr.io/project-sunbird/sunbird-echo-service"
@@ -72,7 +72,7 @@ images:
 
   player: &player
     repository: "ghcr.io/sunbird-ed/sunbirded-portal/player"
-    tag: "release-8.0.1-rc-t27_17710d2"
+    tag: "release-8.1.0_rc5_61af49d"
 
   report: &report
     repository: "ghcr.io/project-sunbird/sunbird-report-service"
@@ -96,7 +96,7 @@ images:
 
   knowledge_mw: &knowledge_mw
     repository: "ghcr.io/sunbird-knowlg/knowledge-mw-service"
-    tag: "release-8.0.0_rc3_2e12b8f_3"
+    tag: "release-8.1.0_rc2_0c57074_10"
 
   nginx_private_ingress: &nginx_private_ingress
     repository: "sunbirded.azurecr.io/proxy"
@@ -120,7 +120,7 @@ images:
 
   certregistry: &certregistry
     repository: "ghcr.io/sunbird-lern/certificate-registry"
-    tag: "release-8.0.0_rc1_f8ac384_1"
+    tag: "release-8.1.0_rc1_623a7ac_2"
 
   certificateapi: &certificateapi
     repository: "sunbirded.azurecr.io/sunbird-rc-certificate-api"
@@ -132,11 +132,11 @@ images:
 
   groups: &groups
     repository: "ghcr.io/sunbird-lern/groups-service"
-    tag: "release-8.0.0_rc7_86387c8_7"
+    tag: "release-8.1.0_rc1_48a145b_8"
 
   keycloak: &keycloak
     repository: "sunbirded.azurecr.io/keycloak"
-    tag: "release-8.0.0_91e02cd"
+    tag: "release-8.0.0_1acd65c"
 
   keycloak-kids-keys: &keycloak-kids-keys
     repository: "sunbirded.azurecr.io/keycloak-kids-keys"
@@ -144,11 +144,11 @@ images:
 
   lms: &lms
     repository: "ghcr.io/sunbird-lern/lms-service"
-    tag: "release-8.0.0_rc6_cc1f3e3_8"
+    tag: "release-8.1.0_rc2_144d90d_10"
 
   notification: &notification
     repository: "ghcr.io/sunbird-lern/notification-service"
-    tag: "release-8.0.0_rc4_1fd3be9_5"
+    tag: "release-8.1.0_rc3_eaf6c11_8"
 
   print: &print
     repository: "sunbirded.azurecr.io/print-service"
@@ -161,15 +161,15 @@ images:
   userorg: &userorg
     registry: "sunbirded.azurecr.io"
     repository: "ghcr.io/sunbird-lern/userorg-service"
-    tag: "release-8.0.0_rc7_5178806_9"
+    tag: "release-8.1.0_rc2_3dd81ea_13"
 
   content: &content
     repository: "ghcr.io/sunbird-knowlg/knowledge-platform/content-service"
-    tag: "release-8.0.0_rc3_09d6e64"
+    tag: "release-8.1.0_rc4_5712381"
 
   dial: &dial
     repository: "ghcr.io/sunbird-knowlg/sunbird-dial-service"
-    tag: "release-8.0.0_rc4_726775d"
+    tag: "release-8.1.0_rc1_8fbeab3"
 
   learning: &learning
     repository: "sunbirded.azurecr.io/learning-service"
@@ -177,15 +177,15 @@ images:
 
   search: &search
     repository: "ghcr.io/sunbird-knowlg/knowledge-platform/search-api"
-    tag: "release-8.0.0_rc3_09d6e64"
+    tag: "release-8.1.0_rc4_5712381"
 
   taxonomy: &taxonomy
     repository: "ghcr.io/sunbird-knowlg/knowledge-platform/taxonomy-api"
-    tag: "release-8.0.0_rc3_09d6e64"
+    tag: "release-8.1.0_rc4_5712381"
 
-  assignment: &assignment
-    repository: "sunbirded.azurecr.io/assignment-service"
-    tag: "release-7.0.0_RC2_aeccd6e_16"
+  assessment: &assessment
+    repository: "ghcr.io/sunbird-inquiry/inquiry-api-service"
+    tag: "release-8.1.0_rc4_62371b1_4"
 
   analytics: &analytics
     registry: "sunbirded.azurecr.io"
@@ -431,8 +431,8 @@ internal: &internal
     imagePullSecrets:
       - name: "registry-secret-name"
 
-  assignment:
-    image: *assignment
+  assessment:
+    image: *assessment
     imagePullSecrets:
       - name: "registry-secret-name"
 
@@ -489,12 +489,12 @@ global:
   knowledgeflink:
     registry: "ghcr.io"
     repository: "sunbird-knowlg/knowledge-platform-jobs"
-    tag: "release-8.0.0_rc7_be30b86"
+    tag: "release-8.1.0_rc1_e7ac747"
 
   learnflink:
     registry: "ghcr.io"
     repository: "sunbird-lern/data-pipeline"
-    tag: "release-8.0.0_rc7_a377ffa"
+    tag: "release-8.1.0_rc1_7ea4c2c"
 
   inquiryflink:
     registry: "sunbirded.azurecr.io"

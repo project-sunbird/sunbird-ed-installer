@@ -167,8 +167,8 @@ kafka: &kafka
     parallel: 1
 
 
-play_http: &play_http
-  secret_key: "secretKey"
+# play_http: &play_http
+#   secret_key: "secretKey"
 schema: &schema
   base_path: "https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
 graph_passport: &graph_passport
@@ -187,7 +187,7 @@ global:
   cassandra: *cassandra
   zookeeper: *zookeeper
   kafka: *kafka
-  play_http: *play_http
+  # play_http: *play_http
   schema: *schema
   graph_passport: *graph_passport
   installation: *installation

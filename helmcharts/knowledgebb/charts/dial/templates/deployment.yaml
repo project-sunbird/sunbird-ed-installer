@@ -1,7 +1,9 @@
+{{- if eq (include "dial.deployDialEnabled" .) "true" }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -70,3 +72,4 @@ spec:
         configMap:
           name: {{ include "common.names.fullname" . }}
       {{- end }}
+{{- end }}

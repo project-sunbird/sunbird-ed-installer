@@ -1,13 +1,14 @@
-{{- if .Values.lets_encrypt_ssl }}
+{{- if .Values.global.lets_encrypt_ssl }}
 ---
 apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: certbot
+  namespace: {{ .Release.Namespace }}
   labels:
     app: certbot
 spec:
-  schedule: "0 18 */85 * *" # Every 85th day at 6:00 PM UTC -> Translates to 12.30 AM IST
+  schedule: "0 18 */85 * *" # Every 85th day at 6:00 PM UTC (~12:30 AM IST)
   jobTemplate:
     spec:
       template:
@@ -16,116 +17,187 @@ spec:
             app: certbot
         spec:
           serviceAccountName: certbot
-          containers:
-          - name: certbot
-            image: sunbird/certbot-autoupdater:v0.0.1
-            resources:
-              limits:
-                cpu: 100m
-                memory: 200Mi
-            ports:
-            - containerPort: 80
-            env:
-            - name: EMAIL
-              value: admin@{{ .Values.domain }}
-            - name: DOMAIN
-              value: {{ .Values.domain }}
-            command:
-              - /bin/sh
-            args:
-              - /opt/renew.sh
-            volumeMounts:
-            - name: renewscript
-              mountPath: /opt/renew.sh
-              subPath: renew.sh
-          volumes:
-          - name: renewscript
-            configMap:
-              name: certbot
           restartPolicy: Never
+          containers:
+            - name: certbot
+              image: alpine:3.20
+              command: ["/bin/sh"]
+              args:
+                - -c
+                - |
+                  set -e
+                  echo ">>> Installing dependencies..."
+                  apk add --no-cache certbot bash curl jq kubectl msmtp ca-certificates
+
+                  echo ">>> Creating msmtp config..."
+                  cat <<EOF > /etc/msmtprc
+                  defaults
+                  tls on
+                  tls_trust_file /etc/ssl/certs/ca-certificates.crt
+                  logfile /var/log/msmtp.log
+
+                  account default
+                  host {{ .Values.global.mail_server_host }}
+                  port {{ .Values.global.mail_server_port }}
+                  auth on
+                  user {{ .Values.global.mail_server_username }}
+                  password {{ .Values.global.mail_server_password }}
+                  from {{ .Values.global.mail_from_certbot_notifications }}
+                  EOF
+                  chmod 600 /etc/msmtprc
+
+                  echo ">>> Copying renewal script to /tmp..."
+                  cp /opt/renew.sh /tmp/renew.sh
+                  chmod +x /tmp/renew.sh
+
+                  echo ">>> Running renewal script..."
+                  /tmp/renew.sh
+
+              env:
+                - name: EMAIL
+                  value: {{ .Values.smtp.to }}
+                - name: DOMAIN
+                  value: {{ .Values.global.domain }}
+                - name: CERTBOT_STAGING
+                  value: "true"
+              volumeMounts:
+                - name: renewscript
+                  mountPath: /opt/renew.sh
+                  subPath: renew.sh
+          volumes:
+            - name: renewscript
+              configMap:
+                name: certbot
+
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: certbot
+  namespace: {{ .Release.Namespace }}
 data:
   renew.sh: |-
-    kubectl patch svc nginx-public-ingress --type='json' -p='[{"op": "replace", "path": "/spec/selector", "value": {"app.kubernetes.io/name": "certbot"}}]'
-    certbot certonly --non-interactive --agree-tos -m $EMAIL -d $DOMAIN --standalone
-    privkey=$(cat /etc/letsencrypt/live/${DOMAIN}/privkey.pem | base64 -w0)
-    #fullchain=$(cat /etc/letsencrypt/live/${DOMAIN}/fullchain.pem | base64 -w0)
-    # The below step is required to trim Letsencrypt Root Certificate since we are using many outdated package versions which don't recognize the new Root CA certificate
-    fullchain=$(awk '$0=="-----BEGIN CERTIFICATE-----"{c++} c==1' /etc/letsencrypt/live/${DOMAIN}/fullchain.pem && awk '$0=="-----BEGIN CERTIFICATE-----"{c++} c==2' /etc/letsencrypt/live/${DOMAIN}/fullchain.pem)
-    fullchain=$(echo "$fullchain" | base64 -w0)
-    kubectl patch configmap nginx-public-ingress --type='json' -p='[{"op": "replace", "path": "/data/tls.key", "value": "'"$privkey"'"}]'
-    kubectl patch configmap nginx-public-ingress --type='json' -p='[{"op": "replace", "path": "/data/tls.crt", "value": "'"$fullchain"'"}]'
-    kubectl patch svc nginx-public-ingress --type='json' -p='[{"op": "replace", "path": "/spec/selector", "value": {"app.kubernetes.io/name": "nginx-public-ingress"}}]'
-    kubectl rollout restart deployment nginx-public-ingress
-    kubectl rollout status deployment nginx-public-ingress
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: certbot
-spec:
-  ports:
-  - port: 80
-    targetPort: 80
-  selector:
-    app: certbot
+    #!/bin/sh
+    set -e
+
+    echo "=============================================="
+    echo "Starting certificate renewal for: ${DOMAIN}"
+    echo "=============================================="
+
+    CERT_DIR="/etc/letsencrypt/live/${DOMAIN}"
+
+    if [ "$CERTBOT_STAGING" = "true" ]; then
+      echo "Environment: STAGING (Test Certificates)"
+      SERVER="--server https://acme-staging-v02.api.letsencrypt.org/directory"
+    else
+      echo "Environment: PRODUCTION (Real Certificates)"
+      SERVER="--server https://acme-v02.api.letsencrypt.org/directory"
+    fi
+
+    echo ">>> Updating nginx-public-ingress selector to certbot..."
+    kubectl patch svc nginx-public-ingress -n {{ .Release.Namespace }} \
+      --type='json' \
+      -p='[{"op": "replace", "path": "/spec/selector", "value": {"app":"certbot"}}]'
+
+    echo ">>> Running Certbot standalone issuance..."
+    if certbot certonly --non-interactive --agree-tos --email "$EMAIL" --standalone -d "$DOMAIN" $SERVER; then
+      echo "✅ Certbot succeeded"
+      STATUS="SUCCESS"
+    else
+      echo "❌ Certbot failed"
+      STATUS="FAILED"
+    fi
+
+    if [ -f "$CERT_DIR/fullchain.pem" ] && [ -f "$CERT_DIR/privkey.pem" ]; then
+      echo "✅ Certificate files exist"
+
+      # 👉 NEW BLOCK ADDED HERE: create backup ConfigMap with renewed certs
+      echo ">>> Creating backup ConfigMap with renewed certs..."
+      kubectl create configmap certbot-certs-backup \
+        --from-file=fullchain.pem="$CERT_DIR/fullchain.pem" \
+        --from-file=privkey.pem="$CERT_DIR/privkey.pem" \
+        -n {{ .Release.Namespace }} \
+        --dry-run=client -o yaml | kubectl apply -f -
+      echo "✅ Backup ConfigMap 'certbot-certs-backup' created/updated successfully"
+      # 👆 END OF NEW BLOCK
+
+      kubectl get configmap nginx-public-ingress -n {{ .Release.Namespace }} -o yaml > /tmp/cm.yaml
+
+      echo "  tls.crt: |-" > /tmp/new_tls.yaml
+      sed 's/^/    /' "$CERT_DIR/fullchain.pem" >> /tmp/new_tls.yaml
+      echo "  tls.key: |-" >> /tmp/new_tls.yaml
+      sed 's/^/    /' "$CERT_DIR/privkey.pem" >> /tmp/new_tls.yaml
+
+      awk '
+        BEGIN {skip=0}
+        /^  tls.crt:/ {system("cat /tmp/new_tls.yaml"); skip=1; next}
+        /^  tls.key:/ {skip=1; next}
+        skip && /^[^ ]/ {skip=0}
+        !skip {print}
+      ' /tmp/cm.yaml > /tmp/updated-cm.yaml
+
+      if kubectl apply -f /tmp/updated-cm.yaml -n {{ .Release.Namespace }}; then
+        echo "✅ ConfigMap updated"
+      else
+        echo "❌ Failed to update ConfigMap"
+      fi
+
+      if kubectl rollout restart deployment nginx-public-ingress -n {{ .Release.Namespace }}; then
+        echo "✅ Nginx deployment restarted"
+      else
+        echo "❌ Failed to restart Nginx deployment"
+      fi
+    else
+      echo "❌ Certificate files not found"
+    fi
+
+    echo ">>> Restoring nginx-public-ingress selector to nginx..."
+    kubectl patch svc nginx-public-ingress -n {{ .Release.Namespace }} \
+      --type='json' \
+      -p='[{"op": "replace", "path": "/spec/selector", "value": {"app.kubernetes.io/name":"nginx-public-ingress"}}]'
+
+    echo ">>> Sending notification mail..."
+    MAIL_SUBJECT="Certbot renewal for ${DOMAIN} - $STATUS"
+    MAIL_BODY="Hello,\n\nThe Certbot SSL renewal job for ${DOMAIN} finished with status: $STATUS.\n\nRegards,\nYour Kubernetes CronJob"
+
+    if printf "To: %s\nSubject: %s\n\n%s\n" "$EMAIL" "$MAIL_SUBJECT" "$MAIL_BODY" | msmtp "$EMAIL"; then
+      echo "✅ Notification sent to $EMAIL"
+    else
+      echo "⚠️ Failed to send notification"
+    fi
+
+    echo "✅ Renewal process completed!"
+
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: certbot
----
-kind: Role
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: certbot
-rules:
-- apiGroups:
-  - apps
-  resourceNames:
-  - nginx-public-ingress
-  resources:
-  - deployment
-  verbs:
-  - get
-  - list
-  - watch
-  - patch
-- apiGroups:
-  - ""
-  resourceNames:
-  - nginx-public-ingress
-  resources:
-  - configmaps
-  verbs:
-  - get
-  - list
-  - watch
-  - patch
-- apiGroups:
-  - ""
-  resourceNames:
-  - nginx-public-ingress
-  resources:
-  - services
-  verbs:
-  - get
-  - list
-  - watch
-  - patch
+  namespace: {{ .Release.Namespace }}
 
 ---
-kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
 metadata:
   name: certbot
-subjects:
-- kind: ServiceAccount
+  namespace: {{ .Release.Namespace }}
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "watch", "patch", "update"]
+  - apiGroups: [""]
+    resources: ["configmaps", "services"]
+    verbs: ["get", "list", "watch", "patch", "update", "create"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
   name: certbot
+  namespace: {{ .Release.Namespace }}
+subjects:
+  - kind: ServiceAccount
+    name: certbot
 roleRef:
   kind: Role
   name: certbot

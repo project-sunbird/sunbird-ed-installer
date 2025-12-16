@@ -41,6 +41,11 @@ function create_tf_resources() {
 }
 
 function certificate_keys() {
+     #  # If keys already present in global-values.yaml → skip writing
+    if grep -q -E '^[[:space:]]*CERTIFICATE_PRIVATE_KEY:' ../terraform/gcp/$environment/global-values.yaml 2>/dev/null; then
+        echo "Certificate keys already present — skipping generation and write."
+        return
+    fi
     # Generate private and public keys using openssl
     echo "Creation of RSA keys for certificate signing"
     openssl genrsa -out ../terraform/gcp/$environment/certkey.pem;

@@ -14,6 +14,10 @@
               "name": "eid"
             },
             {
+              "type": "root",
+              "name": "syncts"
+            },
+            {
               "type": "path",
               "name": "context_channel",
               "expr": "$.context.channel"

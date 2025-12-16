@@ -79,13 +79,36 @@ configmap:
 serviceAccount:
   create: false
 
-serviceMonitor:
+commonLabels:
+  release: monitoring
+
+# serviceMonitor:
+#   enabled: false
+#   interval: 30s
+#   scrapeTimeout: 10s
+#   labels: {} # additional labels e.g. release: prometheus
+#   honorLabels: true
+#   jobLabel: "app.kubernetes.io/name"
+serviceMonitor: &serviceMonitor
   enabled: false
-  interval: 30s
-  scrapeTimeout: 10s
-  labels: {} # additional labels e.g. release: prometheus
-  honorLabels: true
-  jobLabel: "app.kubernetes.io/name"
+  jobmanager:
+    enabled: true
+    interval: 30s
+    scrapeTimeout: 10s
+    labels:
+      release: monitoring # additional labels e.g. release: prometheus
+    honorLabels: true
+    jobLabel: "app.kubernetes.io/name"
+    port: prom
+  taskmanager:
+    enabled: true
+    interval: 30s
+    scrapeTimeout: 10s
+    labels:
+      release: monitoring # additional labels e.g. release: prometheus
+    honorLabels: true
+    jobLabel: "app.kubernetes.io/name"
+    port: prom
 
 # Example values.yaml structure
 initContainers: {}
@@ -386,6 +409,7 @@ flink_jobs:
 
   telemetry-extractor:
     enabled: true
+    serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
       kafka {
@@ -437,6 +461,7 @@ flink_jobs:
 
   pipeline-preprocessor:
     enabled: true
+    serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
       kafka {
@@ -481,6 +506,7 @@ flink_jobs:
 
   de-normalization-secondary:
     enabled: true
+    serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
       kafka {
@@ -544,6 +570,7 @@ flink_jobs:
 
   de-normalization-primary:
     enabled: true
+    serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
       kafka {
@@ -607,6 +634,7 @@ flink_jobs:
 
   summary-denormalization:
     enabled: true
+    serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
       kafka {
@@ -670,6 +698,7 @@ flink_jobs:
 
   druid-validator:
     enabled: true
+    serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
       kafka {
@@ -719,6 +748,7 @@ flink_jobs:
 
   device-profile-updater:
     enabled: true
+    serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
       kafka {
@@ -756,6 +786,7 @@ flink_jobs:
 
   content-cache-updater:
     enabled: true
+    serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
       kafka {
@@ -793,6 +824,7 @@ flink_jobs:
 
   user-cache-updater-v2:
     enabled: true
+    serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
       kafka {
@@ -883,6 +915,7 @@ flink_jobs:
 
   error-denormalization:
     enabled: true
+    serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
       kafka {

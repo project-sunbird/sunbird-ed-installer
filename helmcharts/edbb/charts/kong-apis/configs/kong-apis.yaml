@@ -1847,7 +1847,7 @@ kong_apis:
 
 - name: PrivateContentRetireAPI
   uris: "{{ .Values.private_content_prefix }}/v3/retire"
-  upstream_url: "{{ .Values.learning_service_url }}/content/v3/retire"
+  upstream_url: "{{ .Values.content_service_url }}/content/v3/retire"
   strip_uri: true
   plugins:
   - name: jwt
@@ -1883,7 +1883,7 @@ kong_apis:
 
 - name: PrivateContentReviewAPI
   uris: "{{ .Values.private_content_prefix }}/v3/review"
-  upstream_url: "{{ .Values.learning_service_url }}/content/v3/review"
+  upstream_url: "{{ .Values.content_service_url }}/content/v3/review"
   strip_uri: true
   plugins:
   - name: jwt
@@ -1901,7 +1901,7 @@ kong_apis:
 
 - name: PrivateContentPublishAPI
   uris: "{{ .Values.private_content_prefix }}/v3/publish"
-  upstream_url: "{{ .Values.learning_service_url }}/content/v3/publish"
+  upstream_url: "{{ .Values.content_service_url }}/content/v3/publish"
   strip_uri: true
   plugins:
   - name: jwt
@@ -1919,7 +1919,7 @@ kong_apis:
 
 - name: PrivateContentRejectAPI
   uris: "{{ .Values.private_content_prefix }}/v3/reject"
-  upstream_url: "{{ .Values.learning_service_url }}/content/v3/reject"
+  upstream_url: "{{ .Values.content_service_url }}/content/v3/reject"
   strip_uri: true
   plugins:
   - name: jwt
@@ -4979,7 +4979,7 @@ kong_apis:
 
 - name: assessmentItemRead
   uris: "{{ .Values.assessment_prefix }}/v1/items/read"
-  upstream_url: "{{ .Values.learning_service_url }}/assessment/v3/items/read"
+  upstream_url: "{{ .Values.assessment_service_url }}/assessment/v3/items/read"
   strip_uri: true
   plugins:
   - name: jwt
@@ -8526,28 +8526,9 @@ kong_apis:
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.small_request_size_limit }}"
 
-# New API for connecting to learning service in order to automate post install scripts
-- name: domainDefinitions
-  uris: "{{ .Values.learning_service_prefix }}/taxonomy/domain/definition"
-  upstream_url: "{{ .Values.learning_service_url }}/taxonomy/domain/definition"
-  strip_uri: true
-  plugins:
-  - name: jwt
-  - name: cors
-  - {{ .Values.statsd_pulgin | toYaml | nindent 4 | trim }}
-  - name: acl
-    config.whitelist:
-    - definitionsAdmin
-  - name: rate-limiting
-    config.policy: local
-    config.hour: "{{ .Values.small_rate_limit_per_hour }}"
-    config.limit_by: credential
-  - name: request-size-limiting
-    config.allowed_payload_size: "{{ .Values.small_request_size_limit }}"
-
 - name: masterCategories
-  uris: "{{ .Values.learning_service_prefix }}/framework/v3/category/master/create"
-  upstream_url: "{{ .Values.learning_service_url }}/framework/v3/category/master/create"
+  uris: "{{ .Values.framework_service_prefix }}/v3/category/master/create"
+  upstream_url: "{{ .Values.taxonomy_service_url }}/framework/v3/category/master/create"
   strip_uri: true
   plugins:
   - name: jwt

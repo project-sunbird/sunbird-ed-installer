@@ -1,7 +1,9 @@
+{{- if eq (include "dial.deployDialEnabled" .) "true" }}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "common.names.fullname" . }}-service
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -16,3 +18,4 @@ spec:
   {{- end }}
   selector:
     app.kubernetes.io/name: {{ include "common.names.name" . }}
+{{- end }}

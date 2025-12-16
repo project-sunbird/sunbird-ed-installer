@@ -3,6 +3,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name:  {{ include "common.names.fullname" . }}-role
+  namespace: {{ .Release.Namespace }}
 rules:
 - apiGroups: [""]
   resources: ["configmaps"]
@@ -12,6 +13,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name:  {{ include "common.names.fullname" . }}-rolebinding
+  namespace: {{ .Release.Namespace }}
 subjects:
 - kind: ServiceAccount
   name:  {{ include "common.names.fullname" . }}

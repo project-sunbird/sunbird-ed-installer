@@ -1,13 +1,31 @@
-{{- $currentScope := .}}
+{{- $currentScope := . }}
 {{- range $jobName, $jobData := .Values.flink_jobs }}
-{{- if $jobData.enabled }}
-{{- with $currentScope }}
-{{ $component := "taskmanager" }}
+
+  {{- /* Determine if this job should be enabled */}}
+  {{- $isDialUpdater := or (eq $jobName "dialcode-context-updater") (eq $jobName "qrcode-image-generator") }}
+  {{- /* Normalize global.deploy_dial_services (may be a string anchor) into a real boolean */}}
+  {{- $globalDialRaw := default false $.Values.global.deploy_dial_services }}
+  {{- $globalDialStr := printf "%v" $globalDialRaw | lower | trim }}
+  {{- $globalDialEnabled := or (eq $globalDialStr "true") (eq $globalDialStr "1") (eq $globalDialStr "yes") (eq $globalDialStr "y") (eq $globalDialStr "on") }}
+
+  {{- /* Normalize job-level enabled value (jobData.enabled) to boolean as well */}}
+  {{- $jobEnabledRaw := default false $jobData.enabled }}
+  {{- $jobEnabledStr := printf "%v" $jobEnabledRaw | lower | trim }}
+  {{- $jobEnabledBool := or (eq $jobEnabledStr "true") (eq $jobEnabledStr "1") (eq $jobEnabledStr "yes") (eq $jobEnabledStr "y") (eq $jobEnabledStr "on") }}
+
+  {{- /* If this is the dial updater, use the normalized global flag; otherwise use the job's enabled boolean. */}}
+  {{- $enabled := ternary $globalDialEnabled $jobEnabledBool $isDialUpdater }}
+
+  {{- if $enabled }}
+    {{- with $currentScope }}
+
+      {{- $component := "taskmanager" }}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ printf "%s-%s" $jobName $component }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   annotations:
     checksum/config: {{ .Files.Glob "configs/*" | toYaml | sha256sum }}
@@ -66,16 +84,15 @@ spec:
             "-Ds3.path.style.access={{ .Values.s3_path_style_access }}",
   {{- end }}
             "-Dweb.submit.enable=false",
-            "-Dmetrics.reporter.prom.class=org.apache.flink.metrics.prometheus.PrometheusReporter",
-            "-Dmetrics.reporter.prom.host={{ $jobName }}-taskmanager",
+            "-Dmetrics.reporters=prom",
+            "-Dmetrics.reporter.prom.factory.class=org.apache.flink.metrics.prometheus.PrometheusReporterFactory",
+            "-Dmetrics.reporter.prom.port={{ .Values.taskmanager.prom_port }}",
             "-Dmetrics.reporter.prom.port=9251-9260",
             "-Djobmanager.rpc.address={{ $jobName }}-jobmanager",
             "-Dtaskmanager.rpc.port={{ .Values.taskmanager.rpc_port }}"]
           ports:
-            {{- range .Values.service.ports }}
-            - name: {{ .name }}
-              containerPort: {{ .targetPort }}
-            {{- end }}
+          - containerPort: {{ .Values.taskmanager.rpc_port }}
+            name: rpc
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           securityContext:
@@ -102,6 +119,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ printf "%s-%s" $jobName $component }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   annotations:
     checksum/config: {{ .Files.Glob "configs/*" | toYaml | sha256sum }}
@@ -161,7 +179,8 @@ spec:
   {{- end }}
                 "--job-classname={{ $jobData.job_classname }}",
                 "-Dweb.submit.enable=false",
-                "-Dmetrics.reporter.prom.class=org.apache.flink.metrics.prometheus.PrometheusReporter",
+                "-Dmetrics.reporters=prom",
+                "-Dmetrics.reporter.prom.factory.class=org.apache.flink.metrics.prometheus.PrometheusReporterFactory",
                 "-Dmetrics.reporter.prom.port={{ .Values.jobmanager.prom_port }}",
                 "-Djobmanager.rpc.address={{ $jobName }}-jobmanager",
                 "-Djobmanager.rpc.port={{ .Values.jobmanager.rpc_port }}",

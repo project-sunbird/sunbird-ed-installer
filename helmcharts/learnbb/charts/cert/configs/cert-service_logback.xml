@@ -8,8 +8,8 @@
         <encoder>
             <pattern>[%date{ISO8601}] [%level] %logger{0}:%line [%X{sourceThread}] [%mdc{msgId}] - %msg %n
             </pattern>
-            <!--to print whole Mapped Diagnostic Context (MDC) properties( for eg: the actor’s path, the full address of the ActorSystem) in the logs  refer this link https://doc.akka.io/docs/akka/current/typed/logging.html#mdc-->
-            <!--[%mdc] will print all akka variables akkaSource, akkaAddress, akkaTags, sourceActorSystem. for more info refer this link https://doc.akka.io/docs/akka/current/typed/logging.html#mdc-values-->
+            <!--to print whole Mapped Diagnostic Context (MDC) properties( for eg: the actor’s path, the full address of the ActorSystem) in the logs  refer this link https://doc.pekko.io/docs/pekko/current/typed/logging.html#mdc-->
+            <!--[%mdc] will print all pekko variables pekkoSource, pekkoAddress, pekkoTags, sourceActorSystem. for more info refer this link https://doc.pekko.io/docs/pekko/current/typed/logging.html#mdc-values-->
         </encoder>
     </appender>
 
