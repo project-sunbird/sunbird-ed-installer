@@ -53,3 +53,7 @@ dependencies:
   - name: superset
     version: 0.1.0
     condition: superset.enabled
+  - name: yugabyte
+    repository: https://charts.yugabyte.com
+    version: 2025.2.0   # Chart version
+    condition: yugabyte.enabled    

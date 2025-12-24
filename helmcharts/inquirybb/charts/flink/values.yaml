@@ -321,7 +321,7 @@ flink_jobs:
     job_classname: org.sunbird.job.questionset.task.QuestionSetPublishStreamTask
   
   questionset-republish:
-    enabled: true
+    enabled: false
     serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")

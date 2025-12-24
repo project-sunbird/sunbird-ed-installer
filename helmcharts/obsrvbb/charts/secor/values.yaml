@@ -36,7 +36,7 @@ serviceAccount:
 
 base_config: &base_config
   enabled: true
-  replicas: 1
+  replicas: 0
   service_name: "raw_telemetry_backup"
   timestamp_key: "syncts"
   fallback_timestamp_key: "@timestamp"

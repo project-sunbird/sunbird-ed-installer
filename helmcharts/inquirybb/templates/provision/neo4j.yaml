@@ -1,3 +1,4 @@
+{{- if .Values.global.migrationJobs.enabled }}
 kind: Job
 apiVersion: batch/v1
 metadata:
@@ -71,3 +72,4 @@ spec:
               CREATE INDEX ON :domain(IL_FUNC_OBJECT_TYPE);
               CREATE INDEX ON :domain(IL_SYS_NODE_TYPE);
               EOF
+{{- end }}

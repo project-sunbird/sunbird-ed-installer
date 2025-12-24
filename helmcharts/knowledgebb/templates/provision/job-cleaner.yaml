@@ -40,6 +40,7 @@ roleRef:
   name: {{.Chart.Name}}-job-deleter-role
   apiGroup: rbac.authorization.k8s.io
 ---
+{{- if .Values.global.migrationJobs.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -68,3 +69,4 @@ spec:
               echo "deleted $job"
             done
       restartPolicy: Never
+ {{- end }}     

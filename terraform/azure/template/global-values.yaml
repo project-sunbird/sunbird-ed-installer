@@ -58,7 +58,9 @@ global:
   keycloak:
    keycloak_user: admin
    keycloak_password: *keycloak-password  
-  deploy_dial_services: *deploy_dial_services   
+  deploy_dial_services: *deploy_dial_services 
+  migrationJobs:
+    enabled: false  
   # The merge domain is optional and is required  `only if user merge workflow is required.
   # For most audience, this workflow is not required. If you need this workflow, then
   # set the value of merge_domain_status to "true" and provide a subdomain / another domain

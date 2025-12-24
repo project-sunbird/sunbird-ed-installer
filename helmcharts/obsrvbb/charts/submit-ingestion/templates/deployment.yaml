@@ -1,3 +1,4 @@
+{{- if .Values.global.migrationJobs.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -58,5 +59,6 @@ spec:
         - name: config-volume
           configMap:
             name: ingestion-spec-config
+{{- end }}
 
 

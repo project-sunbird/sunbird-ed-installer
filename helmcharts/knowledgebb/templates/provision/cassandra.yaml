@@ -1,3 +1,4 @@
+{{- if .Values.global.migrationJobs.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -57,3 +58,4 @@ spec:
           - name: shared-volume
             mountPath: /opt/shared-volume
   backoffLimit: 0
+{{- end }}

@@ -378,6 +378,7 @@ spark: &spark
     create: false  # Prevent Helm from creating a new service account
     name: "" # The existing Kubernetes service account
   master:
+      replicaCount: 1
       <<: *confVolume
       extraEnvVars:
         - name: BITNAMI_DEBUG
@@ -403,6 +404,7 @@ spark: &spark
           memory: 1Gi    
   worker:
       replicaCount: 1
+    
 
 
 global:

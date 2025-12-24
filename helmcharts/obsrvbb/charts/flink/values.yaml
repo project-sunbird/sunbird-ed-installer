@@ -460,7 +460,7 @@ flink_jobs:
     job_classname: org.sunbird.dp.extractor.task.TelemetryExtractorStreamTask
 
   pipeline-preprocessor:
-    enabled: true
+    enabled: false
     serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
@@ -505,7 +505,7 @@ flink_jobs:
     job_classname: org.sunbird.dp.preprocessor.task.PipelinePreprocessorStreamTask
 
   de-normalization-secondary:
-    enabled: true
+    enabled: false
     serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
@@ -569,7 +569,7 @@ flink_jobs:
     job_classname: org.sunbird.dp.denorm.task.DenormalizationStreamTask
 
   de-normalization-primary:
-    enabled: true
+    enabled: false
     serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
@@ -633,7 +633,7 @@ flink_jobs:
     job_classname: org.sunbird.dp.denorm.task.DenormalizationStreamTask
 
   summary-denormalization:
-    enabled: true
+    enabled: false
     serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
@@ -697,7 +697,7 @@ flink_jobs:
     job_classname: org.sunbird.dp.denorm.task.SummaryDenormalizationStreamTask
 
   druid-validator:
-    enabled: true
+    enabled: false
     serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
@@ -747,7 +747,7 @@ flink_jobs:
     job_classname: org.sunbird.dp.validator.task.DruidValidatorStreamTask
 
   device-profile-updater:
-    enabled: true
+    enabled: false
     serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
@@ -914,7 +914,7 @@ flink_jobs:
   #   job_classname: org.sunbird.dp.assessment.task.AssessmentAggregatorStreamTask
 
   error-denormalization:
-    enabled: true
+    enabled: false
     serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")

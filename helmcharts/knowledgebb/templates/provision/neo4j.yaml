@@ -1,3 +1,4 @@
+{{- if .Values.global.migrationJobs.enabled }}
 kind: Job
 apiVersion: batch/v1
 metadata:
@@ -71,3 +72,4 @@ spec:
               /var/lib/neo4j/bin/cypher-shell -a bolt://{{.Values.global.neo4j.host}}:{{.Values.global.neo4j.port}} 'CREATE INDEX ON :domain(IL_FUNC_OBJECT_TYPE);'
               sleep 3
               /var/lib/neo4j/bin/cypher-shell -a bolt://{{.Values.global.neo4j.host}}:{{.Values.global.neo4j.port}} 'CREATE INDEX ON :domain(IL_SYS_NODE_TYPE);'
+{{- end }}
