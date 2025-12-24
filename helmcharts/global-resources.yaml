@@ -486,14 +486,15 @@ kubernetes-dashboard:
           cpu: 250m
           memory: 400Mi
 
-promtail:
-  resources:
-    limits:
-      cpu: 200m
-      memory: 128Mi
-    requests:
-      cpu: 100m
-      memory: 128Mi
+alloy:
+ alloy:
+    resources:
+      limits:
+        cpu: 200m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
 
 reloader:
   reloader:
