@@ -231,8 +231,8 @@ base_config: |
       }
   }
   lms-cassandra {
-  host = "{{ .Values.global.cassandra.host }}"
-  port = "{{ .Values.global.cassandra.port }}"
+  host = "{{ .Values.global.yugabyte.host }}"
+  port = "{{ .Values.global.yugabyte.port }}"
   }
 
   neo4j {
@@ -407,7 +407,7 @@ flink_jobs:
     job_classname: org.sunbird.job.transaction.task.TransactionEventProcessorStreamTask
 
   asset-enrichment:
-    enabled: true
+    enabled: false
     serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
@@ -618,7 +618,7 @@ flink_jobs:
 
 
   qrcode-image-generator:
-    enabled: true
+    enabled: false
     serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
@@ -689,7 +689,7 @@ flink_jobs:
     job_classname: org.sunbird.job.qrimagegenerator.task.QRCodeImageGeneratorTask
 
   video-stream-generator:
-    enabled: true
+    enabled: false
     serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")

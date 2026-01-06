@@ -41,6 +41,8 @@ global:
   # Provide your domain name
   # Example: sunbird.com
   domain: "REPLACE_ME"
+  obsrvjobs:
+    enabled: false
   lets_encrypt_ssl: false #enable this if you are using  let's encrypt ssl certificate
   play_http:
      secret_key: "a-long-secret-to-calm-the-rage-of-the-entropy-gods-hidden-deep-within-the-silent-ruins-of-forgotten-realms" 

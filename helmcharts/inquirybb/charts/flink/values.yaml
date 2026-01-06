@@ -253,8 +253,8 @@ base_config: |
       port = {{ .Values.global.redis.port }}
     }
     lms-cassandra {
-      host = "{{ .Values.global.cassandra.host }}"
-      port = {{ .Values.global.cassandra.port }}
+      host = "{{ .Values.global.yugabyte.host }}"
+      port = {{ .Values.global.yugabyte.port }}
     }
     neo4j {
       routePath = "bolt://{{.Values.global.neo4j.host}}:{{.Values.global.neo4j.port}}"
@@ -321,7 +321,7 @@ flink_jobs:
     job_classname: org.sunbird.job.questionset.task.QuestionSetPublishStreamTask
   
   questionset-republish:
-    enabled: true
+    enabled: false
     serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")

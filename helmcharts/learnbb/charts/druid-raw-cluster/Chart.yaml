@@ -6,7 +6,6 @@ description: Helm chart to deploy a druid cluster on Kubernetes
 keywords:
 - druid
 - zookeeper
-- postgres
 maintainers:
 - name: druid-operator-maintainers
 sources:

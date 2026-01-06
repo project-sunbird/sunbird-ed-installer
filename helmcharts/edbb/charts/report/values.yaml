@@ -160,15 +160,8 @@ init_container_resources:
 
 opa_enabled: false
 
-postgresql: &postgresql
-  host: postgresql
-  postgresqlUser: postgres
-  postgresqlPassword: "postgres"
-  port: 5432
-  db: postgres
 
 global:
-  postgresql: *postgresql
   domain: "https://dummy.sunbird.com"
 
 commonAnnotations:

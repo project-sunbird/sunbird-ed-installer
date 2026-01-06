@@ -1,3 +1,4 @@
+{{- if .Values.global.obsrvjobs.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -10,8 +11,9 @@ spec:
     requests:
       storage: {{ .Values.spark.persistence.spark_data_pvc.size }}
   storageClassName: {{ .Values.global.storage_class }}
+{{- end }}
 
-
+{{- if .Values.global.obsrvjobs.enabled }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -25,3 +27,4 @@ spec:
     requests:
       storage: {{ .Values.spark.persistence.log_data_pvc.size }}
   storageClassName: {{ .Values.global.storage_class }}
+  {{- end }}
