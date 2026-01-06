@@ -1,4 +1,5 @@
 ---
+{{- if .Values.global.obsrvjobs.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -19,8 +20,14 @@ spec:
           args:
             - /config/provision.sh
           env:
+            - name: PGHOST
+              value: {{ .Values.global.yugabyte.host }}
+            - name: PGPORT
+              value: {{ .Values.global.yugabyte.postgresql_port | quote }}
+            - name: PGUSER
+              value: {{ .Values.global.yugabyte.username }}
             - name: PGPASSWORD
-              value: {{ .Values.global.postgresql.postgresqlPassword }}
+              value: {{ .Values.global.yugabyte.password }}
           volumeMounts:
           {{- if .Values.configmap.enabled }}
           - name: config
@@ -35,3 +42,4 @@ spec:
       {{- end }}
       restartPolicy: Never
   backoffLimit: 30
+{{- end }}  

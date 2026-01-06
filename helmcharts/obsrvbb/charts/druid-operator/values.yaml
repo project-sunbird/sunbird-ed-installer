@@ -1,6 +1,6 @@
 nameOverride: ""
 fullnameOverride: ""
-replicaCount: 0
+replicaCount: 1
 
 env:
   DENY_LIST: "default,kube-system"

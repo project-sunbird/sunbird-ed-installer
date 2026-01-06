@@ -23,4 +23,6 @@ echo "Convert IPV4 CSV database to IP Range database"
 ./geoip2-csv-converter-v1.0.0/geoip2-csv-converter -block-file={{ .Values.maxmind_db_dir_name }}/{{ .Values.maxmind_db_geo_city_blocks_filename }} -output-file={{ .Values.maxmind_db_dir_name }}/{{ .Values.maxmind_db_geo_city_ip_range_filename }} -include-integer-range
 
 echo "Create schema of geolocation db update from template file"
-psql -U {{ .Values.global.postgresql.postgresqlUsername }} -d {{ .Values.geo_location_db }} -h {{ .Values.global.postgresql.host }} -f /config/geo-location-schema.sql
+# Use psql (PostgreSQL client) which is compatible with YugabyteDB
+# Specify the port explicitly (5433 for YugabyteDB PostgreSQL port)
+psql -U {{ .Values.global.yugabyte.username }} -d {{ .Values.geo_location_db }} -h {{ .Values.global.yugabyte.host }} -p {{ .Values.global.yugabyte.postgresql_port }} -f /config/geo-location-schema.sql

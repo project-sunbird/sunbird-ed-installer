@@ -17,8 +17,19 @@ spec:
         image: busybox
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         command: ["/bin/sh", "-c"]
+        # Wait for Kong admin endpoint to be reachable (port 8001) before seeding APIs
         args:
-        - "timeout 300 sh -c 'until nc -z kong 8000; do echo waiting for kong; sleep 10; done'"
+        - |
+          timeout 300 sh -c '
+            until nc -z kong 8001; do
+              echo "waiting for kong admin...";
+              sleep 10;
+            done;
+            # Extra check: wait for /status to return 200
+            until wget -qO- http://kong:8001/status >/dev/null 2>&1; do
+              echo "waiting for kong /status ...";
+              sleep 5;
+            done'
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

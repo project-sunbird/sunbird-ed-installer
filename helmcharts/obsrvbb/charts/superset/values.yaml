@@ -23,7 +23,7 @@ namespace: sunbird
 nameOverride: superset
 fullnameOverride: superset
 
-replicaCount: 0
+replicaCount: 1
 
 image:
   repository: sunbirded.azurecr.io/superset

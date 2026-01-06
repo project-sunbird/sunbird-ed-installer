@@ -1,4 +1,4 @@
-{{- if .Values.global.migrationJobs.enabled }}
+{{- if .Values.global.obsrvjobs.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -24,7 +24,7 @@ spec:
 
 ---
 
-{{- if .Values.global.migrationJobs.enabled }}
+{{- if .Values.global.obsrvjobs.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -50,7 +50,7 @@ spec:
 
 ---
 
-{{- if .Values.global.migrationJobs.enabled }}
+{{- if .Values.global.obsrvjobs.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -76,7 +76,7 @@ spec:
 
 ---
 
-{{- if .Values.global.migrationJobs.enabled }}
+{{- if .Values.global.obsrvjobs.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -100,7 +100,7 @@ spec:
           serviceAccountName: spark-cronjob-sa
 {{- end }}
 ---
-{{- if .Values.global.migrationJobs.enabled }}
+{{- if .Values.global.obsrvjobs.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -124,7 +124,7 @@ spec:
           serviceAccountName: spark-cronjob-sa
 {{- end }}
 ---
-{{- if .Values.global.migrationJobs.enabled }}
+{{- if .Values.global.obsrvjobs.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -148,7 +148,7 @@ spec:
           serviceAccountName: spark-cronjob-sa
 {{- end }}
 ---
-{{- if .Values.global.migrationJobs.enabled }}
+{{- if .Values.global.obsrvjobs.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -172,7 +172,7 @@ spec:
           serviceAccountName: spark-cronjob-sa
 {{- end }}
 ---
-{{- if .Values.global.migrationJobs.enabled }}
+{{- if .Values.global.obsrvjobs.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -197,7 +197,7 @@ spec:
 {{- end }}
 
 ---
-{{- if .Values.global.migrationJobs.enabled }}
+{{- if .Values.global.obsrvjobs.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -223,7 +223,7 @@ spec:
 
 
 ---
-{{- if .Values.global.migrationJobs.enabled }}
+{{- if .Values.global.obsrvjobs.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -248,7 +248,7 @@ spec:
 {{- end }}
 
 ---
-{{- if .Values.global.migrationJobs.enabled }}
+{{- if .Values.global.obsrvjobs.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -273,7 +273,7 @@ spec:
 {{- end }}
 
 ---
-{{- if .Values.global.migrationJobs.enabled }}
+{{- if .Values.global.obsrvjobs.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -297,7 +297,7 @@ spec:
           serviceAccountName: spark-cronjob-sa
 {{- end }}
 ---
-{{- if .Values.global.migrationJobs.enabled }}
+{{- if .Values.global.obsrvjobs.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -321,7 +321,7 @@ spec:
           serviceAccountName: spark-cronjob-sa
 {{- end }}
 ---
-{{- if .Values.global.migrationJobs.enabled }}
+{{- if .Values.global.obsrvjobs.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -345,7 +345,7 @@ spec:
           serviceAccountName: spark-cronjob-sa
 {{- end }}
 ---
-{{- if .Values.global.migrationJobs.enabled }}
+{{- if .Values.global.obsrvjobs.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -369,7 +369,7 @@ spec:
           serviceAccountName: spark-cronjob-sa
 {{- end }}
 ---
-{{- if .Values.global.migrationJobs.enabled }}
+{{- if .Values.global.obsrvjobs.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -395,7 +395,7 @@ spec:
 
 
 ---
-{{- if .Values.global.migrationJobs.enabled }}
+{{- if .Values.global.obsrvjobs.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:

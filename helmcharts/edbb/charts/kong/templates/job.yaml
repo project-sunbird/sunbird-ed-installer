@@ -10,12 +10,12 @@ spec:
   template:
     spec:
       initContainers:
-        - name: wait-for-postgres
+        - name: wait-for-yugabytepostgres
           image: busybox
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["/bin/sh", "-c"]
           args:
-          - "timeout 300 sh -c 'until nc -z {{.Values.global.postgresql.host}} {{.Values.global.postgresql.port}}; do echo waiting for postgres; sleep 10; done'"
+          - "timeout 300 sh -c 'until nc -z {{.Values.global.yugabyte.host}} {{.Values.global.yugabyte.postgresql_port}}; do echo waiting for yugabytepostgres; sleep 10; done'"
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -33,11 +33,15 @@ spec:
             - name: KONG_PG_DATABASE
               value: {{ .Values.kong_pg_database }}
             - name: KONG_PG_HOST
-              value: {{ .Values.kong_pg_host }}
+              value: {{ .Values.global.yugabyte.host }}
+            - name: KONG_PG_PORT
+              value: {{ .Values.global.yugabyte.postgresql_port | quote }}
             - name: KONG_PG_PASSWORD
-              value: {{ .Values.kong_pg_password }}
+              value: {{ .Values.global.yugabyte.password }}
             - name: KONG_PG_USER
-              value: {{ .Values.kong_pg_user }}
+              value: {{ .Values.global.yugabyte.username }}
+            - name: KONG_PG_SSL
+              value: {{ .Values.kong_pg_ssl | quote }}
             - name: KONG_PROXY_ACCESS_LOG
               value: "/dev/stdout"
             - name: KONG_ADMIN_ACCESS_LOG

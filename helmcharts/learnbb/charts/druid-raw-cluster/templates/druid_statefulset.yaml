@@ -62,9 +62,9 @@ spec:
     # Metadata storage
     # For PostgreSQL:
     druid.metadata.storage.type={{ .Values.druid_metadata_storage_type }}
-    druid.metadata.storage.connector.connectURI= {{ .Values.druid_postgres }}://{{ .Values.global.postgresql.host }}:{{ .Values.global.postgresql.port }}/{{ .Values.druid_postgresql_db }}
-    druid.metadata.storage.connector.user={{ .Values.global.postgresql.postgresqlUsername }}
-    druid.metadata.storage.connector.password={{ .Values.global.postgresql.postgresqlPassword }}
+    druid.metadata.storage.connector.connectURI= {{ .Values.druid_postgres }}://{{ .Values.global.yugabyte.host }}:{{ .Values.global.yugabyte.postgresql_port}}/{{ .Values.druid_postgresql_db }}
+    druid.metadata.storage.connector.user={{ .Values.global.yugabyte.username }}
+    druid.metadata.storage.connector.password={{ .Values.global.yugabyte.password }}
 
     # Deep storage
       druid.storage.type={{ .Values.global.cloud_service_provider }}

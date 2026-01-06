@@ -38,9 +38,9 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 data:
-  PG_USER: "{{ .Values.global.postgresql.postgresqlUsername }}"
+  PG_USER: "{{ .Values.global.yugabyte.username }}"
   PG_PASS: "{{ .Values.global.postgresql.postgresqlPassword }}"
-  PG_HOST: "{{ .Values.global.postgresql.host }}"
+  PG_HOST: "{{ .Values.global.yugabyte.host }}"
   PORTAL_HOST: "{{ .Values.PORTAL_HOST }}"
   PORTAL_API_HOST: "{{ .Values.report_service_url }}"
   PORTAL_API_KEY:  "{{ .Values.global.sunbird_admin_api_token }}"

@@ -350,12 +350,12 @@ base_config: |
         port = "{{ .Values.global.postgresql.port }}"
         maxConnections = "{{ .Values.postgres.max_connections }}"
         sslMode = "{{ .Values.postgres.sslmode }}"
-        user = "{{ .Values.global.postgresql.postgresqlUsername }}"
+        user = "{{ .Values.global.yugabyte.username }}"
         password = "{{ .Values.global.postgresql.postgresqlPassword }}"
       }
       lms-cassandra {
-        host = "{{ .Values.global.cassandra.host }}"
-        port = "{{ .Values.global.cassandra.port }}"
+        host = "{{ .Values.global.yugabyte.host }}"
+        port = "{{ .Values.global.yugabyte.port }}"
       }
       schema {
         basePath = "https://{{ .Values.global.object_storage_endpoint }}/contents/schemas/local"

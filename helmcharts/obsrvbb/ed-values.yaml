@@ -1,10 +1,16 @@
-cassandra:
-  enabled: false
 elasticsearch:
   enabled: false
 kafka:
   enabled: false
 redis:
   enabled: false
-postgresql:
+superset:
+  enabled: false
+secor:
+  enabled: false
+druid:
+  enabled: false
+druid-operator:
+  enabled: false
+spark:
   enabled: false

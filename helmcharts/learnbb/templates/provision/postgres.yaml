@@ -7,7 +7,7 @@ metadata:
     app: {{ .Chart.Name }}-postgres-migration
     scope: provisioning
   annotations:
-    {{- .Values.global.postgresql.provisioning.annotations | toYaml | nindent 4}}
+    {{- .Values.global.yugabyte.provisioning.annotations | toYaml | nindent 4}}
 spec:
   backoffLimit: 0
   template:
@@ -26,7 +26,7 @@ spec:
         command: ['sh', '-c']
         args:
         - |
-          "timeout {{ .Values.migration.postgresql.waitTime }} sh -c 'until nc -z {{ .Values.global.postgresql.host }} {{ .Values.global.postgresql.port }}; do echo waiting for postgres; 10; done'"
+          "timeout {{ .Values.migration.yugabyte.waitTime }} sh -c 'until nc -z {{ .Values.global.yugabyte.host }} {{ .Values.global.yugabyte.port }}; do echo waiting for yugabyte postgres; 10; done'"
           # Downloading migration files
           set -e
           export devops_branch={{ .Values.devops_release_branch }}
@@ -42,7 +42,7 @@ spec:
             mountPath: /opt/shared-volume
       containers:
       - name: migration
-        image: {{ .Values.postgres_migration_image }}
+        image: yugabytedb/yugabyte:latest
         imagePullPolicy: IfNotPresent
         command: ['bash', '-c']
         securityContext:
@@ -53,15 +53,15 @@ spec:
         args:
         - |
             set -e
-            export PGHOST={{.Values.global.postgresql.host}}
-            export PGPORT={{.Values.global.postgresql.port}}
-            export PGUSER={{.Values.global.postgresql.postgresqlUsername}}
-            export PGPASSWORD={{.Values.global.postgresql.postgresqlPassword}}
-            {{- range .Values.global.postgresql.databases }}
+            export PGHOST={{.Values.global.yugabyte.host}}
+            export PGPORT={{.Values.global.postgresql_port}}
+            export PGUSER={{.Values.global.yugabyte.username}}
+            export PGPASSWORD={{.Values.global.yugabyte.password}}
+            {{- range .Values.global.yugabyte.databases }}
             # Check if the database exists
-            if ! psql -lqt | cut -d \| -f 1 | grep -qw {{.name}}; then
+            if ! ysqlsh -lqt | cut -d \| -f 1 | grep -qw {{.name}}; then
               # Database doesn't exist, create it
-              echo "SELECT 'CREATE DATABASE \"{{ .name }}\"' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '\"{{ .name }}\"')\gexec" | psql
+              echo "SELECT 'CREATE DATABASE \"{{ .name }}\"' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '\"{{ .name }}\"')\gexec" | ysqlsh
             else
                 echo "Database {{.name}} already exists."
             fi
@@ -70,9 +70,50 @@ spec:
             cd /opt/shared-volume/sunbird-devops/ansible/roles/postgresql-data-update
 
             cd templates
+            {{- range .Values.global.yugabyte.databases }}
+            echo "Applying SQL files to database {{ .name }}..."
+            # ensure search_path and set transaction isolation for this session
+            ysqlsh -d "{{ .name }}" -c "SET default_transaction_isolation TO 'read committed'; SET search_path TO public;"
+
+            mkdir -p /opt/shared-volume/migration-logs || true
+
+            run_sql_file() {
+              sql_file="$1"
+              db="$2"
+              attempts=0
+              backoff=1
+              tmp_log="/opt/shared-volume/migration-logs/${db}-${sql_file}.log"
+              while true; do
+                echo "Running $sql_file against $db (attempt $((attempts+1)))..."
+                # run and capture output
+                ysqlsh -d "$db" -f "$sql_file" >"$tmp_log" 2>&1
+                rc=$?
+                if [ $rc -eq 0 ]; then
+                  echo "Succeeded $sql_file"
+                  return 0
+                fi
+                # detect transient Yugabyte errors
+                if grep -q -E "Restart read required|Catalog Version Mismatch|conflict with concurrently committed data|kConflict|Restart read required" "$tmp_log"; then
+                  attempts=$((attempts+1))
+                  if [ $attempts -ge 5 ]; then
+                    echo "Failed applying $sql_file after $attempts attempts (exit $rc). See $tmp_log"
+                    return $rc
+                  fi
+                  echo "Transient Yugabyte error detected for $sql_file; retrying in ${backoff}s (attempt $((attempts+1)))..."
+                  sleep $backoff
+                  backoff=$((backoff*2))
+                  continue
+                fi
+                # non-transient error
+                echo "Permanent error applying $sql_file (exit $rc). See $tmp_log"
+                return $rc
+              done
+            }
+
             for sql_file in *.sql; do
-                echo "Applying $sql_file..."
-                psql -f "$sql_file"
+              echo "Applying $sql_file to {{ .name }}..."
+              run_sql_file "$sql_file" "{{ .name }}" || true
             done
+            {{- end }}
             echo "PostgreSQL setup completed."
   backoffLimit: 30

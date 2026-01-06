@@ -69,7 +69,7 @@
       },
       "model": "org.ekstep.analytics.job.report.StateAdminReportJob",
       "modelParams": {
-        "sparkCassandraConnectionHost": "{{ .Values.core_cassandra_host | default .Values.global.cassandra.host }}",
+        "sparkCassandraConnectionHost": "{{ .Values.core_cassandra_host | default .Values.global.yugabyte.host }}",
         "sparkElasticsearchConnectionHost": "{{ .Values.sunbird_es_host | default .Values.global.elasticsearch.host }}"
       },
       "output": [
@@ -90,7 +90,7 @@
       },
       "model": "org.ekstep.analytics.job.report.StateAdminGeoReportJob",
       "modelParams": {
-        "sparkCassandraConnectionHost": "{{ .Values.core_cassandra_host | default .Values.global.cassandra.host }}",
+        "sparkCassandraConnectionHost": "{{ .Values.core_cassandra_host | default .Values.global.yugabyte.host }}",
         "sparkElasticsearchConnectionHost": "{{ .Values.sunbird_es_host | default .Values.global.elasticsearch.host }}"
       },
       "output": [
@@ -355,7 +355,7 @@
           "filePath": "druid-reports/",
           "container": "{{ .Values.global.public_container_name }}/telemetry-data-store",
           "folderPrefix": ["slug", "reportName"],
-          "sparkCassandraConnectionHost": "{{ .Values.core_cassandra_host | default .Values.global.cassandra.host }}",
+          "sparkCassandraConnectionHost": "{{ .Values.core_cassandra_host | default .Values.global.yugabyte.host }}",
           "sparkElasticsearchConnectionHost": "{{ .Values.sunbird_es_host | default .Values.global.elasticsearch.host }}"
   
       },
@@ -467,7 +467,7 @@
         "filePath": "druid-reports/",
         "container": "{{ .Values.global.public_container_name }}/telemetry-data-store",
         "folderPrefix": ["slug", "reportName"],
-        "sparkCassandraConnectionHost": "{{ .Values.core_cassandra_host | default .Values.global.cassandra.host }}",
+        "sparkCassandraConnectionHost": "{{ .Values.core_cassandra_host | default .Values.global.yugabyte.host }}",
         "sparkElasticsearchConnectionHost": "{{ .Values.sunbird_es_host | default .Values.global.elasticsearch.host }}"
 
       },

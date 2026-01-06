@@ -2,12 +2,12 @@ nameOverride: "druid-raw-cluster"
 fullnameOverride: "druid-raw-cluster"
 
 replicaCount:
-  druid_coordinator: 0
-  druid_overlord: 0
-  druid_historical: 0
-  druid_indexer: 0
-  druid_router: 0
-  druid_broker: 0
+  druid_coordinator: 1
+  druid_overlord: 1
+  druid_historical: 1
+  druid_indexer: 1
+  druid_router: 1
+  druid_broker: 1
 
 resources:
   druid_broker:

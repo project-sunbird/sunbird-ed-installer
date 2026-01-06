@@ -1,4 +1,4 @@
-{{- if .Values.global.migrationJobs.enabled }}
+{{- if .Values.global.obsrvjobs.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -60,5 +60,4 @@ spec:
           configMap:
             name: ingestion-spec-config
 {{- end }}
-
 

@@ -1,30 +1,30 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Chart.Name }}-postgres-migration-job
+  name: {{ .Chart.Name }}-yugabyte-postgres-migration-job
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ .Chart.Name }}-postgres-migration
+    app: {{ .Chart.Name }}-yugabyte-postgres-migration
     scope: provisioning
   annotations:
-    {{.Values.global.postgresql.provisioning.annotations | toYaml }}
+    {{.Values.global.yugabyte.provisioning.annotations | toYaml }}
 spec:
   template:
     metadata:
       labels:
-        app: {{ .Chart.Name }}-postgres-migration
+        app: {{ .Chart.Name }}-yugabyte-postgres-migration
     spec:
       restartPolicy: Never
       initContainers:
-      - name: wait-for-postgres
+      - name: wait-for-yugabyte-postgres
         image: busybox
         imagePullPolicy: IfNotPresent
         command: ['sh', '-c']
         args:
-        - "timeout {{ .Values.migration.postgresql.waitTime }} sh -c 'until nc -z {{ .Values.global.postgresql.host }} {{ .Values.global.postgresql.port }}; do echo waiting for postgres; sleep 10; done'"
+        - "timeout {{ .Values.migration.yugabyte.waitTime }} sh -c 'until nc -z {{ .Values.global.yugabyte.host }} {{ .Values.global.yugabyte.postgresql_port}}; do echo waiting for yugabytepostgres; sleep 10; done'"
       containers:
       - name: migration
-        image: {{ .Values.global.postgresql.image.registry }}/{{ .Values.global.postgresql.image.repository }}:{{.Values.global.postgresql.image.tag }}
+        image: yugabytedb/yugabyte:latest
         imagePullPolicy: IfNotPresent
         command: ['bash', '-c']
         securityContext:
@@ -33,19 +33,25 @@ spec:
         - |
             set -e
             export devops_branch={{ .Values.devops_release_branch }}
-            export PGHOST={{.Values.global.postgresql.host}}
-            export PGPORT={{.Values.global.postgresql.port}}
-            export PGUSER={{.Values.global.postgresql.postgresqlUsername}}
-            export PGPASSWORD={{.Values.global.postgresql.postgresqlPassword}}
-            {{- range .Values.global.postgresql.databases }}
+            export PGHOST={{.Values.global.yugabyte.host}}
+            export PGPORT={{.Values.global.yugabyte.postgresql_port}}
+            export PGUSER=yugabyte
+            export PGPASSWORD=yugabyte
+            {{- range .Values.global.yugabyte.databases }}
             # Check if the database exists
-            if ! psql -lqt | cut -d \| -f 1 | grep -qw {{.name}}; then
+            # Ensure ysqlsh is available in the image
+            if ! command -v ysqlsh >/dev/null 2>&1; then
+              echo "ysqlsh not found; please use an image with Yugabyte YSQL client (e.g., yugabytedb/yugabyte)."
+              exit 1
+            fi
+
+            if ! ysqlsh -lqt | cut -d \| -f 1 | grep -qw {{.name}}; then
               # Database doesn't exist, create it
-              echo "SELECT 'CREATE DATABASE \"{{ .name }}\"' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '\"{{ .name }}\"')\gexec" | psql
+              echo "SELECT 'CREATE DATABASE \"{{ .name }}\"' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '\"{{ .name }}\"')\gexec" | ysqlsh
             else
                 echo "Database {{.name}} already exists."
             fi
             {{- end }}
 
-            echo "PostgreSQL setup completed."
+            echo "YugabyteSQL setup completed."
   backoffLimit: 30

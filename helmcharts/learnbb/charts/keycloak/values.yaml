@@ -104,10 +104,15 @@ serviceMonitor: {}
   # jobLabel: "app.kubernetes.io/name"
 
 # Example values.yaml structure
-initContainers: {}
-  # - name: init-myservice
-  #   image: busybox:1.28
-  #   command: ['sh', '-c', "until nslookup kubernetes.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for myservice; sleep 2; done"]
+initContainers:
+  - name: wait-for-migrations
+    image: alpine:3.18
+    imagePullPolicy: IfNotPresent
+    command: ['sh', '-c']
+    # Simple fixed wait to allow external postgres migration Job to finish.
+    # Adjust the sleep seconds as needed before deploying.
+    args:
+      - 'sleep 300' # increased grace period: 300s (5 minutes)
 
 sidecars: {}
   # - name: log-reader # Sidecar container

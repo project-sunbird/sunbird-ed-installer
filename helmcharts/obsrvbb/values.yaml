@@ -63,43 +63,33 @@ elasticsearch: &es
     tag: 11-debian-11-r54
 
 
-postgresql: &postgresql
+yugabyte: &yugabyte
   enabled: true
-  image:
-    repository: sunbirded.azurecr.io/postgresql
-    tag: 11.14.0
-  postgresqlUsername: postgres
-  postgresqlPassword: postgres
-  host: postgresql
-  port: 5432
-  provisioning:
-    annotations: *provisioningAnnotations
-  persistence:
-    size: 25Gi
-  databases:
-  - name: "analytics"
-  - name: "druid_raw"
-  - name: "druid"
-
-cassandra: &cassandra
-  enabled: true
-  nameOverride: "cassandra"
-  fullnameOverride: "cassandra"
-  host: "cassandra"
+  nameOverride: "yugabyte"
+  fullnameOverride: "yugabyte"
+  host: "yb-tserver-service" 
   port: 9042
-  provisioning:
-    annotations: *provisioningAnnotations
+  postgresql_port: 5433
   image:
-    tag: 3.11.13-debian-11-r3
-  extraEnvVars:
-    - name: CASSANDRA_AUTHENTICATOR
-      value: AllowAllAuthenticator
-    - name: CASSANDRA_AUTHORIZER
-      value: AllowAllAuthorizer
+    registry: yugabytedb
+    repository: yugabyte
+    tag: 2025.2.0.0-b131 
   commonAnnotations:
     "helm.sh/hook-weight": "-5"
+  provisioning:
+    annotations: *provisioningAnnotations  
   persistence:
-    size: 25Gi
+    size: 25Gi  
+  # Force single replica for Yugabyte masters and tservers (override subchart defaults)
+  replicas:
+    master: 3
+    tserver: 3  
+  username: yugabyte
+  password: "yugabyte" 
+  databases:
+    - name: "analytics"
+    - name: "druid_raw"
+    - name: "druid"    
 
 zookeeper: &zookeeper
   fullnameOverride: zookeeper
@@ -378,7 +368,7 @@ spark: &spark
     create: false  # Prevent Helm from creating a new service account
     name: "" # The existing Kubernetes service account
   master:
-      replicaCount: 1
+      replicaCount: 0
       <<: *confVolume
       extraEnvVars:
         - name: BITNAMI_DEBUG
@@ -403,16 +393,14 @@ spark: &spark
           cpu: 0.5
           memory: 1Gi    
   worker:
-      replicaCount: 1
-    
+      replicaCount: 0
 
 
 global:
   redis: *redis
   zookeeper: *zookeeper
   kafka: *kafka
-  postgresql: *postgresql
-  cassandra: *cassandra
+  yugabyte: *yugabyte
   elasticsearch: *es
   druid: *druid
   installation: *installation
@@ -432,11 +420,18 @@ migration:
   postgresql:
     waitTimeout: 120
 
-
 superset:
-  enabled: true
+  enabled: false
   image:
     repository: sunbirded.azurecr.io/superset
     tag: release-7.0.0
     pullPolicy: Always
-  
+
+secor:
+  enabled: false
+
+druid-operator:
+  enabled: false
+
+druid:
+  enabled: false  

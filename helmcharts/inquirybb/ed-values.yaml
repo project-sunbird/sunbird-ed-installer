@@ -1,5 +1,4 @@
-cassandra:
-  enabled: false
+
 elasticsearch:
   enabled: false
 kafka:
@@ -8,3 +7,5 @@ redis:
   enabled: false
 neo4j:
   enabled: false
+yugabyte:
+  enabled: false  
