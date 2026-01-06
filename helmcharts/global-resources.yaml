@@ -339,25 +339,38 @@ userorg:
       memory: 1024Mi
 
 kafka:
-  resources:
-    limits:
-      cpu: 1
-      memory: 2048Mi
-    requests:
-      cpu: 750m
-      memory: 1024Mi
-  persistence:
-    size: 10Gi
-  zookeeper:  
-    persistence:
-      size: 2Gi
+  broker:
     resources:
       limits:
-        cpu: 256m
-        memory: 512Mi
+        cpu: 1
+        memory: 2048Mi
       requests:
-        cpu: 100m
-        memory: 128Mi
+        cpu: 750m
+        memory: 1024Mi
+    persistence:
+      size: 8Gi
+  controller:
+    replicaCount: 3
+    resources:
+      limits:
+        cpu: 1
+        memory: 2048Mi
+      requests:
+        cpu: 750m
+        memory: 1024Mi
+    persistence:
+      size: 8Gi
+
+  # zookeeper:  
+  #   persistence:
+  #     size: 2Gi
+  #   resources:
+  #     limits:
+  #       cpu: 256m
+  #       memory: 512Mi
+  #     requests:
+  #       cpu: 100m
+  #       memory: 128Mi
 
 neo4j:
   resources:
