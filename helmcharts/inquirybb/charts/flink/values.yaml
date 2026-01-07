@@ -253,7 +253,7 @@ base_config: |
       port = {{ .Values.global.redis.port }}
     }
     lms-cassandra {
-     host = "{{ .Values.global.cassandra.host }}"
+      host = "{{ .Values.global.cassandra.host }}"
       port = {{ .Values.global.cassandra.port }}
     }
     neo4j {
