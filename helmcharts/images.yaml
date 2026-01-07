@@ -74,10 +74,6 @@ images:
     repository: "ghcr.io/sunbird-ed/sunbirded-portal/player"
     tag: "release-8.1.0_rc5_61af49d"
 
-  report: &report
-    repository: "ghcr.io/project-sunbird/sunbird-report-service"
-    tag: "release-8.0.0_rc2_ea97f3a_3"
-
   router: &router
     repository: "sunbirded.azurecr.io/router"
     tag: "release-3.9.0_RC1_01339f9_07941f0_1_router"
@@ -273,11 +269,6 @@ internal: &internal
 
   player:
     image: *player
-    imagePullSecrets:
-      - name: "registry-secret-name"
-
-  report:
-    image: *report
     imagePullSecrets:
       - name: "registry-secret-name"
 

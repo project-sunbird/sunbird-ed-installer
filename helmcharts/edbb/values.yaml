@@ -169,8 +169,6 @@ global:
 
 knowledgemw:
   opa_enabled: true
-report:
-  opa_enabled: true
 
 migration:
   postgresql:

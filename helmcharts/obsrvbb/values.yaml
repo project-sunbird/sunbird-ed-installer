@@ -110,4 +110,4 @@ global:
   redis: *redis
   zookeeper: *zookeeper
   kafka: *kafka
-  installation: *installation
+
