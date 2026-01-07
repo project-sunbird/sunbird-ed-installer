@@ -189,8 +189,6 @@ log4j_console_properties: |
   logger.kafka.level = ERROR
   logger.hadoop.name = org.apache.hadoop
   logger.hadoop.level = ERROR
-  logger.zookeeper.name = org.apache.zookeeper
-  logger.zookeeper.level = ERROR
 
   # Log all infos to the console
   appender.console.name = ConsoleAppender
@@ -205,7 +203,6 @@ log4j_console_properties: |
 base_config: |
   kafka {
       broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
-      zookeeper = "{{ .Values.global.zookeeper.host }}:{{ .Values.global.zookeeper.port }}"
       producer {
         max-request-size = {{ .Values.producer_max_request_size }}
       }

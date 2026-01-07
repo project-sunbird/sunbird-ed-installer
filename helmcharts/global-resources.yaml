@@ -342,24 +342,24 @@ kafka:
   broker:
     resources:
       limits:
-        cpu: 1
+        cpu: 750m
         memory: 2048Mi
       requests:
         cpu: 750m
         memory: 1024Mi
     persistence:
-      size: 8Gi
+      size: 2Gi
   controller:
     replicaCount: 3
     resources:
       limits:
-        cpu: 1
-        memory: 2048Mi
+        cpu: 500m
+        memory: 512Mi
       requests:
-        cpu: 750m
-        memory: 1024Mi
+        cpu: 100m
+        memory: 128Mi
     persistence:
-      size: 8Gi
+      size: 2Gi
 
   # zookeeper:  
   #   persistence:

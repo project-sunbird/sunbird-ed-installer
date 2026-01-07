@@ -36,8 +36,8 @@ dependencies:
     version: 10.1.0
     condition: cassandra.enabled
   - name: kafka
-    repository: https://charts.bitnami.com/bitnami
-    version: 20.0.2
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 32.2.15
     condition: kafka.enabled
   - name: elasticsearch
     repository: https://charts.bitnami.com/bitnami
