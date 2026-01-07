@@ -132,8 +132,8 @@ global:
   kafka:
     host: kafka
     port: 9092
-  cassandra:
-    host: cassandra
+  yugabyte:
+    host: yb-tserver-service
     port: 9042
   redis:
     host: redis-master

@@ -5,9 +5,6 @@ dependencies:
 - name: redis
   repository: https://charts.bitnami.com/bitnami
   version: 17.8.3
-- name: cassandra
-  repository: https://charts.bitnami.com/bitnami
-  version: 10.1.0
 - name: elasticsearch
   repository: https://charts.bitnami.com/bitnami
   version: 19.5.14
@@ -17,5 +14,7 @@ dependencies:
 - name: neo4j
   repository: ""
   version: 0.1.0
-digest: sha256:305864e886006e585f2a0bbe2d229684c80bb1d6a386439fafaa482c328e9dd9
-generated: "2024-01-12T20:06:31.590485+05:30"
+- name: yugabyte
+  repository: https://charts.yugabyte.com
+  version: 2025.2.0   
+digest: sha2

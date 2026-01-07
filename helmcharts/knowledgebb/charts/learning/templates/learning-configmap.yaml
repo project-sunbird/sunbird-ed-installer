@@ -284,8 +284,8 @@ data:
     # Max count to be reserved against a content
     learnig.reserve_dialcode.max_count=2500
 
-    cassandra.lp.connection="{{ .Values.global.cassandra.host }}:{{ .Values.global.cassandra.port }}"
-    cassandra.lpa.connection="{{ .Values.global.cassandra.host }}:{{ .Values.global.cassandra.port }}"
+    cassandra.lp.connection="{{ .Values.global.yugabyte.host }}:{{ .Values.global.yugabyte.port }}"
+    cassandra.lpa.connection="{{ .Values.global.yugabyte.host }}:{{ .Values.global.yugabyte.port }}"
 
     compositesearch.index.name="compositesearch"
 

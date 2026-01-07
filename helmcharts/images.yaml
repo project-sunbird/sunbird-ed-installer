@@ -73,7 +73,7 @@ images:
 
   report: &report
     repository: "ghcr.io/project-sunbird/sunbird-report-service"
-    tag: "release-8.0.0_rc2_ea97f3a_3"
+    tag: "release-8.1.0_rc1_ea97f3a_4"
 
   router: &router
     repository: "sunbirded.azurecr.io/router"
@@ -117,7 +117,7 @@ images:
 
   certregistry: &certregistry
     repository: "ghcr.io/sunbird-lern/certificate-registry"
-    tag: "release-8.1.0_rc1_623a7ac_2"
+    tag: "release-8.1.0_rc2_546e8d5_3"
 
   certificateapi: &certificateapi
     repository: "sunbirded.azurecr.io/sunbird-rc-certificate-api"
@@ -137,7 +137,7 @@ images:
 
   keycloak-kids-keys: &keycloak-kids-keys
     repository: "sunbirded.azurecr.io/keycloak-kids-keys"
-    tag: "0.1.5"
+    tag: "v3"
 
   lms: &lms
     repository: "ghcr.io/sunbird-lern/lms-service"
@@ -148,8 +148,8 @@ images:
     tag: "release-8.1.0_rc3_eaf6c11_8"
 
   print: &print
-    repository: "sunbirded.azurecr.io/print-service"
-    tag: "release-3.1.0_f9a608c"
+    repository: "ghcr.io/project-sunbird/print-service"
+    tag: "release-8.1.0_rc2_b42d8db_1"
 
   registry: &registry
     repository: "sunbirded.azurecr.io/sunbird-rc-core"
@@ -441,9 +441,9 @@ global:
     tag: "release-8.1.0_rc1_e7ac747"
 
   learnflink:
-    registry: "ghcr.io"
-    repository: "sunbird-lern/data-pipeline"
-    tag: "release-8.1.0_rc1_7ea4c2c"
+    registry: "chethann07"
+    repository: "data-pipeline"
+    tag: "yugabyte_migration_v4"
 
   inquiryflink:
     registry: "sunbirded.azurecr.io"
