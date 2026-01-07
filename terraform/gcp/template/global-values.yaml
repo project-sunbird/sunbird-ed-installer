@@ -6,7 +6,7 @@ default_passwords:
 superset:
   credentials:
     adminUser: admin
-    adminPassword: *superset-admin-password   
+    adminPassword: *superset-admin-password
 kube-prometheus-stack:
   grafana:
     adminUser: admin
