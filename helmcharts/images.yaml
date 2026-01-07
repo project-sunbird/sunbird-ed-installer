@@ -137,7 +137,7 @@ images:
 
   keycloak-kids-keys: &keycloak-kids-keys
     repository: "sunbirded.azurecr.io/keycloak-kids-keys"
-    tag: "v3"
+    tag: "0.1.5"
 
   lms: &lms
     repository: "ghcr.io/sunbird-lern/lms-service"
@@ -148,8 +148,8 @@ images:
     tag: "release-8.1.0_rc3_eaf6c11_8"
 
   print: &print
-    repository: "ghcr.io/project-sunbird/print-service"
-    tag: "release-8.1.0_rc2_b42d8db_1"
+    repository: "sunbirded.azurecr.io/print-service"
+    tag: "release-3.1.0_f9a608c"
 
   registry: &registry
     repository: "sunbirded.azurecr.io/sunbird-rc-core"
@@ -198,7 +198,7 @@ images:
 
   nlwebflink: &nlwebflink
     repository: "sunbirded.azurecr.io/flink-nlweb-job"
-    tag: "0.0.2"
+    tag: "v1.0.0"
  
 
 # Internal block with pull secrets
@@ -441,9 +441,9 @@ global:
     tag: "release-8.1.0_rc1_e7ac747"
 
   learnflink:
-    registry: "chethann07"
-    repository: "data-pipeline"
-    tag: "yugabyte_migration_v4"
+    registry: "ghcr.io"
+    repository: "sunbird-lern/data-pipeline"
+    tag: "release-8.1.0_rc1_7ea4c2c"
 
   inquiryflink:
     registry: "sunbirded.azurecr.io"
