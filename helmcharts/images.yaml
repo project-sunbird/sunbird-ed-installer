@@ -61,6 +61,7 @@ images:
   alloy: &alloy
     registry: "docker.io"
     repository: grafana/alloy
+    tag: v1.12.1
 
   discussion_mw: &discussion_mw
     repository: "sunbirded.azurecr.io/discussion-middleware"
