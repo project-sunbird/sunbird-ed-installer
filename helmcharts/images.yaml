@@ -281,7 +281,7 @@ internal: &internal
     imagePullSecrets:
       - name: "registry-secret-name"
 
-  discussion_mw:
+  discussionmw:
     image: *discussion_mw
     imagePullSecrets:
       - name: "registry-secret-name"
@@ -311,27 +311,27 @@ internal: &internal
     imagePullSecrets:
       - name: "registry-secret-name"
 
-  kong_apis:
+  kong-apis:
     image: *kong_apis
     imagePullSecrets:
       - name: "registry-secret-name"
 
-  kong_consumer:
+  kong-consumer:
     image: *kong_consumer
     imagePullSecrets:
       - name: "registry-secret-name"
 
-  knowledge_mw:
+  knowledgemw:
     image: *knowledge_mw
     imagePullSecrets:
       - name: "registry-secret-name"
 
-  nginx_private_ingress:
+  nginx-private-ingress:
     image: *nginx_private_ingress
     imagePullSecrets:
       - name: "registry-secret-name"
 
-  nginx_public_ingress:
+  nginx-public-ingress:
     image: *nginx_public_ingress
     imagePullSecrets:
       - name: "registry-secret-name"
