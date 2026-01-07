@@ -197,7 +197,7 @@ images:
     tag: "0.0.1"
 
   nlwebflink: &nlwebflink
-    repository: "sunbirded.azurecr.io/flink-nlweb-job"
+    repository: "sunbirded.azurecr.io/flink-nlweb"
     tag: "v1.0.0"
  
 
