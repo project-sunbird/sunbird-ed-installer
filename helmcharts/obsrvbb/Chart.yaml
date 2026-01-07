@@ -35,21 +35,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     version: 20.0.2
     condition: kafka.enabled
-  - name: cassandra
-    repository: https://charts.bitnami.com/bitnami
-    version: 10.1.0
-    condition: cassandra.enabled
   - name: elasticsearch
     repository: https://charts.bitnami.com/bitnami
     version: 19.5.4
-    condition: elasticsearch.enabled
-  - name: spark
-    repository: https://charts.bitnami.com/bitnami
-    version: 6.3.2
-    condition: spark.enabled
-  - name: postgresql
-    condition: postgresql.enabled
-    version: 10.16.3
-  - name: superset
-    version: 0.1.0
-    condition: superset.enabled
+    condition: elasticsearch.enabled       

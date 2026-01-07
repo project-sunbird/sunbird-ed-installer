@@ -1,13 +1,8 @@
 deploy_dial_services:  &deploy_dial_services  "true"
 default_passwords:
   grafana_admin_password: &grafana-admin-password "prom-operator"
-  superset_admin_password: &superset-admin-password "admin"
   keycloak_password: &keycloak-password "admin"
-  postgresql_password: &postgresql-password "postgres"
-superset:
-  credentials:
-    adminUser: admin
-    adminPassword: *superset-admin-password
+  postgresql_password: &-password "postgres"
 kube-prometheus-stack:
   grafana:
     adminUser: admin

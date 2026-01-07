@@ -1,13 +1,3 @@
-#edbb
-bot:
-  resources:
-    requests:
-      cpu: 100m
-      memory: 100Mi
-    limits:
-      cpu: 1000m
-      memory: 1024Mi
-
 discussionmw:
   resources:
     requests:
@@ -217,17 +207,6 @@ druid-operator:
       cpu: 1
       memory: 1024Mi   
 
-cassandra:
-  persistence:
-    size: 25Gi
-  resources:
-    requests:
-      cpu: 520m
-      memory: 3Gi
-    limits:
-      cpu: 750m
-      memory: 10Gi 
-
 druid-raw-cluster:
   druid_indexer_persistent_volume_size: 25Gi 
   druid_historical_persistent_volume_size: 25Gi
@@ -371,17 +350,6 @@ neo4j:
     pvc:
       storage: 25Gi
 
-postgresql: 
-  persistence:
-    size: 25Gi
-  resources:
-    limits:
-      cpu: 250m
-      memory: 512Mi
-    requests:
-      cpu: 250m
-      memory: 256Mi
-
 redis: 
   master:
     persistence:
@@ -394,48 +362,7 @@ redis:
       requests:
         cpu: 0.5
         memory: 1Gi 
-
-spark: 
-  master:
-    resources:
-      limits:
-        cpu: 500m
-        memory: 2Gi
-      requests:
-        cpu: 500m
-        memory: 1Gi
-  persistence:
-    spark_data_pvc:
-      size: 25Gi
-    log_data_pvc:
-      size: 25Gi    
-
-#Obsrvbb
-analytics:
-  resources:
-    requests:
-      cpu: 500m
-      memory: 1G
-    limits:
-      cpu: 1
-      memory: 2G
-
-# secor:
-#   baseconfig:
-#     storage:
-#       size: 10Gi
-#     requests:
-#       cpu: 500m
-#       memory: 700Mi
-
-superset:
-  resources:
-    limits:
-      cpu: 512m
-      memory: 1024Mi
-    requests:
-      cpu: 250m
-      memory: 512Mi
+ 
 
 telemetry:
   resources:
@@ -486,14 +413,15 @@ kubernetes-dashboard:
           cpu: 250m
           memory: 400Mi
 
-promtail:
-  resources:
-    limits:
-      cpu: 200m
-      memory: 128Mi
-    requests:
-      cpu: 100m
-      memory: 128Mi
+alloy:
+ alloy:
+    resources:
+      limits:
+        cpu: 200m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
 
 reloader:
   reloader:
@@ -571,3 +499,20 @@ elasticsearch:
         memory: "4Gi"
     persistence:
       size: 25Gi
+yugabyte:
+  resource:
+    master:
+      requests:
+        cpu: "1"
+        memory: 2Gi
+      limits:
+        cpu: "1.5"
+        memory: 2Gi  ## Ensure the 'memory' value is strictly in 'Gi' or 'G' format. Deviating from these formats
+
+    tserver:
+      requests:
+        cpu: "1"
+        memory: 4Gi
+      limits:
+        cpu: "1.5"
+        memory: 4Gi

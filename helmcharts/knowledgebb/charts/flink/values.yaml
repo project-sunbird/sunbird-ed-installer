@@ -231,8 +231,8 @@ base_config: |
       }
   }
   lms-cassandra {
-  host = "{{ .Values.global.cassandra.host }}"
-  port = "{{ .Values.global.cassandra.port }}"
+  host = "{{ .Values.global.yugabyte.host }}"
+  port = "{{ .Values.global.yugabyte.port }}"
   }
 
   neo4j {
@@ -616,239 +616,6 @@ flink_jobs:
 
     job_classname: org.sunbird.job.dialcodecontextupdater.task.DialcodeContextUpdaterStreamTask
 
-
-  qrcode-image-generator:
-    enabled: true
-    serviceMonitor: *serviceMonitor
-    config: |+
-      include file("/data/flink/conf/base-config.conf")
-      job {
-        env = "{{ .Values.global.env }}"
-      }
-
-      kafka {
-        input.topic = "{{ .Values.global.env }}.knowlg.qrimage.request"
-        groupId = "{{ .Values.global.env }}-qrcode-image-generator-group"
-      }
-
-      task {
-        consumer.parallelism = 1
-        parallelism = 1
-        window.time = 60
-      }
-
-      lp.tmp.file.location="/tmp"
-
-      qr.image {
-          imageFormat="png"
-          bottomMargin=0
-          margin=1
-      }
-
-      lms-cassandra {
-        keyspace = "dialcodes"
-        table {
-          image = "dialcode_images"
-          batch = "dialcode_batch"
-        }
-      }
-
-      # Default value is 120
-      max_allowed_character_for_file_name = 120
-
-      cloudstorage.metadata.replace_absolute_path=true
-      cloudstorage.relative_path_prefix="DIAL_STORAGE_BASE_PATH"
-      cloudstorage.read_base_path="{{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_read_base_path "context" $) }}"
-      cloudstorage.write_base_path=["{{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_read_base_path "context" $) }}"]
-      cloudstorage.metadata.list={{ .Values.cloudstorage_metadatalist }}
-
-      cloud_storage_type="{{ .Values.global.sunbird_cloud_storage_provider }}"
-      cloud_storage_key="{{ .Values.global.cloud_storage_access_key }}"
-      cloud_storage_secret="{{ .Values.global.cloud_storage_secret_key }}"
-      cloud_storage_container="{{ .Values.global.public_container_name }}"
-      cloud_storage_endpoint=""
-      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
-
-
-    flink-conf: |+
-      jobmanager.memory.flink.size: 1024m
-      taskmanager.memory.flink.size: 1024m
-      taskmanager.numberOfTaskSlots: 1
-      jobManager.numberOfTaskSlots: 1
-      parallelism.default: 1
-      jobmanager.execution.failover-strategy: region
-      taskmanager.memory.network.fraction: 0.1
-      scheduler-mode: reactive
-      heartbeat.timeout: 8000
-      heartbeat.interval: 5000
-      taskmanager.memory.process.size: 1700m
-      jobmanager.memory.process.size: 1600m
-      # classloader.resolve-order: "parent-first"
-      # state.savepoints.dir: file:///tmp
-
-    job_classname: org.sunbird.job.qrimagegenerator.task.QRCodeImageGeneratorTask
-
-  video-stream-generator:
-    enabled: true
-    serviceMonitor: *serviceMonitor
-    config: |+
-      include file("/data/flink/conf/base-config.conf")
-      job {
-        env = "{{ .Values.global.env }}"
-      }
-
-      kafka {
-        input.topic = "{{ .Values.global.env }}.knowlg.content.postpublish.request"
-        groupId = "{{ .Values.global.env }}-video-stream-generator-group"
-      }
-
-      task {
-        consumer.parallelism = 1
-        parallelism = 1
-        timer.duration = 60
-        max.retries = 10
-      }
-
-      lms-cassandra {
-        keyspace = "{{ .Values.global.env }}_platform_db"
-        table = "job_request"
-      }
-
-      service {
-        content {
-          basePath = "https://content:9000"
-        }
-      }
-
-      # Azure Media Service Config
-      azure {
-        location = "centralindia"
-        tenant = "tenant"
-        subscription_id = "subscription id "
-
-        login {
-          endpoint="https://login.microsoftonline.com"
-        }
-
-        api {
-          endpoint="https://management.azure.com"
-          version = "2018-07-01"
-        }
-
-        account_name = "account name"
-        resource_group_name = "group name"
-
-        transform {
-          default = "media_transform_default"
-          hls = "media_transform_hls"
-        }
-
-        stream {
-          base_url = "https://sunbirdspikemedia-inct.streaming.media.azure.net"
-          endpoint_name = "default"
-          protocol = "Hls"
-          policy_name = "Predefined_ClearStreamingOnly"
-        }
-
-        token {
-          client_key = "client key"
-          client_secret = "client secret"
-        }
-      }
-
-      azure_tenant="tenant"
-      azure_subscription_id="subscription id"
-      azure_account_name="{{ .Values.global.cloud_storage_access_key }}"
-      azure_resource_group_name="group name"
-      azure_token_client_key="client key"
-      azure_token_client_secret="client secret"
-
-      # CSP Name. e.g: aws or azure
-      media_service_type="aws"
-
-      #AWS Elemental Media Convert Config
-      aws {
-        region="ap-south-1"
-        content_bucket_name="awsmedia-spike"
-        token {
-          access_key="access key"
-          access_secret="access secret"
-        }
-        api {
-          endpoint="API Endpoint for media convert"
-          version="2017-08-29"
-        }
-        service {
-          name="mediaconvert"
-          queue="Media Convert Queue Id"
-          role="Media Convert Role Name"
-        }
-        stream {
-          protocol="Hls"
-        }
-      }
-
-      media_service_job_success_status=["FINISHED", "COMPLETE"]
-      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
-
-    flink-conf: |+
-      jobmanager.memory.flink.size: 1024m
-      taskmanager.memory.flink.size: 1024m
-      taskmanager.numberOfTaskSlots: 1
-      jobManager.numberOfTaskSlots: 1
-      parallelism.default: 1
-      jobmanager.execution.failover-strategy: region
-      taskmanager.memory.network.fraction: 0.1
-      scheduler-mode: reactive
-      heartbeat.timeout: 8000
-      heartbeat.interval: 5000
-      taskmanager.memory.process.size: 1700m
-      jobmanager.memory.process.size: 1600m
-      # classloader.resolve-order: "parent-first"
-      # state.savepoints.dir: file:///tmp
-
-    job_classname: org.sunbird.job.videostream.task.VideoStreamGeneratorStreamTask
-
-  # audit-history-indexer:
-  #   enabled: true
-  #   config: |+
-  #     include file("/data/flink/conf/base-config.conf")
-  #     job {
-  #       env = "{{ .Values.global.env }}"
-  #     }
-
-  #     kafka {
-  #       input.topic = "{{ .Values.global.env }}.knowlg.learning.graph.events"
-  #       groupId = "{{ .Values.global.env }}-audit-history-indexer-group"
-  #     }
-
-  #     task {
-  #       consumer.parallelism = 1
-  #       parallelism = 1
-  #       window.time = 60
-  #     }
-
-  #     timezone = "IST"
-  #     schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
-
-  #   flink-conf: |+
-  #     jobmanager.memory.flink.size: 1024m
-  #     taskmanager.memory.flink.size: 1024m
-  #     taskmanager.numberOfTaskSlots: 1
-  #     jobManager.numberOfTaskSlots: 1
-  #     parallelism.default: 1
-  #     jobmanager.execution.failover-strategy: region
-  #     taskmanager.memory.network.fraction: 0.1
-  #     scheduler-mode: reactive
-  #     heartbeat.timeout: 8000
-  #     heartbeat.interval: 5000
-  #     taskmanager.memory.process.size: 1700m
-  #     jobmanager.memory.process.size: 1600m
-  #     # classloader.resolve-order: "parent-first"
-  #     # state.savepoints.dir: file:///tmp
-
-  #   job_classname: org.sunbird.job.audithistory.task.AuditHistoryIndexerStreamTask
-
   content-publish:
     enabled: true
     serviceMonitor: *serviceMonitor
@@ -877,7 +644,18 @@ flink_jobs:
       redis {
         database {
           contentCache.id = 0
+         qsCache.id = 1
         }
+      }
+
+      question {
+        keyspace = "{{ .Values.global.env }}_question_store"
+        table = "question_data"
+      }
+
+      questionset {
+        keyspace = "{{ .Values.global.env }}_hierarchy_store"
+        table = "questionset_hierarchy"
       }
 
       content {
@@ -887,7 +665,7 @@ flink_jobs:
         keyspace = "{{ .Values.global.env }}_content_store"
         table = "content_data"
         tmp_file_location = "/tmp"
-        objectType = ["Content", "ContentImage","Collection","CollectionImage"]
+        objectType = ["Content", "ContentImage","Collection","CollectionImage", "Question", "QuestionImage", "QuestionSet", "QuestionSetImage"]
         mimeType = ["application/pdf",
                                     "application/vnd.ekstep.ecml-archive",
                                     "application/vnd.ekstep.html-archive",
@@ -942,7 +720,9 @@ flink_jobs:
                                     "application/vnd.ekstep.plugin-archive",
                                     "video/x-youtube",
                                     "video/youtube",
-                                    "text/x-url"]
+                                    "text/x-url",
+                                    "application/vnd.sunbird.question",
+                                    "application/vnd.sunbird.questionset"]
         asset_download_duration = "60 seconds"
 
         stream {
@@ -973,6 +753,7 @@ flink_jobs:
       }
 
       service {
+        print.enabled = false
         print.basePath = "http://print:5000"
       }
 
@@ -1028,7 +809,12 @@ flink_jobs:
       cloud_storage_secret="{{ .Values.global.cloud_storage_secret_key }}"
       cloud_storage_container="{{ .Values.global.public_container_name }}"
       cloud_storage_endpoint=""
-      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
+      schema {
+        basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
+        supportedVersion = {
+          itemset = "2.0"
+        }
+      }
       ai_search_enabled = true
 
     flink-conf: |+
