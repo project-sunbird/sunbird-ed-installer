@@ -340,8 +340,6 @@ redis:
         cpu: 0.5
         memory: 1Gi 
 
-
-
 telemetry:
   resources:
     requests:
@@ -350,6 +348,15 @@ telemetry:
     limits:
       cpu: 1
       memory: 1024Mi
+
+superset:
+  resources:
+    limits:
+      cpu: 512m
+      memory: 1024Mi
+    requests:
+      cpu: 250m
+      memory: 512Mi      
 
 #monitoring
 loki:

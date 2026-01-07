@@ -38,4 +38,7 @@ dependencies:
   - name: elasticsearch
     repository: https://charts.bitnami.com/bitnami
     version: 19.5.4
-    condition: elasticsearch.enabled       
+    condition: elasticsearch.enabled   
+  - name: superset
+    version: 0.1.0
+    condition: superset.enabled     

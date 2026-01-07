@@ -188,6 +188,10 @@ images:
     repository: "ghcr.io/project-sunbird/sunbird-telemetry-service"
     tag: "release-8.0.0_rc3_f082527_4"
 
+  superset: &superset
+    repository: "sunbirded.azurecr.io/superset"
+    tag: "release-7.0.0" 
+
   nlweb: &nlweb
     repository: "sanketikahub/nlweb"
     tag: "0.0.1"
@@ -409,6 +413,11 @@ internal: &internal
     image: *telemetry
     imagePullSecrets:
       - name: "registry-secret-name"
+
+  superset:
+    image: *superset
+    imagePullSecrets:
+      - name: "registry-secret-name"    
 
   nlweb:
     image: *nlweb

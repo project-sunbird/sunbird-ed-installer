@@ -97,6 +97,12 @@ kafka: &kafka
     - name: "{{ .Values.global.env }}.nlweb.ingest"
     parallel: 1
 
+superset:
+  enabled: true
+  image:
+    repository: sunbirded.azurecr.io/superset
+    tag: release-7.0.0
+    pullPolicy: Always
 
 env: &env
 default: "dev"

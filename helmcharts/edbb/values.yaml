@@ -85,6 +85,7 @@ postgresql: &postgresql
   databases:
   - name: "kong"
   - name: "druid_raw"
+  - name: "superset"
   primary:
     resources:
       limits:
