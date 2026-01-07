@@ -80,14 +80,6 @@ player:
       cpu: 1
       memory: 1G      
 
-report: 
-  resources:
-    requests:
-      cpu: 100m
-      memory: 100Mi
-    limits:
-      cpu: 1000m
-      memory: 1G
     
 #inquirybb
 assessment:
@@ -207,15 +199,7 @@ certregistry:
     limits:
       cpu: 1
       memory: 1024Mi      
-
-druid-operator:
-  resources:
-    requests:
-      cpu: 100m
-      memory: 100Mi
-    limits:
-      cpu: 1
-      memory: 1024Mi   
+ 
 
 cassandra:
   persistence:
@@ -227,53 +211,6 @@ cassandra:
     limits:
       cpu: 750m
       memory: 10Gi 
-
-druid-raw-cluster:
-  druid_indexer_persistent_volume_size: 25Gi 
-  druid_historical_persistent_volume_size: 25Gi
-  resources:
-    druid_broker:
-      requests:
-        cpu: 100m
-        memory: 1024Mi
-      limits:
-       cpu: 200m
-       memory: 2048Mi
-    druid_coordinator:
-      requests:
-        cpu: 250m
-        memory: 750Mi
-      limits:
-       cpu: 250m
-       memory: 1024Mi
-    druid_overlord:
-      requests:
-        cpu: 250m
-        memory: 750Mi
-      limits:
-       cpu: 250m
-       memory: 1024Mi
-    druid_historical:
-      requests:
-        cpu: 750m
-        memory: 512Mi
-      limits:
-       cpu: 1000m
-       memory: 2048Mi
-    druid_indexer:
-      requests:
-        cpu: 200m
-        memory: 10Gi
-      limits:
-       cpu: 200m
-       memory: 11Gi
-    druid_router:
-      requests:
-        cpu: 250m
-        memory: 500Mi
-      limits:
-       cpu: 512m
-       memory: 1024Mi
 
 groups:
   resources:
@@ -395,48 +332,6 @@ redis:
         cpu: 0.5
         memory: 1Gi 
 
-spark: 
-  master:
-    resources:
-      limits:
-        cpu: 500m
-        memory: 2Gi
-      requests:
-        cpu: 500m
-        memory: 1Gi
-  persistence:
-    spark_data_pvc:
-      size: 25Gi
-    log_data_pvc:
-      size: 25Gi    
-
-#Obsrvbb
-analytics:
-  resources:
-    requests:
-      cpu: 500m
-      memory: 1G
-    limits:
-      cpu: 1
-      memory: 2G
-
-# secor:
-#   baseconfig:
-#     storage:
-#       size: 10Gi
-#     requests:
-#       cpu: 500m
-#       memory: 700Mi
-
-superset:
-  resources:
-    limits:
-      cpu: 512m
-      memory: 1024Mi
-    requests:
-      cpu: 250m
-      memory: 512Mi
-
 telemetry:
   resources:
     requests:
@@ -445,6 +340,15 @@ telemetry:
     limits:
       cpu: 1
       memory: 1024Mi
+
+superset:
+  resources:
+    limits:
+      cpu: 512m
+      memory: 1024Mi
+    requests:
+      cpu: 250m
+      memory: 512Mi      
 
 #monitoring
 loki:
