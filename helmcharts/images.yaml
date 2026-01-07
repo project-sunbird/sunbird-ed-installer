@@ -187,26 +187,6 @@ images:
     repository: "ghcr.io/sunbird-inquiry/inquiry-api-service"
     tag: "release-8.1.0_rc4_62371b1_4"
 
-  analytics: &analytics
-    registry: "sunbirded.azurecr.io"
-    repository: "sunbird-analytics-service"
-    tag: "release-5.1.4"
-
-  druid-operator: &druid-operator
-    repository: "druidio/druid-operator"
-    tag: ""
-
-  druid-raw-cluster: &druid-raw-cluster
-    druid_image: "apache/druid:25.0.0"
-
-  secor: &secor
-    repository: "sunbirded.azurecr.io/secor"
-    tag: "1.0.0-GA"
-
-  superset: &superset
-    repository: "sunbirded.azurecr.io/superset"
-    tag: "release-7.0.0"
-
   telemetry: &telemetry
     repository: "ghcr.io/project-sunbird/sunbird-telemetry-service"
     tag: "release-8.0.0_rc3_f082527_4"
@@ -218,11 +198,7 @@ images:
   nlwebflink: &nlwebflink
     repository: "sunbirded.azurecr.io/flink-nlweb-job"
     tag: "0.0.2"
-
-  spark: &spark
-    image:
-      registry: sunbirded.azurecr.io
-      repository: spark  
+ 
 
 # Internal block with pull secrets
 internal: &internal
@@ -321,7 +297,7 @@ internal: &internal
     imagePullSecrets:
       - name: "registry-secret-name"
 
-  knowledge_mw:
+  knowledgemw:
     image: *knowledge_mw
     imagePullSecrets:
       - name: "registry-secret-name"
@@ -436,31 +412,6 @@ internal: &internal
     imagePullSecrets:
       - name: "registry-secret-name"
 
-  analytics:
-    image: *analytics
-    imagePullSecrets:
-      - name: "registry-secret-name"
-
-  druid-operator:
-    image: *druid-operator
-    imagePullSecrets:
-      - name: "registry-secret-name"
-
-  druid-raw-cluster:
-    image: *druid-raw-cluster
-    imagePullSecrets:
-      - name: "registry-secret-name"
-
-  secor:
-    image: *secor
-    imagePullSecrets:
-      - name: "registry-secret-name"
-
-  superset:
-    image: *superset
-    imagePullSecrets:
-      - name: "registry-secret-name"
-
   telemetry:
     image: *telemetry
     imagePullSecrets:
@@ -475,11 +426,7 @@ internal: &internal
     image: *nlwebflink
     imagePullSecrets:
       - name: "registry-secret-name"
-
-  spark:
-    image: *spark
-    imagePullSecrets:
-      - name: "registry-secret-name"     
+ 
 
 # Merge internal into root for direct access
 <<: *internal

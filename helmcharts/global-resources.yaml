@@ -550,20 +550,20 @@ elasticsearch:
         memory: "4Gi"
     persistence:
       size: 25Gi
+yugabyte:
+  resource:
+    master:
+      requests:
+        cpu: "1"
+        memory: 2Gi
+      limits:
+        cpu: "1.5"
+        memory: 2Gi  ## Ensure the 'memory' value is strictly in 'Gi' or 'G' format. Deviating from these formats
 
-resource:
-  master:
-    requests:
-      cpu: "1"
-      memory: 2Gi
-    limits:
-      cpu: "1.5"
-      memory: 2Gi  ## Ensure the 'memory' value is strictly in 'Gi' or 'G' format. Deviating from these formats
-
-  tserver:
-    requests:
-      cpu: "1"
-      memory: 4Gi
-    limits:
-      cpu: "1.5"
-      memory: 4Gi
+    tserver:
+      requests:
+        cpu: "1"
+        memory: 4Gi
+      limits:
+        cpu: "1.5"
+        memory: 4Gi

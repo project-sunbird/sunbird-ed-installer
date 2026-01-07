@@ -4,13 +4,3 @@ kafka:
   enabled: false
 redis:
   enabled: false
-superset:
-  enabled: false
-secor:
-  enabled: false
-druid:
-  enabled: false
-druid-operator:
-  enabled: false
-spark:
-  enabled: false
