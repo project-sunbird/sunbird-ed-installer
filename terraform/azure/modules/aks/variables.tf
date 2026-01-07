@@ -29,7 +29,7 @@ variable "big_nodepool_name" {
 variable "big_node_count" {
   type        = number
   description = "Big node pool node count."
-  default     = 3
+  default     = 2
 }
 
 variable "big_node_size" {
