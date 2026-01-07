@@ -7,7 +7,7 @@ replicaCount: 1
 #   tag: "release-5.2.0_RC1_2c615f8_12"
 # docker pull sunbirded.azurecr.io/sunbird-datapipeline:release-4.9.0_RC4_1
 image:
-  repository:  sunbirded.azurecr.io/sunbird-datapipeline
+  repository: sunbirded.azurecr.io/sunbird-datapipeline
   tag: "release-5.2.0_RC8_9610bc7_13_be0895d"
   pullPolicy: IfNotPresent
   pullSecrets: []
@@ -82,13 +82,6 @@ serviceAccount:
 commonLabels:
   release: monitoring
 
-# serviceMonitor:
-#   enabled: false
-#   interval: 30s
-#   scrapeTimeout: 10s
-#   labels: {} # additional labels e.g. release: prometheus
-#   honorLabels: true
-#   jobLabel: "app.kubernetes.io/name"
 serviceMonitor: &serviceMonitor
   enabled: false
   jobmanager:
@@ -166,83 +159,11 @@ flink_dp_storage_container: ""
 checkpoint_interval: 60000
 checkpoint_pause_between_seconds: 5000
 checkpoint_compression_enabled: true
-restart_attempts: 3
-restart_delay: 30000 # in milli-seconds
-producer_max_request_size: 1572864
-producer_batch_size: 98304
-producer_linger_ms: 10
-producer_compression: snappy
-extractor_event_max_size: 1048576 # Max is only 1MB
-extractor_max_request_size: 5242880
-extractor_consumer_parallelism: 1
-extractor_operators_parallelism: 1
-telemetry_extractor_key_expiry_seconds: 3600
-ingest_router_consumer_parallelism: 1
-ingest_router_operators_parallelism: 1
-raw_router_consumer_parallelism: 1
-raw_router_downstream_parallelism: 1
 
-content_port: 6379
-device_port: 6380
-user_port: 6381
-dialcode_port: 6382
-
-pipeline_preprocessor_consumer_parallelism: 1
-pipeline_preprocessor_operators_parallelism: 1
-portal_id: ".sunbird.portal"
-desktop_id: ".sunbird.desktop"
-pipeline_preprocessor_key_expiry_seconds: 3600
-
-denorm_secondary_window_count: 30
-denorm_secondary_window_shards: 1400
-denorm_primary_window_count: 30
-denorm_primary_window_shards: 1400
-
-denorm_summary_window_count: 5
-denorm_summary_window_shards: 1400
-
-denorm_secondary_consumer_parallelism: 1
-telemetry_denorm_secondary_operators_parallelism: 1
-denorm_primary_consumer_parallelism: 1
-telemetry_denorm_primary_operators_parallelism: 1
-
-### summary-denormalization related vars
-summary_denorm_consumer_parallelism: 1
-summary_denorm_operators_parallelism: 1
-summary_denorm_duplication_key_expiry_seconds: 3600
-summary_denorm_key_expiry_seconds: 3600
-
-### De-normalization related vars
-denorm_consumer_parallelism: 1
-telemetry_denorm_operators_parallelism: 1
-de_normalization_duplicationstore_key_expiry_seconds: 3600
-de_normalization_key_expiry_seconds: 3600
-denorm_window_count: 30
-denorm_window_shards: 1400
-
-### Druid-validator related vars
-druid_validator_consumer_parallelism: 1
-druid_validator_operators_parallelism: 1
-druid_validator_key_expiry_seconds: 3600
-druid_validation_enabled: true
-druid_deduplication_enabled: true
-
-### error-denormalization related vars
-error_denorm_consumer_parallelism: 1
-error_denorm_operators_parallelism: 1
-
-### Device-profile-updater related vars
-deviceprofile_parallelism: 1
-device_profile_updater_key_expiry_seconds: 3600
-device_profile_table: "_device_profile"
 
 ### content-cache-updater
 # dialcode_api_url: {{ .Values.global.proto }}://{{ .Values.global.domain_name }}/{{ .Values.dialcode_endpoint }}
 dialcode_api_auth_key: ""
-
-#(user read api details)
-user_read_api_endpoint: "/private/user/v1/read/"
-user_read_api_url: "userorg-service:9000"
 
 ### User-cache-updater related vars
 usercache_updater_parallelism: 1
@@ -250,14 +171,6 @@ user_cache_updater_key_expiry_seconds: 3600
 middleware_cassandra_keyspace: sunbird
 middleware_cassandra_user_table: user
 middleware_cassandra_location_table: location
-
-postgres:
-  max_connections: 2
-  sslmode: false
-  db_name: analytics
-  db_port: 5432
-
-
 
 
 log4j_console_properties: |
@@ -365,7 +278,7 @@ base_config: |
       }
 
 flink_jobs:
-    content-cache-updater:
+  content-cache-updater:
     enabled: true
     serviceMonitor: *serviceMonitor
     config: |+
@@ -403,7 +316,7 @@ flink_jobs:
       taskmanager.memory.network.fraction: 0.1
     job_classname: org.sunbird.dp.contentupdater.task.ContentCacheUpdaterStreamTask
 
-user-cache-updater-v2:
+  user-cache-updater-v2:
     enabled: true
     serviceMonitor: *serviceMonitor
     config: |+
