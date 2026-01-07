@@ -20,13 +20,9 @@ kafka: &kafka
   host: "kafka"
   port: "9092"
 
-zookeeper: &zookeeper
-  host: "zookeeper"
-  port: "2181"
 
 global:
   kafka: *kafka
-  zookeeper: *zookeeper
   env: "dev"
 
 gcp_bucket_name: "{{ .Values.global.private_container_name }}"
@@ -41,7 +37,6 @@ base_config: &base_config
   timestamp_key: "syncts"
   fallback_timestamp_key: "@timestamp"
   kafka_broker_host: "{{.Values.global.kafka.host}}"
-  zookeeper_quorum: "{{.Values.global.zookeeper.host}}:{{.Values.global.zookeeper.port}}"
   max_file_size: "100000000"
   max_file_age: "14400"
   partition_prefix_enabled: "false"

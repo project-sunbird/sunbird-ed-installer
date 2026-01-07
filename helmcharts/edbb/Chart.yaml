@@ -36,5 +36,5 @@ dependencies:
     version: 10.1.0
     condition: cassandra.enabled
   - name: kafka
-    version: 20.0.2
+    version: 32.2.15
     condition: kafka.enabled
