@@ -163,7 +163,7 @@ taxonomy:
       memory: 1024Mi
 
 #learnbb
-adminutils:
+adminutil:
   resources:
     requests:
       cpu: 100m
