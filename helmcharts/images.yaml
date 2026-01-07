@@ -73,7 +73,7 @@ images:
 
   report: &report
     repository: "ghcr.io/project-sunbird/sunbird-report-service"
-    tag: "release-8.1.0_rc1_ea97f3a_4"
+    tag: "release-8.0.0_rc2_ea97f3a_3"
 
   router: &router
     repository: "sunbirded.azurecr.io/router"
@@ -117,7 +117,7 @@ images:
 
   certregistry: &certregistry
     repository: "ghcr.io/sunbird-lern/certificate-registry"
-    tag: "release-8.1.0_rc2_546e8d5_3"
+    tag: "release-8.1.0_rc1_623a7ac_2"
 
   certificateapi: &certificateapi
     repository: "sunbirded.azurecr.io/sunbird-rc-certificate-api"
