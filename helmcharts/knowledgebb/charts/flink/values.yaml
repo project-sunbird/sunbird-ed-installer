@@ -591,7 +591,18 @@ flink_jobs:
       redis {
         database {
           contentCache.id = 0
+          qsCache.id = 1
         }
+      }
+
+      question {
+        keyspace = "{{ .Values.global.env }}_question_store"
+        table = "question_data"
+      }
+
+      questionset {
+        keyspace = "{{ .Values.global.env }}_hierarchy_store"
+        table = "questionset_hierarchy"
       }
 
       content {
@@ -601,7 +612,7 @@ flink_jobs:
         keyspace = "{{ .Values.global.env }}_content_store"
         table = "content_data"
         tmp_file_location = "/tmp"
-        objectType = ["Content", "ContentImage","Collection","CollectionImage"]
+        objectType = ["Content", "ContentImage","Collection","CollectionImage", "Question", "QuestionImage", "QuestionSet", "QuestionSetImage"]
         mimeType = ["application/pdf",
                                     "application/vnd.ekstep.ecml-archive",
                                     "application/vnd.ekstep.html-archive",
@@ -656,7 +667,9 @@ flink_jobs:
                                     "application/vnd.ekstep.plugin-archive",
                                     "video/x-youtube",
                                     "video/youtube",
-                                    "text/x-url"]
+                                    "text/x-url",
+                                    "application/vnd.sunbird.question",
+                                    "application/vnd.sunbird.questionset"]
         asset_download_duration = "60 seconds"
 
         stream {
@@ -687,6 +700,7 @@ flink_jobs:
       }
 
       service {
+        print.enabled = false
         print.basePath = "http://print:5000"
       }
 
@@ -742,7 +756,12 @@ flink_jobs:
       cloud_storage_secret="{{ .Values.global.cloud_storage_secret_key }}"
       cloud_storage_container="{{ .Values.global.public_container_name }}"
       cloud_storage_endpoint=""
-      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
+      schema {
+        basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
+        supportedVersion = {
+          itemset = "2.0"
+        }
+      }
       ai_search_enabled = true
 
     flink-conf: |+
