@@ -1,19 +1,17 @@
-# Use an official PostgreSQL image as the base image
-FROM postgres:latest
+# Use official YugabyteDB image as the base
+# This includes ysqlsh and all YugabyteDB client tools
+FROM yugabytedb/yugabyte:latest
 
-# Install psql client
-RUN apt-get update && \
-    apt-get install -y postgresql-client
+# Switch to root user to install additional packages
+USER root
 
-# Install kubectl
-RUN apt-get update && \
-    apt-get install -y apt-transport-https gnupg jq curl && \
-    curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg && \
-    chmod 644 /etc/apt/keyrings/kubernetes-apt-keyring.gpg && \ 
-    echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | tee /etc/apt/sources.list.d/kubernetes.list && \
-    chmod 644 /etc/apt/sources.list.d/kubernetes.list && \
-    apt-get update && \
-    apt-get install -y kubectl
+# Install kubectl and other dependencies
+# YugabyteDB image is based on AlmaLinux 8, which uses dnf
+RUN dnf install -y curl jq && \
+    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
+    chmod +x kubectl && \
+    mv kubectl /usr/local/bin/kubectl && \
+    dnf clean all
 
 # Copy the SQL script and shell script into the container
 COPY execute_query.sh /usr/local/bin/execute_query.sh

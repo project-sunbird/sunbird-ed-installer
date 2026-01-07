@@ -58,9 +58,6 @@ images:
     tag: "11.4.0"
     digest: ""
 
-  bot: &bot
-    repository: "sunbirded.azurecr.io/bot"
-    tag: "release-5.1.0_RC1_29_bot"
 
   discussion_mw: &discussion_mw
     repository: "sunbirded.azurecr.io/discussion-middleware"
@@ -76,7 +73,7 @@ images:
 
   report: &report
     repository: "ghcr.io/project-sunbird/sunbird-report-service"
-    tag: "release-8.0.0_rc2_ea97f3a_3"
+    tag: "release-8.1.0_rc1_ea97f3a_4"
 
   router: &router
     repository: "sunbirded.azurecr.io/router"
@@ -120,7 +117,7 @@ images:
 
   certregistry: &certregistry
     repository: "ghcr.io/sunbird-lern/certificate-registry"
-    tag: "release-8.1.0_rc1_623a7ac_2"
+    tag: "release-8.1.0_rc2_546e8d5_3"
 
   certificateapi: &certificateapi
     repository: "sunbirded.azurecr.io/sunbird-rc-certificate-api"
@@ -140,7 +137,7 @@ images:
 
   keycloak-kids-keys: &keycloak-kids-keys
     repository: "sunbirded.azurecr.io/keycloak-kids-keys"
-    tag: "0.1.5"
+    tag: "v3"
 
   lms: &lms
     repository: "ghcr.io/sunbird-lern/lms-service"
@@ -151,8 +148,8 @@ images:
     tag: "release-8.1.0_rc3_eaf6c11_8"
 
   print: &print
-    repository: "sunbirded.azurecr.io/print-service"
-    tag: "release-3.1.0_f9a608c"
+    repository: "ghcr.io/project-sunbird/print-service"
+    tag: "release-8.1.0_rc2_b42d8db_1"
 
   registry: &registry
     repository: "sunbirded.azurecr.io/sunbird-rc-core"
@@ -187,29 +184,13 @@ images:
     repository: "ghcr.io/sunbird-inquiry/inquiry-api-service"
     tag: "release-8.1.0_rc4_62371b1_4"
 
-  analytics: &analytics
-    registry: "sunbirded.azurecr.io"
-    repository: "sunbird-analytics-service"
-    tag: "release-5.1.4"
-
-  druid-operator: &druid-operator
-    repository: "druidio/druid-operator"
-    tag: ""
-
-  druid-raw-cluster: &druid-raw-cluster
-    druid_image: "apache/druid:25.0.0"
-
-  secor: &secor
-    repository: "sunbirded.azurecr.io/secor"
-    tag: "1.0.0-GA"
-
-  superset: &superset
-    repository: "sunbirded.azurecr.io/superset"
-    tag: "release-7.0.0"
-
   telemetry: &telemetry
     repository: "ghcr.io/project-sunbird/sunbird-telemetry-service"
     tag: "release-8.0.0_rc3_f082527_4"
+
+  superset: &superset
+    repository: "sunbirded.azurecr.io/superset"
+    tag: "release-7.0.0" 
 
   nlweb: &nlweb
     repository: "sanketikahub/nlweb"
@@ -218,11 +199,7 @@ images:
   nlwebflink: &nlwebflink
     repository: "sunbirded.azurecr.io/flink-nlweb"
     tag: "v1.0.0"
-
-  spark: &spark
-    image:
-      registry: sunbirded.azurecr.io
-      repository: spark  
+ 
 
 # Internal block with pull secrets
 internal: &internal
@@ -276,10 +253,6 @@ internal: &internal
     imagePullSecrets:
       - name: "registry-secret-name"
 
-  bot:
-    image: *bot
-    imagePullSecrets:
-      - name: "registry-secret-name"
 
   discussion_mw:
     image: *discussion_mw
@@ -321,7 +294,7 @@ internal: &internal
     imagePullSecrets:
       - name: "registry-secret-name"
 
-  knowledge_mw:
+  knowledgemw:
     image: *knowledge_mw
     imagePullSecrets:
       - name: "registry-secret-name"
@@ -436,35 +409,15 @@ internal: &internal
     imagePullSecrets:
       - name: "registry-secret-name"
 
-  analytics:
-    image: *analytics
-    imagePullSecrets:
-      - name: "registry-secret-name"
-
-  druid-operator:
-    image: *druid-operator
-    imagePullSecrets:
-      - name: "registry-secret-name"
-
-  druid-raw-cluster:
-    image: *druid-raw-cluster
-    imagePullSecrets:
-      - name: "registry-secret-name"
-
-  secor:
-    image: *secor
+  telemetry:
+    image: *telemetry
     imagePullSecrets:
       - name: "registry-secret-name"
 
   superset:
     image: *superset
     imagePullSecrets:
-      - name: "registry-secret-name"
-
-  telemetry:
-    image: *telemetry
-    imagePullSecrets:
-      - name: "registry-secret-name"
+      - name: "registry-secret-name"    
 
   nlweb:
     image: *nlweb
@@ -475,11 +428,7 @@ internal: &internal
     image: *nlwebflink
     imagePullSecrets:
       - name: "registry-secret-name"
-
-  spark:
-    image: *spark
-    imagePullSecrets:
-      - name: "registry-secret-name"     
+ 
 
 # Merge internal into root for direct access
 <<: *internal
@@ -492,9 +441,9 @@ global:
     tag: "release-8.1.0_rc1_e7ac747"
 
   learnflink:
-    registry: "ghcr.io"
-    repository: "sunbird-lern/data-pipeline"
-    tag: "release-8.1.0_rc1_7ea4c2c"
+    registry: "chethann07"
+    repository: "data-pipeline"
+    tag: "yugabyte_migration_v4"
 
   inquiryflink:
     registry: "sunbirded.azurecr.io"

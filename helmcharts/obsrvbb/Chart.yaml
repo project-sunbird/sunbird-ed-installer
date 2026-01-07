@@ -35,21 +35,10 @@ dependencies:
     repository: oci://registry-1.docker.io/bitnamicharts
     version: 32.2.15
     condition: kafka.enabled
-  - name: cassandra
-    repository: https://charts.bitnami.com/bitnami
-    version: 10.1.0
-    condition: cassandra.enabled
   - name: elasticsearch
     repository: https://charts.bitnami.com/bitnami
     version: 19.5.4
-    condition: elasticsearch.enabled
-  - name: spark
-    repository: https://charts.bitnami.com/bitnami
-    version: 6.3.2
-    condition: spark.enabled
-  - name: postgresql
-    condition: postgresql.enabled
-    version: 10.16.3
+    condition: elasticsearch.enabled   
   - name: superset
     version: 0.1.0
-    condition: superset.enabled
+    condition: superset.enabled     

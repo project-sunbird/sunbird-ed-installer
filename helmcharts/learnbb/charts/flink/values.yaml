@@ -415,8 +415,8 @@ base_config: |
       port = 6379
     }
     lms-cassandra {
-        host = "{{ .Values.global.cassandra.host }}"
-        port = "{{ .Values.global.cassandra.port }}"
+        host = "{{ .Values.global.yugabyte.host }}"
+        port = "{{ .Values.global.yugabyte.port }}"
         isMultiDCEnabled = "{{ .Values.cassandra_isMultiDCEnabled }}"
     }
     neo4j {
@@ -433,8 +433,8 @@ base_config: |
       }
     }
     ml-cassandra {
-      host = "{{ .Values.global.cassandra.host }}"
-      port = "{{ .Values.global.cassandra.port }}"
+      host = "{{ .Values.global.yugabyte.host }}"
+      port = "{{ .Values.global.yugabyte.port }}"
       isMultiDCEnabled = "{{ .Values.cassandra_isMultiDCEnabled }}"
     }
     ml-mongo {
@@ -807,38 +807,6 @@ flink_jobs:
       jobmanager.execution.failover-strategy: region
       taskmanager.memory.network.fraction: 0.1
     job_classname: org.sunbird.job.notification.task.NotificationStreamTask
-
-  program-user-info:
-    enabled: true
-    serviceMonitor: *serviceMonitor
-    config: |+
-      include file("/data/flink/conf/base-config.conf")
-      kafka {
-        producer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
-        consumer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
-        input.topic = "{{ include "common.tplvalues.render" (dict "value" .Values.kafka_topic_programuser_info "context" $) }}"
-        groupId = "{{ include "common.tplvalues.render" (dict "value" .Values.kafka_group_programuser_info "context" $) }}"
-      }
-      task {
-        consumer.parallelism = "{{ .Values.programuserinfo_consumer_parallelism }}"
-        downstream.parallelism = "{{ .Values.programuserinfo_downstream_parallelism }}"
-        programuser {
-          parallelism = "{{ .Values.programuserinfo_programuser_parallelism }}"
-        }
-
-      }
-      ml-cassandra {
-        keyspace = "{{ .Values.middleware_cassandra_programuserinfo_keyspace }}"
-        table = "{{ .Values.middleware_cassandra_programuserinfo_table }}"
-      }
-    flink-conf: |+
-      jobmanager.memory.flink.size: 1024m
-      taskmanager.memory.flink.size: 1024m
-      taskmanager.numberOfTaskSlots: 1
-      parallelism.default: 1
-      jobmanager.execution.failover-strategy: region
-      taskmanager.memory.network.fraction: 0.1
-    job_classname: org.sunbird.job.userinfo.task.ProgramUserInfoStreamTask
   
   user-deletion-cleanup:
     enabled: true
