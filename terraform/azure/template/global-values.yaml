@@ -2,7 +2,7 @@ deploy_dial_services:  &deploy_dial_services  "true"
 default_passwords:
   grafana_admin_password: &grafana-admin-password "prom-operator"
   keycloak_password: &keycloak-password "admin"
-  postgresql_password: &-password "postgres"
+  postgresql_password: &postgresql-password "postgres"
 superset:
   credentials:
     adminUser: admin
