@@ -59,6 +59,15 @@ global:
   sunbird_msg_91_auth: ""
   sunbird_msg_sender: ""
   youtube_apikey: ""
+  mail_from_certbot_notifications: ""  #The "from" email address used by the Certbot renewal job for sending SSL renewal status notifications via SendGrid SMTP
+  youtube_apikey: ""
+  postgresql:
+    postgresqlUsername: postgres
+    postgresqlPassword: *postgresql-password
+  keycloak:
+   keycloak_user: admin
+   keycloak_password: *keycloak-password  
+  deploy_dial_services: *deploy_dial_services 
   postgresql:
     postgresqlUsername: postgres
     postgresqlPassword: *postgresql-password

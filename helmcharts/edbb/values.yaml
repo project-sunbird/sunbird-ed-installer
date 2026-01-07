@@ -85,6 +85,7 @@ postgresql: &postgresql
   databases:
   - name: "kong"
   - name: "druid_raw"
+  - name: "superset"
   primary:
     resources:
       limits:
@@ -167,8 +168,6 @@ global:
   kong_desktop_device_consumer_names_for_opa: '["portal", "desktop"]'
 
 knowledgemw:
-  opa_enabled: true
-report:
   opa_enabled: true
 
 migration:

@@ -73,13 +73,6 @@ configmap:
 serviceAccount:
   create: false
 
-# serviceMonitor:
-#   enabled: false
-#   interval: 30s
-#   scrapeTimeout: 10s
-#   labels: {} # additional labels e.g. release: prometheus
-#   honorLabels: true
-#   jobLabel: "app.kubernetes.io/name"
 serviceMonitor: &serviceMonitor
   jobmanager:
     enabled: true
@@ -203,11 +196,9 @@ kafka_topic_lms_notification: "{{ .Values.global.env }}.lms.notification"
 kafka_topic_enrolment_reconciliation_failed: "{{ .Values.global.env }}.enrolment.reconciliation.failed"
 kafka_topic_generate_certificate_failed: "{{ .Values.global.env }}.generate.certificate.failed"
 kafka_topic_migrate_certificate_request: "{{ .Values.global.env }}.legacy.certificate.migrate"
-kafka_topic_programuser_info: "{{ .Values.global.env }}.programuser.info"
 kafka_topic_contentstate_invalid: "{{ .Values.global.env }}.contentstate.invalid"
 kafka_topic_enrolment_sync_request: "{{ .Values.global.env }}.batch.enrolment.sync.request"
 kafka_topic_assessment: "{{ .Values.global.env }}.telemetry.assess"
-
 kafka_group_enrolment_reconciliation: "{{ .Values.global.env }}-enrolment-reconciliation-group"
 kafka_group_collection_pre_processor: "{{ .Values.global.env }}-collection-cert-pre-processor-group"
 kafka_group_certificate_generator: "{{ .Values.global.env }}-certificate-generator-group"
@@ -215,7 +206,6 @@ kafka_group_certificate_migrator: "{{ .Values.global.env }}-certificate-migrator
 kafka_group_merge_courses: "{{ .Values.global.env }}-merge-courses-group"
 kafka_group_assessment_aggregator: "{{ .Values.global.env }}-assessment-aggregator-group"
 kafka_group_lms_notification: "{{ .Values.global.env }}-lms-notification"
-kafka_group_programuser_info: "{{ .Values.global.env }}-programuser-group"
 
 ### base-config related vars
 postgres_max_connections: 2
@@ -811,39 +801,6 @@ flink_jobs:
       jobmanager.execution.failover-strategy: region
       taskmanager.memory.network.fraction: 0.1
     job_classname: org.sunbird.job.notification.task.NotificationStreamTask
-
-  program-user-info:
-    enabled: true
-    serviceMonitor: *serviceMonitor
-    config: |+
-      include file("/data/flink/conf/base-config.conf")
-      kafka {
-        producer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
-        consumer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
-        zookeeper = "{{ .Values.global.zookeeper.host }}:{{ .Values.global.zookeeper.port }}"
-        input.topic = "{{ include "common.tplvalues.render" (dict "value" .Values.kafka_topic_programuser_info "context" $) }}"
-        groupId = "{{ include "common.tplvalues.render" (dict "value" .Values.kafka_group_programuser_info "context" $) }}"
-      }
-      task {
-        consumer.parallelism = "{{ .Values.programuserinfo_consumer_parallelism }}"
-        downstream.parallelism = "{{ .Values.programuserinfo_downstream_parallelism }}"
-        programuser {
-          parallelism = "{{ .Values.programuserinfo_programuser_parallelism }}"
-        }
-
-      }
-      ml-cassandra {
-        keyspace = "{{ .Values.middleware_cassandra_programuserinfo_keyspace }}"
-        table = "{{ .Values.middleware_cassandra_programuserinfo_table }}"
-      }
-    flink-conf: |+
-      jobmanager.memory.flink.size: 1024m
-      taskmanager.memory.flink.size: 1024m
-      taskmanager.numberOfTaskSlots: 1
-      parallelism.default: 1
-      jobmanager.execution.failover-strategy: region
-      taskmanager.memory.network.fraction: 0.1
-    job_classname: org.sunbird.job.userinfo.task.ProgramUserInfoStreamTask
   
   user-deletion-cleanup:
     enabled: true

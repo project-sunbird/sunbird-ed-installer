@@ -1,4 +1,0 @@
-apiVersion: v2
-name: cronjob-chart
-description: A Helm chart for daily CronJob for etl-jobs
-version: 0.1.0
