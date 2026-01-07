@@ -58,6 +58,9 @@ images:
     tag: "11.4.0"
     digest: ""
 
+  alloy: &alloy
+    registry: "docker.io"
+    repository: grafana/alloy
 
   discussion_mw: &discussion_mw
     repository: "sunbirded.azurecr.io/discussion-middleware"
@@ -253,6 +256,10 @@ internal: &internal
     imagePullSecrets:
       - name: "registry-secret-name"
 
+  alloy:
+    image: *alloy
+    imagePullSecrets:
+      - name: "registry-secret-name"    
 
   discussion_mw:
     image: *discussion_mw
