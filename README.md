@@ -162,3 +162,29 @@ x
 - The CronJob handles only Let’s Encrypt–issued certificates.
 - The default renewal schedule is every **85 days**.
 - Always ensure your domain DNS records are properly configured and reachable before renewal.
+
+# Grafana Alloy Helm Chart
+
+```bash
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo update
+helm search repo grafana/alloy
+helm pull grafana/alloy
+```
+
+This will download the Helm chart as a `.tgz` file.
+
+## Installation Steps
+
+1. Extract the downloaded `.tgz` file.
+2. Replace the extracted folder in the following directory:
+
+```text
+sunbird-ed-installer/helmcharts/monitoring/charts/alloy
+```
+
+3. Update the image version in the following file to match the latest version available in the Grafana Alloy Helm chart:
+
+```text
+sunbird-ed-installer/helmcharts/images.yaml
+```
