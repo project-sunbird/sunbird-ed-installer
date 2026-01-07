@@ -152,9 +152,6 @@ cloudstorage_base_path: "https://{{ .Values.global.object_storage_endpoint }}"
 cloudstorage_metadata_list: '["appIcon","posterImage","artifactUrl","downloadUrl","variants","previewUrl","pdfUrl"]'
 valid_cloudstorage_base_urls: '["https://{{ .Values.global.object_storage_endpoint }}"]'
 cloudstorage_replace_absolute_path: false
-### QuestionSet RePublish Job Config
-inquiry_assessment_republish_kafka_topic_name: "{{ .Values.global.env }}.assessment.republish.request"
-inquiry_assessment_republish_group: "{{ .Values.global.env }}-questionset-republish-group"
 ### user_pii Job Config
 user_pii_updater_kafka_topic_name: "{{ .Values.global.env }}.delete.user"
 user_pii_updater_group: "{{ .Values.global.env }}-user-pii-updater-group"

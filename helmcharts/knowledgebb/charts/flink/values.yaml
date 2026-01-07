@@ -67,13 +67,6 @@ configmap:
 serviceAccount:
   create: false
 
-# serviceMonitor:
-#   enabled: true
-#   interval: 30s
-#   scrapeTimeout: 10s
-#   labels: {} # additional labels e.g. release: prometheus
-#   honorLabels: true
-#   jobLabel: "app.kubernetes.io/name"
 serviceMonitor: &serviceMonitor
   enabled: false
   jobmanager:
@@ -301,52 +294,6 @@ flink_jobs:
       # state.savepoints.dir: file:///tmp
 
     job_classname: org.sunbird.job.searchindexer.task.SearchIndexerStreamTask
-
-  # audit-event-generator:
-  #   enabled: true
-  #   config: |+
-  #     include file("/data/flink/conf/base-config.conf")
-  #     job {
-  #       env = "{{ .Values.global.env }}"
-  #     }
-
-  #     kafka {
-  #       input.topic = "{{ .Values.global.env }}.knowlg.learning.graph.events"
-  #       output.topic = "{{ .Values.global.env }}.knowlg.telemetry.raw"
-  #       groupId = "{{ .Values.global.env }}-audit-event-generator-group"
-  #     }
-
-  #     task {
-  #     consumer.parallelism = 1
-  #     parallelism = 1
-  #     producer.parallelism = 1
-  #     window.time = 60
-  #     }
-
-  #     schema {
-  #       basePath = "{{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_read_base_path "context" $) }}/{{ .Values.global.public_container_name }}/schemas/local/content/"
-  #     }
-
-  #     channel.default = "org.sunbird"
-  #     schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
-
-  #   flink-conf: |+
-  #     jobmanager.memory.flink.size: 1024m
-  #     taskmanager.memory.flink.size: 1024m
-  #     taskmanager.numberOfTaskSlots: 1
-  #     jobManager.numberOfTaskSlots: 1
-  #     parallelism.default: 1
-  #     jobmanager.execution.failover-strategy: region
-  #     taskmanager.memory.network.fraction: 0.1
-  #     scheduler-mode: reactive
-  #     heartbeat.timeout: 8000
-  #     heartbeat.interval: 5000
-  #     taskmanager.memory.process.size: 1700m
-  #     jobmanager.memory.process.size: 1600m
-  #     # classloader.resolve-order: "parent-first"
-  #     # state.savepoints.dir: file:///tmp
-
-  #   job_classname: org.sunbird.job.auditevent.task.AuditEventGeneratorStreamTask
 
   transaction-event-processor:
     enabled: true
