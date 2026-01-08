@@ -8,6 +8,6 @@ dependencies:
 - name: kafka
   repository: https://charts.bitnami.com/bitnami
   version: 20.0.2
-- name: elasticsearch
-  repository: https://charts.bitnami.com/bitnami
-  version: 19.5.4
+- name: yugabyte
+  repository: https://charts.yugabyte.com
+  version: 2025.2.0   

@@ -104,10 +104,42 @@ superset:
     tag: release-7.0.0
     pullPolicy: Always
 
+yugabyte: &yugabyte
+  enabled: true
+  nameOverride: "yugabyte"
+  fullnameOverride: "yugabyte"
+  host: "yb-tserver-service" 
+  port: 9042
+  postgresql_port: 5433
+  databases:
+    - name: "keycloak"
+    - name: "quartz"
+    - name: "userorg"
+    - name: "enc-keys"
+    - name: "registry"
+
+  image:
+    registry: yugabytedb
+    repository: yugabyte
+    tag: 2025.2.0.0-b131 
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  provisioning:
+    annotations: *provisioningAnnotations  
+  persistence:
+    size: 25Gi  
+  # Force single replica for Yugabyte masters and tservers (override subchart defaults)
+  replicas:
+    master: 3
+    tserver: 3
+  username: yugabyte  
+  password: yugabyte    
+
 env: &env
 default: "dev"
 global:
   redis: *redis
   zookeeper: *zookeeper
   kafka: *kafka
+  yugabyte: *yugabyte
 

@@ -82,14 +82,7 @@ credentials:
   creatorPassword: creator
   creatorEmail: report_creator@example.com
 
-postgresql: &postgresql
-  enabled: true
-  host: postgresql
-  postgresqlUsername: postgres
-  postgresqlPassword: postgres
-
 global:
-  postgresql: *postgresql
   adminutil_learner_api_auth_key: ""
 
 
