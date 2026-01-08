@@ -33,4 +33,8 @@ dependencies:
     condition: kafka.enabled
   - name: superset
     version: 0.1.0
-    condition: superset.enabled     
+    condition: superset.enabled    
+  - name: redis
+    repository: https://charts.bitnami.com/bitnami
+    version: 18.1.1
+    condition: redis.enabled   

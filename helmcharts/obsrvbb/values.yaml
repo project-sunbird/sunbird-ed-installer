@@ -40,6 +40,22 @@ kafka: &kafka
     - name: "{{ .Values.global.env }}.telemetry.ingest"
     parallel: 1
 
+redis: &redis
+  enabled: true
+  nameOverride: "redis"
+  fullnameOverride: "redis"
+  auth:
+    enabled: false
+  host: "redis-master"
+  port: 6379
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  replica:
+    replicaCount: 0
+  master:
+    persistence:
+      size: 25Gi
+      
 superset:
   enabled: true
   image:

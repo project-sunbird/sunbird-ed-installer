@@ -5,3 +5,6 @@ dependencies:
 - name: kafka
   repository: https://charts.bitnami.com/bitnami
   version: 20.0.2
+- name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 18.1.1  
