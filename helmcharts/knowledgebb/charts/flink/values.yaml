@@ -425,86 +425,6 @@ flink_jobs:
 
     job_classname: org.sunbird.job.assetenricment.task.AssetEnrichmentStreamTask
 
-  post-publish-processor:
-    enabled: true
-    serviceMonitor: *serviceMonitor
-    config: |+
-      include file("/data/flink/conf/base-config.conf")
-      job {
-        env = "{{ .Values.global.env }}"
-      }
-
-      kafka {
-        input.topic = "{{ .Values.global.env }}.knowlg.content.postpublish.request"
-        groupId = "{{ .Values.global.env }}-post-publish-processor-group"
-        publish.topic = "{{ .Values.global.env }}.learning.job.request"
-        qrimage.topic = "{{ .Values.global.env }}.knowlg.qrimage.request"
-        dialcode.context.topic = "{{ .Values.global.env }}.knowlg.dialcode.context.job.request"
-      }
-
-      task {
-        consumer.parallelism = 1
-        router.parallelism = 1
-        shallow_copy.parallelism = 1
-        link_dialcode.parallelism = 1
-        batch_create.parallelism = 1
-        dialcode_context_updater.parallelism = 1
-      }
-
-      lms-cassandra {
-        keyspace = "sunbird_courses"
-        batchTable = "course_batch"
-      }
-
-      dialcode-cassandra {
-        keyspace = "dialcodes"
-        imageTable = "dialcode_images"
-      }
-
-      service {
-        search.basePath = "http://search-service:9000"
-        lms.basePath = "http://lms-service:9000"
-        learning_service.basePath = "http://learning:8080/learning-service"
-        dial.basePath = "https://dial-service:9000"
-        content.basePath = "http://content-service:9000"
-      }
-
-      dialcode {
-        linkable.primaryCategory = ["Course"]
-        storage.container = "{{ .Values.global.dial_state_container_public }}"
-      }
-
-      cloudstorage.metadata.replace_absolute_path=true
-      cloudstorage.relative_path_prefix= "CONTENT_STORAGE_BASE_PATH"
-      cloudstorage.read_base_path="{{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_read_base_path "context" $) }}"
-      cloudstorage.write_base_path={{ include "common.tplvalues.render" (dict "value" .Values.cloudstorage_write_base_path "context" $) }}
-      cloudstorage.metadata.list={{ .Values.cloudstorage_metadatalist }}
-
-      cloud_storage_type="{{ .Values.global.cloud_storage_provider }}"
-      cloud_storage_key="{{ .Values.global.cloud_storage_access_key }}"
-      cloud_storage_secret="{{ .Values.global.cloud_storage_secret_key }}"
-      cloud_storage_container="{{ .Values.global.public_container_name }}"
-      cloud_storage_endpoint=""
-      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
-
-
-    flink-conf: |+
-      jobmanager.memory.flink.size: 1024m
-      taskmanager.memory.flink.size: 1024m
-      taskmanager.numberOfTaskSlots: 1
-      jobManager.numberOfTaskSlots: 1
-      parallelism.default: 1
-      jobmanager.execution.failover-strategy: region
-      taskmanager.memory.network.fraction: 0.1
-      scheduler-mode: reactive
-      heartbeat.timeout: 8000
-      heartbeat.interval: 5000
-      taskmanager.memory.process.size: 1700m
-      jobmanager.memory.process.size: 1600m
-      # classloader.resolve-order: "parent-first"
-      # state.savepoints.dir: file:///tmp
-
-    job_classname: org.sunbird.job.postpublish.task.PostPublishProcessorStreamTask
 
   dialcode-context-updater:
     enabled: true
@@ -687,7 +607,6 @@ flink_jobs:
       }
 
       service {
-        print.basePath = "http://print:5000"
       }
 
       contentTypeToPrimaryCategory {
