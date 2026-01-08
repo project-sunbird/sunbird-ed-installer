@@ -166,5 +166,5 @@ global:
   provisioningAnnotations: *provisioningAnnotations
 
 migration:
- cassandra:
+ migration:
    waitTime: 120
