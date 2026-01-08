@@ -11,3 +11,6 @@ dependencies:
 - name: yugabyte
   repository: https://charts.yugabyte.com
   version: 2025.2.0   
+- name: superset
+  repository: https://github.com/craig-rueda
+  version: 0.3.5  
