@@ -116,10 +116,6 @@ kafka: &kafka
 
 superset:
   enabled: true
-  image:
-    repository: sunbirded.azurecr.io/superset
-    tag: release-7.0.0
-    pullPolicy: Always
 
 yugabyte: &yugabyte
   enabled: true
@@ -129,11 +125,7 @@ yugabyte: &yugabyte
   port: 9042
   postgresql_port: 5433
   databases:
-    - name: "keycloak"
-    - name: "quartz"
-    - name: "userorg"
-    - name: "enc-keys"
-    - name: "registry"
+    - name: "superset"
 
   image:
     registry: yugabytedb

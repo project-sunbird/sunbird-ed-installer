@@ -189,8 +189,10 @@ images:
     tag: "release-8.0.0_rc3_f082527_4"
 
   superset: &superset
-    repository: "sunbirded.azurecr.io/superset"
-    tag: "release-7.0.0" 
+    registry: "docker.io"
+    repository: "superset"
+    tag: "4.1.1"
+    digest: ""
 
   nlweb: &nlweb
     repository: "sanketikahub/nlweb"
