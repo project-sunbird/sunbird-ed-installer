@@ -89,7 +89,7 @@ kafka: &kafka
   nameOverride: kafka
   fullnameOverride: kafka
   # clientProtocol: PLAINTEXT
-  host: kafka--controller-headless
+  host: kafka-controller-headless
   port: 9092
   image:
     registry: "docker.io"
