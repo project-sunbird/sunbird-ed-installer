@@ -191,6 +191,8 @@ log4j_console_properties: |
   logger.kafka.level = ERROR
   logger.hadoop.name = org.apache.hadoop
   logger.hadoop.level = ERROR
+  logger.zookeeper.name = org.apache.zookeeper
+  logger.zookeeper.level = ERROR
 
   # Log all infos to the console
   appender.console.name = ConsoleAppender
@@ -207,6 +209,7 @@ base_config: |
         broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
         producer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
         consumer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
+        zookeeper = "{{ .Values.global.zookeeper.host }}:{{ .Values.global.zookeeper.port }}"
         producer {
           max-request-size = 1572864
           batch.size = 98304
@@ -281,6 +284,7 @@ flink_jobs:
       kafka {
         producer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
         consumer.broker-servers = "{{ .Values.global.kafka.host }}:{{ .Values.global.kafka.port }}"
+        zookeeper = "{{ .Values.global.zookeeper.host }}:{{ .Values.global.zookeeper.port }}"
         input.topic = {{ .Values.global.env }}.learning.graph.events
         groupId = {{ .Values.global.env }}-content-cache-updater-group
       }
