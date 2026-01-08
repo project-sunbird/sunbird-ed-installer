@@ -1,6 +1,2 @@
-elasticsearch:
-  enabled: false
 kafka:
-  enabled: false
-redis:
   enabled: false
