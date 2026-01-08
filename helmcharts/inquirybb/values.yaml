@@ -87,9 +87,9 @@ kafka: &kafka
   host: "kafka"
   port: 9092
   image:
-    registry: ""
-    repository: sanketikahub/kafka
-    tag: "4.0.0"
+    registry: "docker.io"
+    repository: bitnamilegacy/kafka
+    tag: "4.0.0-debian-12-r10"
   commonAnnotations:
     "helm.sh/hook-weight": "-5"
   provisioning:
