@@ -78,6 +78,37 @@ elasticsearch: &es
     repository: bitnami-shell-archived
     tag: 11-debian-11-r54
 
+yugabyte: &yugabyte
+  enabled: true
+  nameOverride: "yugabyte"
+  fullnameOverride: "yugabyte"
+  host: "yb-tserver-service" 
+  port: 9042
+  postgresql_port: 5433
+  databases:
+    - name: "keycloak"
+    - name: "quartz"
+    - name: "userorg"
+    - name: "enc-keys"
+    - name: "registry"
+
+  image:
+    registry: yugabytedb
+    repository: yugabyte
+    tag: 2025.2.0.0-b131 
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  provisioning:
+    annotations: *provisioningAnnotations  
+  persistence:
+    size: 25Gi  
+  # Force single replica for Yugabyte masters and tservers (override subchart defaults)
+  replicas:
+    master: 3
+    tserver: 3
+  username: yugabyte  
+  password: yugabyte
+
 kafka: &kafka
   # zookeeper: *zookeeper
   enabled: true
@@ -148,6 +179,7 @@ global:
   graph_passport: *graph_passport
   installation: *installation
   elasticsearch: *es
+  yugabyte: *yugabyte
   provisioningAnnotations: *provisioningAnnotations
 
 migration:
