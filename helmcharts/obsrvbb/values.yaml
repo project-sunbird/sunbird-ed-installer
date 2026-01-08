@@ -92,9 +92,8 @@ kafka: &kafka
     replicationFactor: 1
     numPartitions: 1
     topics:
-    - name: "{{ .Values.global.env }}.telemetry.audit"
-    - name: "{{ .Values.global.env }}.learning.graph.events"
     - name: "{{ .Values.global.env }}.nlweb.ingest"
+    - name: "{{ .Values.global.env }}.telemetry.ingest"
     parallel: 1
 
 superset:
