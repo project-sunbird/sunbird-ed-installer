@@ -42,3 +42,7 @@ dependencies:
   - name: neo4j
     condition: neo4j.enabled
     version: 0.1.0
+  - name: yugabyte
+    repository: https://charts.yugabyte.com
+    version: 2025.2.0   # Chart version
+    condition: yugabyte.enabled  
