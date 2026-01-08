@@ -1,5 +1,3 @@
-cassandra:
-  enabled: false
 elasticsearch:
   enabled: false
 kafka:

@@ -20,6 +20,7 @@ spec:
         checksum/config: {{ .Files.Glob "configs/*" | toYaml | sha256sum }}
     spec:
       serviceAccountName: {{ include "common.names.fullname" . }}
+      terminationGracePeriodSeconds: 800
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       {{- with .Values.image.pullSecrets }}

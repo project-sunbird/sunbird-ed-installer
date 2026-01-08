@@ -28,10 +28,6 @@ images:
     repository: "zookeeper"
     tag: "3.8.1-debian-11-r6"
 
-  cassandra: &cassandra
-    registry: "sunbirded.azurecr.io"
-    repository: "cassandra"
-    tag: "3.11.13-debian-11-r3"
 
   postgresql: &postgresql
     registry: "sunbirded.azurecr.io"
@@ -42,6 +38,11 @@ images:
     registry: "sunbirded.azurecr.io"
     repository: "redis"
     tag: "7.0.9-debian-11-r1"
+
+  postgresql: &postgresql
+    registry: "sunbirded.azurecr.io"
+    repository: "postgresql"
+    tag: "11.14.0"  
 
   elasticsearch: &elasticsearch
     registry: "sunbirded.azurecr.io"
@@ -222,10 +223,6 @@ internal: &internal
     imagePullSecrets:
       - name: "registry-secret-name"
 
-  cassandra:
-    image: *cassandra
-    imagePullSecrets:
-      - name: "registry-secret-name"
 
   postgresql:
     image: *postgresql
@@ -311,6 +308,11 @@ internal: &internal
     image: *nodebb
     imagePullSecrets:
       - name: "registry-secret-name"
+
+  postgresql:
+    image: *postgresql
+    imagePullSecrets:
+      - name: "registry-secret-name"    
 
   adminutil:
     image: *adminutil

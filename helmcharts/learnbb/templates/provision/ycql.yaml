@@ -1,10 +1,10 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Chart.Name }}-yugabyte-migration-job
+  name: {{ .Chart.Name }}-yugabytecql-migration-job
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ .Chart.Name }}-yugabyte-migration
+    app: {{ .Chart.Name }}-yugabytecql-migration
     scope: provisioning
   annotations:
     {{.Values.global.yugabyte.provisioning.annotations | toYaml }}
@@ -12,7 +12,7 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ .Chart.Name }}-yugabyte-migration
+        app: {{ .Chart.Name }}-yugabytecql-migration
     spec:
       restartPolicy: Never
       volumes:
