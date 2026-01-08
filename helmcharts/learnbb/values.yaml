@@ -112,10 +112,10 @@ kafka: &kafka
   enabled: true
   fullnameOverride: "kafka"
   # clientProtocol: PLAINTEXT
-  host: "kafka"
+  host: "kafka-controller-headless"
   port: 9092
   image:
-    registry: ""
+    registry: "docker.io"
     repository: sanketikahub/kafka
     tag: "4.0.0"
   commonAnnotations:
