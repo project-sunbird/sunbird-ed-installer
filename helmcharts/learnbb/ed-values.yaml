@@ -10,3 +10,5 @@ druid-raw-cluster:
   enabled: false
 yugabyte:
   enabled: false
+postgresql:
+  enabled: false

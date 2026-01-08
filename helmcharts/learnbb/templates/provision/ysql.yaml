@@ -1,10 +1,10 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Chart.Name }}-postgres-migration-job
+  name: {{ .Chart.Name }}-yugabytesql-migration-job
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ .Chart.Name }}-postgres-migration
+    app: {{ .Chart.Name }}-yugabytesql-migration
     scope: provisioning
   annotations:
     {{- .Values.global.yugabyte.provisioning.annotations | toYaml | nindent 4}}
@@ -13,14 +13,14 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ .Chart.Name }}-postgres-migration
+        app: {{ .Chart.Name }}-yugabytesql-migration
     spec:
       restartPolicy: Never
       volumes:
       - name: shared-volume
         emptyDir: {}
       initContainers:
-      - name: wait-for-postgres
+      - name: wait-for-yugabytesql
         image: alpine/curl
         imagePullPolicy: IfNotPresent
         command: ['sh', '-c']

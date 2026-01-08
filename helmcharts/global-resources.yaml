@@ -80,14 +80,6 @@ player:
       cpu: 1
       memory: 1G      
 
-report: 
-  resources:
-    requests:
-      cpu: 100m
-      memory: 100Mi
-    limits:
-      cpu: 1000m
-      memory: 1G
     
 #inquirybb
 assessment:
@@ -341,6 +333,17 @@ telemetry:
       cpu: 1
       memory: 1024Mi
 
+postgresql: 
+  persistence:
+    size: 25Gi
+  resources:
+    limits:
+      cpu: 250m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+
 superset:
   resources:
     limits:
@@ -390,14 +393,15 @@ kubernetes-dashboard:
           cpu: 250m
           memory: 400Mi
 
-promtail:
-  resources:
-    limits:
-      cpu: 200m
-      memory: 128Mi
-    requests:
-      cpu: 100m
-      memory: 128Mi
+alloy:
+ alloy:
+    resources:
+      limits:
+        cpu: 200m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
 
 reloader:
   reloader:

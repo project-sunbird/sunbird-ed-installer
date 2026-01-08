@@ -28,10 +28,6 @@ images:
     repository: "zookeeper"
     tag: "3.8.1-debian-11-r6"
 
-  cassandra: &cassandra
-    registry: "sunbirded.azurecr.io"
-    repository: "cassandra"
-    tag: "3.11.13-debian-11-r3"
 
   postgresql: &postgresql
     registry: "sunbirded.azurecr.io"
@@ -42,6 +38,11 @@ images:
     registry: "sunbirded.azurecr.io"
     repository: "redis"
     tag: "7.0.9-debian-11-r1"
+
+  postgresql: &postgresql
+    registry: "sunbirded.azurecr.io"
+    repository: "postgresql"
+    tag: "11.14.0"  
 
   elasticsearch: &elasticsearch
     registry: "sunbirded.azurecr.io"
@@ -58,6 +59,9 @@ images:
     tag: "11.4.0"
     digest: ""
 
+  alloy: &alloy
+    registry: "docker.io"
+    repository: grafana/alloy
 
   discussion_mw: &discussion_mw
     repository: "sunbirded.azurecr.io/discussion-middleware"
@@ -70,10 +74,6 @@ images:
   player: &player
     repository: "ghcr.io/sunbird-ed/sunbirded-portal/player"
     tag: "release-8.1.0_rc5_61af49d"
-
-  report: &report
-    repository: "ghcr.io/project-sunbird/sunbird-report-service"
-    tag: "release-8.1.0_rc1_ea97f3a_4"
 
   router: &router
     repository: "sunbirded.azurecr.io/router"
@@ -223,10 +223,6 @@ internal: &internal
     imagePullSecrets:
       - name: "registry-secret-name"
 
-  cassandra:
-    image: *cassandra
-    imagePullSecrets:
-      - name: "registry-secret-name"
 
   postgresql:
     image: *postgresql
@@ -253,6 +249,10 @@ internal: &internal
     imagePullSecrets:
       - name: "registry-secret-name"
 
+  alloy:
+    image: *alloy
+    imagePullSecrets:
+      - name: "registry-secret-name"    
 
   discussion_mw:
     image: *discussion_mw
@@ -266,11 +266,6 @@ internal: &internal
 
   player:
     image: *player
-    imagePullSecrets:
-      - name: "registry-secret-name"
-
-  report:
-    image: *report
     imagePullSecrets:
       - name: "registry-secret-name"
 
@@ -313,6 +308,11 @@ internal: &internal
     image: *nodebb
     imagePullSecrets:
       - name: "registry-secret-name"
+
+  postgresql:
+    image: *postgresql
+    imagePullSecrets:
+      - name: "registry-secret-name"    
 
   adminutil:
     image: *adminutil

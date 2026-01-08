@@ -156,6 +156,24 @@ druid: &druid
   persistence:
     size: 25Gi
 
+postgresql: &postgresql
+  enabled: true
+  fullnameOverride: "postgresql"
+  image:
+    registry: "sunbirded.azurecr.io"
+    repository: postgresql
+    tag: 11.14.0
+  host: postgresql
+  port: 5432
+  postgresqlUsername: postgres
+  postgresqlPassword: postgres
+  provisioning:
+    annotations: *provisioningAnnotations
+  persistence:
+    size: 25Gi
+  databases:
+  - name: "registry"
+
 neo4j: &neo4j
   enabled: true
   host: "neo4j"
@@ -175,6 +193,7 @@ global:
   elasticsearch: *es
   yugabyte: *yugabyte
   zookeeper: *zookeeper
+  postgresql: *postgresql
   kafka: *kafka
   druid: *druid
   neo4j: *neo4j
