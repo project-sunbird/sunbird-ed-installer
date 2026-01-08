@@ -607,6 +607,7 @@ flink_jobs:
       }
 
       service {
+        print.basePath = "http://print:5000"
       }
 
       contentTypeToPrimaryCategory {
