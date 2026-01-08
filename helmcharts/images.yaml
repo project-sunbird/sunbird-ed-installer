@@ -19,7 +19,7 @@ images:
     tag: "1.0.6"
 
   kafka: &kafka
-    registry: ""
+    registry: "docker.io"
     repository: sanketikahub/kafka
     tag: "4.0.0"
 

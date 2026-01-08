@@ -92,7 +92,7 @@ kafka: &kafka
   host: kafka
   port: 9092
   image:
-    registry: ""
+    registry: "docker.io"
     repository: sanketikahub/kafka
     tag: "4.0.0"
   persistence:
