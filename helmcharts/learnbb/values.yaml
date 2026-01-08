@@ -111,7 +111,7 @@ kafka: &kafka
   # zookeeper: *zookeeper
   enabled: true
   fullnameOverride: "kafka"
-  # clientProtocol: PLAINTEXT
+  clientProtocol: PLAINTEXT
   host: "kafka-controller-headless"
   port: 9092
   image:

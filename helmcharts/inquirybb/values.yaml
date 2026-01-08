@@ -83,7 +83,7 @@ kafka: &kafka
   enabled: true
   nameOverride: "kafka"
   fullnameOverride: "kafka"
-  # clientProtocol: PLAINTEXT
+  clientProtocol: PLAINTEXT
   host: "kafka-controller-headless"
   port: 9092
   image:
