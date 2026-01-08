@@ -63,7 +63,7 @@ images:
     tag: "release-5.1.0_RC1_29_bot"
 
   discussion_mw: &discussion_mw
-    repository: "sunbirded.azurecr.io/discussion-middleware"
+    repository: "ghcr.io/sunbird-lern/discussions-middlewar"
     tag: "release-8.1.0_rc2-e7360ec-2"
 
   echo: &echo
