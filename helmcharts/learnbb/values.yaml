@@ -208,3 +208,5 @@ migration:
     jarUrl: "https://github.com/user/repo/releases/download/v1.0/migration.jar"
   elasticsearch:
     waitTime: 120
+  postgresql:
+    waitTime: 120
