@@ -258,10 +258,10 @@ supersetNode:
       enabled: false
       ssl_cert_reqs: CERT_NONE
     # You need to change below configuration incase bringing own PostgresSQL instance and also set postgresql.enabled:false
-    db_host: postgresql
-    db_port: "5432"
-    db_user: postgres
-    db_pass: postgres
+    db_host: yb-tserver-service
+    db_port: "5433"
+    db_user: yugabyte
+    db_pass: yugabyte
     db_name: superset
   env: {}
   # -- If true, forces deployment to reload on each upgrade
@@ -269,7 +269,7 @@ supersetNode:
   # -- Init containers
   # @default -- a container waiting for postgres
   initContainers:
-    - name: wait-for-postgres
+    - name: wait-for-yugabytepostgres
       image: "{{ .Values.initImage.repository }}:{{ .Values.initImage.tag }}"
       imagePullPolicy: "{{ .Values.initImage.pullPolicy }}"
       envFrom:
@@ -702,7 +702,7 @@ init:
     firstname: Superset
     lastname: Admin
     email: admin@superset.com
-    password: admin
+    password: a{{ .Values.global.superset.password }}
   # -- List of initContainers
   # @default -- a container waiting for postgres
   initContainers:
@@ -726,14 +726,21 @@ init:
     echo "Initializing roles..."
     superset init
     {{ if .Values.init.createAdmin }}
+    # Create admin user (ignoring errors if exists) then force password update
+    set +e
     echo "Creating admin user..."
     superset fab create-admin \
                     --username {{ .Values.init.adminUser.username }} \
                     --firstname {{ .Values.init.adminUser.firstname }} \
                     --lastname {{ .Values.init.adminUser.lastname }} \
                     --email {{ .Values.init.adminUser.email }} \
-                    --password {{ .Values.init.adminUser.password }} \
-                    || true
+                    --password {{ .Values.global.superset.init.adminUser.password | default .Values.init.adminUser.password }}
+    
+    echo "Ensuring password matches configuration..."
+    superset fab reset-password \
+                  --username {{ .Values.init.adminUser.username }} \
+                  --password {{ .Values.global.superset.init.adminUser.password | default .Values.init.adminUser.password }}
+    set -e
     {{- end }}
     {{ if .Values.init.loadExamples }}
     echo "Loading examples..."

@@ -189,10 +189,8 @@ images:
     tag: "release-8.0.0_rc3_f082527_4"
 
   superset: &superset
-    registry: "docker.io"
-    repository: "superset"
-    tag: "4.1.1"
-    digest: ""
+    repository: sanketikahub/superset
+    tag: 4.1.1
 
   nlweb: &nlweb
     repository: "sanketikahub/nlweb"
