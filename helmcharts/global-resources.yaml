@@ -276,7 +276,7 @@ kafka:
     persistence:
       size: 2Gi
   controller:
-    replicaCount: 3
+    replicaCount: 1
     resources:
       limits:
         cpu: 500m
