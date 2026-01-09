@@ -248,15 +248,6 @@ notification:
       cpu: 1
       memory: 1024Mi
 
-print:
-  resources:
-    requests:
-      cpu: 100m
-      memory: 100Mi
-    limits:
-      cpu: 1
-      memory: 1024Mi
-
 registry:
   resources:
     requests:

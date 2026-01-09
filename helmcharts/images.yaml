@@ -147,10 +147,6 @@ images:
     repository: "ghcr.io/sunbird-lern/notification-service"
     tag: "release-8.1.0_rc3_eaf6c11_8"
 
-  print: &print
-    repository: "sunbirded.azurecr.io/print-service"
-    tag: "release-3.1.0_f9a608c"
-
   registry: &registry
     repository: "sunbirded.azurecr.io/sunbird-rc-core"
     tag: "release-5.1.0_ece7ed3_14"
@@ -360,11 +356,6 @@ internal: &internal
 
   notification:
     image: *notification
-    imagePullSecrets:
-      - name: "registry-secret-name"
-
-  print:
-    image: *print
     imagePullSecrets:
       - name: "registry-secret-name"
 
