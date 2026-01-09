@@ -146,7 +146,7 @@ sunbird_sso_password: admin
 sunbird_analytics_api_base_url: "http://analytics-service:9000"
 sunbird_search_service_api_base_url: "http://search-service:9000"
 learning_service_url: "http://learning:8080/learning-service"
-content_service_url: "http://content-service:9000"
+content_service_url: "http://knowlg-service:9000"
 content_read_url: "/content/v3/read/"
 mail_server_username: ""
 mail_server_password: ""
