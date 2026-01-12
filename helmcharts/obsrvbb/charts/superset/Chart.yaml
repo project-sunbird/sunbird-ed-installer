@@ -1,25 +1,26 @@
-#
-# Licensed to the Apache Software Foundation (ASF) under one or more
-# contributor license agreements.  See the NOTICE file distributed with
-# this work for additional information regarding copyright ownership.
-# The ASF licenses this file to You under the Apache License, Version 2.0
-# (the "License"); you may not use this file except in compliance with
-# the License.  You may obtain a copy of the License at
-#
-#    http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-apiVersion: v1
-appVersion: "1.0"
-description: A Helm chart for Kubernetes
-name: superset
+apiVersion: v2
+appVersion: 4.1.2
+dependencies:
+- condition: postgresql.enabled
+  name: postgresql
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 13.4.4
+- condition: redis.enabled
+  name: redis
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 17.9.4
+description: Apache Superset is a modern, enterprise-ready business intelligence web
+  application
+home: https://superset.apache.org/
+icon: https://artifacthub.io/image/68c1d717-0e97-491f-b046-754e46f46922@2x
+keywords:
+- business intelligence
+- data science
 maintainers:
-  - name: Chuan-Yen Chiang
-    email: cychiang0823@gmail.com
-    url: https://github.com/cychiang
-version: 0.1.0
+- email: craig@craigrueda.com
+  name: craig-rueda
+  url: https://github.com/craig-rueda
+name: superset
+sources:
+- https://github.com/apache/superset
+version: 0.14.2

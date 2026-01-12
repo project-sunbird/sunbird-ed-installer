@@ -250,8 +250,8 @@ base_config: |
       port = {{ .Values.global.redis.port }}
     }
     lms-cassandra {
-      host = "{{ .Values.global.cassandra.host }}"
-      port = {{ .Values.global.cassandra.port }}
+      host = "{{ .Values.global.yugabyte.host }}"
+      port = {{ .Values.global.yugabyte.port }}
     }
     neo4j {
       routePath = "bolt://{{.Values.global.neo4j.host}}:{{.Values.global.neo4j.port}}"

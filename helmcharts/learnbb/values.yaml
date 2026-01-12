@@ -1,6 +1,6 @@
 devops_release_branch: release-8.0.0
 postgres_migration_image: sunbirded.azurecr.io/postgresql:11.14.0
-cassandra_migration_version: release-5.3.0
+cassandra_migration_version: main
 certregistry:
   opa_enabled: true
 userorg:
@@ -15,27 +15,6 @@ registry:
 provisioningAnnotations: &provisioningAnnotations
   "helm.sh/hook-weight": "-4"
 
-postgresql: &postgresql
-  enabled: true
-  fullnameOverride: "postgresql"
-  image:
-    registry: "sunbirded.azurecr.io"
-    repository: postgresql
-    tag: 11.14.0
-  host: postgresql
-  port: 5432
-  postgresqlUsername: postgres
-  postgresqlPassword: postgres
-  provisioning:
-    annotations: *provisioningAnnotations
-  persistence:
-    size: 25Gi
-  databases:
-  - name: "keycloak"
-  - name: "quartz"
-  - name: "userorg"
-  - name: "enc-keys"
-  - name: "registry"
 
 elasticsearch: &es
   enabled: true
@@ -89,25 +68,36 @@ redis: &redis
     persistence:
       size: 25Gi
 
-cassandra: &cassandra
+yugabyte: &yugabyte
   enabled: true
-  nameOverride: "cassandra"
-  fullnameOverride: "cassandra"
-  host: "cassandra"
+  nameOverride: "yugabyte"
+  fullnameOverride: "yugabyte"
+  host: "yb-tserver-service" 
   port: 9042
-  provisioning:
-    annotations: *provisioningAnnotations
+  postgresql_port: 5433
+  databases:
+    - name: "keycloak"
+    - name: "quartz"
+    - name: "userorg"
+    - name: "enc-keys"
+    - name: "registry"
+
   image:
-    tag: 3.11.13-debian-11-r3
-  extraEnvVars:
-    - name: CASSANDRA_AUTHENTICATOR
-      value: AllowAllAuthenticator
-    - name: CASSANDRA_AUTHORIZER
-      value: AllowAllAuthorizer
+    registry: yugabytedb
+    repository: yugabyte
+    tag: 2025.2.0.0-b131 
   commonAnnotations:
     "helm.sh/hook-weight": "-5"
+  provisioning:
+    annotations: *provisioningAnnotations  
   persistence:
-    size: 25Gi
+    size: 25Gi  
+  # Force single replica for Yugabyte masters and tservers (override subchart defaults)
+  replicas:
+    master: 3
+    tserver: 3
+  username: yugabyte  
+  password: yugabyte
 
 zookeeper: &zookeeper
   fullnameOverride: zookeeper
@@ -149,6 +139,24 @@ druid: &druid
   persistence:
     size: 25Gi
 
+postgresql: &postgresql
+  enabled: true
+  fullnameOverride: "postgresql"
+  image:
+    registry: "sunbirded.azurecr.io"
+    repository: postgresql
+    tag: 11.14.0
+  host: postgresql
+  port: 5432
+  postgresqlUsername: postgres
+  postgresqlPassword: postgres
+  provisioning:
+    annotations: *provisioningAnnotations
+  persistence:
+    size: 25Gi
+  databases:
+  - name: "registry"
+
 neo4j: &neo4j
   enabled: true
   host: "neo4j"
@@ -166,10 +174,10 @@ neo4j: &neo4j
 global:
   redis: *redis
   elasticsearch: *es
-  cassandra: *cassandra
+  yugabyte: *yugabyte
   zookeeper: *zookeeper
-  kafka: *kafka
   postgresql: *postgresql
+  kafka: *kafka
   druid: *druid
   neo4j: *neo4j
   provisioningAnnotations: *provisioningAnnotations
@@ -178,7 +186,7 @@ global:
   kong_desktop_device_consumer_names_for_opa: '["portal", "desktop"]'
 
 migration:
-  cassandra:
+  yugabyte:
     waitTime: 120
     jarUrl: "https://github.com/user/repo/releases/download/v1.0/migration.jar"
   elasticsearch:

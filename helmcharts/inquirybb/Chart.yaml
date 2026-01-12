@@ -31,10 +31,6 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     version: 17.8.3
     condition: redis.enabled
-  - name: cassandra
-    repository: https://charts.bitnami.com/bitnami
-    version: 10.1.0
-    condition: cassandra.enabled
   - name: kafka
     repository: https://charts.bitnami.com/bitnami
     version: 20.0.2
@@ -46,3 +42,7 @@ dependencies:
   - name: neo4j
     condition: neo4j.enabled
     version: 0.1.0
+  - name: yugabyte
+    repository: https://charts.yugabyte.com
+    version: 2025.2.0   # Chart version
+    condition: yugabyte.enabled  

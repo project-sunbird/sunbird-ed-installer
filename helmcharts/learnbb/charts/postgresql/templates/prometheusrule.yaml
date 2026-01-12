@@ -3,7 +3,9 @@ apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   name: {{ template "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+{{- with .Values.metrics.prometheusRule.namespace }}
+  namespace: {{ . }}
+{{- end }}
   labels:
   {{- include "common.labels.standard" . | nindent 4 }}
   {{- if .Values.commonLabels }}

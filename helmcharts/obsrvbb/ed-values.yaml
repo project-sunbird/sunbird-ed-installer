@@ -1,4 +1,6 @@
 kafka:
   enabled: false
-redis:
-  enabled: false  
+yugabyte:
+  enabled: false
+superset:
+  enabled: true

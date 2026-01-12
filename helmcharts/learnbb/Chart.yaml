@@ -35,10 +35,6 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     version: 20.0.2
     condition: kafka.enabled
-  - name: cassandra
-    repository: https://charts.bitnami.com/bitnami
-    version: 10.1.0
-    condition: cassandra.enabled
   - name: elasticsearch
     repository: https://charts.bitnami.com/bitnami
     version: 19.5.4
@@ -49,9 +45,13 @@ dependencies:
   - name: druid-operator
     condition: druid-operator.enabled
     version: 0.1.1
-  - name: postgresql
-    condition: postgresql.enabled
-    version: 10.16.3
   - name: neo4j
     condition: neo4j.enabled
     version: 0.1.0
+  - name: postgresql
+    condition: postgresql.enabled
+    version: 10.16.3  
+  - name: yugabyte
+    repository: https://charts.yugabyte.com
+    version: 2025.2.0   # Chart version
+    condition: yugabyte.enabled

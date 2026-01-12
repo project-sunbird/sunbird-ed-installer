@@ -408,8 +408,8 @@ base_config: |
       port = 6379
     }
     lms-cassandra {
-        host = "{{ .Values.global.cassandra.host }}"
-        port = "{{ .Values.global.cassandra.port }}"
+        host = "{{ .Values.global.yugabyte.host }}"
+        port = "{{ .Values.global.yugabyte.port }}"
         isMultiDCEnabled = "{{ .Values.cassandra_isMultiDCEnabled }}"
     }
     neo4j {
@@ -426,8 +426,8 @@ base_config: |
       }
     }
     ml-cassandra {
-      host = "{{ .Values.global.cassandra.host }}"
-      port = "{{ .Values.global.cassandra.port }}"
+      host = "{{ .Values.global.yugabyte.host }}"
+      port = "{{ .Values.global.yugabyte.port }}"
       isMultiDCEnabled = "{{ .Values.cassandra_isMultiDCEnabled }}"
     }
     ml-mongo {

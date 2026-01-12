@@ -1,0 +1,57 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Chart.Name }}-yugabyte-postgres-migration-job
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Chart.Name }}-yugabyte-postgres-migration
+    scope: provisioning
+  annotations:
+    {{.Values.global.yugabyte.provisioning.annotations | toYaml }}
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}-yugabyte-postgres-migration
+    spec:
+      restartPolicy: Never
+      initContainers:
+      - name: wait-for-yugabyte-postgres
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        command: ['sh', '-c']
+        args:
+        - "timeout {{ .Values.migration.yugabyte.waitTime }} sh -c 'until nc -z {{ .Values.global.yugabyte.host }} {{ .Values.global.yugabyte.postgresql_port}}; do echo waiting for yugabytepostgres; sleep 10; done'"
+      containers:
+      - name: migration
+        image: yugabytedb/yugabyte:latest
+        imagePullPolicy: IfNotPresent
+        command: ['bash', '-c']
+        securityContext:
+          runAsUser: 0
+        args:
+        - |
+            set -e
+            export devops_branch={{ .Values.devops_release_branch }}
+            export PGHOST={{.Values.global.yugabyte.host}}
+            export PGPORT={{.Values.global.yugabyte.postgresql_port}}
+            export PGUSER=yugabyte
+            export PGPASSWORD=yugabyte
+            {{- range .Values.global.yugabyte.databases }}
+            # Check if the database exists
+            # Ensure ysqlsh is available in the image
+            if ! command -v ysqlsh >/dev/null 2>&1; then
+              echo "ysqlsh not found; please use an image with Yugabyte YSQL client (e.g., yugabytedb/yugabyte)."
+              exit 1
+            fi
+
+            if ! ysqlsh -lqt | cut -d \| -f 1 | grep -qw {{.name}}; then
+              # Database doesn't exist, create it
+              echo "SELECT 'CREATE DATABASE \"{{ .name }}\"' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '\"{{ .name }}\"')\gexec" | ysqlsh
+            else
+                echo "Database {{.name}} already exists."
+            fi
+            {{- end }}
+
+            echo "YugabyteSQL setup completed."
+  backoffLimit: 30

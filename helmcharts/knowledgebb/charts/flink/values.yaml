@@ -224,8 +224,8 @@ base_config: |
       }
   }
   lms-cassandra {
-  host = "{{ .Values.global.cassandra.host }}"
-  port = "{{ .Values.global.cassandra.port }}"
+  host = "{{ .Values.global.yugabyte.host }}"
+  port = "{{ .Values.global.yugabyte.port }}"
   }
 
   neo4j {

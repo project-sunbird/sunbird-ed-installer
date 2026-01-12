@@ -39,7 +39,7 @@ global:
 nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
-fullnameOverride: "postgresql"
+fullnameOverride: ""
 ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
 ##
 extraDeploy: []
@@ -115,7 +115,7 @@ volumePermissions:
   image:
     registry: sunbirded.azurecr.io
     repository: os-shell
-    tag: 10-debian-10-r326
+    tag: 11-debian-11-r90
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

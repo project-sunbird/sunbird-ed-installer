@@ -28,10 +28,6 @@ images:
     repository: "zookeeper"
     tag: "3.8.1-debian-11-r6"
 
-  cassandra: &cassandra
-    registry: "sunbirded.azurecr.io"
-    repository: "cassandra"
-    tag: "3.11.13-debian-11-r3"
 
   postgresql: &postgresql
     registry: "sunbirded.azurecr.io"
@@ -42,6 +38,11 @@ images:
     registry: "sunbirded.azurecr.io"
     repository: "redis"
     tag: "7.0.9-debian-11-r1"
+
+  postgresql: &postgresql
+    registry: "sunbirded.azurecr.io"
+    repository: "postgresql"
+    tag: "11.14.0"  
 
   elasticsearch: &elasticsearch
     registry: "sunbirded.azurecr.io"
@@ -117,7 +118,7 @@ images:
 
   certregistry: &certregistry
     repository: "ghcr.io/sunbird-lern/certificate-registry"
-    tag: "release-8.1.0_rc1_623a7ac_2"
+    tag: "release-8.1.0_rc2_546e8d5_3"
 
   certificateapi: &certificateapi
     repository: "sunbirded.azurecr.io/sunbird-rc-certificate-api"
@@ -137,7 +138,7 @@ images:
 
   keycloak-kids-keys: &keycloak-kids-keys
     repository: "sunbirded.azurecr.io/keycloak-kids-keys"
-    tag: "0.1.5"
+    tag: "v3"
 
   lms: &lms
     repository: "ghcr.io/sunbird-lern/lms-service"
@@ -148,8 +149,8 @@ images:
     tag: "release-8.1.0_rc3_eaf6c11_8"
 
   print: &print
-    repository: "sunbirded.azurecr.io/print-service"
-    tag: "release-3.1.0_f9a608c"
+    repository: "ghcr.io/project-sunbird/print-service"
+    tag: "release-8.1.0_rc2_b42d8db_1"
 
   registry: &registry
     repository: "sunbirded.azurecr.io/sunbird-rc-core"
@@ -189,8 +190,8 @@ images:
     tag: "release-8.0.0_rc3_f082527_4"
 
   superset: &superset
-    repository: "sunbirded.azurecr.io/superset"
-    tag: "release-7.0.0" 
+    repository: sanketikahub/superset
+    tag: 4.1.1
 
   nlweb: &nlweb
     repository: "sanketikahub/nlweb"
@@ -223,10 +224,6 @@ internal: &internal
     imagePullSecrets:
       - name: "registry-secret-name"
 
-  cassandra:
-    image: *cassandra
-    imagePullSecrets:
-      - name: "registry-secret-name"
 
   postgresql:
     image: *postgresql
@@ -312,6 +309,11 @@ internal: &internal
     image: *nodebb
     imagePullSecrets:
       - name: "registry-secret-name"
+
+  postgresql:
+    image: *postgresql
+    imagePullSecrets:
+      - name: "registry-secret-name"    
 
   adminutil:
     image: *adminutil
@@ -440,9 +442,9 @@ global:
     tag: "release-8.1.0_rc1_e7ac747"
 
   learnflink:
-    registry: "ghcr.io"
-    repository: "sunbird-lern/data-pipeline"
-    tag: "release-8.1.0_rc1_7ea4c2c"
+    registry: "chethann07"
+    repository: "data-pipeline"
+    tag: "yugabyte_migration_v4"
 
   inquiryflink:
     registry: "sunbirded.azurecr.io"

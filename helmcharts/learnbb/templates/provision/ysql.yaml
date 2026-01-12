@@ -1,0 +1,119 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Chart.Name }}-yugabytesql-migration-job
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Chart.Name }}-yugabytesql-migration
+    scope: provisioning
+  annotations:
+    {{- .Values.global.yugabyte.provisioning.annotations | toYaml | nindent 4}}
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}-yugabytesql-migration
+    spec:
+      restartPolicy: Never
+      volumes:
+      - name: shared-volume
+        emptyDir: {}
+      initContainers:
+      - name: wait-for-yugabytesql
+        image: alpine/curl
+        imagePullPolicy: IfNotPresent
+        command: ['sh', '-c']
+        args:
+        - |
+          "timeout {{ .Values.migration.yugabyte.waitTime }} sh -c 'until nc -z {{ .Values.global.yugabyte.host }} {{ .Values.global.yugabyte.port }}; do echo waiting for yugabyte postgres; 10; done'"
+          # Downloading migration files
+          set -e
+          export devops_branch={{ .Values.devops_release_branch }}
+          apk add --no-cache git
+          cd /opt/shared-volume
+          git clone --filter=blob:none --no-checkout https://github.com/project-sunbird/sunbird-devops --branch=$devops_branch --depth 1
+          cd sunbird-devops
+          git sparse-checkout init --cone
+          git sparse-checkout set ansible/roles/postgresql-data-update/templates
+          git checkout
+        volumeMounts:
+          - name: shared-volume
+            mountPath: /opt/shared-volume
+      containers:
+      - name: migration
+        image: yugabytedb/yugabyte:latest
+        imagePullPolicy: IfNotPresent
+        command: ['bash', '-c']
+        securityContext:
+          runAsUser: 0
+        volumeMounts:
+          - name: shared-volume
+            mountPath: /opt/shared-volume
+        args:
+        - |
+            set -e
+            export PGHOST={{.Values.global.yugabyte.host}}
+            export PGPORT={{.Values.global.postgresql_port}}
+            export PGUSER={{.Values.global.yugabyte.username}}
+            export PGPASSWORD={{.Values.global.yugabyte.password}}
+            {{- range .Values.global.yugabyte.databases }}
+            # Check if the database exists
+            if ! ysqlsh -lqt | cut -d \| -f 1 | grep -qw {{.name}}; then
+              # Database doesn't exist, create it
+              echo "SELECT 'CREATE DATABASE \"{{ .name }}\"' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '\"{{ .name }}\"')\gexec" | ysqlsh
+            else
+                echo "Database {{.name}} already exists."
+            fi
+            {{- end }}
+
+            cd /opt/shared-volume/sunbird-devops/ansible/roles/postgresql-data-update
+
+            cd templates
+            {{- range .Values.global.yugabyte.databases }}
+            echo "Applying SQL files to database {{ .name }}..."
+            # ensure search_path and set transaction isolation for this session
+            ysqlsh -d "{{ .name }}" -c "SET default_transaction_isolation TO 'read committed'; SET search_path TO public;"
+
+            mkdir -p /opt/shared-volume/migration-logs || true
+
+            run_sql_file() {
+              sql_file="$1"
+              db="$2"
+              attempts=0
+              backoff=1
+              tmp_log="/opt/shared-volume/migration-logs/${db}-${sql_file}.log"
+              while true; do
+                echo "Running $sql_file against $db (attempt $((attempts+1)))..."
+                # run and capture output
+                ysqlsh -d "$db" -f "$sql_file" >"$tmp_log" 2>&1
+                rc=$?
+                if [ $rc -eq 0 ]; then
+                  echo "Succeeded $sql_file"
+                  return 0
+                fi
+                # detect transient Yugabyte errors
+                if grep -q -E "Restart read required|Catalog Version Mismatch|conflict with concurrently committed data|kConflict|Restart read required" "$tmp_log"; then
+                  attempts=$((attempts+1))
+                  if [ $attempts -ge 5 ]; then
+                    echo "Failed applying $sql_file after $attempts attempts (exit $rc). See $tmp_log"
+                    return $rc
+                  fi
+                  echo "Transient Yugabyte error detected for $sql_file; retrying in ${backoff}s (attempt $((attempts+1)))..."
+                  sleep $backoff
+                  backoff=$((backoff*2))
+                  continue
+                fi
+                # non-transient error
+                echo "Permanent error applying $sql_file (exit $rc). See $tmp_log"
+                return $rc
+              done
+            }
+
+            for sql_file in *.sql; do
+              echo "Applying $sql_file to {{ .name }}..."
+              run_sql_file "$sql_file" "{{ .name }}" || true
+            done
+            {{- end }}
+            echo "PostgreSQL setup completed."
+  backoffLimit: 30

@@ -5,6 +5,9 @@ dependencies:
 - name: kafka
   repository: https://charts.bitnami.com/bitnami
   version: 20.0.2
-- name: redis
-  repository: https://charts.bitnami.com/bitnami
-  version: 18.1.1  
+- name: yugabyte
+  repository: https://charts.yugabyte.com
+  version: 2025.2.0   
+- name: superset
+  repository: https://github.com/craig-rueda
+  version: 0.3.5  

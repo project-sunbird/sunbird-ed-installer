@@ -40,33 +40,41 @@ kafka: &kafka
     - name: "{{ .Values.global.env }}.telemetry.ingest"
     parallel: 1
 
-redis: &redis
-  enabled: true
-  nameOverride: "redis"
-  fullnameOverride: "redis"
-  auth:
-    enabled: false
-  host: "redis-master"
-  port: 6379
-  commonAnnotations:
-    "helm.sh/hook-weight": "-5"
-  replica:
-    replicaCount: 0
-  master:
-    persistence:
-      size: 25Gi
       
 superset:
   enabled: true
+
+yugabyte: &yugabyte
+  enabled: true
+  nameOverride: "yugabyte"
+  fullnameOverride: "yugabyte"
+  host: "yb-tserver-service" 
+  port: 9042
+  postgresql_port: 5433
+  databases:
+    - name: "superset"
+
   image:
-    repository: sunbirded.azurecr.io/superset
-    tag: release-7.0.0
-    pullPolicy: Always
+    registry: yugabytedb
+    repository: yugabyte
+    tag: 2025.2.0.0-b131 
+  commonAnnotations:
+    "helm.sh/hook-weight": "-5"
+  provisioning:
+    annotations: *provisioningAnnotations  
+  persistence:
+    size: 25Gi  
+  # Force single replica for Yugabyte masters and tservers (override subchart defaults)
+  replicas:
+    master: 3
+    tserver: 3
+  username: yugabyte  
+  password: yugabyte    
 
 env: &env
 default: "dev"
 global:
-  redis: *redis
   zookeeper: *zookeeper
   kafka: *kafka
+  yugabyte: *yugabyte
 

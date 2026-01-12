@@ -30,11 +30,12 @@ dependencies:
   - name: kafka
     repository: https://charts.bitnami.com/bitnami
     version: 20.0.2
-    condition: kafka.enabled
+    condition: kafka.enabled 
+  - name: yugabyte
+    repository: https://charts.yugabyte.com
+    version: 2025.2.0   # Chart version
+    condition: yugabyte.enabled 
   - name: superset
-    version: 0.1.0
-    condition: superset.enabled    
-  - name: redis
-    repository: https://charts.bitnami.com/bitnami
-    version: 18.1.1
-    condition: redis.enabled   
+    repository: https://sunbirded.github.io/helm-charts/
+    version: 0.3.5
+    condition: superset.enabled

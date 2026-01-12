@@ -5,11 +5,11 @@ dependencies:
 - name: redis
   repository: https://charts.bitnami.com/bitnami
   version: 17.8.3
-- name: cassandra
-  repository: https://charts.bitnami.com/bitnami
-  version: 10.1.0
 - name: kafka
   repository: https://charts.bitnami.com/bitnami
   version: 20.0.2
+- name: yugabyte
+  repository: https://charts.yugabyte.com
+  version: 2025.2.0  
 digest: sha256:b58587093240b8d6005314af318d4cbfecdca635dc7d8066d495a24fbed191f9
 generated: "2024-01-12T11:37:46.219743493+01:00"

@@ -201,17 +201,6 @@ certregistry:
       memory: 1024Mi      
  
 
-cassandra:
-  persistence:
-    size: 25Gi
-  resources:
-    requests:
-      cpu: 520m
-      memory: 3Gi
-    limits:
-      cpu: 750m
-      memory: 10Gi 
-
 groups:
   resources:
     requests:
@@ -308,6 +297,16 @@ neo4j:
     pvc:
       storage: 25Gi
 
+
+telemetry:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 1
+      memory: 1024Mi
+
 postgresql: 
   persistence:
     size: 25Gi
@@ -318,28 +317,6 @@ postgresql:
     requests:
       cpu: 250m
       memory: 256Mi
-
-redis: 
-  master:
-    persistence:
-      size: 25Gi
-    primary:
-    resources:
-      limits:
-        cpu: 0.5
-        memory: 2Gi
-      requests:
-        cpu: 0.5
-        memory: 1Gi 
-
-telemetry:
-  resources:
-    requests:
-      cpu: 100m
-      memory: 100Mi
-    limits:
-      cpu: 1
-      memory: 1024Mi
 
 superset:
   resources:
@@ -476,3 +453,21 @@ elasticsearch:
         memory: "4Gi"
     persistence:
       size: 25Gi
+
+yugabyte:
+  resource:
+    master:
+      requests:
+        cpu: "1"
+        memory: 2Gi
+      limits:
+        cpu: "1.5"
+        memory: 2Gi  ## Ensure the 'memory' value is strictly in 'Gi' or 'G' format. Deviating from these formats
+
+    tserver:
+      requests:
+        cpu: "1"
+        memory: 4Gi
+      limits:
+        cpu: "1.5"
+        memory: 4Gi      
