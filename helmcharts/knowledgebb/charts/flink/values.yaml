@@ -466,7 +466,7 @@ flink_jobs:
         lms.basePath = "http://lms-service:9000"
         learning_service.basePath = "http://learning:8080/learning-service"
         dial.basePath = "https://dial-service:9000"
-        content.basePath = "http://content-service:9000"
+        content.basePath = "http://knowlg-service:9000"
       }
 
       dialcode {
