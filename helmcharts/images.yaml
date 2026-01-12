@@ -19,9 +19,9 @@ images:
     tag: "1.0.6"
 
   kafka: &kafka
-    registry: "sunbirded.azurecr.io"
-    repository: "kafka"
-    tag: "3.3.1-debian-11-r25"
+    registry: "docker.io"
+    repository: sanketikahub/kafka
+    tag: "4.0.0"
 
   zookeeper: &zookeeper
     registry: "sunbirded.azurecr.io"
@@ -200,6 +200,7 @@ images:
   nlwebflink: &nlwebflink
     repository: "sunbirded.azurecr.io/flink-nlweb"
     tag: "v1.0.0"
+
  
 
 # Internal block with pull secrets
