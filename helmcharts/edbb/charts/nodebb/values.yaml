@@ -9,6 +9,13 @@ image:
   tag: release-5.0.0_RC1_1_v1.18.6
   pullSecrets: []
 
+args:
+  - /bin/sh
+  - -c
+  - |
+    ./nodebb build
+    node loader.js --no-daemon --no-silent
+
 podAnnotations: {}
 
 podSecurityContext:
@@ -68,7 +75,7 @@ autoscaling:
 livenessProbe:
   failureThreshold: 20
   httpGet:
-      path: /discussions/api/category/2
+      path: /discussions/api/forum/health
       port: 4567
   initialDelaySeconds: 45
   periodSeconds: 15
@@ -79,7 +86,7 @@ livenessProbe:
 readinessProbe:
   failureThreshold: 20
   httpGet:
-      path: /discussions/api/category/2
+      path: /discussions/api/forum/health
       port: 4567
   initialDelaySeconds: 45
   periodSeconds: 15

@@ -132,7 +132,7 @@ function post_install_nodebb_plugins() {
     echo ">> Activating NodeBB plugins..."
     kubectl exec -n sunbird deploy/nodebb -- ./nodebb activate nodebb-plugin-create-forum
     kubectl exec -n sunbird deploy/nodebb -- ./nodebb activate nodebb-plugin-sunbird-oidc
-    kubectl exec -n sunbird deploy/nodebb -- ./nodebb activate nodebb-plugin-write-api
+    kubectl exec -n sunbird deploy/nodebb -- ./nodebb reset nodebb-plugin-write-api
 
     echo ">> Rebuilding NodeBB to apply plugin changes..."
     kubectl exec -n sunbird deploy/nodebb -- ./nodebb build

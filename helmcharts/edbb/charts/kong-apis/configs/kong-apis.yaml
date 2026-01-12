@@ -9071,3 +9071,94 @@ kong_apis:
     config.limit_by: credential
   - name: request-size-limiting
     config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
+
+# v3 APIs for discussions
+- name: createTopicOfDiscussionsV3
+  uris: "{{ .Values.discussions_prefix }}/v3/topics"
+  upstream_url: "{{ .Values.discussions_mw_service_url }}/v3/topics"
+  strip_uri: true
+  plugins:
+  - name: jwt
+  - name: cors
+  - {{ .Values.statsd_plugin | toYaml | nindent 4 | trim }}
+  - name: acl
+    config.whitelist:
+    - discussionCreate
+  - name: rate-limiting
+    config.policy: local
+    config.hour: "{{ .Values.medium_rate_limit_per_hour }}"
+    config.limit_by: credential
+  - name: request-size-limiting
+    config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
+
+- name: createCategoryOfDiscussionV3
+  uris: "{{ .Values.discussions_prefix }}/v3/categories"
+  upstream_url: "{{ .Values.discussions_mw_service_url }}/v3/categories"
+  strip_uri: true
+  plugins:
+  - name: jwt
+  - name: cors
+  - {{ .Values.statsd_plugin | toYaml | nindent 4 | trim }}
+  - name: acl
+    config.whitelist:
+    - discussionCreate
+  - name: rate-limiting
+    config.policy: local
+    config.hour: "{{ .Values.medium_rate_limit_per_hour }}"
+    config.limit_by: credential
+  - name: request-size-limiting
+    config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
+
+- name: createGroupsOfDiscussionV3
+  uris: "{{ .Values.discussions_prefix }}/v3/groups"
+  upstream_url: "{{ .Values.discussions_mw_service_url }}/v3/groups"
+  strip_uri: true
+  plugins:
+  - name: jwt
+  - name: cors
+  - {{ .Values.statsd_plugin | toYaml | nindent 4 | trim }}
+  - name: acl
+    config.whitelist:
+    - discussionCreate
+  - name: rate-limiting
+    config.policy: local
+    config.hour: "{{ .Values.medium_rate_limit_per_hour }}"
+    config.limit_by: credential
+  - name: request-size-limiting
+    config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
+
+- name: createNewPostOfDiscussionV3
+  uris: "{{ .Values.discussions_prefix }}/v3/posts"
+  upstream_url: "{{ .Values.discussions_mw_service_url }}/v3/posts"
+  strip_uri: true
+  plugins:
+  - name: jwt
+  - name: cors
+  - {{ .Values.statsd_plugin | toYaml | nindent 4 | trim }}
+  - name: acl
+    config.whitelist:
+    - discussionCreate
+  - name: rate-limiting
+    config.policy: local
+    config.hour: "{{ .Values.medium_rate_limit_per_hour }}"
+    config.limit_by: credential
+  - name: request-size-limiting
+    config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
+
+- name: createNewUserOfDiscussionV3
+  uris: "{{ .Values.discussions_prefix }}/v3/users"
+  upstream_url: "{{ .Values.discussions_mw_service_url }}/v3/users"
+  strip_uri: true
+  plugins:
+  - name: jwt
+  - name: cors
+  - {{ .Values.statsd_plugin | toYaml | nindent 4 | trim }}
+  - name: acl
+    config.whitelist:
+    - discussionCreate
+  - name: rate-limiting
+    config.policy: local
+    config.hour: "{{ .Values.medium_rate_limit_per_hour }}"
+    config.limit_by: credential
+  - name: request-size-limiting
+    config.allowed_payload_size: "{{ .Values.medium_request_size_limit }}"
