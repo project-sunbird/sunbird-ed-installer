@@ -268,7 +268,7 @@ base_config: |
     }
 flink_jobs:
   async-questionset-publish:
-    enabled: true
+    enabled: false
     serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")

@@ -5,7 +5,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/sunbird-knowlg/knowledge-platform-jobs
-  tag: "release-8.1.0_rc1_e7ac747"
+  tag: "spark-v0.1_b7e896f"
   pullPolicy: IfNotPresent
   pullSecrets: []
 
@@ -354,7 +354,7 @@ flink_jobs:
     job_classname: org.sunbird.job.transaction.task.TransactionEventProcessorStreamTask
 
   asset-enrichment:
-    enabled: true
+    enabled: false
     serviceMonitor: *serviceMonitor
     config: |+
       include file("/data/flink/conf/base-config.conf")
@@ -563,7 +563,7 @@ flink_jobs:
 
     job_classname: org.sunbird.job.dialcodecontextupdater.task.DialcodeContextUpdaterStreamTask
 
-  content-publish:
+  knowlg-publish:
     enabled: true
     serviceMonitor: *serviceMonitor
     config: |+
@@ -578,7 +578,7 @@ flink_jobs:
         post_publish.topic = "{{ .Values.global.env }}.knowlg.content.postpublish.request"
         mvc.topic = "{{ .Values.global.env }}.knowlg.mvc.processor.job.request"
         error.topic = "{{ .Values.global.env }}.knowlg.learning.events.failed"
-        groupId = "{{ .Values.global.env }}-content-publish-group"
+        groupId = "{{ .Values.global.env }}-knowlg-publish-group"
         content_metadata.topic = "dv.telemetry.coss"
       }
 
@@ -591,7 +591,18 @@ flink_jobs:
       redis {
         database {
           contentCache.id = 0
+          qsCache.id = 1
         }
+      }
+
+      question {
+        keyspace = "{{ .Values.global.env }}_question_store"
+        table = "question_data"
+      }
+
+      questionset {
+        keyspace = "{{ .Values.global.env }}_hierarchy_store"
+        table = "questionset_hierarchy"
       }
 
       content {
@@ -601,7 +612,7 @@ flink_jobs:
         keyspace = "{{ .Values.global.env }}_content_store"
         table = "content_data"
         tmp_file_location = "/tmp"
-        objectType = ["Content", "ContentImage","Collection","CollectionImage"]
+        objectType = ["Content", "ContentImage","Collection","CollectionImage", "Question", "QuestionImage", "QuestionSet", "QuestionSetImage"]
         mimeType = ["application/pdf",
                                     "application/vnd.ekstep.ecml-archive",
                                     "application/vnd.ekstep.html-archive",
@@ -656,7 +667,9 @@ flink_jobs:
                                     "application/vnd.ekstep.plugin-archive",
                                     "video/x-youtube",
                                     "video/youtube",
-                                    "text/x-url"]
+                                    "text/x-url",
+                                    "application/vnd.sunbird.question",
+                                    "application/vnd.sunbird.questionset"]
         asset_download_duration = "60 seconds"
 
         stream {
@@ -684,10 +697,6 @@ flink_jobs:
               content = "content"
               artifact = "artifact"
           }
-      }
-
-      service {
-        print.basePath = "http://print:5000"
       }
 
       contentTypeToPrimaryCategory {
@@ -742,7 +751,12 @@ flink_jobs:
       cloud_storage_secret="{{ .Values.global.cloud_storage_secret_key }}"
       cloud_storage_container="{{ .Values.global.public_container_name }}"
       cloud_storage_endpoint=""
-      schema.basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
+      schema {
+        basePath="https://{{ .Values.global.object_storage_endpoint }}/{{ .Values.global.public_container_name }}/schemas/local"
+        supportedVersion = {
+          itemset = "2.0"
+        }
+      }
       ai_search_enabled = true
 
     flink-conf: |+
@@ -760,7 +774,7 @@ flink_jobs:
       jobmanager.memory.process.size: 1600m
       # classloader.resolve-order: "parent-first"
       # state.savepoints.dir: file:///tmp
-    job_classname: org.sunbird.job.content.task.ContentPublishStreamTask
+    job_classname: org.sunbird.job.knowlg.task.KnowlgPublishStreamTask
 
 commonAnnotations:
   reloader.stakater.com/auto: "true"

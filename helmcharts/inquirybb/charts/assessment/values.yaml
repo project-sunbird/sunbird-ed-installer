@@ -100,7 +100,7 @@ javaenv:
 
 inquiry:
   assessment:
-    publish_kafka_topic: "{{ .Values.global.env }}.assessment.publish.request"
+    publish_kafka_topic: "{{ .Values.global.env }}.knowlg.publish.job.request"
     import_kafka_topic: "{{ .Values.global.env }}.object.import.request"
     copy_origin_data: '["name", "author", "license", "organisation"]'
     copy_props_to_remove: '["downloadUrl", "artifactUrl", "variants",
