@@ -27,10 +27,6 @@ dependencies:
   - name: common
     repository: https://nimbushubin.github.io/helmcharts
     version: 0.1.0
-  - name: redis
-    repository: https://charts.bitnami.com/bitnami
-    version: 18.1.1
-    condition: redis.enabled
   - name: kafka
     repository: oci://registry-1.docker.io/bitnamicharts
     version: 32.2.15
@@ -43,3 +39,7 @@ dependencies:
     repository: https://charts.yugabyte.com
     version: 2025.2.0   # Chart version
     condition: yugabyte.enabled 
+  - name: superset
+    repository: https://sunbirded.github.io/helm-charts/
+    version: 0.3.5
+    condition: superset.enabled

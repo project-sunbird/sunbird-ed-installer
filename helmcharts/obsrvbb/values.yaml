@@ -4,62 +4,6 @@ fullname: obsrvbb
 provisioningAnnotations: &provisioningAnnotations
   "helm.sh/hook-weight": "-4"
 
-redis: &redis
-  enabled: true
-  nameOverride: "redis"
-  fullnameOverride: "redis"
-  auth:
-    enabled: false
-  host: "redis-master"
-  port: 6379
-  commonAnnotations:
-    "helm.sh/hook-weight": "-5"
-  replica:
-    replicaCount: 0
-  master:
-    persistence:
-      size: 25Gi
-
-elasticsearch: &es
-  enabled: true
-  nameOverride: "elasticsearch"
-  fullnameOverride: "elasticsearch"
-  host: "elasticsearch"
-  port: 9200
-  image:
-    registry: docker.io
-    repository: bitnami/elasticsearch
-    tag: 7.10.2
-    digest: ""
-  master:
-    masterOnly: false
-    replicaCount: 1
-    resources:
-      requests:
-        cpu: "1"
-        memory: "2Gi"
-      limits:
-        cpu: "2"
-        memory: "4Gi"
-    heapSize: 2G
-    persistence:
-      size: 25Gi
-  data:
-    replicaCount: 0
-  coordinating:
-    replicaCount: 0
-  ingest:
-    enabled: false
-  commonAnnotations:
-    "helm.sh/hook-weight": "-5"
-  provisioning:
-    annotations: *provisioningAnnotations
-  sysctlImage:
-    registry: sunbirded.azurecr.io
-    repository: bitnami-shell-archived
-    tag: 11-debian-11-r54
-
-
 zookeeper: &zookeeper
   fullnameOverride: zookeeper
   nameOverride: zookeeper
@@ -92,9 +36,8 @@ kafka: &kafka
     replicationFactor: 1
     numPartitions: 1
     topics:
-    - name: "{{ .Values.global.env }}.telemetry.audit"
-    - name: "{{ .Values.global.env }}.learning.graph.events"
     - name: "{{ .Values.global.env }}.nlweb.ingest"
+    - name: "{{ .Values.global.env }}.telemetry.ingest"
     parallel: 1
   listeners:
     client:
@@ -114,6 +57,7 @@ kafka: &kafka
       enabled: false
     existingSecret: ""
 
+      
 superset:
   enabled: true
 
@@ -147,7 +91,6 @@ yugabyte: &yugabyte
 env: &env
 default: "dev"
 global:
-  redis: *redis
   zookeeper: *zookeeper
   kafka: *kafka
   yugabyte: *yugabyte

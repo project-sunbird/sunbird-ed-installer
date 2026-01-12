@@ -2,9 +2,6 @@ dependencies:
 - name: common
   repository: https://nimbushubin.github.io/helmcharts
   version: 0.1.0
-- name: redis
-  repository: https://charts.bitnami.com/bitnami
-  version: 18.1.1
 - name: kafka
   repository: https://charts.bitnami.com/bitnami
   version: 20.0.2
