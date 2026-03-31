@@ -1,0 +1,58 @@
+{
+    "id": "org.ekstep.plugins.funtoot.readsettimebase",
+    "ver": "1.0",
+    "author": "amit",
+    "type": "plugin",
+    "title": "readsettime",
+    "description": "This plugin is used to generate clock read and set problems.",
+    "editor": {
+        "main": "editor/plugin.js",
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        },
+        "wizard": {
+            "controller": "editor/readsettime.js",
+            "template": "editor/readsettime.html"
+        },
+        "assets": {
+            "fabricImgPath": "/editor/assets/timeclock.png"
+        },
+        "menu": [],
+        "configManifest": [
+            {
+                "propertyName": "count",
+                "title": "Number of Questions",
+                "description": "Number of Questions",
+                "dataType": "rangeslider",
+                "valueType": "text",
+                "required": true,
+                "minimumValue": 1,
+                "maximumValue": 10
+            }
+        ]
+    },
+    "renderer": {
+        "main": "renderer/plugin.js",
+        "dependencies": [
+            {
+                "id": "increase",
+                "src": "renderer/assets/increase.png",
+                "type": "image"
+            },
+            {
+                "id": "decrease",
+                "src": "renderer/assets/decrease.png",
+                "type": "image"
+            }
+        ]
+    },
+    "dependencies": [
+        {
+            "plugin": "org.ekstep.funtoot.common",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        }
+    ]
+}

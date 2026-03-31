@@ -1,0 +1,61 @@
+{
+    "id": "org.ekstep.plugins.funtoot.genericitemrenderer",
+    "ver": "1.0",
+    "author": "Ram Jayaraman",
+    "type": "plugin",
+    "title": "Generic plugin to render funtoot items",
+    "description": "Generic plugin to render funtoot items",
+    "renderer": {
+        "main": "renderer/plugin.js"
+    },
+    "targets": [],
+    "dependencies": [{
+            "plugin": "org.ekstep.funtoot.common",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        },
+        {
+            "plugin": "org.ekstep.plugins.funtoot.fibwordproblem",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "renderer"
+        },
+        {
+            "plugin": "org.ekstep.plugins.funtoot.genericfib",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "renderer"
+        },
+        {
+            "plugin": "org.ekstep.plugins.funtoot.genericmfr",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "renderer"
+        },
+        {
+            "plugin": "org.ekstep.plugins.funtoot.genericmdd",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "renderer"
+        },
+        {
+            "plugin": "org.ekstep.plugins.funtoot.genericmcq",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "renderer"
+        },
+        {
+            "plugin": "org.ekstep.plugins.funtoot.genericmtf",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "renderer"
+        },
+        {
+            "plugin": "org.ekstep.plugins.funtoot.genericseq",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "renderer"
+        }
+    ]
+}

@@ -1,0 +1,65 @@
+{
+    "id": "org.ekstep.funtoot.subtractionvertical",
+    "ver": "1.0",
+    "author": "funtoot",
+    "type": "plugin",
+    "title": "SubtractionVertical",
+    "description": "SubtractionVertical",
+    "editor": {
+        "main": "editor/plugin.js",
+        "wizard": {
+            "configFile": {
+                "path": "editor/configs.json"
+            },
+            "i18nFile": {
+                "pluginId": "org.ekstep.funtoot.subtractionverticalbase"
+            },
+            "localeFile": {
+                "pluginId": "org.ekstep.funtoot.subtractionverticalbase",
+                "path": "editor/i18n.json"
+            },
+            "fbImage": {
+                "pluginId": "org.ekstep.funtoot.subtractionverticalbase"
+            }
+        },
+        "assets": {
+            "fabricImgPath": "/editor/assets/verticalsubtraction.png"
+        },
+        "menu": [
+            {
+                "id": "org.ekstep.funtoot.subtractionvertical::menu",
+                "category": "main",
+                "type": "icon",
+                "toolTip": "Add Subtraction Vertical",
+                "title": "SubtractionVertical",
+                "iconClass": "icon-readalong icon",
+                "onclick": {
+                    "id": "org.ekstep.funtoot.subtractionvertical:showpopup"
+                }
+            }
+        ],
+        "configManifest": [
+            {
+                "propertyName": "count",
+                "title": "Number of Questions",
+                "description": "Number of Questions",
+                "dataType": "rangeslider",
+                "valueType": "text",
+                "required": true,
+                "minimumValue": 1,
+                "maximumValue": 10
+            }
+        ]
+    },
+    "renderer": {
+        "main": "renderer/plugin.js"
+    },
+    "dependencies": [
+        {
+            "plugin": "org.ekstep.funtoot.subtractionverticalbase",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        }
+    ]
+}

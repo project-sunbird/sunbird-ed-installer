@@ -1,0 +1,21 @@
+{
+    "id": "org.ekstep.plugins.i18n",
+    "ver": "1.0",
+    "author": "funtoot",
+    "title": "org.ekstep.plugins.i18n Plugin",
+    "description": "",
+    "publishedDate": "",
+    "editor": {},
+    "renderer": {
+        "main": "renderer/plugin.js",
+        "dependencies": [
+            {
+                "id": "polyglot",
+                "src": "renderer/polyglot.js",
+                "type": "js",
+                "preload": true
+            }
+        ],
+        "compatibilityVersion": 2
+    }
+}

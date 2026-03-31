@@ -1,0 +1,23 @@
+[
+  {
+    "Type": "Comparing numbers",
+    "Grade": "1, 2",
+    "Level": 0,
+    "LevelDescShown": "Comparing 2 numbers",
+    "SubLevel": 0,
+    "SubLevelDescShown": "Single and 2 digit number comparison",
+    "Expression": "$a =[1 - 9]\n$b=[1 - 9]\n$n1=$a\n$n2=$a*10+$b",
+    "BTLO": "R",
+    "DifficultyLevel": 1,
+    "Description": "Tests the difference between single and 2 digit numbers.",
+    "SubLevelDesc": "Single and 2 digit number",
+    "HintID": "HINT041_DIGITS",
+    "QuestionText": "QUESTION04_STEM",
+    "QID": "",
+    "Subject": "NUM",
+    "ConceptCode": "C226, C484",
+    "ESDifficultyLevel": "",
+    "ConceptName": "",
+    "": 2
+  }
+]

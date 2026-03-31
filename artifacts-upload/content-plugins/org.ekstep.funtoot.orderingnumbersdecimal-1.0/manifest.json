@@ -1,0 +1,65 @@
+{
+    "id": "org.ekstep.funtoot.orderingnumbersdecimal",
+    "ver": "1.0",
+    "author": "funtoot",
+    "type": "plugin",
+    "title": "OrderingDecimalNumbers",
+    "description": "OrderingDecimalNumbers",
+    "editor": {
+        "main": "editor/plugin.js",
+        "wizard": {
+            "configFile": {
+                "path": "editor/configs.json"
+            },
+            "i18nFile": {
+                "pluginId": "org.ekstep.funtoot.orderingNumbersbase"
+            },
+            "localeFile": {
+                "pluginId": "org.ekstep.funtoot.orderingNumbersbase",
+                "path": "editor/i18n.json"
+            },
+            "fbImage": {
+                "pluginId": "org.ekstep.funtoot.orderingNumbersbase"
+            }
+        },
+        "assets": {
+            "fabricImgPath": "/editor/assets/orderingnumbers.png"
+        },
+        "menu": [
+            {
+                "id": "org.ekstep.funtoot.orderingnumbersdecimal::menu",
+                "category": "main",
+                "type": "icon",
+                "toolTip": "Add Ordering Decimal Numbers",
+                "title": "OrderingDecimalNumbers",
+                "iconClass": "icon-readalong icon",
+                "onclick": {
+                    "id": "org.ekstep.funtoot.orderingnumbersdecimal:showpopup"
+                }
+            }
+        ],
+        "configManifest": [
+            {
+                "propertyName": "count",
+                "title": "Number of Questions",
+                "description": "Number of Questions",
+                "dataType": "rangeslider",
+                "valueType": "text",
+                "required": true,
+                "minimumValue": 1,
+                "maximumValue": 10
+            }
+        ]
+    },
+    "renderer": {
+        "main": "renderer/plugin.js"
+    },
+    "dependencies": [
+        {
+            "plugin": "org.ekstep.funtoot.orderingNumbersbase",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        }
+    ]
+}

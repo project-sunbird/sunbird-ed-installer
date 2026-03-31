@@ -1,0 +1,17 @@
+{
+    "id": "org.ekstep.plugins.funtoot.genericmdd",
+    "ver": "1.0",
+    "author": "Sivashanmugam",
+    "type": "plugin",
+    "title": "genericmdd",
+    "description": "This is a genericmdd plugin",
+    "renderer": {
+        "main": "renderer/plugin.js"
+    },
+    "dependencies": [{
+        "plugin": "org.ekstep.funtoot.common",
+        "ver": "1.0",
+        "type": "plugin",
+        "scope": "all"
+    }]
+}

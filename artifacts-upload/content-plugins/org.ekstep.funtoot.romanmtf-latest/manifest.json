@@ -1,0 +1,59 @@
+{
+    "id": "org.ekstep.funtoot.romanmtf",
+    "ver": "1.0",
+    "author": "Amulya",
+    "title": "ROMAN mtf",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        },
+        "wizard": {
+            "controller": "editor/romanmtf.js",
+            "template": "editor/romanmtf.html"
+        },
+        "assets": {
+            "fabricImgPath": "/editor/assets/romanbasicsmatchingtoarabicnumbers.png"
+        },
+        "menu": [
+            {
+                "id": "romanmtf",
+                "category": "main",
+                "type": "icon",
+                "toolTip": "Add Roman mtf",
+                "title": "mtf-roman",
+                "iconClass": "icon-readalong icon",
+                "onclick": {
+                    "id": "org.ekstep.funtoot.romanmtf:showpopup"
+                }
+            }
+        ],
+        "configManifest": [
+            {
+                "propertyName": "count",
+                "title": "Number of Questions",
+                "description": "Number of Questions",
+                "dataType": "rangeslider",
+                "valueType": "text",
+                "required": true,
+                "minimumValue": 1,
+                "maximumValue": 10
+            }
+        ]
+    },
+    "renderer": {
+        "main": "renderer/romanmtf.js",
+        "dependencies": []
+    },
+    "dependencies": [
+        {
+            "plugin": "org.ekstep.funtoot.common",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        }
+    ]
+}

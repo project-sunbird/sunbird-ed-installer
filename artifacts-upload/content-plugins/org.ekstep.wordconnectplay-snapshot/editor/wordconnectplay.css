@@ -1,0 +1,201 @@
+body>.inner {
+    display: none;
+}
+
+body.pg-loaded>.inner {
+    display: block;
+}
+
+body {
+    color: #9b9b9b!important;
+}
+.loading-content{
+    position: absolute;
+    top:0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #ffffff;
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif');
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 1;
+    display: none;
+}
+.loading-content.loading{
+    display: block !important;
+}
+
+.coverCanvas{
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 0;
+    height: 0;
+    z-index: 2;
+}
+.collection-masterhead {
+    padding: 0 1em!important;
+    /*height: 100vh!important;*/
+    padding-left: 2em!important;
+    padding-right: 2em!important;
+    background: #fff!important;
+    /*overflow-y: auto;*/
+}
+.playinfocard{
+    position: fixed !important;
+    top: 100px;
+    right: 10px;
+    transition: background-position 150ms ease-out !important;
+    /* width: 400px !important;*/
+    padding: 15px;
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75) !important;
+}
+#closeinfo{
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    cursor: pointer;
+}
+#closeinfo .close{
+    font-size: 20px;
+}
+.playinfocard .ui.small.image{
+   /* max-width: 100px;
+    display: inline-block;*/
+    margin: 30px auto;
+    height: 200px;
+    display: inline-block;
+    vertical-align: middle;
+    background: #fff;
+    position: relative;
+}
+.playinfocard .ui.small.image img{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+/*.playinfocard .ui.small.image img{
+    margin: 0 auto;
+    width: 80px;
+    display: block;
+}*/
+/*.playinfocard .description{
+    display: inline-block;
+    width: 250px;
+}*/
+.playinfocard .header{
+    display: inline-block !important;
+}
+.playinfocard .description{
+    text-align: left ;
+}
+.playinfocard ul{
+    padding-left: 0px;
+    border-top: 2px solid #ddd;
+    margin-top: 5px;
+    list-style-type: none;
+}
+.playinfocard ol{
+    padding-left: 15px;
+    border-top: 2px solid #ddd;
+    margin-top: 5px;
+}
+#audioContoler{
+    display: inline-block;
+    width: 50px;
+    height: 20px;
+    position: relative;
+    margin-left: 10px;
+}
+#audioContoler .announcement{
+    font-size: 20px;
+}
+#audioContoler audio{
+   opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+#submit_btn {
+   margin-left: 10px;
+   display: inline-block;
+}
+/*#submit_btn{
+    margin: 0 auto;
+    display: block;
+    font-weight: bold;
+}
+*/
+.link {
+  stroke: #000;
+  z-index: 1;
+}
+.node{
+    z-index: 2;
+}
+.node text {
+  pointer-events: none;
+  font: 16px sans-serif;
+}
+
+.main-body {
+    height:calc(100vh - 90px);/*90%!important;*/
+    margin-bottom: 0!important;
+    margin-top: 0em!important; /* padding-top: 5px !important;*/
+    position: relative;
+}
+
+
+#contents-pane {
+    width: 100% !important;
+    height: 100%;
+    padding: 0 !important;
+    padding-left: 1em !important;
+    position: relative;
+}
+
+.canvas-container{
+    width: 100% !important;
+}
+
+/* for not able to fetch content */
+ #infoIcon{
+     background-image: url("./libs/images/info.png");
+     background-position: center;
+     background-repeat: no-repeat;
+     width:24px;
+     height: 24px;
+     background-size: 100%;
+     cursor: pointer;
+     padding: 0 !important;
+ }
+  #infoIcon,#deleteIcon{
+    position: absolute;
+    top:0;
+    left:0;
+  }
+  #infoIcon .info,#deleteIcon .trash,.contextMenu .info{
+    font-size: 30px;
+    cursor: pointer;
+  }
+  .hide{
+    display: none !important;
+  }
+  .custom-disabled{
+    pointer-events: none;
+    opacity: .5;
+}
+
+#playtext{
+    text-align: center;
+}
+
+.playnote {
+  font-weight: bold;
+  font-size: 18px;
+}

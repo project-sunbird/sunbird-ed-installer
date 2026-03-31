@@ -1,0 +1,59 @@
+{
+    "id": "org.ekstep.funtoot.placefacevalue",
+    "ver": "1.0",
+    "author": "Henrietta",
+    "title": "Place Face Value",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        },
+        "wizard": {
+            "controller": "editor/placefacevalue.js",
+            "template": "editor/placefacevalue.html"
+        },
+        "assets": {
+            "fabricImgPath": "/editor/assets/facevalueplacevalue.png"
+        },
+        "menu": [
+            {
+                "id": "placefacevalue",
+                "category": "main",
+                "type": "icon",
+                "toolTip": "Add Place value face value",
+                "title": "Place Face Value",
+                "iconClass": "icon-readalong icon",
+                "onclick": {
+                    "id": "org.ekstep.funtoot.placefacevalue:showpopup"
+                }
+            }
+        ],
+        "configManifest": [
+            {
+                "propertyName": "count",
+                "title": "Number of Questions",
+                "description": "Number of Questions",
+                "dataType": "rangeslider",
+                "valueType": "text",
+                "required": true,
+                "minimumValue": 1,
+                "maximumValue": 10
+            }
+        ]
+    },
+    "renderer": {
+        "main": "renderer/plugin.js",
+        "dependencies": []
+    },
+    "dependencies": [
+        {
+            "plugin": "org.ekstep.funtoot.common",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        }
+    ]
+}

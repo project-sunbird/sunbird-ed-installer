@@ -1,0 +1,50 @@
+{
+    "id": "org.ekstep.plugins.funtoot.fnmmcqbase",
+    "ver": "1.0",
+    "author": "Amit",
+    "title": "FNM MCQ",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        },
+        "wizard": {
+            "controller": "editor/fnmmcq.js",
+            "template": "editor/fnmmcq.html"
+        },
+        "menu": [],
+        "configManifest": [
+            {
+                "propertyName": "count",
+                "title": "Number of Questions",
+                "description": "Number of Questions",
+                "dataType": "rangeslider",
+                "valueType": "text",
+                "required": true,
+                "minimumValue": 1,
+                "maximumValue": 10
+            }
+        ]
+    },
+    "renderer": {
+        "main": "renderer/fnmmcq.js",
+        "dependencies": []
+    },
+    "dependencies": [
+        {
+            "plugin": "org.ekstep.funtoot.common",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        },
+        {
+            "plugin": "org.ekstep.plugins.funtoot.genericmcq",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "renderer"
+        }
+    ]
+}

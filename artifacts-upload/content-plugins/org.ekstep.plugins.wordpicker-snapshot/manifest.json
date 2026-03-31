@@ -1,0 +1,33 @@
+{
+    "id": "org.ekstep.plugins.wordpicker",
+    "ver": "1.0",
+    "author": "Srivathsa Dhanraj",
+    "type": "plugin",
+    "title": "org.ekstep.plugins.wordpicker Plugin",
+    "description": "This plugin is used for getting word definitions from various sources",
+    "icon": "assets/icon.png",
+    "publishedDate": "",
+    "languages": ["English"],
+    "categories": ["library"],
+    "keywords": ["word picker", "word duniya"],
+    "editor": {
+        "main": "editor/plugin.js",
+        "dependencies": [
+            { "type": "js", "src": "editor/init.js" },
+            { "type": "js", "src": "editor/search-criteria.js" },
+            { "type": "js", "src": "editor/source-base.js" },
+            { "type": "js", "src": "editor/word-duniya.js" },
+            { "type": "js", "src": "editor/word-picker-app.js" },
+            { "type": "js", "src": "editor/words-extractor.js" },
+            { "type": "css", "src": "editor/word-picker-style.css" },
+            { "type": "plugin", "plugin": "org.ekstep.plugins.extractwords", "ver": "1.0" }
+        ],
+        "menu": [],
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        },
+        "init-data": {}
+    },
+    "renderer": {}
+}

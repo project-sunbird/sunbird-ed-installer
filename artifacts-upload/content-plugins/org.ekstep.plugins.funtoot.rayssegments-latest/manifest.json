@@ -1,0 +1,41 @@
+{
+    "id": "org.ekstep.plugins.funtoot.rayssegments",
+    "ver": "1.0",
+    "author": "funtoot",
+    "type": "plugin",
+    "title": "Points and Lines: Rays and Line Segments",
+    "description": "Points and Lines: Rays and Line Segments",
+    "editor": {
+        "main": "editor/plugin.js",
+        "wizard": {
+            "filter": "editor/filters.json"
+        },
+        "assets": {
+            "fabricImgPath": "/editor/assets/pointsandlinesraysandlinesegments.png"
+        },
+        "menu": [{
+            "id": "org.ekstep.plugins.funtoot.rayssegments::menu",
+            "category": "main",
+            "type": "icon",
+            "toolTip": "Add Points and Lines: Rays and Line Segments",
+            "title": "Points and Lines: Rays and Line Segments",
+            "iconClass": "icon-readalong icon",
+            "onclick": {
+                "id": "org.ekstep.plugins.funtoot.rayssegments:showpopup"
+            }
+        }],
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        }
+    },
+    "renderer": {
+        "main": "renderer/plugin.js"
+    },
+    "dependencies": [{
+        "plugin": "org.ekstep.plugins.funtoot.activitybase",
+        "ver": "1.0",
+        "type": "plugin",
+        "scope": "all"
+    }]
+}

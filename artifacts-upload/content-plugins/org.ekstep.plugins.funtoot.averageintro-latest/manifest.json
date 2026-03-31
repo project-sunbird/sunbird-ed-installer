@@ -1,0 +1,45 @@
+{
+    "id": "org.ekstep.plugins.funtoot.averageintro",
+    "ver": "1.0",
+    "author": "funtoot",
+    "type": "plugin",
+    "title": "Average: Intro",
+    "description": "Average: Intro",
+    "editor": {
+        "main": "editor/plugin.js",
+        "wizard": {
+            "filter": "editor/filters.json"
+        },
+        "assets": {
+            "fabricImgPath": "/editor/assets/averagesintroduction.png"
+        },
+        "menu": [
+            {
+                "id": "org.ekstep.plugins.funtoot.averageintro::menu",
+                "category": "main",
+                "type": "icon",
+                "toolTip": "Add Average: Intro",
+                "title": "Average: Intro",
+                "iconClass": "icon-readalong icon",
+                "onclick": {
+                    "id": "org.ekstep.plugins.funtoot.averageintro:showpopup"
+                }
+            }
+        ],
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        }
+    },
+    "renderer": {
+        "main": "renderer/plugin.js"
+    },
+    "dependencies": [
+        {
+            "plugin": "org.ekstep.plugins.funtoot.activitybase",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        }
+    ]
+}

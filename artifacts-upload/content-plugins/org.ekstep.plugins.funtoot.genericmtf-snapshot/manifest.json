@@ -1,0 +1,28 @@
+{
+    "id": "org.ekstep.plugins.funtoot.genericmtf",
+    "ver": "1.0",
+    "author": "funtoot",
+    "title": "genericMtf Plugin",
+    "description": "",
+    "publishedDate": "",
+    "editor": {},
+    "renderer": {
+        "main": "renderer/plugin.js",
+        "dependencies": [
+            {
+                "id": "connector",
+                "src": "asset/connector.png",
+                "type": "image",
+                "preload": true
+            }
+        ]
+    },
+    "dependencies": [
+        {
+            "plugin": "org.ekstep.funtoot.common",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        }
+    ]
+}

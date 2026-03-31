@@ -1,0 +1,45 @@
+{
+    "id": "org.ekstep.plugins.funtoot.factorsandmultipleshcf",
+    "ver": "1.0",
+    "author": "funtoot",
+    "type": "plugin",
+    "title": "Factors and Multiples-HCF of numbers",
+    "description": "Factors and Multiples-HCF of numbers",
+    "editor": {
+        "main": "editor/plugin.js",
+        "wizard": {
+            "filter": "editor/filters.json"
+        },
+        "assets": {
+            "fabricImgPath": "/editor/assets/factorsandmultipleshcf.png"
+        },
+        "menu": [
+            {
+                "id": "org.ekstep.plugins.funtoot.factorsandmultipleshcf::menu",
+                "category": "main",
+                "type": "icon",
+                "toolTip": "Add Factors and Multiples-HCF of numbers",
+                "title": "Factors and Multiples-HCF of numbers",
+                "iconClass": "icon-readalong icon",
+                "onclick": {
+                    "id": "org.ekstep.plugins.funtoot.factorsandmultipleshcf:showpopup"
+                }
+            }
+        ],
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        }
+    },
+    "renderer": {
+        "main": "renderer/plugin.js"
+    },
+    "dependencies": [
+        {
+            "plugin": "org.ekstep.plugins.funtoot.activitybase",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        }
+    ]
+}

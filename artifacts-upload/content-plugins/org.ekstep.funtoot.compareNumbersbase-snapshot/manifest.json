@@ -1,0 +1,78 @@
+{
+    "id": "org.ekstep.funtoot.compareNumbersbase",
+    "ver": "1.0",
+    "author": "Amulya",
+    "title": "Compare Numbers",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        },
+        "wizard": {
+            "controller": "editor/comparenumbersbase.js",
+            "template": "editor/comparenumbersbase.html"
+        },
+        "assets": {
+            "fabricImgPath": "/editor/assets/comparenumbers.png"
+        },
+        "menu": [],
+        "configManifest": [
+            {
+                "propertyName": "count",
+                "title": "Number of Questions",
+                "description": "Number of Questions",
+                "dataType": "rangeslider",
+                "valueType": "text",
+                "required": true,
+                "minimumValue": 1,
+                "maximumValue": 10
+            }
+        ]
+    },
+    "renderer": {
+        "main": "renderer/comparenumbersbase.js",
+        "dependencies": [
+            {
+                "id": "lesser",
+                "src": "asset/less-than.png",
+                "type": "image",
+                "preload": true
+            },
+            {
+                "id": "emptyBg",
+                "src": "asset/emptybg.png",
+                "type": "image",
+                "preload": true
+            },
+            {
+                "id": "lhsBg",
+                "src": "asset/lhsbg.png",
+                "type": "image",
+                "preload": true
+            },
+            {
+                "id": "greater",
+                "src": "asset/greater-than.png",
+                "type": "image",
+                "preload": true
+            },
+            {
+                "id": "equal",
+                "src": "asset/equal.png",
+                "type": "image",
+                "preload": true
+            }
+        ]
+    },
+    "dependencies": [
+        {
+            "plugin": "org.ekstep.funtoot.common",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        }
+    ]
+}

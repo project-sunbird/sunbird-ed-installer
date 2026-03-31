@@ -1,0 +1,129 @@
+{
+    "id": "org.ekstep.memory-game",
+    "ver": "1.0",
+    "author": "Swati Singh",
+    "title": "Grid Plugin",
+    "description": "",
+    "publishedDate": "",
+    "editor":
+    {
+        "main": "editor/plugin.js",
+        "dependencies": [
+            {
+                "type": "js",
+                "src": "editor/init.js"
+            },
+            {
+                "type": "js",
+                "src": "editor/promisifier.js"
+            },
+            {
+                "type": "js",
+                "src": "editor/syllable-search-service.js"
+            },
+            {
+                "type": "js",
+                "src": "editor/memory-game-syllable-service.js"
+            },
+            {
+                "type": "plugin",
+                "plugin": "org.ekstep.plugins.wordpicker",
+                "ver": "1.0"
+            }
+        ],
+        "menu": [
+            {
+                "id": "ak_editor",
+                "category": "main",
+                "type": "icon",
+                "toolTip": "Akshara Teaching",
+                "title": "Grid",
+                "iconClass": "book icon",
+                "onclick":
+                {
+                    "id": "org.ekstep.memory-game:showpopup"
+                }
+            }
+
+        ],
+
+        "configManifest": [
+        {
+            "propertyName": "frontFaceColor",
+            "title": "Front Face Color",
+            "description": "Choose a color from the color picker",
+            "dataType": "colorpicker",
+            "required": true,
+            "defaultValue": "#008000"
+        },
+        {
+            "propertyName": "backFaceColor",
+            "title": "Back Face Color",
+            "description": "Choose a color from the color picker",
+            "dataType": "colorpicker",
+            "required": true,
+            "defaultValue": "#002b80"
+        },
+        {
+            "propertyName": "textColor",
+            "title": "Text Color",
+            "description": "Choose a color from the color picker",
+            "dataType": "colorpicker",
+            "required": true,
+            "defaultValue": "#FFFFFF"
+        },
+        {
+            "propertyName": "fixRows",
+            "title": "Fix Row",
+            "description": "Select true or false for fixing the row",
+            "dataType": "boolean",
+            "required": false,
+            "defaultValue": true
+        }],
+        "help":
+        {
+            "src": "editor/help.md",
+            "dataType": "text"
+        }
+    },
+    "renderer":
+    {
+        "main": "renderer/memorygameplugin.js",
+        "dependencies": [
+        {
+            "id": "audimanager",
+            "type": "js",
+            "src": "renderer/audimanager.js"
+        },
+        {
+            "id": "coption",
+            "type": "plugin",
+            "src": "renderer/customoptionplugin.js"
+        },
+        {
+            "id": "coptions",
+            "type": "plugin",
+            "src": "renderer/customoptionsplugin.js"
+        },
+        {
+            "id": "cmtf",
+            "type": "plugin",
+            "src": "renderer/custommtfplugin.js"
+        },
+        {
+            "id": "tile",
+            "type": "plugin",
+            "src": "renderer/tileplugin.js"
+        },
+        {
+            "id": "tiles",
+            "type": "plugin",
+            "src": "renderer/tilesplugin.js"
+        },
+        {
+            "id": "cmtf",
+            "type": "plugin",
+            "src": "renderer/custommtfplugin.js"
+        }]
+    }
+}

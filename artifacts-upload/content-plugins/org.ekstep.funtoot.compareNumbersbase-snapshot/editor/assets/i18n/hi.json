@@ -1,0 +1,24 @@
+{
+    "hi": {
+        "H04R_1": "रोमन संख्याओं के प्रतीकों और नियमों को याद करें और पुनः प्रयास करें।",
+        "LESSER_THAN_999": "संख्या अनुक्रम दोहराएं और ध्यान से प्रतीक दर्ज करें",
+        "Q04R_1": "प्रतीकों के उपयोग से रोमन संख्याओं की तुलना करें",
+        "DECIMAL1": "दूसरी संख्या में समांक के साथ एक दूसरी संख्या में अंकों की सावधानी से तुलना करें ।",
+        "HINT_3_1_4_Comp": "[HI] Convert to equivalent fractions with same denominator and then compare them.",
+        "NO_ANSWER": "सबमिट बटन पर क्लिक करने से पहले किसी एक विकल्प का चयन करें।",
+        "QUESTION_TITLE": "सही प्रतीक का उपयोग कर संख्याओं की तुलना करें",
+        "HINT_4_0_0_Comp": "[HI] Check the integral part first and then the decimal part.",
+        "HINT_1_0_0_Comp": "[HI] Check the number of digits in each number and then carefully compare the given numbers.",
+        "HINT_4_0_2_Comp": "[HI] Check the units place and then the tenth place.",
+        "HINT_3_0_0_Comp": "[HI] Check the numerator of the fractions as the denominators are equal.",
+        "HINT_1_0_1_Comp": "[HI] Check the place value of all the digits in the given numbers and then apply the symbol correctly.",
+        "GREATER_THAN_999": "प्रत्येक बिंदु के स्थान मूल्य की जांच करें और ध्यान से प्रतीक दर्ज करें",
+        "NO_HINT": "इस सवाल के लिए कोई संकेत नहीं है।",
+        "FRAC1": "जांचें कि क्या भिन्न समान हैं या असमान है तो तदनुसार प्रतीक को परिवर्तित करें और जोड़ें।",
+        "Comp_Q_4_0_0_Comp": "[HI] Compare the given decimal numbers.",
+        "HINT_3_1_0_Comp": "[HI] Check the denominator of the fractions.",
+        "Comp_Q_1_0_0_Comp": "[HI] Compare the numbers using correct symbols.",
+        "FRAC_EQUAL_CHECK": "दोनों भिन्नों की जांच करें",
+        "Comp_Q_3_0_0_Comp": "[HI] Compare the given fractions."
+    }
+}

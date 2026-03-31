@@ -1,0 +1,82 @@
+<div ng-app="org.ekstep.wordconnectheader:app" ng-controller="headerController" class="ui masthead vertical segment content-masterhead">
+    <div class="custom-container custom-style">
+          <div class="ui three column grid">
+              <div class="column">
+                  <h2 class="inlineBlock">WORD CONNECT</h2>
+                  <span class="helpinfoicon" ng-click="showHelp()">
+                      <i class="info circle icon"></i>
+                  </span>
+                  <p>Identify, Connect and Win!</p>
+            </div>
+            <div class="column">
+                  <div class="ui two column grid">
+                      <div class="column">
+                          <p class="tiny ui">Your favourite language?</p>
+                      </div>
+                     <div class="column downarrow"> 
+                        <select class="ui dropdown" ng-if="languages" id="languageDropdown" ng-model="selectedLanguage" ng-change="onlanguagechange(selectedLanguage)" ng-options="language.code as language.name for language in languages">
+                        </select>
+                     </div>
+                  </div>
+                   <div class="ui two column grid">
+                    <div class="column">
+                        <a href="#" class="pickarandomword_link" ng-click="pickRandomWord()">Pick a Random Word</a> <span class="or_text">OR</span>
+                    </div>
+                    <div class="column searchcolumn">
+                    <div class="ui action input">
+                        <input type="text" ng-model="searchword" id="search" class="search" placeholder="Search..." ng-keydown="$event.keyCode === 13 && search(searchword)">
+                        <button class="ui icon button searchIcon" ng-click="search(searchword)">
+                            <i class="search icon"></i>
+                        </button>
+                    </div>
+                    </div>
+                </div>
+                   
+              </div>
+              <div class="column lastcolumn">
+               <div class="ui two column grid shrinkcolum">
+                        <div class="column">
+                            <p>Mode: </p>
+                        </div>
+                        <div class="column downarrow">
+                            <select class="ui dropdown" ng-model="mode" ng-change="changemode(mode)">
+                                <option value="play">Play</option>
+                                <option value="explore">Explore</option>
+                            </select>
+                        </div>
+                   </div>
+                <div class="ui two column grid shrinkcolum">
+                    <div class="column">
+                        <p><b>Score: {{score}}</b></p>
+                    </div>
+                    <div class="column">
+                        <p><b></b></p>
+                    </div>
+                </div>
+                
+              </div>
+          </div>
+    </div>
+    <div class="ui modal">
+        <i class="close icon"></i>
+        <div class="header">
+            Help
+        </div>
+        <div class="image content">
+            <!--<div class="ui medium image">
+            <img ng-src="/images/avatar/large/chris.jpg">
+            </div>-->
+            <div class="description">
+                <p>To start playing, enter a search word or pick a random word.</p>
+                <p>This word will appear at the centre surrounded by a set of words.</p>
+                <p>You need to connect the word at the centre to the words you think are semantically related to it. These could include synonyms, antonyms, “is a” and “part of” type of relations, and translations in another language.
+Start by selecting the word. A red arrow appears. Select and drag this arrow to another word to link it. You can move the arrow to another word by selecting and dragging the rectangle shape at the top of the arrow. Dropping the arrow in an empty space deletes the link.
+</p>
+                <p>After you have linked all the words you think are closely related to the central word, press submit. Your score will appear on the top right and the correct links will be marked in green, the incorrect ones in red. The blank links show words that are related but were not connected. You get +1 for a right answer, -1 for a wrong answer and no points for link that was not connected.</p>
+                <br>
+                <p>To get more information on the central word or any other word, select the word and click on the info (“i”) icon. This will open a sidebar containing, if available, the meaning of the word, a picture, an audio pronunciation, and example usage in a sentence. You can use this information to help make a decision on which words are connected to the central word. </p>
+               
+        </div>
+       
+    </div>
+</div>

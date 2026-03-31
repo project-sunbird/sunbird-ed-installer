@@ -1,0 +1,81 @@
+{
+    "id": "org.ekstep.plugins.funtoot.custombills",
+    "ver": "1.0",
+    "author": "Swathi",
+    "type": "plugin",
+    "title": "bills",
+    "description": "Plugin to render bills questions",
+    "editor": {
+        "main": "editor/custombillseditorplugin.js",
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        },
+        "wizard": {
+            "controller": "editor/custombillseditor.js",
+            "template": "editor/custombills.html"
+        },
+        "assets": {
+            "fabricImgPath": "/editor/assets/custombills.png"
+        },
+        "menu": [
+            {
+                "id": "bills",
+                "category": "main",
+                "type": "icon",
+                "toolTip": "Add Bills",
+                "title": "Bills",
+                "iconClass": "icon-readalong icon",
+                "onclick": {
+                    "id": "org.ekstep.plugins.funtoot.custombills:showpopup"
+                }
+            }
+        ],
+        "configManifest": [
+            {
+                "propertyName": "count",
+                "title": "Number of Questions",
+                "description": "Number of Questions",
+                "dataType": "rangeslider",
+                "valueType": "text",
+                "required": true,
+                "minimumValue": 1,
+                "maximumValue": 10
+            }
+        ],
+        "dependencies": [
+            {
+                "type": "js",
+                "src": "editor/custombillseditor.js"
+            }
+        ]
+    },
+    "renderer": {
+        "main": "renderer/custombillsrenderer.js",
+        "dependencies": [
+            {
+                "id": "billheaderimgbar",
+                "src": "assets/billheaderimgbar.png",
+                "type": "image"
+            }
+        ]
+    },
+    "icon": "assets/icon.png",
+    "languages": [
+        "English"
+    ],
+    "categories": [
+        ""
+    ],
+    "keywords": [
+        ""
+    ],
+    "dependencies": [
+        {
+            "plugin": "org.ekstep.funtoot.common",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        }
+    ]
+}

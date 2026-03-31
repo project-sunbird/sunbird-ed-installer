@@ -1,0 +1,23 @@
+{
+    "en": {
+        "1": "['units']",
+        "10": "['tens']",
+        "100": "['hundreds']",
+        "1000": "['thousands']",
+        "10000": "['ten thousands']",
+        "100000": "['lakhs','hundred thousands']",
+        "1000000": "['ten lakhs','millions']",
+        "10000000": "['crores', 'ten millions']",
+        "HINT08_1": "Carefully check the place value of the numbers and try again.",
+        "HINT08_2": "Carefully check the given place value with the digits and form the numbers in the standard form.",
+        "QSTEM08_1": "Expand the given number.",
+        "QSTEM08_2": "Expand the given number in the Indian System.",
+        "QSTEM08_3": "Expand the given number in the International System.",
+        "QSTEM08_4": "Write the given expanded number in the standard form.",
+        "WRONG_STD_FORM": "Check carefully the place value with the face value of the digits given in the expanded form.",
+        "WRONG_EXPANDED_FORM": "Check carefully the place value with the face value of the digits given in the standard form.",
+        "NO_ANSWER": "Please answer.",
+        "NO_HINT": "There is no hint for this question.",
+        "QUESTION_TITLE": "Standard and expanded forms"
+    }
+}

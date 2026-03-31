@@ -1,0 +1,21 @@
+{
+    "en": {
+        "NO_ANSWER": "Please answer.",
+        "NO_HINT": "There is no hint for this question",
+        "ZERO_EXPECTED": "There is one apple on the plate. When we remove that apple, how many are left in the plate? Now can you find the missing number.",
+        "PREV_ENDS_WITH_9": "Look at the number sequence carefully and write the missing number.",
+        "NEXT_ENDS_WITH_1": "Look at the sequence. The unit digit is 1. Now carefully find the missing number.",
+        "PREV_ENDS_WITH_0": "Look at the sequence. The unit digit is 0. Now carefully find the missing number.",
+        "GENERIC_ERROR": " Look at the given sequence and carefully find the missing numbers.",
+        "NEXT_ENDS_WITH_0": "Look at the number sequence carefully and write the missing number.",
+        "HINT011_SEQUENCE_INITIAL_GENERIC": "Think of the numbers from 0 to 9 and check which are missing.",
+        "HINT012_SEQUENCE_PREDECESSOR": "Look at the succeeding number and think which number will come before that.",
+        "HINT013_SEQUENCE_INITIAL_SUCCESSOR": "Think of the numbers from 0 to 9 and check which number will come next.",
+        "HINT014_SEQUENCE_NIB": "Recall the counting numbers and find the number that comes between the given numbers.",
+        "HINT015_SEQUENCE_SUCCESSOR": "Look at the numbers given and think which number will come next.",
+        "HINT016_SEQUENCE_SUCCESSORS": "Recall the counting numbers and find the number that comes after the given numbers.",
+        "HINT017_SEQUENCE_GENERIC": "Recall the counting numbers and find the numbers that come before and after the given numbers.",
+        "QUESTION01_STEM1": "Write the missing number in the sequence",
+        "QUESTION_TITLE": "Fill in the missing numbers"
+    }
+}

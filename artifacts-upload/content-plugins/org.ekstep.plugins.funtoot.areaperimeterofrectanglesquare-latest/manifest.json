@@ -1,0 +1,45 @@
+{
+    "id": "org.ekstep.plugins.funtoot.areaperimeterofrectanglesquare",
+    "ver": "1.0",
+    "author": "funtoot",
+    "type": "plugin",
+    "title": "Area and Perimeter: Rectangle and Square",
+    "description": "Area and Perimeter: Rectangle and Square",
+    "editor": {
+        "main": "editor/plugin.js",
+        "wizard": {
+            "filter": "editor/filters.json"
+        },
+        "assets": {
+            "fabricImgPath": "/editor/assets/areaandperimeterofrectanglesandsquares.png"
+        },
+        "menu": [
+            {
+                "id": "org.ekstep.plugins.funtoot.areaperimeterofrectanglesquare::menu",
+                "category": "main",
+                "type": "icon",
+                "toolTip": "Add Area and Perimeter: Rectangle and Square",
+                "title": "Area and Perimeter: Rectangle and Square",
+                "iconClass": "icon-readalong icon",
+                "onclick": {
+                    "id": "org.ekstep.plugins.funtoot.areaperimeterofrectanglesquare:showpopup"
+                }
+            }
+        ],
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        }
+    },
+    "renderer": {
+        "main": "renderer/plugin.js"
+    },
+    "dependencies": [
+        {
+            "plugin": "org.ekstep.plugins.funtoot.activitybase",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        }
+    ]
+}

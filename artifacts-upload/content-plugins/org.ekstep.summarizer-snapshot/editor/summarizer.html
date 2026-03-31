@@ -1,0 +1,194 @@
+<script type="text/ng-template" ng-app="resultsummarizerapp" ng-controller="resultsummarizer as $ctrl" id="summarizer">
+    <style type="text/css">
+    table,
+    th,
+    td {
+        border: 1px solid black;
+    }
+    
+    .scrollDiv {
+        overflow-y: auto;
+        overflow-x: hidden;
+        min-height: 300px !important;
+        max-height: 300px !important;
+    }
+    
+    .headerList {
+        list-style-type: none;
+    }
+    
+    .headerOptions {
+        margin: 5px;
+    }
+    </style>
+    <div class="ui modal large active" style="top: 10% !important;">
+        <div class="header">
+            <div class="ui two column grid">
+                <div class="row">
+                    <div class="column">
+                        <span><i class="icon-readalong icon"></i>Result Summarizer</span>
+                    </div>
+                    <div class="column" style="text-align: right; cursor: pointer;">
+                        <i class="cursor-pointer close icon" ng-click="closeThisDialog()"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="ui mini three steps">
+                <div class="{{$ctrl.showLevel ? 'active': ''}} step">
+                    <i class="checkmark box icon"></i>
+                    <div class="content">
+                        <div class="title">Select level</div>
+                        <div class="description">Choose how many levels</div>
+                    </div>
+                </div>
+                <div class="{{$ctrl.showLevelOptions ? 'active': ''}} step" ng-click="levelfunc()">
+                    <i class="browser icon"></i>
+                    <div class="content">
+                        <div class="title">Select Options</div>
+                        <div class="description">Describe the levels</div>
+                    </div>
+                </div>
+                <div class="{{$ctrl.showTable ? 'active': ''}} step">
+                    <i class="table icon"></i>
+                    <div class="content">
+                        <div class="title">Select Table</div>
+                        <div class="description">Configure the table</div>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="$ctrl.showLevel">
+                <div class="ui grid container scrollDiv">
+                    <div class="two column row">
+                        <div class="column">
+                            <div class="ui form">
+                                <div class="field">
+                                    <label>Number of Levels</label>
+                                    <input type="Number" ng-model="$ctrl.levelNo" min="1" max="5" id="levelno" style="width: 23.5em;" ng-change="$ctrl.submitlevels()">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column" style="color: #000; font-size: 13px; margin-top: 20px;">
+                            <p>You can create a worksheet report card by clicking on this feature. Build your own levels/grades, rewards and performance feedback after adding the question set stage.</p>
+                            <p>Enter the number of levels/grades you would like to set for this worksheet.</p>
+                            <p>Please note : You can create upto 5 levels/grades for a worksheet.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="$ctrl.showLevelOptions">
+                <div class="ui grid container scrollDiv">
+                    <div class="two column row">
+                        <div class="column">
+                            <div class="ui form">
+                                <div class="field">
+                                    <div ng-repeat="levelArr in $ctrl.levelArray">
+                                        <br>Level <span ng-bind="levelArr.levelId"></span>
+                                        <br>
+                                        <input type="text" id="levelName" ng-model="levelArr.levelName" ng-change="$ctrl.validateLevel()" style="width: 23.5em;" placeholder="Add the level name" required>
+                                        <br>
+                                        <br>
+                                        <input type="Number" id="minLevel" ng-model="levelArr.minLevel" min="0" max="100" ng-change="$ctrl.validateLevel()" style="width: 11.65em;" placeholder="min %" required>
+                                        <input type="Number" id="maxLevel" ng-model="levelArr.maxLevel" min="0" max="100" ng-change="$ctrl.validateLevel()" style="width: 11.65em;" placeholder="max %" required>
+                                        <br>
+                                        <br>
+                                        <textarea ng-model="levelArr.textReward" rows="2" id="rewardText" maxlength="56" placeholder="Add Text as Reward" ng-change="$ctrl.validateLevel()" style="width: 23.5em;"></textarea>
+                                        <br>
+                                        <br>
+                                        <button class="ui button" ng-click="$ctrl.selectAudio(levelArr.levelId); " id="rewadAudio">
+                                            <span ng-show="!levelArr.audioReward">Select Audio as Reward</span>
+                                            <span ng-show="levelArr.audioReward">Change</span>
+                                        </button>
+                                        <div class="ui big label" ng-show="levelArr.audioReward">
+                                            <i class="music icon"></i>
+                                            <span ng-bind="levelArr.audioReward"></span>
+                                        </div>
+                                        <br>
+                                        <br>
+                                        <button class="ui button" ng-click="$ctrl.selectImage(levelArr.levelId); " id="rewadImage">
+                                            <span ng-show="!levelArr.imageReward">Select Image as Reward</span>
+                                            <span ng-show="levelArr.imageReward">Change</span></button>
+                                        <div class="ui big label" ng-show="levelArr.imageReward">
+                                            <i class="image icon"></i>
+                                            <span ng-bind="levelArr.imageReward"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column" style="color: #000; font-size: 13px; margin-top: 20px;">
+                            <p>To set the grades/levels for the worksheet all of the steps below are mandatory,</p>
+                            <ol>
+                                <li> Name the level (E.g : "A+", "You're a star", "Excellent")</li>
+                                <li> Translate the score range for worksheet to percentage</li>
+                                <li> Set the criteria for the grade/level with the percentage</li>
+                                <li>Add the reward. You must add atleast one type (audio/image/text)</li>
+                            </ol>
+                            <p>Set super fun rewards based on the levels to make engaging worksheets. The rewards can be an image/audio or text. Choose from our collection or make up your own. </p>
+                            <p>The more generous the reward the better! You can also use all three.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="$ctrl.showTable">
+                <div class="ui grid container scrollDiv">
+                    <div class="two column row">
+                        <div class="column">
+                            <div class="ui form">
+                                <div class="ui form">
+                                    <div class="field">
+                                        <p>Select which parameter to be displayed in the table</p>
+                                        <input type="checkbox" class="headerOptions" ng-model="$ctrl.qid" ng-change="$ctrl.addHeader('qid')" ng-checked="true" ng-disabled="!$ctrl.qtitle">Question Id
+                                        <br>
+                                        <input type="checkbox" class="headerOptions" ng-model="$ctrl.qtitle" ng-change="$ctrl.addHeader('qtitle')" ng-checked="true" ng-disabled="!ctrl.qid">Question description
+                                        <br>
+                                        <input type="checkbox" class="headerOptions" ng-model="$ctrl.pass" ng-change="$ctrl.addHeader('pass')">Pass/Fail
+                                        <br>
+                                        <input type="checkbox" class="headerOptions" ng-model="$ctrl.score" ng-change="$ctrl.addHeader('score')">Score
+                                        <br>
+                                        <input type="checkbox" class="headerOptions" ng-model="$ctrl.ansEntered" ng-change="$ctrl.addHeader('ansEntered')">Answer entered
+                                        <br>
+                                        <input type="checkbox" class="headerOptions" ng-model="$ctrl.correctAns" ng-change="$ctrl.addHeader('correctAns')">Correct Answer
+                                        <br>
+                                        <input type="checkbox" class="headerOptions" ng-model="$ctrl.attempt" ng-change="$ctrl.addHeader('attempt')">Attempted or not
+                                        <br>
+                                        <input type="checkbox" class="headerOptions" ng-model="$ctrl.timeTaken" ng-change="$ctrl.addHeader('timeTaken')">Time taken
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column" style="color: #000; font-size: 13px; margin-top: 20px;">
+                            <p>Describe and provide feedback for each question. You can create your own performance table. Choose from the list of question descriptions :</p>
+                            <ol>
+                                <li>Pass or Fail</li>
+                                <li>Score </li>
+                                <li>Answer given by the user </li>
+                                <li>The correct answer</li>
+                                <li>If the answer was Attempted/Not Attempted</li>
+                                <li>Time taken to answer a question</li>
+                            </ol>
+                            <p>Please note : Question ID and Question description will be displayed by default. Select any four of the above.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui buttons" ng-if="$ctrl.showLevel">
+                <button class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
+                <div class="or"></div>
+                <button class="ui blue button" type="button" ng-click="$ctrl.finalLevel()" ng-disabled="!$ctrl.levelNo">NEXT</button>
+            </div>
+            <div class="ui buttons" ng-if="$ctrl.showLevelOptions">
+                <button class="ui orange button" ng-click="$ctrl.editLevel()" type="button">Edit number of Levels</button>
+                <div class="or"></div>
+                <button class="ui blue button" type="button" ng-click="$ctrl.finalLevelOptions($ctrl.levelArray)" ng-disabled="$ctrl.validateLevelValue">NEXT</button>
+            </div>
+            <div class="ui buttons" ng-if="$ctrl.showTable">
+                <button class="ui orange button" ng-click="$ctrl.editLevelOptions($ctrl.levelArray)" type="button">Edit level options</button>
+                <div class="or"></div>
+                <button class="ui blue button" type="button" ng-click="$ctrl.addtoLesson()" ng-disabled="(!$ctrl.pass && !$ctrl.score && !$ctrl.timeTaken && !$ctrl.ansEntered && !$ctrl.correctAns && !$ctrl.attempt)">Add To Lesson</button>
+            </div>
+        </div>
+    </div>

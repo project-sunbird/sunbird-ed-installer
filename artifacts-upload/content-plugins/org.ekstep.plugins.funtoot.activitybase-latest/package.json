@@ -1,0 +1,7 @@
+{
+    "name": "org.ekstep.plugins.funtoot.anglesintro",
+    "devDependencies": {
+        "ekstep-content-plugin-dev-common": "ekstep/ekstep-content-plugin-dev-common",
+        "eslint-config-ekstep-content-plugin": "ekstep/eslint-config-ekstep-content-plugin"
+    }
+}

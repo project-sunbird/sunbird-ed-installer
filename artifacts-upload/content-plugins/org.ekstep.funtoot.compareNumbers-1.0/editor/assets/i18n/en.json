@@ -1,0 +1,24 @@
+{
+    "en": {
+        "NO_ANSWER": "Select one option before clicking the submit button.",
+        "NO_HINT": "There is no hint for this question.",
+        "GREATER_THAN_999": "Check the place value of every digit and carefully insert the symbol.",
+        "LESSER_THAN_999": "Recall the number sequence and carefully insert the symbol.",
+        "QUESTION_TITLE": "Compare the numbers using correct symbol",
+        "H04R_1": "Recall the symbols and rules of Roman numbers and try again.",
+        "Q04R_1": "Compare the Roman numbers using the symbols",
+        "DECIMAL1": "Carefully compare the digits in a number with the corresponding digit in other number.",
+        "FRAC_EQUAL_CHECK": "Check the two fractions again.",
+        "FRAC1": "Check if fraction is like or unlike then convert and add symbol accordingly.",
+        "HINT_3_1_4_Comp": "Convert to equivalent fractions with same denominator and then compare them.",
+        "HINT_4_0_0_Comp": "Check the integral part first and then the decimal part.",
+        "HINT_1_0_0_Comp": "Check the number of digits in each number and then carefully compare the given numbers.",
+        "HINT_4_0_2_Comp": "Check the units place and then the tenth place.",
+        "HINT_3_0_0_Comp": "Check the numerator of the fractions as the denominators are equal.",
+        "HINT_1_0_1_Comp": "Check the place value of all the digits in the given numbers and then apply the symbol correctly.",
+        "Comp_Q_4_0_0_Comp": "Compare the given decimal numbers.",
+        "HINT_3_1_0_Comp": "Check the denominator of the fractions.",
+        "Comp_Q_1_0_0_Comp": "Compare the numbers using correct symbols.",
+        "Comp_Q_3_0_0_Comp": "Compare the given fractions."
+    }
+}

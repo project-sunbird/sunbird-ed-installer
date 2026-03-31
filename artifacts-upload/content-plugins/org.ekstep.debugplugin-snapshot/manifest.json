@@ -1,0 +1,61 @@
+{
+    "id": "org.ekstep.debugplugin",
+    "ver": "1.0",
+    "author": "Srivathsa Dhanraj",
+    "title": "Deubg Plugin",
+    "description": "",
+    "publishedDate": "",
+    "type":"widget",
+    "editor": {
+        "main": "editor/plugin.js",
+        "dependencies": [
+            
+        ],
+        "menu": [{
+            "id": "debugplguin",
+            "category": "main",
+            "type": "icon",
+            "toolTip": "Add Debug Plugin",
+            "title": "Debug Plugin",
+            "iconClass": "bug icon",
+            "onclick": {
+                    "id": "org.ekstep.debugplugin:create",
+                    "data": {
+                        "x": 10,
+                        "y": 5,
+                        "w": 15,
+                        "h": 8,
+                        "name":"testName1"
+                    }
+                }
+            
+        }],
+        "configManifest": [
+            {
+                "propertyName": "name",
+                "title": "Name",
+                "placeholder": "Name",
+                "description": "Id for the timer",
+                "dataType": "input",
+                "valueType": "text",
+                "required": true,
+                "defaultValue": "timer1"
+            }
+            
+        ],
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        },
+        "init-data": {
+            "x": 10,
+            "y": 20,
+            "w": 14,
+            "h": 25,
+            "name":"testname"
+        }
+    },
+    "renderer": {
+        "main": "renderer/plugin.js"
+    }
+}

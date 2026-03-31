@@ -1,0 +1,42 @@
+{
+    "id": "org.ekstep.plugins.testplugin",
+    "ver": "1.0",
+    "author": "",
+    "type": "widget",
+    "title": "org.ekstep.plugins.testplugin Plugin",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "dependencies": [
+            {
+                "type": "plugin",
+                "plugin": "org.ekstep.colorpicker",
+                "ver": "1.0"
+            }
+        ],
+        "menu": [],
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        },
+        "init-data": {
+            "type": "circle",
+            "radius": 90,
+            "strokeWidth": 10,
+            "x": 10,
+            "y": 10,
+            "w": 10,
+            "h": 10,
+            "fill": "",
+            "stroke": "rgba(0,192,255,0.5)"
+        }
+    },
+    "renderer": {
+        "main": "renderer/plugin.js"
+    },
+    "dependencies":[
+        {"plugin": "org.ekstep.plugins.common.keyboard", "ver": "1.0", "scope": "renderer" },
+        {"plugin": "org.ekstep.plugins.common.eraser", "ver": "1.0", "scope": "renderer" }
+    ]
+}

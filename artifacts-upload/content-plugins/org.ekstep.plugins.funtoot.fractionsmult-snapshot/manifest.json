@@ -1,0 +1,41 @@
+{
+    "id": "org.ekstep.plugins.funtoot.fractionsmult",
+    "ver": "1.0",
+    "author": "funtoot",
+    "type": "plugin",
+    "title": "Fractions: Multiplication",
+    "description": "Fractions: Multiplication",
+    "editor": {
+        "main": "editor/plugin.js",
+        "wizard": {
+            "filter": "editor/filters.json"
+        },
+        "assets": {
+            "fabricImgPath": "/editor/assets/fractionsmultiplication.png"
+        },
+        "menu": [{
+            "id": "org.ekstep.plugins.funtoot.fractionsmult::menu",
+            "category": "main",
+            "type": "icon",
+            "toolTip": "Add Fractions: Multiplication",
+            "title": "Fractions: Multiplication",
+            "iconClass": "icon-readalong icon",
+            "onclick": {
+                "id": "org.ekstep.plugins.funtoot.fractionsmult:showpopup"
+            }
+        }],
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        }
+    },
+    "renderer": {
+        "main": "renderer/plugin.js"
+    },
+    "dependencies": [{
+        "plugin": "org.ekstep.plugins.funtoot.activitybase",
+        "ver": "1.0",
+        "type": "plugin",
+        "scope": "all"
+    }]
+}

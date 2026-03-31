@@ -1,0 +1,54 @@
+.filters-container {
+    padding: 8px 10px 4px 18px;
+    background: #f1f1f1;
+}
+.itemIframeMessages {
+    border: 2px solid #E4E4E4;
+    padding: 110px 20px;
+    background: #FFFFFF;
+    text-align: center;
+    font-weight: bold;
+    height: 270px;
+    width: 480px;
+}
+.grid .items .item:hover{
+    background: #f1f1f1;
+}
+.verticalcenter{
+    display: flex;
+    align-items: center;
+}
+
+.assessmentbrowser.ui.modal{
+    top: 0 !important;
+}
+
+.ngdialog-content {
+    top: 3% !important;
+    width: 100% !important;
+    position: absolute !important;
+    background: none !important;
+}
+.assessment-browser-error{
+    height: 350px;
+}
+.ui.modal.fullscreen.active.assessmentbrowser > .content {
+    height: 88%;
+}
+.assessmentbrowser.ui.modal.fullscreen.active{
+     top: 0 !important;
+    left: 0 !important;
+    height: 100%;
+    width: 100% !important;
+    margin: 0 auto;
+    border-radius: 0;
+    display: flex;
+    -webkit-flex-flow: column;
+    -moz-flex-flow: column;
+    -ms-flex-flow: column;
+    -o-flex-flow: column;
+    flex-flow: column;
+}
+.ui.two.column.horizontally.padded.grid{
+    height: 300px;
+}

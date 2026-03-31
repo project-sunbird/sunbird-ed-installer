@@ -1,0 +1,45 @@
+{
+    "id": "org.ekstep.plugins.funtoot.capacityintro",
+    "ver": "1.0",
+    "author": "funtoot",
+    "type": "plugin",
+    "title": "Capacity: Intro",
+    "description": "Capacity: Intro",
+    "editor": {
+        "main": "editor/plugin.js",
+        "wizard": {
+            "filter": "editor/filters.json"
+        },
+        "assets": {
+            "fabricImgPath": "/editor/assets/capacityintroduction.png"
+        },
+        "menu": [
+            {
+                "id": "org.ekstep.plugins.funtoot.capacityintro::menu",
+                "category": "main",
+                "type": "icon",
+                "toolTip": "Add Capacity: Intro",
+                "title": "Capacity: Intro",
+                "iconClass": "icon-readalong icon",
+                "onclick": {
+                    "id": "org.ekstep.plugins.funtoot.capacityintro:showpopup"
+                }
+            }
+        ],
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        }
+    },
+    "renderer": {
+        "main": "renderer/plugin.js"
+    },
+    "dependencies": [
+        {
+            "plugin": "org.ekstep.plugins.funtoot.activitybase",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        }
+    ]
+}

@@ -1,0 +1,339 @@
+{
+    "id": "org.ekstep.funtoot.common",
+    "ver": "1.0",
+    "author": "Sandhya M",
+    "title": "funtoot Common lib",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/fteditorplugin.js",
+        "dependencies": [
+            {
+                "type": "js",
+                "src": "editor/fteditorapp.js"
+            },
+            {
+                "type": "js",
+                "src": "editor/fteditorpreview.js"
+            },
+            {
+                "type": "js",
+                "src": "editor/fteditorappib.js"
+            },
+            {
+                "type": "js",
+                "src": "renderer/generators.js"
+            },
+            {
+                "id": "mathjs",
+                "src": "renderer/math.min.js",
+                "type": "js"
+            }
+        ]
+    },
+    "renderer": {
+        "main": "renderer/ftfibbaseplugin.js",
+        "dependencies": [
+            {
+                "id": "generators",
+                "type": "js",
+                "src": "renderer/generators.js"
+            },
+            {
+                "id": "eraser",
+                "src": "assets/eraser.png",
+                "type": "image"
+            },
+            {
+                "id": "seq",
+                "src": "assets/seq.png",
+                "type": "image"
+            },
+            {
+                "id": "semitrans",
+                "src": "assets/semitrans.png",
+                "type": "image"
+            },
+            {
+                "id": "zoom-in",
+                "src": "assets/zoom.png",
+                "type": "image"
+            },
+            {
+                "id": "plus-white",
+                "src": "assets/plus_white.png",
+                "type": "image"
+            },
+            {
+                "id": "minus-white",
+                "src": "assets/minus_white.png",
+                "type": "image"
+            },
+            {
+                "id": "micro-hint",
+                "src": "assets/micro-hint.png",
+                "type": "image"
+            },
+            {
+                "id": "micro-hint-mdd",
+                "src": "assets/micro-hint.png",
+                "type": "image"
+            },
+            {
+                "id": "html-micro-hint",
+                "src": "assets/micro-hint.png",
+                "type": "image"
+            },
+            {
+                "id": "drop-down",
+                "src": "assets/drop-down-icon.png",
+                "type": "image"
+            },
+            {
+                "id": "org.ekstep.funtoot.hint-icon",
+                "src": "assets/hint.png",
+                "type": "image"
+            },
+            {
+                "id": "org.ekstep.funtoot.solution-icon",
+                "src": "assets/solimg.png",
+                "type": "image"
+            },
+            {
+                "id": "close",
+                "src": "assets/close.png",
+                "type": "image"
+            },
+            {
+                "id": "submit",
+                "src": "assets/icn_submit.png",
+                "type": "image"
+            },
+            {
+                "id": "undo",
+                "src": "assets/undo.png",
+                "type": "image"
+            },
+            {
+                "id": "clearall",
+                "src": "assets/clearall.png",
+                "type": "image"
+            },
+            {
+                "id": "disabledsubmit",
+                "src": "assets/disabled_submit.png",
+                "type": "image"
+            },
+            {
+                "id": "org.ekstep.funtoot.asset.next",
+                "src": "assets/next.png",
+                "type": "image"
+            },
+            {
+                "id": "editable",
+                "src": "assets/editable.png",
+                "type": "image"
+            },
+            {
+                "id": "nonEditable",
+                "src": "assets/noneditable.png",
+                "type": "image"
+            },
+            {
+                "id": "additioneval",
+                "src": "renderer/additioneval.js",
+                "type": "js"
+            },
+            {
+                "id": "fractioneval",
+                "src": "renderer/fractioneval.js",
+                "type": "js"
+            },
+            {
+                "id": "multiplicationeval",
+                "src": "renderer/multiplicationeval.js",
+                "type": "js"
+            },
+            {
+                "id": "divisioneval",
+                "src": "renderer/divisioneval.js",
+                "type": "js"
+            },
+            {
+                "id": "clockcontrol",
+                "src": "renderer/clockcontrol.js",
+                "type": "plugin"
+            },
+            {
+                "id": "numberlineeval",
+                "src": "renderer/numberlineeval.js",
+                "type": "js"
+            },
+            {
+                "id": "mathquill",
+                "src": "renderer/mathquill.js",
+                "type": "js"
+            },
+            {
+                "id": "mathjs",
+                "src": "renderer/math.min.js",
+                "type": "js"
+            },
+            {
+                "id": "mathquill-basic",
+                "src": "renderer/mathquill.css",
+                "type": "css"
+            },
+            {
+                "id": "genericmdd",
+                "src": "renderer/css/genericmdd.css",
+                "type": "css"
+            },
+            {
+                "id": "zoomableImageStyle",
+                "src": "renderer/css/zoomableimage.css",
+                "type": "css"
+            },
+            {
+                "id": "mathtext",
+                "src": "renderer/mathtext.js",
+                "type": "plugin"
+            },
+            {
+                "id": "mathedit",
+                "src": "renderer/mathedit.js",
+                "type": "plugin"
+            },
+            {
+                "id": "org.ekstep.funtoot.ftPlugin",
+                "src": "renderer/ftbaseplugin.js",
+                "type": "plugin"
+            },
+            {
+                "id": "nkeyboard",
+                "src": "renderer/customnumkeyboard.js",
+                "type": "plugin"
+            },
+            {
+                "id": "keyboard",
+                "src": "renderer/keyboard-plugin.js",
+                "type": "plugin"
+            },
+            {
+                "id": "fibblankprocessor",
+                "src": "renderer/fibblankprocessor.js",
+                "type": "plugin"
+            },
+            {
+                "id": "ftbdropdownprocessor",
+                "src": "renderer/ftbdropdownprocessor.js",
+                "type": "plugin"
+            },
+            {
+                "id": "org.ekstep.funtoot.zoomableImage",
+                "src": "renderer/zoomableimage.js",
+                "type": "plugin"
+            },
+            {
+                "id": "defaultkeyboardadapter",
+                "src": "renderer/defaultkeyboardadapter.js",
+                "type": "plugin"
+            },
+            {
+                "id": "ftFib",
+                "src": "renderer/ftfib.js",
+                "type": "plugin"
+            },
+            {
+                "id": "ftPluginHelper",
+                "src": "renderer/ftpluginhelper.js",
+                "type": "plugin"
+            },
+            {
+                "id": "org.ekstep.funtoot.grid",
+                "src": "renderer/grid.js",
+                "type": "plugin"
+            },
+            {
+                "id": "org.ekstep.funtoot.table",
+                "src": "renderer/table.js",
+                "type": "plugin"
+            },
+            {
+                "id": "keyboard_css",
+                "src": "renderer/css/numerickeyboard.css",
+                "type": "css"
+            },
+            {
+                "id": "htmlpopup",
+                "src": "renderer/htmlpopupplugin.js",
+                "type": "plugin"
+            },
+            {
+                "id": "htmlpopup_css",
+                "src": "renderer/css/htmlpopup.css",
+                "type": "css"
+            },
+            {
+                "id": "htmlpopup_js",
+                "src": "renderer/scripts/htmlpopup.js",
+                "type": "js"
+            },
+            {
+                "id": "ftMicroHint",
+                "src": "renderer/ftmicrohint.js",
+                "type": "plugin"
+            },
+            {
+                "id": "ftPopup",
+                "src": "renderer/ftpopup.js",
+                "type": "plugin"
+            },
+            {
+                "id": "ftAttempts",
+                "src": "renderer/ftattempts.js",
+                "type": "plugin"
+            },
+            {
+                "id": "inlineFib",
+                "src": "renderer/inlinefib.js",
+                "type": "plugin"
+            },
+            {
+                "id": "numberlinenumber",
+                "src": "renderer/numberlinenumber.js",
+                "type": "plugin"
+            },
+            {
+                "id": "numberline",
+                "src": "renderer/numberline.js",
+                "type": "plugin"
+            },
+            {
+                "id": "org.ekstep.funtoot.option",
+                "src": "renderer/option.js",
+                "type": "plugin"
+            },
+            {
+                "id": "org.ekstep.funtoot.optionBuilder",
+                "src": "renderer/optionbuilder.js",
+                "type": "plugin"
+            }
+        ],
+        "compatibilityVersion": 2
+    },
+    "dependencies": [
+        {
+            "plugin": "org.ekstep.plugins.i18n",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "renderer"
+        },
+        {
+            "plugin": "org.ekstep.plugins.common.keyboard",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "renderer"
+        }
+    ]
+}

@@ -1,0 +1,260 @@
+<script type="text/ng-template" ng-app="wordmakerEditorApp" ng-controller="wordmakerEditorController as $ctrl" id="wordMakerEditor">
+    <style type="text/css">
+    @import url('https://fonts.googleapis.com/css?family=Noto+Sans');
+    /*Wormaker css start*/
+
+    .subheadings {
+        font-size: 2.6vh;
+        font-weight: bold;
+        vertical-align: top;
+        padding-bottom: 2.5vh;
+    }
+
+    .select-mode-text {
+        text-align: center;
+    }
+
+    .select-mode-area {
+        padding-right: 2vh;
+        padding-left: 2vh;
+        padding-bottom: 2vh;
+    }
+
+    .gray-border {
+        border: 1px solid #ddd;
+    }
+
+    .selected-box-border.active {
+        border: 3px solid #5588BF;
+    }
+
+    .ui.image.unselected-box-background {
+        background-color: #999;
+    }
+
+    .unselected-box-background .ui.disabled.image {
+        cursor: pointer;
+        opacity: .65;
+    }
+
+    .ui.checkbox.wordmaker label {
+        cursor: pointer;
+        padding-left: 6vh;
+        font-size: 2.3vh;
+    }
+
+    .help-description {
+        margin-top: 4vh;
+    }
+    /*Wormaker css end*/
+    /*wizard css start*/
+
+    .wizard-error-message-box {
+        background-color: #f26d7d;
+        color: #ffffff;
+        font-size: 1.5em;
+        margin: 0 0 1em 0;
+        padding: 15px;
+    }
+
+    .wizard-error-message {
+        color: #f26d7d;
+        font-size: 1.2em;
+        padding: 10px 0;
+    }
+
+    .wizard-error-message-box>p {
+        -webkit-margin-before: 0;
+        -webkit-margin-after: 0;
+        -moz-margin-before: 0;
+        -moz-margin-after: 0;
+        -ms-margin-before: 0;
+        -ms-margin-after: 0;
+        -o-margin-before: 0;
+        -o-margin-after: 0;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    .wizard .ui.breadcrumb .section {
+        color: rgba(0, 0, 0, .4);
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+
+    .wizard .ui.breadcrumb .active.section {
+        color: #5588BF;
+        font-weight: 700;
+    }
+
+    .wizard h2 {
+        font-weight: 700;
+        font-family: 'Noto Sans', sans-serif;
+    }
+
+    .wizard .ui.grid>.column.wizard-title {
+        text-align: center;
+        background-color: #eee;
+        padding-top: 1.2rem;
+        padding-bottom: 1.2rem;
+    }
+
+    .wizard .ui.grid>.column.breadcrumb-container {
+        padding-top: 1.4rem;
+    }
+
+    .wizard .ui.grid.wizard-header {
+        margin-left: -21px;
+        margin-top: -21px;
+        margin-bottom: 20px;
+    }
+
+    .ui.modal {
+        top: 3%;
+    }
+
+    .ngdialog.ngdialog-theme-default .ngdialog-content {
+        margin-top: -100%;
+        font-family: 'Noto Sans', sans-serif;
+    }
+
+    @media only screen and (max-height: 799px) {
+        .ui.modal {
+            top: 1%;
+        }
+    }
+    /*wizard css end*/
+    </style>
+    <div class="ui modal fullscreen active">
+        <div class="content wizard">
+            <div class="ui grid wizard-header">
+                <div class="two wide column wizard-title">
+                    <h2>Word Maker</h2>
+                </div>
+                <div class="six wide column breadcrumb-container">
+                    <div class="ui huge breadcrumb">
+                        <span class="{{$ctrl.showConfigWindow ? 'active': ''}} section">1.Choose Options</span>
+                        <i class="right chevron icon divider"></i>
+                        <span class="{{$ctrl.showWordpickerWindow ? 'active': ''}} section">2.Pick Words</span>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="$ctrl.errors.length" class="wizard-error-message-box">
+                <p ng-repeat="error in $ctrl.errors">{{error}}</p>
+            </div>
+            <div ng-show="$ctrl.showWordpickerWindow">
+                <div class="ui grid container">
+                    <div class="twelve wide column">
+                        <wordpicker selected-words="$ctrl.words" config="$ctrl.config"></wordpicker>
+                    </div>
+                    <div class="ui segment custom-loadingicon" ng-show="$ctrl.isWaitingForSyllables">
+                        <div class="ui active inverted dimmer">
+                            <div class="ui text loader">Just one second, We're fetching syllables for you.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="$ctrl.showConfigWindow">
+                <div class="ui internally celled grid">
+                    <div class="row">
+                        <div class="nine wide column gray-border">
+                            <div class="select-mode-area">
+                                <div class="row">
+                                    <div class="subheadings select-mode-text"><span>Select Mode</span></div>
+                                </div>
+                                <div class="ui grid">
+                                    <div class="six wide column">
+                                        <div class="ui fluid image unselected-box-background selected-box-border {{$ctrl.keyboardType=='jumbled' ? 'active': ''}}">
+                                            <img class="{{$ctrl.keyboardType != 'jumbled' ? 'disabled ui image' : ''}}" ng-src="{{$ctrl.jumbledKeyboardImageURL}}" ng-click="$ctrl.keyboardType='jumbled'">
+                                        </div>
+                                    </div>
+                                    <div class="six wide column">
+                                        <div class="ui fluid image unselected-box-background selected-box-border {{$ctrl.keyboardType=='full' ? 'active': ''}}">
+                                            <img class="{{$ctrl.keyboardType != 'full' ? 'disabled ui image' : ''}}" ng-src="{{$ctrl.fullKeyboardImageURL}}" ng-click="$ctrl.keyboardType='full'">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui grid">
+                                    <div class="six wide column centered row">
+                                        <div class="radio-buttons" ng-click="$ctrl.keyboardType='jumbled'">
+                                            <div class="ui radio checkbox wordmaker">
+                                                <input type="radio" ng-model="$ctrl.keyboardType" value="jumbled" name="keybpardType">
+                                                <label>Jumbled Keyboard</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="six wide column centered row">
+                                        <div class="radio-buttons" ng-click="$ctrl.keyboardType='full'">
+                                            <div class="ui radio checkbox wordmaker">
+                                                <input type="radio" ng-model="$ctrl.keyboardType" value="full" name="keybpardType">
+                                                <label>Full Keyboard</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui grid">
+                                    <div class="row">
+                                        <div class="six wide column">
+                                            <div class="description-text">
+                                                <span>This jumbles the letters of the word</span>
+                                            </div>
+                                        </div>
+                                        <div class="six wide column">
+                                            <div class="description-text">
+                                                <span>This will provide the student with a keyboard with all the letters along with its related forms.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="three wide column gray-border">
+                            <div class="row">
+                                <div class="subheadings"><span>Show</span></div>
+                            </div>
+                            <div class="ui grid">
+                                <div class="twelve wide column">
+                                    <div class="field">
+                                        <div class="ui checkbox wordmaker">
+                                            <input type="checkbox" id="feedback" name="feedback" ng-model="$ctrl.showImmediateFeedback" ng-change="$ctrl.hintEnable=$ctrl.showImmediateFeedback">
+                                            <label>Feedback <i class="help circle icon" ng-click="$ctrl.showHintDescription = true" ng-model="$ctrl.showHintDescription"></i></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="twelve wide column">
+                                    <div class="field">
+                                        <div class="ui checkbox wordmaker">
+                                            <input type="checkbox" id="hints" name="hints" ng-model="$ctrl.hintEnable" ng-disabled="!$ctrl.showImmediateFeedback">
+                                            <label>Hint <i class="help circle icon" ng-click="$ctrl.showHintDescription = false;" ng-model="$ctrl.showHintDescription"></i></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="nine wide column help-description">
+                                    <div ng-show="$ctrl.showHintDescription">
+                                        <div class="subheadings"><span>Show Feedback</span></div>
+                                        <div class="row"><span>This allows the student to know if his/her answer was right or wrong.</span></div>
+                                    </div>
+                                    <div ng-show="!$ctrl.showHintDescription">
+                                        <div class="subheadings"><span>Show Hint</span></div>
+                                        <div class="row"><span>This will enable showing hint in the form of word audio if the student gives an incorrect answer. After 3 incorrect attempts, the correct answer will be displayed.</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class=" actions ">
+            <div class="ui buttons big" ng-if="$ctrl.showConfigWindow ">
+                <button class="ui orange button " ng-click="$ctrl.closeWizard()" type="button ">Cancel</button>
+                <div class="or "></div>
+                <button class="ui blue button " type="button " ng-click="$ctrl.showWordPicker() ">Next</button>
+            </div>
+            <div class="ui buttons big" ng-if="$ctrl.showWordpickerWindow ">
+                <button class="ui orange button " ng-click="$ctrl.showConfigurations() " type="button ">Back</button>
+                <div class="or "></div>
+                <button class="ui blue button " type="button " ng-click="$ctrl.getSyllablesForEnglish() " ng-disabled="($ctrl.words.length<=0)">Add to lesson</button>
+            </div>
+        </div>
+    </div>

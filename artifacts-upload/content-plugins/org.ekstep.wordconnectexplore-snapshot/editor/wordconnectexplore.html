@@ -1,0 +1,45 @@
+
+<div ng-app="org.ekstep.wordconnectexplore:app" ng-controller="exploreController" class="ui masthead vertical segment collection-masterhead">
+    <!--<div ng-repeat="header in headers" ng-include="header.templateURL" class="header-wrapper"></div>-->
+    
+    <div class="ui grid main-body">
+        <div class="loading-content"></div>
+        <div class="ui column" id="expandMode"></div>
+    </div>
+    
+    <div class="ui card explorecardinfo hide">
+        <div class="content">
+            <a class="header">{{exploretitle}}</a>
+
+            <span id="audioContoler">
+                <i class="announcement icon">
+                    <audio controls="" ng-src="{{exploreaudio}}"></audio>
+                </i>
+            </span>
+
+            <span id="closeinfo" ng-click="closeinfo()">
+                <i class="window close outline icon"></i>
+            </span>
+
+            <div class="meta" ng-show="explorepos">
+                <a>{{explorepos}}</a>
+            </div>
+
+            <div class="ui small image">
+                <img ng-src="{{exploreimage}}">
+            </div>
+
+            <div class="content">
+                <div class="description">
+                    {{exploremeaning}}
+                </div>
+                <ul ng-if="exploreExampleSentences.length == 1">
+                    <li ng-repeat="item in exploreExampleSentences">{{item}}</li>
+                </ul>
+                <ol ng-if="exploreExampleSentences.length > 1">
+                    <li ng-repeat="item in exploreExampleSentences">{{item}}</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>

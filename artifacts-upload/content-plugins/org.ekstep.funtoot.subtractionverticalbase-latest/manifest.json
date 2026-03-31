@@ -1,0 +1,44 @@
+{
+    "id": "org.ekstep.funtoot.subtractionverticalbase",
+    "ver": "1.0",
+    "author": "Henrietta",
+    "title": "Subtraction Vertical",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        },
+        "wizard": {
+            "controller": "editor/subtractionvertical.js",
+            "template": "editor/subtractionvertical.html"
+        },
+        "menu": [],
+        "configManifest": [
+            {
+                "propertyName": "count",
+                "title": "Number of Questions",
+                "description": "Number of Questions",
+                "dataType": "rangeslider",
+                "valueType": "text",
+                "required": true,
+                "minimumValue": 1,
+                "maximumValue": 10
+            }
+        ]
+    },
+    "renderer": {
+        "main": "renderer/subtractionvertical.js",
+        "dependencies": []
+    },
+    "dependencies": [
+        {
+            "plugin": "org.ekstep.funtoot.common",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        }
+    ]
+}

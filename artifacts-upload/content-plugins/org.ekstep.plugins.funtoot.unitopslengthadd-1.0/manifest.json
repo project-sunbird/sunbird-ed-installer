@@ -1,0 +1,65 @@
+{
+    "id": "org.ekstep.plugins.funtoot.unitopslengthadd",
+    "ver": "1.0",
+    "author": "funtoot",
+    "type": "plugin",
+    "title": "LengthAddition",
+    "description": "LengthAddition",
+    "editor": {
+        "main": "editor/plugin.js",
+        "wizard": {
+            "configFile": {
+                "path": "editor/configs.json"
+            },
+            "i18nFile": {
+                "pluginId": "org.ekstep.plugins.funtoot.unitopsbase"
+            },
+            "localeFile": {
+                "pluginId": "org.ekstep.plugins.funtoot.unitopsbase",
+                "path": "editor/i18n.json"
+            },
+            "fbImage": {
+                "pluginId": "org.ekstep.plugins.funtoot.unitopsbase"
+            }
+        },
+        "assets": {
+            "fabricImgPath": "/editor/assets/measurementstepbystepadditionandsubtraction.png"
+        },
+        "menu": [
+            {
+                "id": "org.ekstep.plugins.funtoot.unitopslengthadd::menu",
+                "category": "main",
+                "type": "icon",
+                "toolTip": "Add Length Addition",
+                "title": "LengthAddition",
+                "iconClass": "icon-readalong icon",
+                "onclick": {
+                    "id": "org.ekstep.plugins.funtoot.unitopslengthadd:showpopup"
+                }
+            }
+        ],
+        "configManifest": [
+            {
+                "propertyName": "count",
+                "title": "Number of Questions",
+                "description": "Number of Questions",
+                "dataType": "rangeslider",
+                "valueType": "text",
+                "required": true,
+                "minimumValue": 1,
+                "maximumValue": 10
+            }
+        ]
+    },
+    "renderer": {
+        "main": "renderer/plugin.js"
+    },
+    "dependencies": [
+        {
+            "plugin": "org.ekstep.plugins.funtoot.unitopsbase",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        }
+    ]
+}

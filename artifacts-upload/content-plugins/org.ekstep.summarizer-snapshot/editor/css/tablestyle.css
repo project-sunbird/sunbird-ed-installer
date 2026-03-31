@@ -1,0 +1,35 @@
+#tableParent {
+    bottom: 329px;
+    position: relative;
+    height: 100%;
+    width: 92%;
+}
+
+#tableID {
+    border: 1px solid #383838;
+    width: 88%;
+    bottom: 0px;
+    position: relative;
+    left: 59px;
+    font-size: 13px;
+}
+
+thead {
+    display: block;
+    width: 100%;
+    color: #fff;
+    background: #2691d0;
+    color: #fff;
+}
+
+tbody {
+    display: block;
+    width: 100%;
+    height: 263px;
+    overflow: auto;
+}
+
+th {
+    font-weight: bold;
+    color: #fff;
+}

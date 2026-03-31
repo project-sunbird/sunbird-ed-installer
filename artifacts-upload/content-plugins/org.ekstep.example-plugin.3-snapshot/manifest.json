@@ -1,0 +1,39 @@
+{
+    "id": "org.ekstep.example-plugin.3",
+    "ver": "2.0",
+    "author": "Harish Kumar Gangula",
+    "title": "Hello world",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "menu": [{
+            "id": "helloworld",
+            "category": "main",
+            "type": "icon",
+            "toolTip": "Add helloworld",
+            "title": "Text",
+            "iconClass": "hand paper icon",
+            "onclick": {
+                "id": "org.ekstep.example-plugin.3:create",
+                "data": {
+                    "__text": "Hello World",
+                    "x": 10,
+                    "y": 20,
+                    "fontFamily": "Sans-serif",
+                    "fontSize": 18,
+                    "minWidth": 20,
+                    "w": 35,
+                    "maxWidth": 500,
+                    "fill": "#000000",
+                    "fontStyle": "normal",
+                    "fontWeight": "normal",
+                    "stroke": "rgba(255, 255, 255, 0)",
+                    "strokeWidth": 1,
+                    "opacity": 1,
+                    "editable": false
+                }
+            }
+        }]
+    }
+}

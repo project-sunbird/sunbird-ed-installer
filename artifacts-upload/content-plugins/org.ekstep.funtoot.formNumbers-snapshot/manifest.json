@@ -1,0 +1,59 @@
+{
+    "id": "org.ekstep.funtoot.formNumbers",
+    "ver": "1.0",
+    "author": "Amulya",
+    "title": "Forming Numbers",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        },
+        "wizard": {
+            "controller": "editor/formnumbers.js",
+            "template": "editor/formnumbers.html"
+        },
+        "assets": {
+            "fabricImgPath": "/editor/assets/formnumbers.png"
+        },
+        "menu": [
+            {
+                "id": "formNumbers",
+                "category": "main",
+                "type": "icon",
+                "toolTip": "Add Forming Numbers",
+                "title": "forming-numbers",
+                "iconClass": "icon-readalong icon",
+                "onclick": {
+                    "id": "org.ekstep.funtoot.formNumbers:showpopup"
+                }
+            }
+        ],
+        "configManifest": [
+            {
+                "propertyName": "count",
+                "title": "Number of Questions",
+                "description": "Number of Questions",
+                "dataType": "rangeslider",
+                "valueType": "text",
+                "required": true,
+                "minimumValue": 1,
+                "maximumValue": 10
+            }
+        ]
+    },
+    "renderer": {
+        "main": "renderer/formnumbers.js",
+        "dependencies": []
+    },
+    "dependencies": [
+        {
+            "plugin": "org.ekstep.funtoot.common",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        }
+    ]
+}

@@ -1,0 +1,17 @@
+{
+    "en": {
+        "HINT_4_3_3": "Recall the Roman Numerals sequence from 31 to 37 and try again.",
+        "HINT_4_3_2": "Recall the Roman Numerals sequence from 21 to 30 and try again",
+        "HINT_4_3_1": "Recall the Roman Numerals sequence from 11 to 20 and try again",
+        "HINT_4_3_0": "Recall the Roman Numerals sequence from 1 to 10 and try again",
+        "HINT_5_3_4": "Recall the Roman Numerals sequence from 41 to 50 and try again",
+        "HINT_4_3_5": "Identify and apply the rules for the symbols correctly and match them again",
+        "HINT_5_3_3": "Recall the Roman Numerals sequence from 31 to 40 and try again",
+        "QUESTION_TITLE": "ROMAN NUMBERS",
+        "NO_ANSWER": "Match the given questions and then click the submit button.",
+        "HINT_4_3_4": "Recall the Roman Numerals sequence from 39 to 50 and try again",
+        "NO_HINT": "There is no hint for this question.",
+        "Q_4_3_0": "Match the Arabic and Roman form of the numbers",
+        "MH_4_3_0": "Remember any symbol can be used for a maximum of 3 times. Recall all the rules and try again."
+    }
+}

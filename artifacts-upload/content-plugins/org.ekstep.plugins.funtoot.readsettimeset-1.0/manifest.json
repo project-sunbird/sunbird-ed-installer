@@ -1,0 +1,65 @@
+{
+    "id": "org.ekstep.plugins.funtoot.readsettimeset",
+    "ver": "1.0",
+    "author": "funtoot",
+    "type": "plugin",
+    "title": "SettingTheTime",
+    "description": "SettingTheTime",
+    "editor": {
+        "main": "editor/plugin.js",
+        "wizard": {
+            "configFile": {
+                "path": "editor/configs.json"
+            },
+            "i18nFile": {
+                "pluginId": "org.ekstep.plugins.funtoot.readsettimebase"
+            },
+            "localeFile": {
+                "pluginId": "org.ekstep.plugins.funtoot.readsettimebase",
+                "path": "editor/i18n.json"
+            },
+            "fbImage": {
+                "pluginId": "org.ekstep.plugins.funtoot.readsettimebase"
+            }
+        },
+        "assets": {
+            "fabricImgPath": "/editor/assets/timeclock.png"
+        },
+        "menu": [
+            {
+                "id": "org.ekstep.plugins.funtoot.readsettimeset::menu",
+                "category": "main",
+                "type": "icon",
+                "toolTip": "Add Setting The Time",
+                "title": "SettingTheTime",
+                "iconClass": "icon-readalong icon",
+                "onclick": {
+                    "id": "org.ekstep.plugins.funtoot.readsettimeset:showpopup"
+                }
+            }
+        ],
+        "configManifest": [
+            {
+                "propertyName": "count",
+                "title": "Number of Questions",
+                "description": "Number of Questions",
+                "dataType": "rangeslider",
+                "valueType": "text",
+                "required": true,
+                "minimumValue": 1,
+                "maximumValue": 10
+            }
+        ]
+    },
+    "renderer": {
+        "main": "renderer/plugin.js"
+    },
+    "dependencies": [
+        {
+            "plugin": "org.ekstep.plugins.funtoot.readsettimebase",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        }
+    ]
+}

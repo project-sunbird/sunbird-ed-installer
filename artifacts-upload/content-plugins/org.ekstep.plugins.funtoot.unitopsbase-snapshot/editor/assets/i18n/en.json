@@ -1,0 +1,46 @@
+{
+    "en": {
+        "NO_ANSWER": "Fill all the blanks before pressing the submit button.",
+        "QUESTION_TITLE": "Measurements",
+
+        "cm": "cm",
+        "m": "m",
+        "kg": "kg",
+        "g": "g",
+        "l": "l",
+        "ml": "ml",
+        "hours": "hours",
+        "minutes": "minutes",
+        "paise": "paise",
+
+        "LEN_ADD_QT": "Add the given lengths",
+        "LEN_SUB_QT": "Subtract the given lengths",
+        "CAP_ADD_QT": "Add the given capacities",
+        "CAP_SUB_QT": "Subtract the given capacities",
+        "WEIG_ADD_QT": "Add the given weights",
+        "WEIG_SUB_QT": "Subtract the given weights",
+        "TIME_ADD_QT": "Add the given measures of time.",
+        "TIME_SUB_QT": "Subtract the given measures of time.",
+        "MON_ADD_QT": "Add the given money",
+        "MON_SUB_QT": "Subtract the given money",
+
+        "ADD_HINT": "Add the numbers carefully like any other addition problem.",
+        "SUB_HINT": "Subtract the numbers carefully like any other subtraction problem.",
+        "MISSING_LEAD_ZERO": "Carefully add the leading zeroes. While writing the values in decimals, for example 45. 065 and 45. 65 are different.",
+
+        "ADD_1": "Carefully add the numbers under the %{minorunit} column.",
+        "ADD_2": "Carefully add the numbers under the %{majorunit} column.",
+        "ADD_3": "We know %{exp}. The carry over digit from the %{minorunit} should be taken to the %{majorunit} column. Try again.",
+        "ADD_4": "Carefully add the numbers under the %{majorunit} column taking care of the carry over digits.",
+        "ADD_5": "Always start the addition from the units place under the %{minorunit} columns.",
+        "ADD_6": "The numbers under the %{majorunit} column is added after the addition of the numbers under %{minorunit}.",
+        "ADD_7": "Carefully add the numbers under the %{minorunit} column taking care of the carry over.",
+        "ADD_8": "Carefully add the numbers under the %{majorunit} column taking care of the carry over digits.",
+        "SUB_1": "Carefully subtract the numbers under the %{minorunit} column.",
+        "SUB_2": "Carefully subtract the numbers under the %{majorunit} column.",
+        "SUB_3": "Always start the subtraction from the units place under the %{minorunit} columns.",
+        "SUB_4": "The numbers under the %{majorunit} column in subtracted after the subtraction of the numbers under %{minorunit}.",
+        "SUB_5": "Carefully subtract the numbers under the %{minorunit} column taking care of the borrow.",
+        "SUB_6": "Take care of the borrow in the %{minorunit} column, and then subtract the numbers under the %{majorunit} column."
+    }
+}

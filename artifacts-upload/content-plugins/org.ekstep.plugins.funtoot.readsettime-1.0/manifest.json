@@ -1,0 +1,65 @@
+{
+    "id": "org.ekstep.plugins.funtoot.readsettime",
+    "ver": "1.0",
+    "author": "funtoot",
+    "type": "plugin",
+    "title": "ReadTheTime",
+    "description": "ReadTheTime",
+    "editor": {
+        "main": "editor/plugin.js",
+        "wizard": {
+            "configFile": {
+                "path": "editor/configs.json"
+            },
+            "i18nFile": {
+                "pluginId": "org.ekstep.plugins.funtoot.readsettimebase"
+            },
+            "localeFile": {
+                "pluginId": "org.ekstep.plugins.funtoot.readsettimebase",
+                "path": "editor/i18n.json"
+            },
+            "fbImage": {
+                "pluginId": "org.ekstep.plugins.funtoot.readsettimebase"
+            }
+        },
+        "assets": {
+            "fabricImgPath": "/editor/assets/timeclock.png"
+        },
+        "menu": [
+            {
+                "id": "org.ekstep.plugins.funtoot.readsettime::menu",
+                "category": "main",
+                "type": "icon",
+                "toolTip": "Add Read The Time",
+                "title": "ReadTheTime",
+                "iconClass": "icon-readalong icon",
+                "onclick": {
+                    "id": "org.ekstep.plugins.funtoot.readsettime:showpopup"
+                }
+            }
+        ],
+        "configManifest": [
+            {
+                "propertyName": "count",
+                "title": "Number of Questions",
+                "description": "Number of Questions",
+                "dataType": "rangeslider",
+                "valueType": "text",
+                "required": true,
+                "minimumValue": 1,
+                "maximumValue": 10
+            }
+        ]
+    },
+    "renderer": {
+        "main": "renderer/plugin.js"
+    },
+    "dependencies": [
+        {
+            "plugin": "org.ekstep.plugins.funtoot.readsettimebase",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        }
+    ]
+}

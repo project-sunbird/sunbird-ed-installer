@@ -1,0 +1,41 @@
+{
+    "id": "org.ekstep.plugins.funtoot.symmetrylinereflection",
+    "ver": "1.0",
+    "author": "funtoot",
+    "type": "plugin",
+    "title": "Symmetry: Line and Reflection Symmetry",
+    "description": "Symmetry: Line and Reflection Symmetry",
+    "editor": {
+        "main": "editor/plugin.js",
+        "wizard": {
+            "filter": "editor/filters.json"
+        },
+        "assets": {
+            "fabricImgPath": "/editor/assets/symmetrylineandreflection.png"
+        },
+        "menu": [{
+            "id": "org.ekstep.plugins.funtoot.symmetrylinereflection::menu",
+            "category": "main",
+            "type": "icon",
+            "toolTip": "Add Symmetry: Line and Reflection Symmetry",
+            "title": "Symmetry: Line and Reflection Symmetry",
+            "iconClass": "icon-readalong icon",
+            "onclick": {
+                "id": "org.ekstep.plugins.funtoot.symmetrylinereflection:showpopup"
+            }
+        }],
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        }
+    },
+    "renderer": {
+        "main": "renderer/plugin.js"
+    },
+    "dependencies": [{
+        "plugin": "org.ekstep.plugins.funtoot.activitybase",
+        "ver": "1.0",
+        "type": "plugin",
+        "scope": "all"
+    }]
+}

@@ -1,0 +1,24 @@
+{
+    "mr": {
+        "H04R_1": "चिन्ह आणि रोमन अंकांचे नियम आठवून पुन्हा प्रयत्न कर.",
+        "LESSER_THAN_999": "संख्या श्रेणी आठव आणि काळजीपूर्वक चिन्ह घाल.",
+        "Q04R_1": "चिन्ह वापरून  रोमन अंकांची  तुलना कर.",
+        "DECIMAL1": "दिलेल्या संख्येतील अंकाची  दुसर्या संख्येतील संगत अंकाशी काळजीपूर्वक तुलना कर .",
+        "HINT_3_1_4_Comp": "[MR] Convert to equivalent fractions with same denominator and then compare them.",
+        "NO_ANSWER": "एका पर्यायाची निवड करून सबमिट बटण दाबा.",
+        "QUESTION_TITLE": "अचूक  चिन्हाचा वापर करून संख्यांची तुलना कर.",
+        "HINT_4_0_0_Comp": "[MR] Check the integral part first and then the decimal part.",
+        "HINT_1_0_0_Comp": "[MR] Check the number of digits in each number and then carefully compare the given numbers.",
+        "HINT_4_0_2_Comp": "[MR] Check the units place and then the tenth place.",
+        "HINT_3_0_0_Comp": "[MR] Check the numerator of the fractions as the denominators are equal.",
+        "HINT_1_0_1_Comp": "[MR] Check the place value of all the digits in the given numbers and then apply the symbol correctly.",
+        "GREATER_THAN_999": "दिलेल्या संख्येतील अंकांची स्थानिक किंमत लक्षात घेऊन चिन्ह घाला.",
+        "NO_HINT": "या प्रश्नासाठी मार्गदर्शक सूचना नाही.",
+        "FRAC1": "अपूर्णांक सामच्छेद  आहे की भिन्नछेद  आहे हे अभ्यासून रुपांतर करून बेरीज कर आणि  सुयोग्य चिन्ह घाल.",
+        "Comp_Q_4_0_0_Comp": "[MR] Compare the given decimal numbers.",
+        "HINT_3_1_0_Comp": "[MR] Check the denominator of the fractions.",
+        "Comp_Q_1_0_0_Comp": "[MR] Compare the numbers using correct symbols.",
+        "FRAC_EQUAL_CHECK": "दोनही  अपूर्णांक पुन्हा तपास.",
+        "Comp_Q_3_0_0_Comp": "[MR] Compare the given fractions."
+    }
+}

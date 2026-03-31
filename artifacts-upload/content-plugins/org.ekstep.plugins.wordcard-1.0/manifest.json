@@ -1,0 +1,65 @@
+{
+    "id": "org.ekstep.plugins.wordcard",
+    "ver": "1.0",
+    "author": "Devendra Singh",
+    "title": "Wordcard Plugin",
+    "description": "This pugin can be used to create Word Cards to teach Vocabulary of any language. Information of the word comes from Word Duniya. It provides information such as meaning, pronunciation, picture, example usages etc. as required and available in Word Duniya.This uses Word Picker plugin to fetch words from Word Duniya",
+    "icon": "assets/icon.png",
+    "languages": ["English"],
+    "categories": ["learning"],
+    "publishedDate": "",
+    "keywords": ["word card", "wordcard"],
+    "editor": {
+        "main": "editor/plugin.js",
+        "dependencies": [
+            { "type": "js", "src": "editor/init.js" },
+            { "type": "js", "src": "editor/promisifier.js" },
+            { "type": "js", "src": "editor/word.js" },
+            { "type": "js", "src": "editor/translation-service.js" },
+            { "type": "js", "src": "editor/transliteration-service.js" },
+            { "type": "js", "src": "editor/word-card.js" },
+            { "type": "js", "src": "editor/word-card-layout.js" },
+            { "type": "js", "src": "editor/word-card-service.js" },
+            { "type": "js", "src": "editor/word-card-editor-app.js" },
+            { "type": "plugin", "plugin": "org.ekstep.plugins.wordpicker", "ver": "1.0" }
+        ],
+        "menu": [{
+            "id": "wordcard",
+            "category": "main",
+            "type": "image",
+            "toolTip": "Add Wordcard",
+            "title": "wordcard",
+            "iconImage": "assets/wordcardicon.svg",
+            "onclick": {
+                "id": "org.ekstep.plugins.wordcard:showpopup",
+                "data": {
+                    "type": "roundrect",
+                    "x": 5,
+                    "y": 5,
+                    "fill": "#0000",
+                    "w": 90,
+                    "h": 90,
+                    "radius": 10,
+                    "stroke": "rgba(255, 255, 255, 255)",
+                    "strokeWidth": 1,
+                    "opacity": 0.01
+                }
+            }
+        }],
+        "configManifest": [{
+
+        }],
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        },
+        "init-data": {
+            "type": "rect",
+            "x": 0,
+            "y": 0,
+            "fill": "#FFFF00",
+            "w": 50,
+            "h": 25
+        }
+    }
+}

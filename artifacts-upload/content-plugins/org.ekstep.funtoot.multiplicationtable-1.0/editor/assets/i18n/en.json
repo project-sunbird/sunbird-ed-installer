@@ -1,0 +1,23 @@
+{
+    "en": {
+        "NO_ANSWER": "Please answer.",
+        "NO_HINT": "There is no hint for this question.",
+        "QUESTION_TITLE": "Fill in the blanks",
+        "QTEXT": "Multiply the given numbers",
+        "HINT_1": "Product of a number with 1 gives the number itself.",
+        "HINT_2": "Carefully remember counting in 2's and try again.",
+        "HINT_3": "Carefully remember counting in 3's and try again.",
+        "HINT_4": "Carefully find the product of the numbers by recalling the skip counting sequences.",
+        "HINT_5": "Carefully multiply by each term and calculate the product without missing the addition of carryover digits.",
+        "MH_1": "When we multiply by 1, we get the number itself. This is the special property of 1.",
+        "MH_SINGLEDIGIT": "Check the numbers to be multiplied and recall skip counting and carefully try again.",
+        "MH_10": "When multiplying with 10 or powers of 10, carefully check the number of zeroes in the product and try again.",
+        "MH_SUM": "Please identify the symbol carefully and find the product of the given numbers.",
+        "MH_0": "Do not ignore the zero in the given numbers. Carefully do the multiplication.",
+        "MH_MISPLACE": "Recall the process of multiplication. When multiplying with successive digits, we need to identify the correct place value to put the next set of multiplied numbers.",
+        "MH_END0": "Please do not leave the zeros  in the product while multiplying with multiples of 10.",
+        "MH_SAME": "Please understand that product of two equal numbers is calculated exactly like product of any numbers. Try again.",
+        "MH_MISSED0": "Please do not leave the zero while multiplying. The product with zero must be calculated to find the final answer.",
+        "MH_DEFAULT": "Please go through the process of multiplication and identify the exact position where numbers must be placed after multiplying each digit."
+    }
+}

@@ -1,0 +1,9 @@
+diff a/org.ekstep.funtoot.additionhorizontal-1.0/editor/additionhorizontal.js b/org.ekstep.funtoot.additionhorizontal-1.0/editor/additionhorizontal.js	(rejected hunks)
+@@ -78,6 +78,7 @@
+ 			var rhs = obj[1].trim();
+ 			newItem.model.variables[obj[0].trim()] = rhs;
+ 		}
++		if ($scope.config.selectedConfig.isFeedbackSuppressed) {
+ 			new org.ekstep.generators().processVariables(newItem.model.variables);
+ 			newItem.model.variablesProcessed = true;
+ 			$scope.config.selectedConfig.QCount = 1;

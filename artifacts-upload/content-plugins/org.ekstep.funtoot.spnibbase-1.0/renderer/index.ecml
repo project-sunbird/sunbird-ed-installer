@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+<theme id="theme" version="1.0" 
+startStage="2accd767-8664-48d6-b67d-46e0d6ec6b55">
+  <stage x="0" y="0" w="100" h="100" id="2accd767-8664-48d6-b67d-46e0d6ec6b55" 
+r="">
+    <config>
+      <![CDATA[{"opacity":100,"strokeWidth":1,"stroke":"rgba(255, 255, 255, 
+0)","autoplay":false,"visible":true}]]>
+    </config>
+    <param name="instructions" value=""/>
+<org.ekstep.funtoot.spnib w="100" h="100" x="0" y="0" r="" id="195b145c-05b6-4322-baea-cb2216c8aa4b">
+      <data>
+<![CDATA[{"total_items":0,"item_sets":[{"id":"set1","count":3}],"items":{"set1":[{"langid":"en","identifier":"number_counting","qid":0,"type":"ftb","template_id":"","template":"numeralsCounting","title":"Fill in the missing numbers","question_audio":"","question_image":"","model":{"numericLangId":"kn","langId":"hi","numbers":"$nums","langId":"en","numberType":"","rows":1,"cols":3,"qindex":"0","subject":"NUM","qlevel":"EASY","bgImg":"number_inbetween_train","qtype":"Number-in-between","mask": [2],"variables":{"$expr":"'[0 - 9][1-4][1-9]'","$totalNums":"1*3","$langId":"'en'","$numberType":"''","$nums":"getNumberSequence($expr, $totalNums, 1,$langId,$numberType)","$debug":"$nums"}},
+    "concepts": {
+      "identifier": "C9",
+      "name": "Word problems"
+    }},{"langid":"en","identifier":"number_counting","qid":0,"type":"ftb","template_id":"","template":"numeralsCounting","title":"Fill in the missing numbers","question_audio":"","question_image":"","model":{"numericLangId":"kn","langId":"hi","numbers":"$nums","langId":"en","numberType":"","rows":1,"cols":2,"qindex":"0","subject":"NUM","qlevel":"EASY","bgImg":"successor_predecessor_train","qtype":"Predecessor","mask": [1],"variables":{"$expr":"'[0 - 9]'","$totalNums":"1*2","$langId":"'en'","$numberType":"''","$nums":"getNumberSequence($expr, $totalNums, 1,$langId,$numberType)","$debug":"$nums"}},
+    "concepts": {
+      "identifier": "C9",
+      "name": "Word problems"
+    }},
+{
+    "langid": "en",
+    "identifier": "number_counting",
+    "qid": 0,
+    "type": "ftb",
+    "template_id": "",
+    "template": "numeralsCounting",
+    "title": "Fill in the missing numbers",
+    "question_audio": "",
+    "question_image": "",
+    "model": {
+    "numericLangId":"kn","langId":"hi",
+        "numbers": "$nums",
+        "langId": "en",
+        "numberType": "",
+        "rows": 1,
+        "cols": 2,
+        "qindex":"0",
+        "subject":"NUM",
+        "qlevel":"EASY",
+        "bgImg": "successor_predecessor_train",
+        "qtype": "Successor",
+        "mask": [2],
+        "variables": {
+            "$expr": "'[0 - 9]'",
+            "$totalNums": "1*2",
+            "$langId": "'en'",
+            "$numberType": "''",
+            "$nums": "getNumberSequence($expr, $totalNums, 1,$langId,$numberType)",
+            "$debug":"$nums"
+        }
+    },
+    "concepts": {
+      "identifier": "C9",
+      "name": "Word problems"
+    }
+}]},"i18n": {
+    "en": {
+        "ENTERED_SUCCESSOR_INSTEAD_OF_PREDECESSOR": "This is the number that comes after the given number. Recall the number series and find the number that comes before the given number.",
+        "ENTERED_PREDECESSOR_INSTEAD_OF_SUCCESSOR": "This is the number that comes before the given number. Recall the number series and find the number that comes after the given number.",
+        "WRONG_PREDECESSOR": "Recall the number sequence and find the correct number that comes before the given number.",
+        "WRONG_SUCCESSOR": "Recall the number sequence and find the correct number that comes after the given number.",
+        "WRONG_MIDDLE_NUMBER": "Recall the number sequence and find the correct number that comes between the given numbers.",
+        "NO_ANSWER": "Please answer.",
+        "NO_HINT": "There is no hint for this question",
+        "HINT021_INITIAL_SUCCESSOR_PREDECESSOR": "Recall the sequence of counting numbers one by one from 1 to 5.",
+        "HINT022_INITIAL_SUCCESSOR_PREDECESSOR": "Recall the sequence of counting numbers one by one from 6 to 9.",
+        "HINT023_LEADINGZERO": "Remember that zeroes on the left side have no value.",
+        "HINT024_SUCCESSOR": "Recall the sequence of counting numbers and identify the number which comes next.",
+        "HINT025_PREDECESSOR": "Recall the sequence of counting numbers and identify the number which comes before.",
+        "HINT026_INITIAL_NIB": "Recall counting numbers one by one from 1 to 10.",
+        "HINT027_NIB": "Recall the sequence of counting numbers and find the missing number.",
+        "QUESTION02_STEM1": "Write which number comes next to the given number"
+    },
+    "kn": {
+        "ENTERED_SUCCESSOR_INSTEAD_OF_PREDECESSOR": "ಈ ನಿರ್ದಿಷ್ಟ ಸಂಖ್ಯೆಯ ನಂತರ ಬರುತ್ತದೆ ಸಂಖ್ಯೆ. ಸಂಖ್ಯೆಯು ಸರಣಿ ನೆನಪಿಸಿಕೊಂಡು ನಿರ್ದಿಷ್ಟ ಸಂಖ್ಯೆಯ ಮೊದಲು ಬರುತ್ತದೆ ಎಂದು ಹೇಗೆ.",
+        "ENTERED_PREDECESSOR_INSTEAD_OF_SUCCESSOR": "ಈ ನಿರ್ದಿಷ್ಟ ಸಂಖ್ಯೆಯ ಮೊದಲು ಬರುತ್ತದೆ ಸಂಖ್ಯೆ. ಸಂಖ್ಯೆಯು ಸರಣಿ ನೆನಪಿಸಿಕೊಂಡು ನಿರ್ದಿಷ್ಟ ಸಂಖ್ಯೆಯ ನಂತರ ಬರುತ್ತದೆ ಎಂದು ಹೇಗೆ.",
+        "WRONG_PREDECESSOR": "ಸಂಖ್ಯೆ ಅನುಕ್ರಮ ನೆನಪಿಸಿಕೊಂಡು ನಿರ್ದಿಷ್ಟ ಸಂಖ್ಯೆಯ ಮೊದಲು ಬರುತ್ತದೆ ಸರಿಯಾದ ಸಂಖ್ಯೆಯನ್ನು ಕಂಡು.",
+        "WRONG_SUCCESSOR": "ಸಂಖ್ಯೆ ಅನುಕ್ರಮ ನೆನಪಿಸಿಕೊಂಡು ನಿರ್ದಿಷ್ಟ ಸಂಖ್ಯೆಯ ನಂತರ ಬರುತ್ತದೆ ಸರಿಯಾದ ಸಂಖ್ಯೆಯನ್ನು ಕಂಡು.",
+        "WRONG_MIDDLE_NUMBER": "ಸಂಖ್ಯೆ ಅನುಕ್ರಮ ನೆನಪಿಸಿಕೊಂಡು ಕೊಟ್ಟಿರುವ ಸಂಖ್ಯೆಗಳನ್ನು ನಡುವೆ ಬರುತ್ತದೆ ಸರಿಯಾದ ಸಂಖ್ಯೆಯನ್ನು ಕಂಡು.",
+        "NO_ANSWER": "ದಯವಿಟ್ಟು ಉತ್ತರಿಸಿ.",
+        "NO_HINT": "ಈ ಪ್ರಶ್ನೆಗೆ ಯಾವುದೇ ಸುಳಿವು ಇಲ್ಲ.",
+        "HINT021_INITIAL_SUCCESSOR_PREDECESSOR": "1 ರಿಂದ 5 ರವರೆಗಿನ ಒಂದು ಸಂಖ್ಯೆಗಳು ಒಂದು ಲೆಕ್ಕ ಅನುಕ್ರಮ ನೆನಪಿಸಿಕೊಳ್ಳುತ್ತಾರೆ.",
+        "HINT022_INITIAL_SUCCESSOR_PREDECESSOR": "6 ರಿಂದ 9 ಒಂದು ಸಂಖ್ಯೆಗಳು ಒಂದು ಲೆಕ್ಕ ಅನುಕ್ರಮ ನೆನಪಿಸಿಕೊಳ್ಳುತ್ತಾರೆ.",
+        "HINT023_LEADINGZERO": "ಎಡಭಾಗದಲ್ಲಿ ಸೊನ್ನೆಗಳ ಮೌಲ್ಯವನ್ನು ಹೊಂದಿರುವ ನೆನಪಿಡಿ.",
+        "HINT024_SUCCESSOR": "ಎಣಿಕೆಯ ಸಂಖ್ಯೆಗಳನ್ನು ಅನುಕ್ರಮ ನೆನಪಿಸಿಕೊಂಡು ಮುಂದಿನ ಬರುವಂತಹ ಗುರುತಿಸಲು.",
+        "HINT025_PREDECESSOR": "ಎಣಿಕೆಯ ಸಂಖ್ಯೆಗಳನ್ನು ಅನುಕ್ರಮ ನೆನಪಿಸಿಕೊಂಡು ಮೊದಲು ಬರುವಂತಹ ಗುರುತಿಸಲು.",
+        "HINT026_INITIAL_NIB": "10 1 ರಿಂದ ಒಂದು ಸಂಖ್ಯೆಗಳು ಒಂದು ಲೆಕ್ಕ ನೆನಪಿಸಿಕೊಳ್ಳುತ್ತಾರೆ.",
+        "HINT027_NIB": "ಎಣಿಕೆಯ ಸಂಖ್ಯೆಗಳನ್ನು ಅನುಕ್ರಮ ನೆನಪಿಸಿಕೊಂಡು ಕಾಣೆಯಾಗಿದೆ ಸಂಖ್ಯೆಯನ್ನು ಕಂಡು.",
+        "QUESTION02_STEM1": " ಇದು ಬರೆಯಿರಿ ಸಂಖ್ಯೆಯನ್ನು ನೀಡಲಾಗುವುದು ಸಂಖ್ಯೆಗೆ ಮುಂದಿನ ಬರುತ್ತದೆ"
+    }
+}}]]>
+      </data>
+      <config>
+        <![CDATA[{"title":"Fill in the missing numbers","count":2,"type":"items","var":"item"}]]>
+      </config>
+    </org.ekstep.funtoot.spnib>
+  </stage>
+  <manifest>
+    <media id="eraser" type="image" 
+src="http://localhost:3000/plugins/org.ekstep.funtoot.spnib-1.0/../org.ekstep.funtoot.common-1.0/assets/eraser.png"/>
+    <media id="number_inbetween_train" type="image" 
+src="http://localhost:3000/plugins/org.ekstep.funtoot.spnib-1.0/asset/number_inbetween_train.png"/>
+    <media id="successor_predecessor_train" type="image" 
+src="http://localhost:3000/plugins/org.ekstep.funtoot.spnib-1.0/asset/successor_predecessor_train.png"/>
+    <media id="micro-hint" type="image" 
+src="http://localhost:3000/plugins/org.ekstep.funtoot.spnib-1.0/../org.ekstep.funtoot.common-1.0/assets/micro-hint.png"/>
+    <media id="hint" type="image" 
+src="http://localhost:3000/plugins/org.ekstep.funtoot.spnib-1.0/../org.ekstep.funtoot.common-1.0/assets/hint.png"/>
+    <media id="solImg" type="image" 
+src="http://localhost:3000/plugins/org.ekstep.funtoot.spnib-1.0/../org.ekstep.funtoot.common-1.0/assets/solImg.png"/>
+    <media id="close" type="image" 
+src="http://localhost:3000/plugins/org.ekstep.funtoot.spnib-1.0/../org.ekstep.funtoot.common-1.0/assets/close.png"/>
+    <media id="submit" type="image" 
+src="http://localhost:3000/plugins/org.ekstep.funtoot.spnib-1.0/../org.ekstep.funtoot.common-1.0/assets/icn_submit.png"/>
+    <media id="editable" type="image" 
+src="http://localhost:3000/plugins/org.ekstep.funtoot.spnib-1.0/../org.ekstep.funtoot.common-1.0/assets/editable.png"/>
+    <media id="nonEditable" type="image" 
+src="http://localhost:3000/plugins/org.ekstep.funtoot.spnib-1.0/../org.ekstep.funtoot.common-1.0/assets/nonEditable.png"/>
+    <media id="ftPlugin" type="js" 
+src="http://localhost:3000/plugins/org.ekstep.funtoot.spnib-1.0/../org.ekstep.funtoot.common-1.0/renderer/ftBasePlugin.js"/>
+<media id="ftI18n" type="plugin" 
+src="http://localhost:3000/plugins/org.ekstep.funtoot.numerals.counting-1.0/../org.ekstep.funtoot.common-1.0/renderer/fti18n.js"/>
+    <media id="ftFibBasePlugin" type="js" 
+src="http://localhost:3000/plugins/org.ekstep.funtoot.spnib-1.0/../org.ekstep.funtoot.common-1.0/renderer/ftFibBasePlugin.js"/>
+    <media id="nkeyboard" type="plugin" 
+src="http://localhost:3000/plugins/org.ekstep.funtoot.spnib-1.0/../org.ekstep.funtoot.common-1.0/renderer/CustomNumKeyboard.js"/>
+    <media id="ftFib" type="plugin" 
+src="http://localhost:3000/plugins/org.ekstep.funtoot.spnib-1.0/../org.ekstep.funtoot.common-1.0/renderer/ftFib.js"/>
+    <media id="ftPluginHelper" type="plugin" 
+src="http://localhost:3000/plugins/org.ekstep.funtoot.spnib-1.0/../org.ekstep.funtoot.common-1.0/renderer/ftPluginHelper.js"/>
+     <media id="org.ekstep.funtoot.common.grid" type="plugin" 
+src="http://localhost:3000/plugins/org.ekstep.funtoot.numerals.counting-1.0/../org.ekstep.funtoot.common-1.0/renderer/grid.js"/>
+    <media id="keyboard_css" type="css" 
+src="http://localhost:3000/plugins/org.ekstep.funtoot.spnib-1.0/../org.ekstep.funtoot.common-1.0/renderer/css/numerickeyboard.css"/>
+    <media id="ftMicroHint" type="plugin" 
+src="http://localhost:3000/plugins/org.ekstep.funtoot.spnib-1.0/../org.ekstep.funtoot.common-1.0/renderer/ftMicroHint.js"/>
+    <media id="ftPopup" type="plugin" 
+src="http://localhost:3000/plugins/org.ekstep.funtoot.spnib-1.0/../org.ekstep.funtoot.common-1.0/renderer/ftPopup.js"/>
+     <media id="ftAttempts" type="plugin" 
+src="http://localhost:3000/plugins/org.ekstep.funtoot.skipcounting-1.0/../org.ekstep.funtoot.common-1.0/renderer/ftAttempts.js"/>
+     <media id="ftI18n" type="plugin" 
+src="http://localhost:3000/plugins/org.ekstep.funtoot.numerals.counting-1.0/../org.ekstep.funtoot.common-1.0/renderer/fti18n.js"/>
+    <media id="org.ekstep.funtoot.spnib" ver="1.0" 
+src="http://localhost:3000/plugins/org.ekstep.funtoot.spnib-1.0/renderer/plugin.js"
+ type="plugin"/>
+  </manifest>
+</theme>

@@ -1,0 +1,49 @@
+{
+    "id": "org.ekstep.plugins.funtoot.timecustomintro",
+    "ver": "1.0",
+    "author": "funtoot",
+    "type": "plugin",
+    "title": "timeintrocustom",
+    "description": "This plugin is used to generate analog clock based questions.",
+    "editor": {
+        "main": "editor/plugin.js",
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        },
+        "wizard": {
+            "controller": "editor/timeintrocustom.js",
+            "template": "editor/timeintrocustom.html"
+        },
+        "menu": [{
+            "id": "timeintrocustom",
+            "category": "main",
+            "type": "icon",
+            "toolTip": "Add A Clock",
+            "title": "Clock Intro",
+            "iconClass": "icon-readalong icon",
+            "onclick": {
+                "id": "org.ekstep.plugins.funtoot.timecustomintro:showpopup"
+            }
+        }],
+        "configManifest": [{
+            "propertyName": "count",
+            "title": "Number of Questions",
+            "description": "Number of Questions",
+            "dataType": "rangeslider",
+            "valueType": "text",
+            "required": true,
+            "minimumValue": 1,
+            "maximumValue": 10
+        }]
+    },
+    "renderer": {
+        "main": "renderer/plugin.js"
+    },
+    "dependencies": [{
+        "plugin": "org.ekstep.funtoot.common",
+        "ver": "1.0",
+        "type": "plugin",
+        "scope": "all"
+    }]
+}

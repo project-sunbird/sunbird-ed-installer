@@ -1,0 +1,17 @@
+{
+    "id": "org.ekstep.plugins.funtoot.previewhelper",
+    "ver": "1.0",
+    "author": "funtoot",
+    "title": "previewhelper",
+    "description": "This plugin helps us preview funtoot questions on the ekstep question set (quiz plugin).",
+    "editor": {},
+    "renderer": {
+        "main": "renderer/plugin.js"
+    },
+    "dependencies": [{
+        "plugin": "org.ekstep.funtoot.common",
+        "ver": "1.0",
+        "type": "plugin",
+        "scope": "all"
+    }]
+}

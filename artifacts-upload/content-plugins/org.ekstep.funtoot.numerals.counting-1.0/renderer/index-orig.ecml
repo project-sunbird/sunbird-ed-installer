@@ -1,0 +1,87 @@
+<theme id="theme" startStage="splash" ver="0.2">
+    <manifest>
+        <media id="funtoot-splash" src="funtoot-splash.jpg" type="image"/>
+        <media id="eraser" src="eraser.png" type="image"/>
+        <media id="t-shirt" src="t-shirt.png" type="image"/>
+		<media id="house" src="house.png" type="image"/>
+        <media id="hint" src="hint.png" type="image"/>
+        <media id="solImg" src="solImg.png" type="image"/>
+        <media id="close" src="close.png" type="image"/>
+        <media id="submit" src="icn_submit.png" type="image"/>
+        <media id="ftPlugin" src="../../../../org.ekstep.funtoot.common-1.0/renderer/ftBasePlugin.js" type="plugin"/>
+        <media id="ftFibBasePlugin" src="../../../../org.ekstep.funtoot.common-1.0/renderer/ftFibBasePlugin.js" type="plugin"/>
+        <media id="nkeyboard" src="../../../../org.ekstep.funtoot.common-1.0/renderer/CustomNumKeyboard.js" type="plugin"/> 
+        <media id="ftFib" src="../../../../org.ekstep.funtoot.common-1.0/renderer/ftFib.js" type="plugin"/>
+        <media id="ftPluginHelper" src="../../../../org.ekstep.funtoot.common-1.0/renderer/ftPluginHelper.js" type="plugin"/>
+        <media id="numeralsCounting" src="../../numeralsCounting.js" type="plugin"/>
+        <media id="ftGrid" src="../../../../org.ekstep.funtoot.numerals.grid-1.0/renderer/ftGrid.js" type="plugin"/>
+        <media id="keyboard_css" src="../../../../org.ekstep.funtoot.common-1.0/renderer/css/numerickeyboard.css" type="css"/>
+    </manifest>
+    <stage id="baseStage" preload="true">
+        <image asset="funtoot-splash"/>
+        <image asset="t-shirt" />
+        <image asset="house" />
+        <image asset="eraser" />
+        <image asset="hint" />
+        <image asset="close" />
+        <image asset="solImg" />
+        <image asset="submit" />
+    </stage>
+    <controller id="assessment" name="assessment" type="items"/>
+    <template id="tshirt">
+        <text align="center" color="#4c4c4c" fontsize="3.2vw" lineHeight="1.4" model="item.title" w="100" x="0" y="10" valign="top" h="23">
+        </text>
+        <shape hitArea="true" type="rect" h="80" w="100" x="0" y="0">
+                <event type="click">
+                    <action asset="keypadId" command="hide" type="command"/>
+                </event>
+        </shape>
+		
+        <ftPluginHelper w="10" h="10" x="0" y="0" id="plugin_helper" />
+        
+         <g h="60" w="80" x="10" y="20"  visible="true" > 
+            <numeralsCounting h="100" id="ftWordPrb1" type="custom" w="100" x="0" y="0"/>
+        </g>
+		<set param="overlaySubmit" scope="stage" value="off"/>
+        <set param="overlayNext" scope="stage" value="off"/>
+         <g h="70" id="solutionId" visible="false" w="80" x="10" y="20" >
+            <shape blur="5" type="roundrect" h="100" w="80" x="10" y="0" stroke="#cccccc" fill="#ffffff" outline="10" offsetY="3" offsetX="-2" shadow="#cccccc"/>
+           <text align="center" color="#60BC50" fontsize="2.7vw" lineHeight="1.4" w="100" x="0" y="2" valign="top" h="23">
+            Solution
+           </text>
+           <g h="80"  w="95" x="2.5" y="12">
+           <numeralsCounting  h="100" type="custom" w="100" x="0" y="0" isSolution="true" />
+           </g>
+            <image hitArea="true" asset="close" h="4" w="3" x="84" y="6" >
+                <event type="click">
+                     <action asset="solutionId" command="hide" type="command"/>
+                </event>
+        </image>
+        </g>
+        <g h="70" id="hintId" visible="false" w="80" x="10" y="20" >
+            <shape blur="5" type="roundrect" h="100" w="80" x="10" y="0" stroke="#cccccc" fill="#ffffff" outline="10" offsetY="3" offsetX="-2" shadow="#cccccc"/>
+           <text align="center" color="#60BC50" fontsize="2.7vw" lineHeight="1.4" w="100" x="0" y="2" valign="top" h="23">
+            Hint
+           </text>
+           <text align="center" model="item.hintMsg"  fontsize="2.7vw" lineHeight="1.4" w="100" x="0" y="10" valign="top" h="23"/>
+            
+            <image hitArea="true" asset="close" h="4" w="3" x="84" y="6" >
+                <event type="click">
+                     <action asset="hintId" command="hide" type="command"/>
+                </event>
+        </image>
+        </g>
+       
+    </template>
+   
+    <stage h="100" id="splash" w="100" x="0" y="0" >
+        <param name="next" value="stage1" />
+        <image asset="funtoot-splash" h="100" w="100" x="0" y="0"/>
+    </stage>
+    <stage h="100" id="stage1" iterate="assessment" var="item" w="100" x="0" y="0">
+        <param name="previous" value="stage1"/>
+        <g h="100" w="100" x="0" y="0">
+            <embed template="item" var-item="item"/>
+        </g>
+    </stage>
+</theme>

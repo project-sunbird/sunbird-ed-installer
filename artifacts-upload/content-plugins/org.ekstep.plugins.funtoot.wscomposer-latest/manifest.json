@@ -1,0 +1,115 @@
+{
+    "id": "org.ekstep.plugins.funtoot.wscomposer",
+    "ver": "1.0",
+    "author": "Amulya",
+    "type": "plugin",
+    "title": "Word Problems",
+    "description": "This plugin is an example plugin",
+    "editor": {
+        "main": "editor/wscomposerplugin.js",
+        "dependencies": [
+            {
+                "type": "plugin",
+                "plugin": "org.ekstep.conceptselector",
+                "ver": "1.0"
+            },
+            {
+                "type": "js",
+                "src": "editor/assessment_util.js"
+            },
+            {
+                "type": "js",
+                "src": "editor/libs/xml2json.js"
+            }
+        ],
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        },
+        "menu": [
+            {
+                "id": "wscomposer",
+                "category": "main",
+                "type": "icon",
+                "toolTip": "Add Wordproblems",
+                "title": "Word Problem",
+                "iconClass": "icon-readalong icon",
+                "onclick": {
+                    "id": "org.ekstep.plugins.funtoot.wscomposer:show"
+                }
+            }
+        ],
+        "configManifest": [
+            {
+                "propertyName": "count",
+                "title": "Number of Questions",
+                "description": "Number of Questions",
+                "dataType": "rangeslider",
+                "valueType": "text",
+                "required": true,
+                "minimumValue": 1,
+                "maximumValue": 10
+            }
+        ]
+    },
+    "renderer": {
+        "main": "renderer/wscomposerrenderer.js",
+        "dependencies": [
+            {
+                "id": "fameCinema",
+                "src": "asset/fameCinema.png",
+                "type": "image"
+            }
+        ]
+    },
+    "dependencies": [
+        {
+            "plugin": "org.ekstep.funtoot.common",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        },
+        {
+            "plugin": "org.ekstep.plugins.funtoot.fibwordproblem",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        },
+        {
+            "plugin": "org.ekstep.plugins.funtoot.genericfib",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        },
+        {
+            "plugin": "org.ekstep.plugins.funtoot.genericmcq",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        },
+        {
+            "plugin": "org.ekstep.plugins.funtoot.genericmfr",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        },
+        {
+            "plugin": "org.ekstep.plugins.funtoot.genericmdd",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        },
+        {
+            "plugin": "org.ekstep.plugins.funtoot.genericmtf",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        },
+        {
+            "plugin": "org.ekstep.plugins.funtoot.genericseq",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        }
+    ]
+}

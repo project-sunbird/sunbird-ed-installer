@@ -1,0 +1,13 @@
+{
+    "id": "org.manoj.plugins.tests.1",
+    "ver": "1.0",
+    "author": "Manoj",
+    "title": "Manoj Test Plugin",
+    "description": "",
+    "publishedDate": "",
+    "editor": {},
+    "renderer": {
+        "main": "renderer/plugin.js"
+    },
+    "dependencies": []
+}

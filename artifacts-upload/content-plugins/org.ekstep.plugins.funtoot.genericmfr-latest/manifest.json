@@ -1,0 +1,19 @@
+{
+    "id": "org.ekstep.plugins.funtoot.genericmfr",
+    "ver": "1.0",
+    "author": "Henrietta",
+    "type": "plugin",
+    "title": "genericmfr",
+    "description": "This is a genericmfr plugin",
+    "renderer": {
+        "main": "renderer/plugin.js"
+    },
+    "dependencies": [
+        {
+            "plugin": "org.ekstep.funtoot.common",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        }
+    ]
+}

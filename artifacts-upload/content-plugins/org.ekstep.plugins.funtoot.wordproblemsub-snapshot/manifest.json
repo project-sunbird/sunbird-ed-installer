@@ -1,0 +1,45 @@
+{
+    "id": "org.ekstep.plugins.funtoot.wordproblemsub",
+    "ver": "1.0",
+    "author": "funtoot",
+    "type": "plugin",
+    "title": "Word Problem-Subtraction",
+    "description": "Word Problem-Subtraction",
+    "editor": {
+        "main": "editor/plugin.js",
+        "wizard": {
+            "filter": "editor/filters.json"
+        },
+        "assets": {
+            "fabricImgPath": "/editor/assets/subtractionwordproblems.png"
+        },
+        "menu": [
+            {
+                "id": "org.ekstep.plugins.funtoot.wordproblemsub::menu",
+                "category": "main",
+                "type": "icon",
+                "toolTip": "Add Word Problem-Subtraction",
+                "title": "Word Problem-Subtraction",
+                "iconClass": "icon-readalong icon",
+                "onclick": {
+                    "id": "org.ekstep.plugins.funtoot.wordproblemsub:showpopup"
+                }
+            }
+        ],
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        }
+    },
+    "renderer": {
+        "main": "renderer/plugin.js"
+    },
+    "dependencies": [
+        {
+            "plugin": "org.ekstep.plugins.funtoot.activitybase",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        }
+    ]
+}

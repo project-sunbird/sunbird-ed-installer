@@ -1,0 +1,22 @@
+{
+    "id": "org.ekstep.plugins.common.keyboard",
+    "ver": "1.0",
+    "author": "Daipayan Roy",
+    "type": "widget",
+    "title": "Keyboard Plugin",
+    "description": "This plugin will create a keyboard at the specified positions with the given keys.",
+    "icon":"assets/icon.png",
+    "languages": ["English"],
+    "categories":["library"],
+    "keywords":["keyboard"],
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js"
+    },
+    "renderer": {
+        "main": "renderer/keyboard-plugin.js",
+        "dependencies": [
+            { "id": "keyboardcss", "type": "css", "src": "renderer/keyboard.css" }
+        ]
+    }
+}

@@ -1,0 +1,134 @@
+<script type="text/ng-template" ng-app="flashcardapp" ng-controller="flashcardEditorController as $ctrl" id="flashcard">
+    <style type="text/css">
+    .filters-container {
+        padding: 8px 10px 4px 18px;
+        background: #f1f1f1;
+    }
+    
+    .textWrapper {
+        font-size: 26px;
+        overflow-x: auto;
+        white-space: nowrap;
+        background-color: #efefef;
+        height: 75px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .helptext {
+        color: #ccc;
+    }
+    
+    .words-div: {
+        width: 100%;
+    }
+    
+    .words-list {
+        width: 22%;
+        float: left;
+        margin: 4px;
+    }
+    
+    .panel {
+        margin-bottom: 20px;
+        background-color: #fff;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    }
+    
+    .panel-heading {
+        border: 0px;
+        color: #000;
+        background: #BAD9D4;
+        padding: 15px 3px;
+    }
+    
+    .panel-body {
+        padding: 0px;
+    }
+    
+    #div1 {
+        float: left;
+        margin: 10px;
+        padding: 10px;
+        border: solid 2px;
+        border-color: #C0C0C0;
+    }
+    
+    .dragDiv {
+        margin: 20px;
+
+    }
+    
+    .cursor-pointer {
+        cursor: pointer;
+        padding: 0px 0px;
+    }
+    
+    .error-msg {
+        color: red;
+    }
+    </style>
+    <div class="ui modal large active" style="top: 10% !important;">
+        <div class="content">
+            <div class="ui mini one steps">
+                <div class="{{$ctrl.isWordBrowser ? 'active': ''}} step">
+                    <i class="browser icon"></i>
+                    <div class="content">
+                        <div class="title">Word browser</div>
+                        <div class="description">Type the word to search </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="$ctrl.isWordBrowser">
+                <div class="ui two column horizontally padded grid">
+                    <div class="eight wide column">
+                        <div class="row" style="margin-bottom: 10px;">
+                            <div class="column">
+                                <div class="field">
+                                    <div class="ui fluid labeled input">
+                                        <div class="ui label">Word</div>
+                                        <input type="text" name="word" ng-model="$ctrl.word " min="1" ng-keypress="$event.keyCode === 13 ? $ctrl.getWords() : null">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="height: 50vh; overflow-y: scroll; padding-top:20px;">
+                            <div class="ui large divided items">
+                                <div class="words-list select" ng-repeat="wordVal in $ctrl.wordData">
+                                    <!-- {{wordVal.lemma}} -->
+                                    <!-- <div class="panel "> -->
+                                        <div class="panel-heading" ng-click="$ctrl.toggleWordSelection(wordVal)">
+                                            <h4>{{wordVal.lemma}}</h4>
+                                        <i class="fa pull-right fa-lg akshara-select " aria-hidden="true "
+                                 ng-class="wordVal.isSelected ? 'checkmark box icon' : 'square outline icon' " >
+                                        </i>
+                                        </div>
+                                       
+                                        <div class="panel-body ">
+                                        </div>
+                                    <!-- </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="four wide column right floated">
+                        1. Type the word</br>
+                        2. Click on 'Next' button to see list of related words.</br>
+                        3. Select one word to display.</br>
+                        4. Only one word will be displayed on each stage.</br> If more than one word has been selected, only the first selected word will be displayed.</br>
+                        5. Click on 'Lesson' button to add the word to the lesson.</br>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui buttons">
+                <button class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
+                <div class="or"></div>
+                <button class="ui blue button" type="button" ng-show="$ctrl.selectedWords.length == 0" ng-disabled="!$ctrl.word" ng-click="$ctrl.getWords()">NEXT</button>
+                <button class="ui blue button" type="button" ng-show="$ctrl.selectedWords.length > 0" ng-click="$ctrl.addtoLesson()">Lesson</button>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,17 @@
+{
+    "en": {
+        "NO_ANSWER": "Fill all the blanks before pressing the submit button.",
+        "NO_HINT": "There is no hint for this question.",
+        "QUESTION_TITLE": "BODMAS",
+        "Q_TEXT": "Simplify",
+        "HINT_1": "Follow BODMAS rule and proceed with each step carefully.",
+        "HINT_2": "Recall the order of DMAS and carefully calculate again.",
+        "HINT_3": "Recall the order of subtraction and division in DMAS and try again.",
+        "HINT_4": "Recall the order of subtraction and multiplication in DMAS and try again.",
+        "HINT_5": "Recall the order of addition and division in DMAS and try again.",
+        "HINT_6": "Recall the order of addition and multiplication in DMAS and try again.",
+        "HINT_7": "Recall the order of multiplication and division in DMAS and try.",
+        "HINT_8": "Please check the signs between the given numbers and then calculate.",
+        "MH": "Carefully follow the rules of BODMAS and calculate again taking care of the signs."
+    }
+}

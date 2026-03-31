@@ -1,0 +1,29 @@
+{
+    "mr": {
+        "NO_ANSWER": "",
+        "INVALID_QTY": "",
+        "INVALID_UNIT_PRICE": "",
+        "INVALID_ITEM_PRICE": "",
+        "INVALID_TOTAL": "",
+        "NO_HINT": "",
+        "HINT_BILL_1": "",
+        "HINT_BILL_2": "",
+        "HINT_BILL_3": "",
+        "HINT_BILL_4": "",
+        "HINT_BILL_5": "",
+        "HINT_BILL_6": "",
+        "HINT_BILL_7": "",
+        "HINT_BILL_8": "",
+        "HINT_BILL_9": "",
+        "BILL_QSTEM": "",
+        "SLNO": "",
+        "ITEM_DESC": "",
+        "ITEM_QTY": "",
+        "ITEM_PPU": "",
+        "ITEM_PRICE": "",
+        "TOTAL_PRICE": "",
+        "ITEM_LIST": "Saridon,Crocin,Vicks Action 500,Rice,Wheat,Dal,Plate,Glass,Spoon,Pencil,Sharpner,Eraser,Chocolate,Chocolate Cake,Strawberry Cake,Kolhapuri Chat,Spicy Punjabi Chat,Bhel Puri Chat,Maths Text Book,Science Text Book,English Text Book",
+        "ITEM_QTY_LIST": "1-5,1-5,1-5,1-10,1-10,1-10,2-10,2-10,2-10,1-5,1-3,1-3,2-20,1-2,1-2,1-5,1-5,1-5,1-2,1-2,1-2",
+        "ITEM_PPU_LIST": "1-10,1-10,1-10,40-90,40-60,30-50,20-30,20-30,10-25,2-4,3-5,2-5,5-10,100-150,100-150,15-20,15-20,15-20,100-150,100-150,100-150"
+    }
+}

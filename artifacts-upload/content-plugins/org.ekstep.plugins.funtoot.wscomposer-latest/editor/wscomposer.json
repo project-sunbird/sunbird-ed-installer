@@ -1,0 +1,26 @@
+[
+    {
+        "Type": "Word problems",
+        "Grade": 3,
+        "Level": 1,
+        "LevelDesc": "",
+        "SubLevel": 0,
+        "SubLevelDesc": "",
+        "Expression": "",
+        "BTLO": "R",
+        "DifficultyLevel": 2,
+        "Description": "Tests the identification of the sequence of 3 digit numbers with different units digit.",
+        "HintID": "HINT051_VALUE",
+        "QuestionContext": "QUESTION05_STEM",
+        "QuestionImage": "",
+        "QID": "QFIB02903",
+        "WorksheetId": "",
+        "isVariablized": "",
+        "QuestionText": "QUESTION05_STEM",
+        "Subject": "NUM",
+        "ConceptCode": "C467, C670",
+        "ESDifficultyLevel": "Easy",
+        "Number of attempts": 2,
+        "ResponsePattern": "[{value:'',mh:'',mmc:''}]"
+    }
+]

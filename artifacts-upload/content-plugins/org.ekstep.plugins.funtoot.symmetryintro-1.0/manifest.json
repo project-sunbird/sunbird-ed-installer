@@ -1,0 +1,41 @@
+{
+    "id": "org.ekstep.plugins.funtoot.symmetryintro",
+    "ver": "1.0",
+    "author": "funtoot",
+    "type": "plugin",
+    "title": "Symmetry: Introduction",
+    "description": "Symmetry: Introduction",
+    "editor": {
+        "main": "editor/plugin.js",
+        "wizard": {
+            "filter": "editor/filters.json"
+        },
+        "assets": {
+            "fabricImgPath": "/editor/assets/symmetryintroduction.png"
+        },
+        "menu": [{
+            "id": "org.ekstep.plugins.funtoot.symmetryintro::menu",
+            "category": "main",
+            "type": "icon",
+            "toolTip": "Add Symmetry: Introduction",
+            "title": "Symmetry: Introduction",
+            "iconClass": "icon-readalong icon",
+            "onclick": {
+                "id": "org.ekstep.plugins.funtoot.symmetryintro:showpopup"
+            }
+        }],
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        }
+    },
+    "renderer": {
+        "main": "renderer/plugin.js"
+    },
+    "dependencies": [{
+        "plugin": "org.ekstep.plugins.funtoot.activitybase",
+        "ver": "1.0",
+        "type": "plugin",
+        "scope": "all"
+    }]
+}

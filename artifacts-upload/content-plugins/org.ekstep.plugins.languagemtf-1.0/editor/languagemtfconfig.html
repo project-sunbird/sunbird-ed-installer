@@ -1,0 +1,343 @@
+<script type="text/ng-template" ng-app="languagemtfapp" ng-controller="org.ekstep.plugins.languagemtf:configurationController as $ctrl" id="languagemtfTemplate">
+    <style type="text/css">
+.ui.vertical.menu .active.item {
+        background: #3CB878;
+        color: #fff;
+    }
+
+    .ui.vertical.pointing.menu .active.item:after,
+    .ui.vertical.pointing.menu .active.item:hover:after,
+    .ui.vertical.pointing.menu .active.item:hover {
+        background-color: #3CB878;
+        color: #fff;
+    }
+
+    .ui.vertical.pointing.menu .item:hover {
+        background-color: #BABABA;
+        color: #fff;
+    }
+
+    .ui.vertical.menu {
+        box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0);
+        width: auto;
+    }
+
+    .ui.menu .item {
+        line-height: 1.6em;
+        height : 7vh;
+    }
+
+    .ui.menu {
+        font-size: 1.28rem;
+        border: none;
+    }
+
+    .ui.vertical.menu .item {
+        display: block;
+        background: -webkit-linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0));
+        background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0));
+        color: #BABABA;
+    }
+
+    .ui.vertical.menu>.active.item:first-child,
+    .ui.vertical.menu>.active.item:last-child,
+    .ui.vertical.menu>.item:first-child,
+    .ui.menu>.item:first-child,
+    .ui.vertical.menu>.item:last-child {
+        border-radius: 0px !important;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+        max-height: 4.5vh;
+        min-height: 4.5vh;
+    }
+
+    .switch input {
+        display: none;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #EBEBEB;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 100%;
+        width: 50%;
+        background-color: #3CB878;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    input:checked + .slider {
+        background-color: #EBEBEB;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(100%);
+        -ms-transform: translateX(100%);
+        transform: translateX(100%);
+    }
+
+    .slider.round {
+        border-radius: 34px;
+    }
+
+    .slider.round:before {
+        border-radius: 34px;
+    }
+
+    .toggleConfigText {
+        width: 50%;
+        text-align: center;
+        height: 100%;
+        vertical-align: middle;
+        font-size: 1vw;
+        padding-top: 6px;
+    }
+
+    .configText {
+        color: white;
+        text-align: center;
+        height: 100%;
+        vertical-align: middle;
+        font-size: 1vw;
+        padding-top: 6px;
+    }
+
+    .configText:before {
+        position: absolute;
+        top: 7px;
+        right: 18%;
+        content: "Vertical";
+        -webkit-transition: opacity 0.5s ease-in-out;
+        -moz-transition: opacity 0.5s ease-in-out;
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .configText:after {
+        position: absolute;
+        top: 7px;
+        left: 14%;
+        content: "Horizontal";
+        -webkit-transition: opacity 0.5s ease-in-out;
+        -moz-transition: opacity 0.5s ease-in-out;
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    input + .slider + .configText:after {
+        opacity: 1;
+    }
+
+    input + .slider + .configText:before {
+        opacity: 0;
+    }
+
+    input:checked + .slider + .configText:after {
+        opacity: 0;
+    }
+
+    input:checked + .slider + .configText:before {
+        opacity: 1;
+    }
+
+    .flipButton {
+        background-color: #3CB878 !important;
+        width: 100%;
+        border-radius: 25px!important;
+        color: #fff !important;
+        font-size: 1vw !important;
+        padding: 0.5em 5.5em !important;
+    }
+
+    .borderDiv {
+        border-color: #EBEBEB;
+        border-style: solid;
+        border-width: 1.2px;
+    }
+
+    #panelContainer {
+        width: 99.1% !important;
+        padding-left: 1rem;
+    }
+
+    #panelContainer>.menuItemDiv {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    .menuItemDiv > .menu {
+        border-radius: 0px !important;
+    }
+
+    .panelBody {
+        width: 27% !important;
+    }
+
+    .panelIamgeDiv {
+        width: 46% !important;
+    }
+
+    .panelIamgeDiv>.row {
+        text-align: center;
+    }
+
+    .panelIamgeDiv> .row> img {
+        max-width: 72%;
+    }
+
+    .panelHeading {
+        margin: 1% 2% 5%;
+    }
+
+    .panelHeading span {
+        font-size: 20px;
+    }
+
+    .mt15 {
+        margin-top: 15%;
+    }
+
+    .flipImage {
+        width: 15%;
+        margin-right: 10%;
+        float: left;
+    }
+
+    .ui.modal {
+        top: 3%;
+    }
+
+    .wizard {
+        max-height: 78vh;
+    }
+
+     .wizard .ui.breadcrumb .section {
+        color: rgba(0, 0, 0, .4);
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+    .wizard .ui.breadcrumb .active.section {
+        color: #5588BF;
+        font-weight: 700;
+    }
+    .wizard h2 {
+        font-weight: 700;
+        font-family: 'Noto Sans', sans-serif;
+    }
+    .wizard .ui.grid>.column.wizard-title {
+        text-align: center;
+        background-color: #eee;
+        padding-top: 1.2rem;
+        padding-bottom: 1.2rem;
+    }
+    .wizard .ui.grid>.column.breadcrumb-container {
+        padding-top: 1.4rem;
+    }
+    .wizard .ui.grid.wizard-header {
+        margin-left: -21px;
+        margin-top: -21px;
+        margin-bottom: 20px;
+    }
+    .ui.modal {
+        top: 3%;
+    }
+    .ngdialog.ngdialog-theme-default .ngdialog-content {
+        margin-top: -100%;
+        font-family: 'Noto Sans', sans-serif;
+    }
+
+    @media only screen and (max-height: 799px) {
+        .ui.modal {
+            top: 1%;
+        }
+    }
+}
+    </style>
+    <div class="ui modal fullscreen active">
+        <div class="content wizard">
+            <div class="ui grid wizard-header">
+                <div class="three wide column wizard-title">
+                    <h2>Match The Following</h2>
+                </div>
+                <div class="six wide column breadcrumb-container">
+                    <div class="ui huge breadcrumb">
+                        <span class="{{!$ctrl.showWordSource ? 'active': ''}} section">1.Choose Options</span>
+                        <i class="right chevron icon divider"></i>
+                        <span class="{{$ctrl.showWordSource ? 'active': ''}} section">2.Pick Words</span>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="!$ctrl.showWordSource">
+                <div class="ui grid">
+                    <div class="row " id="panelContainer">
+                        <div class="panelBody column menuItemDiv borderDiv">
+                            <div class="ui vertical pointing menu">
+                                <li class="item" ng-class="{'active': item.id == $ctrl.activeItem}" ng-repeat="item in $ctrl.menuItems" ng-click="$ctrl.selectMenuItem(item.id)">{{item.text}}</li>
+                            </div>
+                        </div>
+                        <div class="panelIamgeDiv column borderDiv">
+                            <div class="row">
+                                <div class="column panelHeading">
+                                    <span class="panelHeading"> Preview</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <img ng-src="{{$ctrl.imageSrc}}">
+                            </div>
+                        </div>
+                        <div class="panelBody column borderDiv">
+                            <div class="row">
+                                <div class="column panelHeading">
+                                    <span class="panelHeading"> Layout</span>
+                                </div>
+                            </div>
+                            <div class="row mt15">
+                                <label class="switch">
+                                    <input type="checkbox" checked ng-model="$ctrl.isVertical" ng-change="$ctrl.changePreviewImage()">
+                                    <div class="slider round"><span class="toggleConfigText" style="float:left">Horizontal</span> <span class="toggleConfigText" style="float:right">Vertical</span></div>
+                                    <div class="configText"></div>
+                                </label>
+                            </div>
+                            <div class="mt15">
+                                <button class="ui button flipButton" ng-click="$ctrl.flipSide()">
+                                    <img class="flipImage" src="/assets/flipside64x48.png"> Flip Side </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="$ctrl.showWordSource">
+                <wordpicker selected-words="$ctrl.words" config="$ctrl.wordPickerConfig" errors="error"></wordpicker>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui buttons big" ng-if="!$ctrl.showWordSource">
+                <button class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
+                <div class="or"></div>
+                <button class="ui blue button" type="button" ng-click="$ctrl.showWordSource = !$ctrl.showWordSource">Next</button>
+            </div>
+            <div class="ui buttons big" ng-if="$ctrl.showWordSource">
+                <button class="ui orange button" ng-click="$ctrl.showWordSource = !$ctrl.showWordSource" type="button">Edit Config</button>
+                <div class="or"></div>
+                <button class="ui blue button" type="button" ng-disabled="($ctrl.words.length < 3 || $ctrl.words.length > 4)" ng-click="$ctrl.addtoLesson()">Add To Lesson</button>
+                <!-- {{$ctrl.words.length}} -->
+            </div>
+        </div>
+    </div>

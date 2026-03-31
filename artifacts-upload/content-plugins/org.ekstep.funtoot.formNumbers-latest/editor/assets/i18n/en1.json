@@ -1,0 +1,16 @@
+{
+    "en": {
+        "NO_ANSWER": "Please answer.",
+        "NO_HINT": "There is no hint for this question.",
+        "QUESTION_TITLE": "Form numbers",
+        "QUESTION06_STEM": "Form the %{largestOrSmallest} %{numDigits} digit %{evenOrOdd} number using the given digits",
+        "MH3": "Check if the number starts with the %{largestOrSmallest} digit amongst the given digits and all the digits are in %{increasingOrDecreasing} order after that.",
+        "MH1": "The number required should be the %{largestOrSmallest} %{evenOrOdd} number.",
+        "MH2": "The number is an %{evenOrOdd} number. But we need the %{largestOrSmallest} %{evenOrOdd} number possible from the digits.",
+        "HINT06_HUNDREDS1": "The number should start with the %{largestOrSmallest} digit and %{increaseOrDecrease} after that.",
+        "HINT06_HUNDREDS2": "Carefully identify the digits which will give the %{largestOrSmallest} %{evenOrOdd} number correctly and try again.",
+        "HINT06_HUNDREDS3": "Check the odd and even digits and carefully form the %{largestOrSmallest} %{evenOrOdd} number.",
+        "HINT06_4": "The face value of the digit in the %{placeValue} place should be the %(highestOrLowest} to get the %{largestOrSmallest} number using the given digits.",
+        "HINT06_5": "Carefully identify the digits which will give the %{largestOrSmallest} number and try again."
+    }
+}

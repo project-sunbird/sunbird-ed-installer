@@ -1,0 +1,261 @@
+.word-panel {
+    border: 1px solid #ddd;
+    height: 350px;
+    overflow-y: auto;
+    padding: 2%;
+    font-size: 1.2rem;
+}
+
+.word-panel.words-list {
+    margin-top: 2vh;
+    margin-left: 1.1rem;
+    margin-right: 1.1rem;
+}
+
+.wordpicker .ui.checkbox label {
+    cursor: pointer;
+    padding-top: 0.2em;
+    font-size: 1.2rem;
+}
+
+.ui.checkbox input[type=radio] {
+    width: 22px;
+    height: 22px;
+}
+
+.word-select {
+    padding-bottom: 2%;
+}
+
+.word-select .capitalize {
+    font-weight: 600;
+}
+
+.word-list .word-panel {
+    height: 350px;
+    margin-top: -3px;
+}
+
+.mb10 {
+    margin-bottom: 10px;
+}
+
+.custom-checkbox-label {
+    border: 1px solid #EEE;
+    cursor: pointer;
+    display: block;
+    padding: 10px;
+}
+
+.ui.checkbox.custom-checkbox {
+    margin-top: -32px;
+}
+
+.ui.checkbox .box:before,
+.ui.checkbox label:before,
+.ui.checkbox input[type=checkbox] {
+    height: 23px;
+    width: 23px;
+    border-width: 2px;
+}
+
+.ui.checkbox .box:after,
+.ui.checkbox label:after {
+    font-size: 18px;
+    height: 23px;
+    position: absolute;
+    top: 2px;
+    width: 23px;
+}
+
+.ui.checkbox input:checked~.box:before,
+.ui.checkbox input:checked~label:before {
+    border-color: #5588BF;
+}
+
+.ui.radio.checkbox input:checked~.box:after,
+.ui.radio.checkbox input:checked~label:after {
+    background-color: #5588BF;
+}
+
+.ui.checkbox input:checked~.box:after,
+.ui.checkbox input:checked~label:after {
+    color: #5588BF;
+}
+
+.capitalize {
+    text-transform: capitalize;
+}
+
+.icon.close {
+    cursor: pointer;
+}
+
+.close.red {
+    font-size: 2rem;
+}
+
+.ui.label.custom-label {
+    background-color: #43B77A;
+    border-radius: 25px;
+    color: #fff;
+    font-size: 1.2rem;
+    padding: 10px 20px;
+    text-transform: capitalize;
+}
+
+.ui.segment.custom-loader {
+    background: #FFF;
+    border-radius: 0;
+    border: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .075);
+    margin: 0;
+    padding: 0;
+    position: static;
+}
+
+.link-text {
+    color: #4183C4;
+    cursor: pointer;
+}
+
+.word-pos {
+    color: #888;
+    font-style: italic;
+    text-transform: capitalize;
+}
+
+
+/*Filter CSS*/
+
+.ui.grid>.column.no-left-padding {
+    padding-left: 0;
+}
+
+.ui.grid>.column.no-right-padding {
+    padding-right: 0;
+}
+
+.ui.grid>.column.no-left-right-padding {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.ui.grid>.column.no-top-padding {
+    padding-top: 0;
+}
+
+.ui.grid.filters-container {
+    border: 1px solid #ddd;
+    font-size: 1.2rem;
+    height: 407px;
+    margin-right: 10px;
+    margin-top: 0;
+    overflow-y: auto;
+}
+
+.ui.grid.filters-container.push-down {
+    margin-top: 57px;
+}
+
+.filters-container> .five.wide.column,
+.filters-container> .seven.wide.column {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.filters-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.filters-list li {
+    padding: 19.7px 15px;
+    border-right: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.filters-list li.selected {
+    border-right: none;
+    color: #5588BF;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+.filters-options {
+    padding: 15px 0 15px 15px;
+}
+
+.ui.grid.filter-icon {
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+}
+
+.ui.form .inline.field>input {
+    width: 80px;
+}
+
+.wordpicker .ui.button.primary {
+    font-size: 1.2rem;
+    background-color: #5588BF;
+    font-weight: 600;
+    font-family: 'Noto Sans', sans-serif;
+}
+
+.wordpicker .ui.button.search {
+    font-size: 1.5rem;
+    background-color: #5588BF;
+    padding: 1rem 2rem 1rem 2.7rem;
+}
+
+.wordpicker .wizard-error-message-box {
+    margin-bottom: 0;
+}
+
+.wordpicker .disableword {
+    pointer-events: none;
+    opacity: 0.4;
+}
+
+.wordpicker label.error-missing-audio-image {
+    color: red;
+    float: right;
+    font-size: 0.8rem;
+}
+
+.visible-small-screen,
+.ui.form .visible-small-screen {
+    display: none;
+}
+
+@media only screen and (max-width: 1679px) {
+    .visible-small-screen,
+    .ui.form .visible-small-screen {
+        display: flex;
+    }
+    .visible-large-screen,
+    .ui.form .visible-large-screen {
+        display: none;
+    }
+}
+
+@media only screen and (max-height: 799px) {
+    .word-panel,
+    .word-list .word-panel {
+        height: 250px;
+    }
+    .ui.grid.filters-container {
+        height: 307px;
+        margin-top: 0;
+    }
+    .ui.form .field {
+        margin-bottom: 0.5em;
+    }
+    .filters-list li {
+        padding: 14.7px 15px;
+    }
+    .wizard-error-message-box {
+        padding: 10px;
+    }
+}

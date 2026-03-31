@@ -1,0 +1,33 @@
+{
+    "en": {
+        "NO_ANSWER": "Match the given questions and then click the submit button.",
+        "NO_HINT": "There is no hint for this question.",
+        "QUESTION_TITLE": "Arrange the numbers/fractions",
+        "HINT051_VALUE": "Check the place value of each digit in the numbers and then carefully order them in sequence.",
+        "QUESTION05_STEM1": "Rearrange the given numbers in descending order.",
+        "QUESTION05_STEM2": "Rearrange the given numbers in ascending order.",
+        "GREATER_THAN_9999_ASCENDING": "Check the place value of the given numbers/fractions and carefully arrange them in increasing order.",
+        "GREATER_THAN_9999_DESCENDING": "Check the place value of the given numbers/fractions and carefully arrange them in decreasing order.",
+        "LESSER_THAN_9999_ASCENDING": "Use the number sequence and arrange them in increasing order carefully.",
+        "LESSER_THAN_9999_DESCENDING": "Take the given number sequence and carefully arrange them in decreasing order.",
+        "Q05R_1": "Write the given Roman Numerals in ascending / descending order.",
+        "H05R_1": "Recall the symbols and the rules for Roman Numbers.",
+        "H_FRAC1": "As the denominator is the same, check the value of the numerator.",
+        "Q_FRAC": "Rearrange the given fractions in ascending / descending order.",
+        "H_FRAC2": "As the numerator is the same, check the value of the denominator.",
+        "H_FRAC3": "Convert to equivalent fractions with same denominator and then order them.",
+        "HINT_3_1_0_Orde": "As the numerator is the same, check the value of the denominator.",
+        "HINT_4_0_5_Orde": "Check the integral part as the tenth digit are equal for all numbers.",
+        "HINT_1_0_-1_Orde": "Check the place value of each digit in the numbers and then carefully order them in sequence.",
+        "HINT_3_0_0_Orde": "As the denominator is the same, check the value of the numerator.",
+        "HINT_3_1_4_Orde": "Convert to equivalent fractions with same denominator and then order them.",
+        "HINT_4_0_1_Orde": "Check the integral part first and then the decimal part of the given numbers.",
+        "Orde_Q_3_0_0_Orde": "Rearrange the given fractions in ascending / descending order.",
+        "HINT_4_0_0_Orde": "Check the thousandth part of the given numbers.",
+        "HINT_1_-1_0_Orde": "Recall the order of single digit numbers.",
+        "Orde_Q_4_0_0_Orde": "Rearrange the given decimal numbers in ascending / descending order.",
+        "HINT_4_0_3_Orde": "Check the hundredth part of the given numbers.",
+        "HINT_4_0_6_Orde": "Check the tenth place value as the integral part is equal for all numbers.",
+        "HINT_4_0_2_Orde": "Check the decimal part of the given numbers."
+    }
+}

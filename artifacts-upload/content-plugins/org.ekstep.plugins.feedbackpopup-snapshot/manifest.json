@@ -1,0 +1,18 @@
+{
+    "id": "org.ekstep.plugins.feedbackpopup",
+    "ver": "1.0",
+    "author": "",
+    "type": "widget",
+    "title": "org.ekstep.plugins.feedbackpopup Plugin",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js"
+    },
+    "renderer": {
+        "main": "renderer/feedback-popup.js",
+        "dependencies": [
+            { "id": "feedbackPopupcss", "type": "css", "src": "renderer/feedback-popup.css" }
+        ]
+    }
+}

@@ -1,0 +1,71 @@
+{
+    "id": "org.ekstep.funtoot.compareNumbersdecimal",
+    "ver": "1.0",
+    "author": "Amulya",
+    "title": "Compare Decimal Numbers",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "type": "Compare Decimal Numbers",
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        },
+        "wizard": {
+            "configFile": {
+                "path": "editor/configs.json"
+            },
+            "i18nFile": {
+                "pluginId": "org.ekstep.funtoot.compareNumbersbase"
+            },
+            "localeFile": {
+                "pluginId": "org.ekstep.funtoot.compareNumbersbase",
+                "path": "editor/i18n.json"
+            },
+            "fbImage": {
+                "pluginId": "org.ekstep.funtoot.compareNumbersbase"
+            }
+        },
+        "assets": {
+            "fabricImgPath": "/editor/assets/comparenumbers.png"
+        },
+        "menu": [
+            {
+                "id": "org.ekstep.funtoot.compareNumbersdecimal::menu",
+                "category": "main",
+                "type": "icon",
+                "toolTip": "Add Compare Decimal Numbers",
+                "title": "compare-numbers",
+                "iconClass": "icon-readalong icon",
+                "onclick": {
+                    "id": "org.ekstep.funtoot.compareNumbersdecimal:showpopup"
+                }
+            }
+        ],
+        "configManifest": [
+            {
+                "propertyName": "count",
+                "title": "Number of Questions",
+                "description": "Number of Questions",
+                "dataType": "rangeslider",
+                "valueType": "text",
+                "required": true,
+                "minimumValue": 1,
+                "maximumValue": 10
+            }
+        ]
+    },
+    "renderer": {
+        "main": "renderer/comparenumbersdecimal.js",
+        "dependencies": []
+    },
+    "dependencies": [
+        {
+            "plugin": "org.ekstep.funtoot.compareNumbersbase",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        }
+    ]
+}

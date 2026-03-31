@@ -1,0 +1,65 @@
+{
+    "id": "org.ekstep.funtoot.multiplicationhorizontal",
+    "ver": "1.0",
+    "author": "funtoot",
+    "type": "plugin",
+    "title": "HorizontalMultiplication",
+    "description": "HorizontalMultiplication",
+    "editor": {
+        "main": "editor/plugin.js",
+        "wizard": {
+            "configFile": {
+                "path": "editor/configs.json"
+            },
+            "i18nFile": {
+                "pluginId": "org.ekstep.funtoot.multiplicationhorizontalbase"
+            },
+            "localeFile": {
+                "pluginId": "org.ekstep.funtoot.multiplicationhorizontalbase",
+                "path": "editor/i18n.json"
+            },
+            "fbImage": {
+                "pluginId": "org.ekstep.funtoot.multiplicationhorizontalbase"
+            }
+        },
+        "assets": {
+            "fabricImgPath": "/editor/assets/multiplicationhorizontalformat.png"
+        },
+        "menu": [
+            {
+                "id": "org.ekstep.funtoot.multiplicationhorizontal::menu",
+                "category": "main",
+                "type": "icon",
+                "toolTip": "Add Horizontal Multiplication",
+                "title": "HorizontalMultiplication",
+                "iconClass": "icon-readalong icon",
+                "onclick": {
+                    "id": "org.ekstep.funtoot.multiplicationhorizontal:showpopup"
+                }
+            }
+        ],
+        "configManifest": [
+            {
+                "propertyName": "count",
+                "title": "Number of Questions",
+                "description": "Number of Questions",
+                "dataType": "rangeslider",
+                "valueType": "text",
+                "required": true,
+                "minimumValue": 1,
+                "maximumValue": 10
+            }
+        ]
+    },
+    "renderer": {
+        "main": "renderer/plugin.js"
+    },
+    "dependencies": [
+        {
+            "plugin": "org.ekstep.funtoot.multiplicationhorizontalbase",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        }
+    ]
+}

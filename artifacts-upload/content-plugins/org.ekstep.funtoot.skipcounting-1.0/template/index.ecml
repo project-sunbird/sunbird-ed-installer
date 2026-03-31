@@ -1,0 +1,48 @@
+<theme id="theme" ver="0.2">
+    <template id="org.ekstep.funtoot.skipcounting_template">
+		<org.ekstep.funtoot.skipcounting w="100" h="100" x="0" y="0">
+		</org.ekstep.funtoot.skipcounting>
+	</template>
+	<manifest>
+		<!-- 
+		<media id="polyglot" plugin="org.ekstep.plugins.i18n" ver="1.0" src="/content-plugins/org.ekstep.plugins.i18n-1.0/renderer/polyglot.js" type="js"/>
+		<media id="org.ekstep.plugins.i18n" plugin="org.ekstep.plugins.i18n" ver="1.0" src="/content-plugins/org.ekstep.plugins.i18n-1.0/renderer/plugin.js" type="plugin"/>
+		<media id="org.ekstep.plugins.i18n_manifest" plugin="org.ekstep.plugins.i18n" ver="1.0" src="/content-plugins/org.ekstep.plugins.i18n-1.0/manifest.json" type="json"/>
+		<media id="eraser" plugin="org.ekstep.funtoot.common" ver="1.0" src="/content-plugins/org.ekstep.funtoot.common-1.0/assets/eraser.png" type="image"/>
+		<media id="micro-hint" plugin="org.ekstep.funtoot.common" ver="1.0" src="/content-plugins/org.ekstep.funtoot.common-1.0/assets/micro-hint.png" type="image"/>
+		<media id="org.ekstep.funtoot.hint-icon" plugin="org.ekstep.funtoot.common" ver="1.0" src="/content-plugins/org.ekstep.funtoot.common-1.0/assets/hint.png" type="image"/>
+		<media id="org.ekstep.funtoot.solution-icon" plugin="org.ekstep.funtoot.common" ver="1.0" src="/content-plugins/org.ekstep.funtoot.common-1.0/assets/solimg.png" type="image"/>
+		<media id="close" plugin="org.ekstep.funtoot.common" ver="1.0" src="/content-plugins/org.ekstep.funtoot.common-1.0/assets/close.png" type="image"/>
+		<media id="submit" plugin="org.ekstep.funtoot.common" ver="1.0" src="/content-plugins/org.ekstep.funtoot.common-1.0/assets/icn_submit.png" type="image"/>
+		<media id="disabledsubmit" plugin="org.ekstep.funtoot.common" ver="1.0" src="/content-plugins/org.ekstep.funtoot.common-1.0/assets/disabled_submit.png" type="image"/>
+		<media id="org.ekstep.funtoot.asset.next" plugin="org.ekstep.funtoot.common" ver="1.0" src="/content-plugins/org.ekstep.funtoot.common-1.0/assets/next.png" type="image"/>
+		<media id="editable" plugin="org.ekstep.funtoot.common" ver="1.0" src="/content-plugins/org.ekstep.funtoot.common-1.0/assets/editable.png" type="image"/>
+		<media id="nonEditable" plugin="org.ekstep.funtoot.common" ver="1.0" src="/content-plugins/org.ekstep.funtoot.common-1.0/assets/noneditable.png" type="image"/>
+		<media id="additioneval" plugin="org.ekstep.funtoot.common" ver="1.0" src="/content-plugins/org.ekstep.funtoot.common-1.0/renderer/additioneval.js" type="js"/>
+		<media id="org.ekstep.funtoot.ftPlugin" plugin="org.ekstep.funtoot.common" ver="1.0" src="/content-plugins/org.ekstep.funtoot.common-1.0/renderer/ftbaseplugin.js" type="plugin"/>
+		<media id="nkeyboard" plugin="org.ekstep.funtoot.common" ver="1.0" src="/content-plugins/org.ekstep.funtoot.common-1.0/renderer/customnumkeyboard.js" type="plugin"/>
+		<media id="ftFib" plugin="org.ekstep.funtoot.common" ver="1.0" src="/content-plugins/org.ekstep.funtoot.common-1.0/renderer/ftfib.js" type="plugin"/>
+		<media id="ftPluginHelper" plugin="org.ekstep.funtoot.common" ver="1.0" src="/content-plugins/org.ekstep.funtoot.common-1.0/renderer/ftpluginhelper.js" type="plugin"/>
+		<media id="org.ekstep.funtoot.grid" plugin="org.ekstep.funtoot.common" ver="1.0" src="/content-plugins/org.ekstep.funtoot.common-1.0/renderer/grid.js" type="plugin"/>
+		<media id="org.ekstep.funtoot.table" plugin="org.ekstep.funtoot.common" ver="1.0" src="/content-plugins/org.ekstep.funtoot.common-1.0/renderer/table.js" type="plugin"/>
+		<media id="keyboard_css" plugin="org.ekstep.funtoot.common" ver="1.0" src="/content-plugins/org.ekstep.funtoot.common-1.0/renderer/css/numerickeyboard.css" type="css"/>
+		<media id="ftMicroHint" plugin="org.ekstep.funtoot.common" ver="1.0" src="/content-plugins/org.ekstep.funtoot.common-1.0/renderer/ftmicrohint.js" type="plugin"/>
+		<media id="ftPopup" plugin="org.ekstep.funtoot.common" ver="1.0" src="/content-plugins/org.ekstep.funtoot.common-1.0/renderer/ftpopup.js" type="plugin"/>
+		<media id="ftAttempts" plugin="org.ekstep.funtoot.common" ver="1.0" src="/content-plugins/org.ekstep.funtoot.common-1.0/renderer/ftattempts.js" type="plugin"/>
+		<media id="generators" plugin="org.ekstep.funtoot.common" ver="1.0" src="/content-plugins/org.ekstep.funtoot.common-1.0/renderer/generators.js" type="plugin"/>
+		<media id="inlineFib" plugin="org.ekstep.funtoot.common" ver="1.0" src="/content-plugins/org.ekstep.funtoot.common-1.0/renderer/inlinefib.js" type="plugin"/>
+		<media id="org.ekstep.funtoot.option" plugin="org.ekstep.funtoot.common" ver="1.0" src="/content-plugins/org.ekstep.funtoot.common-1.0/renderer/option.js" type="plugin"/>
+		<media id="org.ekstep.funtoot.optionBuilder" plugin="org.ekstep.funtoot.common" ver="1.0" src="/content-plugins/org.ekstep.funtoot.common-1.0/renderer/optionbuilder.js" type="plugin"/>
+		<media id="org.ekstep.funtoot.common" plugin="org.ekstep.funtoot.common" ver="1.0" src="/content-plugins/org.ekstep.funtoot.common-1.0/renderer/ftfibbaseplugin.js" type="plugin"/>
+		<media id="org.ekstep.funtoot.common_manifest" plugin="org.ekstep.funtoot.common" ver="1.0" src="/content-plugins/org.ekstep.funtoot.common-1.0/manifest.json" type="json"/>
+		<media id="candy" plugin="org.ekstep.funtoot.skipcounting" ver="1.0" src="/content-plugins/org.ekstep.funtoot.skipcounting-1.0/asset/candy.png" type="image"/>
+		<media id="org.ekstep.funtoot.skipcounting" plugin="org.ekstep.funtoot.skipcounting" ver="1.0" src="/content-plugins/org.ekstep.funtoot.skipcounting-1.0/renderer/skipcounting.js" type="plugin"/>
+		<media id="org.ekstep.funtoot.skipcounting_manifest" plugin="org.ekstep.funtoot.skipcounting" ver="1.0" src="/content-plugins/org.ekstep.funtoot.skipcounting-1.0/manifest.json" type="json"/>
+		 -->
+	</manifest>
+	<plugin-manifest>
+		<plugin id="org.ekstep.plugins.i18n" ver="1.0" type="plugin" depends=""/>
+		<plugin id="org.ekstep.funtoot.common" ver="1.0" type="plugin" depends="org.ekstep.plugins.i18n"/>
+		<plugin id="org.ekstep.funtoot.skipcounting" ver="1.0" type="plugin" depends="org.ekstep.funtoot.common"/>
+	</plugin-manifest>
+</theme>

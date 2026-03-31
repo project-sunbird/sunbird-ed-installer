@@ -1,0 +1,65 @@
+{
+    "id": "org.ekstep.funtoot.stdexp",
+    "ver": "1.0",
+    "author": "funtoot",
+    "type": "plugin",
+    "title": "StandardAndExpanded",
+    "description": "StandardAndExpanded",
+    "editor": {
+        "main": "editor/plugin.js",
+        "wizard": {
+            "configFile": {
+                "path": "editor/configs.json"
+            },
+            "i18nFile": {
+                "pluginId": "org.ekstep.funtoot.stdexpbase"
+            },
+            "localeFile": {
+                "pluginId": "org.ekstep.funtoot.stdexpbase",
+                "path": "editor/i18n.json"
+            },
+            "fbImage": {
+                "pluginId": "org.ekstep.funtoot.stdexpbase"
+            }
+        },
+        "assets": {
+            "fabricImgPath": "/editor/assets/standardandexpandedform.png"
+        },
+        "menu": [
+            {
+                "id": "org.ekstep.funtoot.stdexp::menu",
+                "category": "main",
+                "type": "icon",
+                "toolTip": "Add Standard And Expanded Form",
+                "title": "StandardAndExpanded",
+                "iconClass": "icon-readalong icon",
+                "onclick": {
+                    "id": "org.ekstep.funtoot.stdexp:showpopup"
+                }
+            }
+        ],
+        "configManifest": [
+            {
+                "propertyName": "count",
+                "title": "Number of Questions",
+                "description": "Number of Questions",
+                "dataType": "rangeslider",
+                "valueType": "text",
+                "required": true,
+                "minimumValue": 1,
+                "maximumValue": 10
+            }
+        ]
+    },
+    "renderer": {
+        "main": "renderer/plugin.js"
+    },
+    "dependencies": [
+        {
+            "plugin": "org.ekstep.funtoot.stdexpbase",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        }
+    ]
+}

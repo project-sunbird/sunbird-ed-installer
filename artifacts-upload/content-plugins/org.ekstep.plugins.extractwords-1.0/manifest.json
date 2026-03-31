@@ -1,0 +1,27 @@
+{
+    "id": "org.ekstep.plugins.extractwords",
+    "ver": "1.0",
+    "author": "Deepak Narayana Rao",
+    "type": "plugin",
+    "title": "Extract Words",
+    "description": "This plugin is used to extract words from the content",
+    "editor": {
+        "main": "editor/plugin.js",
+        "dependencies": [
+            { "type": "js", "src": "editor/init.js" },
+            { "type": "js", "src": "editor/editor-content.js" },
+            { "type": "js", "src": "editor/word-search-service.js" },
+            { "type": "js", "src": "editor/extract-words-service.js" },
+            { "type": "js", "src": "editor/ekstep-editor-api-extension.js" }
+        ],
+        "menu": [],
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        }
+    },
+    "icon": "assets/icon.png",
+    "languages": ["English"],
+    "categories": ["library"],
+    "keywords": ["word"]
+}
