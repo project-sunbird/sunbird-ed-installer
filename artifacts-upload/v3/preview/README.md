@@ -1,0 +1,280 @@
+![](https://api.travis-ci.org/project-sunbird/sunbird-content-player.svg?branch=master)
+[![npm version](https://badge.fury.io/js/%40project-sunbird%2Fcontent-player.svg)](https://badge.fury.io/js/%40project-sunbird%2Fcontent-player)
+
+
+
+# Content Player
+
+   Content-Player which is used to play/render the contents in both device and web.
+   
+ **Supported Content MIME Types**
+
+| Content Type | MIME Type | 
+| --- | --- | 
+|ECML | application/vnd.ekstep.ecml-archive|
+|HTML|application/vnd.ekstep.html-archive|
+|Epub|application/epub|
+|H5P|application/vnd.ekstep.h5p-archive|
+|PDF|application/pdf|
+|YOUTUBE|video/x-youtube|
+|WEBM|video/Webm|
+|MP4|video/mp4|
+|EXTERNAL CONTENT|text/x-url|
+
+
+## How to render the contents?
+
+Content player is a customisable and configurable before launching any type of content inside any environment (preview or device) it expecting few configurations. Based on the configuration content will be rendered in the respective environment. 
+
+Download content player preview from NPM 
+
+> npm i @project-sunbird/content-player
+
+	
+
+**Preview object**     
+
+```js
+var previewObj = {
+    "context": {
+        "mode": "preview/edit/play", // to identify preview used by the user to play/edit/preview
+        "authToken": "", // Auth key to make V3 api calls
+        "contentId": "do_201734893", // ContentId used to get body data from content API call
+        "sid": "sdjfo8e-3ndofd3-3nhfo334", // User sessionid on portal or mobile
+        "did": "sdjfo8e-3ndofd3-3nhfo334", // Unique id to identify the device or browser 
+        "uid": "sdjfo8e-3ndofd3-3nhfo334", // Current logged in user id
+        "channel": "", // To identify the channel(Channel ID). Default value ""
+        "pdata": // Producer information. Generally the App which is creating the event, default value {}
+        {
+            "id": "", // Producer ID. For ex: For sunbird it would be "portal" or "genie"
+            "pid": "", // Optional. In case the component is distributed, then which instance of that component
+            "ver": "", // version of the App
+        },
+        "app": [""], // Genie tags
+        "partner": [""], // Partner tags
+        "dims": [""], // Encrypted dimension tags passed by respective channels
+        "cdata": [{ //correlation data
+            "type": "", //Used to indicate action that is being correlated
+            "id": "" //The correlation ID value
+        }],
+
+    },
+    "config": {
+    	"whiteListUrl": ["contentProviderPath"], // The URLs that passed as this config only will allow from player, other URLs will be blocked. eg. 'https://obj.stage.sunbirded.org/**', 'https://*.blob.core.windows.net/**' etc.
+        "repos": ["s3path"], // plugins repo path where all the plugins are pushed s3 or absolute folder path
+        "plugins": [{ id: "org.sunbird.telemtryPlugin", "ver": "1.0", "type": "plugin" }], //Inject external custom plugins into content (for externl telemetry sync)
+        "overlay": { // Configuarable propeties of overlay showing by GenieCanvas on top of the content
+            "enableUserSwitcher": true, // enable/disable user-switcher, default is true for mobile & preview
+            "showUser": true, // show/hide user-switcher functionality. default is true to show user information
+            "showOverlay": true, // show/hide complete overlay including next/previous buttons. default value true
+            "showNext": true, // show/hide next navigation button on content. default is true
+            "showPrevious": true, // show/hide previous navigation button on content. default is true
+            "showSubmit": false, // show/hide submit button for assessmetns in the content. default is false
+            "showReload": true, // show/hide stage reload button to reset/re-render the stage. default is true
+            "menu": {
+                "showTeachersInstruction": true // show/hide teacher instructions in the menu
+            }
+        },
+        "splash": { // list of configurable properties to handle splash screen shown while loading content
+            "text": "Powered by Sunbird", // Text to be shown on splash screen while loading content. 
+            "icon": "assets/icons/icn_genie.png", // Icon to be show on above the text(full absolute path of the image in mobiew or http image link)
+            "bgImage": "assets/icons/background_1.png", // backgroung image used for splash screen while loading content(absolute folder path of the image in mobie or http image link)
+            "webLink": "XXXX" // weblink to be opened on click of text
+        },
+        "mimetypes": [ // Content mimetypes for new cotent lucnhers
+            "application/vnd.ekstep.ecml-archive",
+            "application/vnd.ekstep.html-archive"
+        ],
+        "contentLaunchers": [ // content laucher plugins for specific content mimetypes
+            { // Plugin used for ECML content to launch, It is default plugin
+                "mimeType": 'application/vnd.ekstep.html-archive',
+                "id": 'org.sunbird.htmlrenderer',
+                "ver": 1.0,
+                "type": 'plugin'
+            }
+        ]
+    },
+    "metadata": {}, //content metadata json object (from API response take -> response.result.content)
+    "data": undefined // content body json object (from API response take -> response.result.content.body)
+}
+
+
+```
+**Description**
+
+
+| Property Name | Description | Default Value   |
+| --- | --- | --- |
+| `host` | It is a `string` which defines the from which domain content should be load|```window.location.origin```  |
+| `mimetypes` | It is an `array` which defines the what type of the content to be renderer| ```[ ]```|
+| `contentLaunchers` | It is an `array` of plugin objects it will launch the content based on the mimeType which is defined| ``` []```|
+| `overlay` | It is an `object` using this canvas overlay can be customized based on the flags| ```{}```|
+| `splash` | It is an `object` before launching any type of content splash screen will load and it is customizable |```{}```|
+| `showEndpage` | It is `boolean` which defines should default canvas endpage should load or not | ```TRUE```
+| `pdata` | It is an `object` which defines the producer information it should have identifier and version and canvas will log in the telemetry| ```{'id':'in.ekstep', 'ver':'1.0'}```|
+| `channel` | It is `string` which defines channel identifier to know which channel is currently using.| `in.ekstep` |
+| `app` | It is an `array` which defines the app tags and canvas will log in the telemetry| ```[]``` |
+| `partner` | It is an `array` which defines the partner tags and canvas will log in the telemetry|```[]``` |
+| `dims` | It is an `array` which defines the encrypted dimension tags it should be passed from the respective channel and canvas will log in the telemetry|```[]```  |
+| `context` | It is an `object` it contains the `uid`,`did`,`sid`,`mode` etc., these will be logged inside the telemetry  | ```{}``` |
+| `config` | It is an `object` it contains the `repo`,`plugins`,`overlay`,`splash` etc., these will be used to configure the canvas  | ```{}```
+| `apislug` | It is `string` which defines proxy setup to make a api request | ```/action```
+| `whiteListUrl`| It is an `Array` which defines whiteList URLs which should allows from player| ```['self']```
+
+
+1. **How to render in Web**
+
+    Content player will render inside the web environment with the above configuration .
+    
+	**HTML**
+	```html
+	<div class="content-player">
+	    <iframe id="preview" src ='./node_modules/@project-sunbird/content-player/preview.html?webview=true' width=100% height=100%></iframe>
+   </div>
+	
+	```
+	**JS**
+	```js
+	
+	  var previewElement = jQuery('#preview')[0];
+      previewElement.onload = function() {
+           previewElement.contentWindow.initializePreview(configuration);
+      }
+	
+	```
+2. **How to render in Device(cordova)**
+
+Content player will render inside Cordova environment and it's accepting the configuration through ```cordova webintent```
+
+
+
+
+
+
+
+## How to setup content player in local
+
+
+ **Prerequisites**
+    
+   * Install NPM, Node(v6), android-sdk, Cordova and Ionic
+
+ **How to Run**
+
+* Clone the content player from [here](https://github.com/project-sunbird/sunbird-content-player)
+* Run `npm install` in PROJECT_FOLDER/player path
+* Disable `isCorePluginsPackaged` variable in the `appConfig.js` to load/run the plugins without minifiying.   
+* To run player in local run `node app` in the Terminal
+* Open http://localhost:3000/ in the browser. By default player runs in the `3000` port
+
+ **How to build**
+    
+   1. **Preview**
+      
+     	Run `npm run build-preview sunbird` which creates the preview folder for sunbird instance
+      
+   2. **AAR**
+   
+ 		Run  `npm run build-aar sunbird`  which creates an aar file for the sunbird instance
+
+        The AAR file will create in the below path.
+
+        >PROJECT_FOLDER/player/platforms/android/build/outputs/aar/geniecanvas-BUILD_NUMBER-debug.aar
+ 
+   3. **Plugins Package**
+
+        Run  `npm run package-coreplugins -- --env.channel sunbird`  Which bundles all the coreplugins plugins and creates the `coreplugins.js` and `coreplugins.css`  
+
+   4. **Test Cases**
+
+        Run  `npm run test` Which runs the player test cases.         
+ 	
+ 
+
+## Change Logs
+ See [ChangeLogs](https://github.com/project-sunbird/sunbird-content-player/releases) for more information 
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/project-sunbird/sunbird-content-player/blob/master/LICENSE) file for details 
+
+## Versioning
+
+We use [SemVer](https://semver.org/) for versioning. For the versions available, see the [tags](https://github.com/project-sunbird/sunbird-content-player/tags) on this repository.
+
+## Any Issues ?
+We have an open and active [issue tracker](https://github.com/Field-Issues/issues). Please report any issues. 
+
+## Code Quality
+
+The project maintains code quality through automated checks that run on every pull request:
+
+1. **Dependencies**
+   - Uses `npm i --legacy-peer-deps` for installation
+   - GitHub Actions cache for faster builds
+
+2. **Testing**
+   - Unit tests using Karma
+   - Command: `npm run test`
+
+3. **Code Analysis**
+   - SonarCloud integration for code quality metrics
+   - Analyzes code quality, test coverage, duplications, and security vulnerabilities.
+
+These checks ensure consistent code style, secure dependency management, and reliable testing.
+
+## Package Publishing
+
+Workflow automatically builds and publishes NPM packages whenever a new tag is pushed to the repository.
+
+### Publish Workflow
+
+The workflow is triggered on:
+- push of any tag
+
+Key features of the workflow:
+1. Automatically builds the project
+2. Creates NPM package
+3. Publishes to NPM registry as @project-sunbird/sunbird-collection-editor-web-component, using NPM authentication token (must be provided as GitHub secret `NPM_TOKEN`)
+
+### Workflow name: `Upload Content-Plugin to Blob`
+
+- This GitHub Actions workflow automates the process of uploading the repository's build to a cloud blob storage service (Google Cloud Storage or Azure Blob Storage). This workflow triggers when a tag is created.
+
+### Prerequisites
+
+Before triggering this workflow, ensure the following:
+
+- A valid Git tag is pushed to start the workflow.
+- Required **GitHub Actions Variables** and **Secrets** are configured based on the selected cloud provider.
+
+You can set **Variables and Secrets** in GitHub under:  
+`Settings → Secrets and Variables → Actions`
+
+---
+
+### Cloud Provider Configuration
+
+The workflow uses the `CLOUD_PROVIDER` variable to determine where to upload the build artifacts. Based on the provider selected, configure the following:
+
+#### GCP (Google Cloud Platform)
+
+**Repository Variable:**
+- `CLOUD_PROVIDER` = `gcp`
+- `GCP_BUCKET` — Name of the GCP bucket to upload to.
+
+**Repository Secret:**
+- `GCP_SERVICE_ACCOUNT_KEY` — Base64-encoded GCP service account key.
+
+---
+
+#### Azure
+
+**Repository Variable:**
+- `CLOUD_PROVIDER` = `azure`
+- `AZURE_CONTAINER` — Name of the Azure Blob Storage container.
+
+**Repository Secrets:**
+- `AZURE_STORAGE_ACCOUNT` — Azure Storage account name.
+- `AZURE_STORAGE_KEY` — Azure Storage account key.
+
+---
