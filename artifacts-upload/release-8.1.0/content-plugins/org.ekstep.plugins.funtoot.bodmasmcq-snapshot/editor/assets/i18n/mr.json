@@ -1,8 +1,0 @@
-{
-    "mr": {
-        "NO_ANSWER": "Please answer.",
-        "NO_HINT": "There is no hint for this question.",
-        "QUESTION_TITLE": "BODMAS MCQ",
-        "QUESTION_STEM1": "Choose the number of times Roman numeral %{n} can be repeated"
-    }
-}
